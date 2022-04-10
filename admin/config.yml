@@ -21,10 +21,19 @@ collections:
     label: Pages
     label_singular: Page
     description: Specific content for each page of the website.
-    folder: static/content/pages
-    create: true
-    fields:
-      - { label: Picture, name: picture, widget: image }
-      - { label: Name, name: name, widget: string }
-      - { label: Role, name: role, widget: string }
-      - { label: Description, name: description, widget: string }
+    format: json
+    extension: json
+    files:
+      - label: Landing page
+        name: "index"
+        file: content/pages/index.json
+        fields:
+          - { label: Picture, name: picture, widget: image }
+          - { label: Name, name: name, widget: string }
+          - { label: Role, name: role, widget: string }
+          - { label: Description, name: description, widget: string }
+
+slug:
+  encoding: ascii
+  clean_accents: true
+  sanitize_replacement: "_"
