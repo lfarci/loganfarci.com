@@ -7,4 +7,5 @@ Personal website.
 - [Netlify Git Gateway](https://docs.netlify.com/visitor-access/git-gateway/)
 
 
-- [Sourcing Data](https://www.gatsbyjs.com/docs/how-to/sourcing-data/sourcing-from-netlify-cms/)
+- [Sourcing from Netlify CMS](https://www.gatsbyjs.com/docs/how-to/sourcing-data/sourcing-from-netlify-cms/)
+- [Adding Markdown Pages](https://www.gatsbyjs.com/docs/how-to/routing/adding-markdown-pages/)
