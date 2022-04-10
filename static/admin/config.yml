@@ -3,7 +3,6 @@ site_url: https://www.loganfarci.com/
 display_url: loganfarci.com
 
 media_folder: content/images/uploads
-public_folder: /images/uploads
 
 backend:
   name: git-gateway
@@ -28,10 +27,11 @@ collections:
         name: "index"
         file: content/data/index.json
         fields:
-          - { label: Picture, name: picture, widget: image }
+          - { label: Picture Source, name: pictureSource, widget: image }
+          - { label: Picture Alternative Text, name: pictureAlt, widget: string }
           - { label: Name, name: name, widget: string }
           - { label: Role, name: role, widget: string }
-          - { label: Description, name: description, widget: string }
+          - { label: Description, name: description, widget: text }
 
 slug:
   encoding: ascii
