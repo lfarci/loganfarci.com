@@ -2,7 +2,8 @@ locale: en
 site_url: https://www.loganfarci.com/
 display_url: loganfarci.com
 
-media_folder: content/images/uploads
+media_folder: static/images/uploads
+public_folder: /images/uploads
 
 backend:
   name: git-gateway

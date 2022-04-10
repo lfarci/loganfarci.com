@@ -9,3 +9,4 @@ Personal website.
 
 - [Sourcing from Netlify CMS](https://www.gatsbyjs.com/docs/how-to/sourcing-data/sourcing-from-netlify-cms/)
 - [Adding Markdown Pages](https://www.gatsbyjs.com/docs/how-to/routing/adding-markdown-pages/)
+- [Working With Images](https://www.gatsbyjs.com/docs/how-to/images-and-media/using-gatsby-plugin-image)
