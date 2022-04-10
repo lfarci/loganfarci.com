@@ -1,11 +1,12 @@
-locale: "en"
-site_url: "https://www.loganfarci.com/"
-display_url: "loganfarci.com"
+locale: en
+site_url: https://www.loganfarci.com/
+display_url: loganfarci.com
 
-media_folder: "static/images/uploads"
-public_folder: "/images/uploads"
+media_folder: static/images/uploads
+public_folder: /images/uploads
 
 backend:
+  name: git-gateaway
   repo: lfarci/loganfarci.com
   branch: main
   commit_messages:
@@ -16,12 +17,12 @@ backend:
     deleteMedia: "Delete “{{path}}”"
 
 collections:
-  - name: "pages"
-    label: "Pages"
-    label_singular: "Page"
-    description: "Specific content for each page of the website."
+  - name: pages
+    label: Pages
+    label_singular: Page
+    description: Specific content for each page of the website.
     files:
-      - file: ""
+      - folder: static/content/pages
         label: "Home"
         name: "index"
         fields:
