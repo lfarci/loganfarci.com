@@ -8,6 +8,9 @@
         <meta name="description" content="I am currently an Analyst Developer at Smals seconded the the Belgian National Employment Office (NEO). I completed a Bachelor’s degree in Computer Sciences in 2020. Passionate about technology, I have grown to love this field thanks to education, a first professional experience, and personal interest. I have experience in programming, DevOps, database management, agile methodologies, and software design.">
         <link rel="stylesheet" href="style.css">
         <link href="admin/config.yml" type="text/yaml" rel="cms-config-url">
+
+        <!-- Include the script that handle authentication thanks to Netlify Identity Widget -->
+        <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
     </head>
     <body>
         <div class="centered raised card">
@@ -22,5 +25,17 @@
                 <span>I am currently an Analyst Developer at Smals seconded the the Belgian National Employment Office (NEO). I completed a Bachelor’s degree in Computer Sciences in 2020. Passionate about technology, I have grown to love this field thanks to education, a first professional experience, and personal interest. I have experience in programming, DevOps, database management, agile methodologies, and software design.</span>
             </div>
         </div>
+        <script>
+            // Check Netlify guide to learn more about this: https://www.netlifycms.org/docs/add-to-your-site/#authentication
+            if (window.netlifyIdentity) {
+              window.netlifyIdentity.on("init", user => {
+                if (!user) {
+                  window.netlifyIdentity.on("login", () => {
+                    document.location.href = "/admin/";
+                  });
+                }
+              });
+            }
+          </script>
     </body>
 </html>
