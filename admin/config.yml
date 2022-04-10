@@ -22,6 +22,7 @@ collections:
     label_singular: Page
     description: Specific content for each page of the website.
     folder: static/content/pages
+    create: true
     fields:
       - { label: Picture, name: picture, widget: image }
       - { label: Name, name: name, widget: string }
