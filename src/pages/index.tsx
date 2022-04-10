@@ -19,7 +19,7 @@ const IndexPage = () => {
   return <main>
     <h1>{data.name}</h1>
 
-    <img alt={data.pictureAlt} src={data.pictureSource}/>
+    <img alt={data.pictureAlt} src={data.pictureSource} width="64"/>
     <p>{data.role}</p>
     <p>{data.description}</p>
   </main>;
