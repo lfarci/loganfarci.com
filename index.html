@@ -15,14 +15,14 @@
     <body>
         <div class="centered raised card">
             <div class="horizontal card-header">
-                <img alt="Author's picture" src="https://i.ibb.co/ZT7Hr2h/profile-picture-64-64.jpg">    
+                <img id="picture" alt="Author's picture">    
                 <div class="vertical card-header-title">
-                    <div class="primary-text">Logan Farci</div>
-                    <div class="secondary-text">Analyst developer</div>
+                    <div id="name" class="primary-text"></div>
+                    <div id="role" class="secondary-text"></div>
                 </div>
             </div>
             <div class="card-content">
-                <span>I am currently an Analyst Developer at Smals seconded the the Belgian National Employment Office (NEO). I completed a Bachelor’s degree in Computer Sciences in 2020. Passionate about technology, I have grown to love this field thanks to education, a first professional experience, and personal interest. I have experience in programming, DevOps, database management, agile methodologies, and software design.</span>
+                <span id="description"></span>
             </div>
         </div>
         <script>
@@ -36,6 +36,7 @@
                 }
               });
             }
-          </script>
+        </script>
+        <script src="src/index.js"></script>
     </body>
 </html>
