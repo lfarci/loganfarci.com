@@ -21,12 +21,10 @@ collections:
     label: Pages
     label_singular: Page
     description: Specific content for each page of the website.
-    format: json
-    extension: json
     files:
       - label: Landing page
         name: "index"
-        file: content/pages/index.json
+        file: content/pages/index.md
         fields:
           - { label: Picture, name: picture, widget: image }
           - { label: Name, name: name, widget: string }
