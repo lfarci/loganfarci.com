@@ -2,11 +2,13 @@ import type { GatsbyConfig } from "gatsby";
 
 const config: GatsbyConfig = {
   siteMetadata: {
-    title: "loganfarci.com",
-    siteUrl: "https://www.loganfarci.com"
+    title: "Logan Farci",
+    siteUrl: "https://www.loganfarci.com",
+    description: ""
   },
   plugins: [
     "gatsby-plugin-netlify-cms",
+    "gatsby-plugin-react-helmet",
     "gatsby-plugin-sass",
     "gatsby-plugin-sharp",
     "gatsby-transformer-sharp",
@@ -24,7 +26,12 @@ const config: GatsbyConfig = {
         path: "./content/data",
       },
     },
-    "gatsby-transformer-json",
+    {
+      resolve: "gatsby-transformer-json",
+      options: {
+        typeName: ({node}) => node.name
+      }
+    },
   ]
 };
 

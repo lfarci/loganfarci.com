@@ -1,8 +1,37 @@
 import * as React from "react"
-import { useStaticQuery, graphql } from "gatsby"
+import {graphql} from "gatsby"
+import Layout from "../components/Layout";
+import Header from "../components/Header";
+import "./index.scss"
 
-const indexPageQuery = graphql`query IndexPageQuery {
-  indexJson {
+interface IndexPageContent {
+  name: string;
+  pictureAlt: string;
+  pictureSource: string;
+  role: string;
+  description: string;
+}
+
+interface IndexData {
+  index: IndexPageContent;
+}
+
+const IndexPage = ({data}: {data: IndexData}) => {
+  return <Layout
+    title={data.index.name}
+    description={data.index.description}
+  >
+    <Header
+      name={data.index.name}
+      role={data.index.role}
+      picture={{alt: data.index.pictureAlt, src: data.index.pictureSource }}
+      description={data.index.description}
+    />
+  </Layout>;
+}
+
+export const query = graphql`query IndexPageQuery {
+  index {
     name
     pictureAlt
     pictureSource
@@ -11,17 +40,4 @@ const indexPageQuery = graphql`query IndexPageQuery {
   }
 }`;
 
-const IndexPage = () => {
-
-  const {indexJson: data} = useStaticQuery(indexPageQuery);
-
-  return <main>
-    <h1>{data.name}</h1>
-
-    <img alt={data.pictureAlt} src={data.pictureSource} width="64"/>
-    <p>{data.role}</p>
-    <p>{data.description}</p>
-  </main>;
-}
-
-export default IndexPage
+export default IndexPage;
