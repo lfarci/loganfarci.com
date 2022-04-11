@@ -1,20 +1,19 @@
 import * as React from "react"
 import { useStaticQuery, graphql } from "gatsby"
-import { StaticImage } from "gatsby-plugin-image"
+
+const indexPageQuery = graphql`query IndexPageQuery {
+  indexJson {
+    name
+    pictureAlt
+    pictureSource
+    role
+    description
+  }
+}`;
 
 const IndexPage = () => {
 
-  const {json: data} = useStaticQuery(graphql`
-    query IndexPageQuery {
-      json {
-        pictureSource
-        pictureAlt
-        role
-        name
-        description
-      }
-    }
-  `);
+  const {indexJson: data} = useStaticQuery(indexPageQuery);
 
   return <main>
     <h1>{data.name}</h1>

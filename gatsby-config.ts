@@ -24,12 +24,7 @@ const config: GatsbyConfig = {
         path: "./content/data",
       },
     },
-    {
-      resolve: "gatsby-transformer-json",
-      options: {
-        typeName: "Json",
-      },
-    }
+    "gatsby-transformer-json",
   ]
 };
 
