@@ -1,6 +1,7 @@
 
 import * as React from "react";
 import Helmet from "react-helmet";
+import * as styles from "./Layout.module.scss";
 
 interface LayoutProps {
     title: string;
@@ -9,7 +10,7 @@ interface LayoutProps {
 }
 
 const Layout = ({title, description, children}: LayoutProps) => {
-  return <>
+  return <div className={styles.layout}>
         <Helmet>
             <html lang="en"/>
             <title>{title}</title>
@@ -18,7 +19,7 @@ const Layout = ({title, description, children}: LayoutProps) => {
         <main>
             {children}
         </main>
-  </>;
+  </div>;
 };
 
 export default Layout;

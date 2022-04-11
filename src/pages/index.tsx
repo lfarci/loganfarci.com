@@ -2,7 +2,6 @@ import * as React from "react"
 import {graphql} from "gatsby"
 import Layout from "../components/Layout";
 import Header from "../components/Header";
-import "./index.scss"
 
 interface IndexPageContent {
   name: string;
@@ -24,7 +23,7 @@ const IndexPage = ({data}: {data: IndexData}) => {
     <Header
       name={data.index.name}
       role={data.index.role}
-      picture={{alt: data.index.pictureAlt, src: data.index.pictureSource }}
+      picture={{alt: data.index.pictureAlt, src: data.index.pictureSource}}
       description={data.index.description}
     />
   </Layout>;
