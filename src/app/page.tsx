@@ -28,6 +28,11 @@ export default function Home() {
   const [output, setOutput] = useState<string[]>([]);
 
   const handleCommandSubmit = (command: string) => {
+    if (command === "clear") {
+      setOutput([]);
+      return;
+    }
+
     setOutput([...output, "$ " + command]);
   };
 
