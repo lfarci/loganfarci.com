@@ -6,12 +6,17 @@ import "./Terminal.css"; // Import the CSS file
 
 interface IHistoryItem {
     className: string;
-    input: string;
+    input?: string;
     output: string;
 }
 
+const welcomeMessage = "Welcome my website! Type 'help' to see a list of commands.";
+const defaultItems: IHistoryItem[] = [{ className: "output", input: null, output: welcomeMessage }];
+
+const dollar = "$";
+
 export default function Terminal() {
-    const [history, setHistory] = useState<IHistoryItem[]>([]);
+    const [history, setHistory] = useState<IHistoryItem[]>(defaultItems);
 
     const clearHistory = () => setHistory([]);
 
@@ -19,8 +24,6 @@ export default function Terminal() {
 
     const handleCommandSubmit = (line: string) => {
         var command = handleCommand(line);
-
-        console.log(command);
 
         if (command.hasError) {
             appendToHistory({ className: "error", input: line, output: command.error ?? "" });
@@ -40,12 +43,12 @@ export default function Terminal() {
             <div>
                 {history.map((item, index) => (
                     <div key={index}>
-                        <div>$ {item.input}</div>
+                        {item.input !== null && <div>{dollar} {item.input}</div>}
                         <div className={item.className}>{item.output}</div>
                     </div>
                 ))}
             </div>
-            <Prompt prompt="$" onCommandSubmit={handleCommandSubmit} />
+            <Prompt prompt={dollar} onCommandSubmit={handleCommandSubmit} />
         </div>
     );
 }
