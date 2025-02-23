@@ -1,6 +1,9 @@
 "use client";
 import { useState } from "react";
+
 import Prompt from "./Prompt";
+import History from "./history/History";
+
 import handleCommand from "@/core/Commands";
 import "./Terminal.css"; // Import the CSS file
 
@@ -40,14 +43,7 @@ export default function Terminal() {
 
     return (
         <div style={{ backgroundColor: "black", color: "white", padding: "10px", fontFamily: "monospace" }}>
-            <div>
-                {history.map((item, index) => (
-                    <div key={index}>
-                        {item.input !== null && <div>{dollar} {item.input}</div>}
-                        <div className={item.className}>{item.output}</div>
-                    </div>
-                ))}
-            </div>
+            <History prompt={dollar} history={history} />
             <Prompt prompt={dollar} onCommandSubmit={handleCommandSubmit} />
         </div>
     );
