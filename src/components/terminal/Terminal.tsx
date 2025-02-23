@@ -44,7 +44,7 @@ export default function Terminal() {
     }, [history]);
 
     return (
-        <div ref={terminalRef} style={{ backgroundColor: "black", color: "white", padding: "10px", fontFamily: "monospace", height: "100vh", overflowY: "auto" }}>
+        <div ref={terminalRef} className="terminal">
             <History prompt={dollar} history={history} />
             <Prompt prompt={dollar} onCommandSubmit={handleCommandSubmit} />
         </div>
