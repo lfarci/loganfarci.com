@@ -10,20 +10,20 @@ export interface IHistoryItem {
     output: string;
 }
 
-function HistoryItem({ item }: { item: IHistoryItem }) {
+function HistoryItem({ prompt, item }: { prompt: string, item: IHistoryItem }) {
 
     if (item.type === "welcomeMessage") {
         return <Welcome />
     }
 
     return <div>
-        {item.input !== null && <div>{item.input}</div>}
+        {item.input !== null && <div>{prompt} {item.input}</div>}
         <div className={item.type}>{item.output}</div>
     </div>;
 }
 
 export default function History({ prompt, history }: { prompt: string, history: IHistoryItem[] }) {
     return <>
-        {history.map((item, index) => <HistoryItem key={index} item={item} />)}
+        {history.map((item, index) => <HistoryItem key={index} prompt={prompt} item={item} />)}
     </>;
 }
