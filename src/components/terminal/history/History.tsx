@@ -1,18 +1,29 @@
-interface IHistoryItem {
-    className: string;
-    input?: string;
+import { Key } from "react";
+import Welcome from "./Welcome";
+
+type IHistoryItemInput = null | string;
+type IHistoryItemType = "commandOutput" | "commandError" | "welcomeMessage";
+
+export interface IHistoryItem {
+    type: IHistoryItemType;
+    input: IHistoryItemInput;
     output: string;
 }
 
-export default function history({prompt, history}: {prompt: string, history: IHistoryItem[]}) {
+function HistoryItem({ item }: { item: IHistoryItem }) {
+
+    if (item.type === "welcomeMessage") {
+        return <Welcome />
+    }
+
+    return <div>
+        {item.input !== null && <div>{item.input}</div>}
+        <div className={item.type}>{item.output}</div>
+    </div>;
+}
+
+export default function History({ prompt, history }: { prompt: string, history: IHistoryItem[] }) {
     return <>
-        <div>
-            {history.map((item, index) => (
-                <div key={index}>
-                    {item.input !== null && <div>{prompt} {item.input}</div>}
-                    <div className={item.className}>{item.output}</div>
-                </div>
-            ))}
-        </div>
+        {history.map((item, index) => <HistoryItem key={index} item={item} />)}
     </>;
 }

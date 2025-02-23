@@ -3,18 +3,13 @@ import { useState } from "react";
 
 import Prompt from "./Prompt";
 import History from "./history/History";
+import { IHistoryItem } from "./history/History";
 
 import handleCommand from "@/core/Commands";
 import "./Terminal.css"; // Import the CSS file
 
-interface IHistoryItem {
-    className: string;
-    input?: string;
-    output: string;
-}
-
 const welcomeMessage = "Welcome my website! Type 'help' to see a list of commands.";
-const defaultItems: IHistoryItem[] = [{ className: "output", input: null, output: welcomeMessage }];
+const defaultItems: IHistoryItem[] = [{ type: "welcomeMessage", input: null, output: welcomeMessage }];
 
 const dollar = "$";
 
@@ -29,7 +24,7 @@ export default function Terminal() {
         var command = handleCommand(line);
 
         if (command.hasError) {
-            appendToHistory({ className: "error", input: line, output: command.error ?? "" });
+            appendToHistory({ type: "commandError", input: line, output: command.error ?? "" });
             return;
         }
         
@@ -38,7 +33,7 @@ export default function Terminal() {
             return;
         }
 
-        appendToHistory({ className: "output", input: line, output: command.output });
+        appendToHistory({ type: "commandOutput", input: line, output: command.output });
     };
 
     return (
