@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
 import Prompt from "./Prompt";
 import History from "./history/History";
@@ -15,6 +15,7 @@ const dollar = "$";
 
 export default function Terminal() {
     const [history, setHistory] = useState<IHistoryItem[]>(defaultItems);
+    const terminalRef = useRef<HTMLDivElement>(null);
 
     const clearHistory = () => setHistory([]);
 
@@ -36,8 +37,14 @@ export default function Terminal() {
         appendToHistory({ type: "commandOutput", input: line, output: command.output });
     };
 
+    useEffect(() => {
+        if (terminalRef.current) {
+            terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
+        }
+    }, [history]);
+
     return (
-        <div style={{ backgroundColor: "black", color: "white", padding: "10px", fontFamily: "monospace" }}>
+        <div ref={terminalRef} style={{ backgroundColor: "black", color: "white", padding: "10px", fontFamily: "monospace", height: "100vh", overflowY: "auto" }}>
             <History prompt={dollar} history={history} />
             <Prompt prompt={dollar} onCommandSubmit={handleCommandSubmit} />
         </div>
