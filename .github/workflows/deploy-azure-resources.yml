@@ -1,0 +1,44 @@
+name: "Release to Azure"
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "infra/**"
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: Production
+    defaults:
+      run:
+        working-directory: infra
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init
+        run: |
+          terraform init \
+            -backend-config="storage_account_name=${{ secrets.STORAGE_ACCOUNT_NAME }}" \
+            -backend-config="container_name=${{ secrets.CONTAINER_NAME }}" \
+            -backend-config="key=${{ secrets.BLOB_NAME }}" \
+            -backend-config="access_key=${{ secrets.ACCESS_KEY }}"
+
+      - name: Terraform Plan
+        id: plan
+        run: |
+          terraform plan \
+            -var="subscription_id=${{ secrets.SUBSCRIPTION_ID }}" \
+            -var="workload_name=lfarci" \
+            -out=tfplan
+
+      - name: Terraform Apply
+        run: |
+          terraform apply -auto-approve tfplan
