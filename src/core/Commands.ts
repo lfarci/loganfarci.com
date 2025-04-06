@@ -50,6 +50,14 @@ class ClearCommand extends Command {
     }
 }
 
+class HelpCommand extends Command {
+    execute(): CommandResult {
+        return new CommandResult(null, false, `Available commands:
+            - clear: Clear the console.
+            - help: Show this help message.`);
+    }
+}
+
 function parseCommand(line: string): ICommand {
     const [name, ...args] = line.split(" ");
     switch (name) {
@@ -57,6 +65,8 @@ function parseCommand(line: string): ICommand {
             return new EmptyCommand(name, args);
         case "clear":
             return new ClearCommand(name, args);
+        case "help":
+            return new HelpCommand(name, args);
         default:
             throw new Error(`Unknown command: ${name}.`);
     }
