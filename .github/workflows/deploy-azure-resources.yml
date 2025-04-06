@@ -59,10 +59,11 @@ jobs:
         if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'Destroy' }}
         id: destroy
         run: |
-          terraform destroy \
+          terraform plan \
             -var="subscription_id=${{ secrets.SUBSCRIPTION_ID }}" \
             -var="workload_name=lfarci" \
-            -out=tfplan
+            -out=tfplan \
+            -destroy
 
       - name: Terraform Apply
         run: |
