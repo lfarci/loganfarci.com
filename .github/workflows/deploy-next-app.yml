@@ -46,4 +46,4 @@ jobs:
 
       - name: Deploy to Azure Static Web Apps
         run: |
-          swa deploy ./out --env production --token ${{ secrets.AZURE_STATIC_DEPLOYMENT_TOKEN }}
+          npx swa deploy ./out --env production --token ${{ secrets.AZURE_STATIC_DEPLOYMENT_TOKEN }}
