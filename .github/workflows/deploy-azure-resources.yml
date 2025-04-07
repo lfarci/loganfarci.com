@@ -8,25 +8,26 @@ on:
       - "infra/**"
   workflow_dispatch:
     inputs:
-        action:
-            description: "Choose an action to perform"
-            required: true
-            type: choice
-            options:
-                - Deploy
-                - Destroy
+      action:
+        description: "Choose an action to perform"
+        required: true
+        type: choice
+        options:
+          - Deploy
+          - Destroy
 
 permissions:
   contents: read
 
 env:
-    ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
-    ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
-    ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-    ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+  ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+  ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+  ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+  ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
 
 jobs:
   deploy:
+    name: "Deploy Azure Resources"
     runs-on: ubuntu-latest
     environment:
       name: Production
