@@ -28,7 +28,9 @@ env:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: Production
+    environment:
+      name: Production
+      url: ${{ steps.output.outputs.host_name }}
     defaults:
       run:
         working-directory: infra
@@ -68,3 +70,9 @@ jobs:
       - name: Terraform Apply
         run: |
           terraform apply -auto-approve tfplan
+
+      - name: Terraform Output
+        id: output
+        run: |
+          host_name="$(terraform output -raw static_web_host_name)"
+          echo "host_name=$host_name" >> $GITHUB_OUTPUT
