@@ -18,7 +18,7 @@ export default function Welcome() {
         <div>
             <pre style={{ fontSize: '0.5em' }}>{message}</pre>
             <br/>
-            <p>Hi 👋, welcome on my personal website! I&apos;m a Passionate and results-driven Software Engineer specializing in Microsoft technologies, with a focus on C#, .NET, Visual Studio, and Azure. With three years of hands-on experience in the public, banking, and energy sectors in Belgium, I&apos;ve demonstrated expertise in crafting robust solutions and driving digital innovation.</p>
+            <p>Hi 👋, welcome on my personal website! I&apos;m a Passionate and results-driven Software Engineer specializing in Microsoft technologies, with a focus on C#, .NET, Visual Studio, and Azure. With three years of hands-on experience in the public, banking, and energy sectors in Belgium, I&apos;ve demonstrated expertise in crafting robust solutions and driving digital innovation. Te amo Juliana ❤️❤️❤️</p>
             <br/>
             <p>Type &apos;help&apos; to see a list of commands.</p>
             <br/>
