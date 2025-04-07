@@ -1,4 +1,3 @@
-import { Key } from "react";
 import Welcome from "./Welcome";
 
 type IHistoryItemInput = null | string;

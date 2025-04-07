@@ -22,7 +22,7 @@ export default function Terminal() {
     const appendToHistory = (item: IHistoryItem) => setHistory([...history, item]);
 
     const handleCommandSubmit = (line: string) => {
-        var command = handleCommand(line);
+        const command = handleCommand(line);
 
         if (command.hasError) {
             appendToHistory({ type: "commandError", input: line, output: command.error ?? "" });
