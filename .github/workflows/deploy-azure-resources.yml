@@ -1,4 +1,4 @@
-name: "Release to Azure"
+name: "Deploy Azure Resources"
 
 on:
   push:
@@ -74,5 +74,5 @@ jobs:
       - name: Terraform Output
         id: output
         run: |
-          host_name="$(terraform output -raw static_web_host_name)"
+          host_name="https://$(terraform output -raw static_web_host_name)"
           echo "host_name=$host_name" >> $GITHUB_OUTPUT
