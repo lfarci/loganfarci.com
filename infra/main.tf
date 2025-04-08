@@ -16,7 +16,7 @@ resource "azurerm_dns_zone" "this" {
 }
 
 resource "azurerm_dns_cname_record" "this" {
-  name                = "www"
+  name                = "www.${var.static_web_app_custom_domain}"
   zone_name           = azurerm_dns_zone.this.name
   resource_group_name = azurerm_resource_group.this.name
   ttl                 = 300
