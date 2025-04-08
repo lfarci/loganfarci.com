@@ -23,7 +23,7 @@ resource "azurerm_dns_cname_record" "example" {
   record              = azurerm_static_web_app.this.default_hostname
 }
 
-resource "azurerm_static_site_custom_domain" "loganfarci" {
+resource "azurerm_static_web_app_custom_domain" "loganfarci" {
   static_site_id  = azurerm_static_web_app.this.id
   domain_name     = var.static_web_app_custom_domain
   validation_type = "cname-delegation"
