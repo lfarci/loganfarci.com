@@ -20,11 +20,11 @@ resource "azurerm_dns_cname_record" "example" {
   zone_name           = azurerm_dns_zone.this.name
   resource_group_name = azurerm_resource_group.this.name
   ttl                 = 300
-  record              = azurerm_static_web_app.this.default_hostname
+  record              = azurerm_static_web_app.this.default_host_name
 }
 
 resource "azurerm_static_web_app_custom_domain" "loganfarci" {
-  static_site_id  = azurerm_static_web_app.this.id
+  static_web_app_id  = azurerm_static_web_app.this.id
   domain_name     = var.static_web_app_custom_domain
   validation_type = "cname-delegation"
 }
