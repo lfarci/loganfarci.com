@@ -1,5 +1,5 @@
-import Terminal from "../components/terminal/Terminal";
+import Introduction from "@/components/home/Introduction";
 
 export default function Home() {
-  return <Terminal />;
+  return <Introduction />;
 }

@@ -6,7 +6,7 @@ import History from "./history/History";
 import { IHistoryItem } from "./history/History";
 
 import handleCommand from "@/core/Commands";
-import "./Terminal.css"; // Import the CSS file
+import "./Terminal.css";
 
 const welcomeMessage = "Welcome my website! Type 'help' to see a list of commands.";
 const defaultItems: IHistoryItem[] = [{ type: "welcomeMessage", input: null, output: welcomeMessage }];

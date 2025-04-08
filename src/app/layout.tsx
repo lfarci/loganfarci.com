@@ -21,7 +21,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${redditMono.variable}`}>
-        {children}
+        <div className="max-w-screen-lg mx-auto px-4">
+          {children}
+        </div>
+        <hr className="border-t border-gray-300 my-8" />
+        <footer className="text-center mt-8">
+          © 2023 Logan Farci. All rights reserved.
+        </footer>
       </body>
     </html>
   );
