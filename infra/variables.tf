@@ -20,3 +20,9 @@ variable "static_web_app_sku_tier" {
     type        = string
     default     = "Free"
 }
+
+variable "static_web_app_custom_domain" {
+    description = "The custom domain for the Static Web App."
+    type        = string
+    default     = "loganfarci.com"
+}
