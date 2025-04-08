@@ -16,7 +16,7 @@ resource "azurerm_dns_zone" "this" {
 }
 
 resource "azurerm_dns_cname_record" "example" {
-  name                = var.static_web_app_custom_domain
+  name                = "www"
   zone_name           = azurerm_dns_zone.this.name
   resource_group_name = azurerm_resource_group.this.name
   ttl                 = 300
@@ -25,6 +25,6 @@ resource "azurerm_dns_cname_record" "example" {
 
 resource "azurerm_static_web_app_custom_domain" "loganfarci" {
   static_web_app_id  = azurerm_static_web_app.this.id
-  domain_name     = var.static_web_app_custom_domain
+  domain_name     = "www.${var.static_web_app_custom_domain}"
   validation_type = "cname-delegation"
 }
