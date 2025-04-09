@@ -26,7 +26,7 @@ resource "azurerm_dns_cname_record" "this" {
 resource "azurerm_static_web_app_custom_domain" "this" {
   static_web_app_id = azurerm_static_web_app.this.id
   domain_name       = "${local.subdomain}.${var.static_web_app_custom_domain}"
-  validation_method = "cname-delegation"
+  validation_type = "cname-delegation"
 
   depends_on = [azurerm_dns_cname_record.this]
 }
