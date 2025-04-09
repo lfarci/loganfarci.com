@@ -9,3 +9,8 @@ resource "azurerm_static_web_app" "this" {
   location            = azurerm_resource_group.this.location
   sku_tier            = var.static_web_app_sku_tier
 }
+
+resource "azurerm_dns_zone" "this" {
+  name                = var.static_web_app_custom_domain
+  resource_group_name = azurerm_resource_group.this.name
+}
