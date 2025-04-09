@@ -81,5 +81,13 @@ jobs:
           host_name="https://$(terraform output -raw static_web_host_name)"
           name_servers=$(terraform output -json dns_zone_name_servers)
           echo "host_name=$host_name" >> $GITHUB_OUTPUT
-          echo "## Name Servers" >> $GITHUB_STEP_SUMMARY
-          echo $name_servers >> $GITHUB_STEP_SUMMARY
+          echo "name_servers=$name_servers" >> $GITHUB_OUTPUT
+
+      - name: Write summary
+        if: ${{ env.IS_DEPLOY == 'true' }}
+        run: |
+          echo "## Deployment Summary" >> $GITHUB_STEP_SUMMARY
+          echo "### Host Name" >> $GITHUB_STEP_SUMMARY
+          echo "${{ steps.output.outputs.host_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "### Name Servers" >> $GITHUB_STEP_SUMMARY
+          echo "${{ steps.output.outputs.name_servers }}" >> $GITHUB_STEP_SUMMARY
