@@ -88,10 +88,10 @@ jobs:
         if: ${{ env.IS_DEPLOY == 'true' }}
         run: |
           echo "## ☁️ Azure Deployment Summary" >> $GITHUB_STEP_SUMMARY
-          echo "- Default host name: `${{ steps.output.outputs.host_name }}`." >> $GITHUB_STEP_SUMMARY
+            echo "- Default host name: \`${{ steps.output.outputs.host_name }}\`." >> $GITHUB_STEP_SUMMARY
           echo "- DNS name servers:" >> $GITHUB_STEP_SUMMARY
           
           IFS=',' read -ra servers <<< "${{ steps.output.outputs.name_servers }}"
           for server in "${servers[@]}"; do
-            echo "  - `$server`" >> $GITHUB_STEP_SUMMARY
+            echo "  - \`$server\`" >> $GITHUB_STEP_SUMMARY
           done
