@@ -79,7 +79,7 @@ jobs:
         id: output
         run: |
           host_name="https://$(terraform output -raw static_web_host_name)"
-          name_servers=$(terraform output -raw dns_zone_name_servers)
+          name_servers=$(terraform output -json dns_zone_name_servers)
           echo "host_name=$host_name" >> $GITHUB_OUTPUT
           echo "## Name Servers" >> $GITHUB_SUMMARY
           echo $name_servers >> $GITHUB_SUMMARY
