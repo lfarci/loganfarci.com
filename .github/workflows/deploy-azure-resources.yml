@@ -80,14 +80,19 @@ jobs:
         run: |
           host_name="https://$(terraform output -raw static_web_host_name)"
           name_servers=$(terraform output -json dns_zone_name_servers)
+          cleaned_name_servers=${name_servers:1:-1}
           echo "host_name=$host_name" >> $GITHUB_OUTPUT
-          echo "name_servers=$name_servers" >> $GITHUB_OUTPUT
+          echo "name_servers=$cleaned_name_servers" >> $GITHUB_OUTPUT
 
       - name: Write summary
         if: ${{ env.IS_DEPLOY == 'true' }}
         run: |
-          echo "## Deployment Summary" >> $GITHUB_STEP_SUMMARY
-          echo "### Host Name" >> $GITHUB_STEP_SUMMARY
+          echo "## ☁️ Azure Deployment Summary" >> $GITHUB_STEP_SUMMARY
+          echo "- Default host name:" >> $GITHUB_STEP_SUMMARY
           echo "${{ steps.output.outputs.host_name }}" >> $GITHUB_STEP_SUMMARY
-          echo "### Name Servers" >> $GITHUB_STEP_SUMMARY
-          echo "${{ steps.output.outputs.name_servers }}" >> $GITHUB_STEP_SUMMARY
+          echo "- DNS name servers:" >> $GITHUB_STEP_SUMMARY
+          
+          IFS=',' read -ra servers <<< "${{ steps.output.outputs.name_servers }}"
+          for server in "${servers[@]}"; do
+            echo "- $server" >> $GITHUB_STEP_SUMMARY
+          done
