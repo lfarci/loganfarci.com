@@ -27,4 +27,6 @@ resource "azurerm_static_web_app_custom_domain" "this" {
   static_web_app_id = azurerm_static_web_app.this.id
   hostname          = "${local.subdomain}.${var.static_web_app_custom_domain}"
   validation_method = "cname-delegation"
+
+  depends_on = [azurerm_dns_cname_record.this]
 }
