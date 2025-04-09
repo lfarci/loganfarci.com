@@ -1,4 +1,4 @@
-name: "Deploy Azure Resources"
+name: "Manage Azure Resources"
 
 on:
   push:
