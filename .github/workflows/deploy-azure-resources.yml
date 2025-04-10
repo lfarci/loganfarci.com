@@ -90,7 +90,7 @@ jobs:
         run: |
           resource_group_name="$(terraform output -raw resource_group_name)"
           static_web_app_name="$(terraform output -raw static_web_app_name)"
-          static_web_app_host_name="https://$(terraform output -raw static_web_host_name)"
+          static_web_app_host_name="https://$(terraform output -raw static_web_app_host_name)"
           dns_zone_name=$(terraform output -raw dns_zone_name)
           name_servers=$(terraform output -json dns_zone_name_servers)
           cleaned_name_servers=${name_servers:1:-1}
@@ -125,6 +125,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Azure CLI Login
+        if: ${{ env.IS_DEPLOY == 'true' }}
         uses: azure/login@v2
         with:
           client-id: ${{ secrets.ARM_CLIENT_ID }}
@@ -132,6 +133,7 @@ jobs:
           subscription-id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
 
       - name: Configure custom domain
+        if: ${{ env.IS_DEPLOY == 'true' }}
         run: ./setup_custom_domain.sh
         env:
           RESOURCE_GROUP: ${{ needs.terraform.outputs.resource_group_name }}
