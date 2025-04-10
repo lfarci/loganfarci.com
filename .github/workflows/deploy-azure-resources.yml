@@ -31,7 +31,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: Production
-      url: ${{ steps.output.outputs.host_name }}
+      url: "https://${{ steps.output.outputs.host_name }}"
     defaults:
       run:
         working-directory: infra
@@ -91,7 +91,7 @@ jobs:
         run: |
           resource_group_name="$(terraform output -raw resource_group_name)"
           static_web_app_name="$(terraform output -raw static_web_app_name)"
-          static_web_app_host_name="https://$(terraform output -raw static_web_app_host_name)"
+          static_web_app_host_name="$(terraform output -raw static_web_app_host_name)"
           dns_zone_name=$(terraform output -raw dns_zone_name)
           name_servers=$(terraform output -json dns_zone_name_servers)
           cleaned_name_servers=${name_servers:1:-1}
