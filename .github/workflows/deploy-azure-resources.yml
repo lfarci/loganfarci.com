@@ -23,6 +23,7 @@ permissions:
 env:
   IS_DEPLOY: ${{ github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'Deploy') }}
   IS_DESTROY: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'Destroy' }}
+  CUSTOM_DOMAIN: "loganfarci.com"
 
 jobs:
   terraform:
@@ -118,9 +119,6 @@ jobs:
     runs-on: ubuntu-latest
     environment: Production
     needs: terraform
-    defaults:
-      run:
-        working-directory: "${{ github.workspace }}/.github/scripts"
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -135,10 +133,10 @@ jobs:
 
       - name: Configure custom domain
         if: ${{ env.IS_DEPLOY == 'true' }}
-        run: ./setup_custom_domain.sh
+        run: ${{ github.workspace }}/.github/scripts/setup_custom_domain.sh
         env:
           RESOURCE_GROUP: ${{ needs.terraform.outputs.resource_group_name }}
           DNS_ZONE: ${{ needs.terraform.outputs.dns_zone_name }}
-          STATIC_WEB_APP_CUSTOM_DOMAIN: 
+          STATIC_WEB_APP_CUSTOM_DOMAIN: ${{ env.CUSTOM_DOMAIN }}
           STATIC_WEB_APP_NAME: ${{ needs.terraform.outputs.static_web_app_name }}
           STATIC_WEB_APP_HOST_NAME: ${{ needs.terraform.outputs.static_web_app_host_name }}
