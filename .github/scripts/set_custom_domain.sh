@@ -1,12 +1,5 @@
 #!/bin/bash
 
-# Set variables
-RESOURCE_GROUP="your-resource-group"
-DNS_ZONE="your-dns-zone-name"
-STATIC_WEB_APP_CUSTOM_DOMAIN="your-custom-domain"
-STATIC_WEB_APP_NAME="your-static-site-name"
-STATIC_WEB_APP_HOST_NAME="your-static-site-endpoint" # e.g., example.z6.web.core.windows.net
-
 ###############################################################################
 #                                 Constants                                   #
 ###############################################################################
