@@ -116,6 +116,7 @@ jobs:
   custom_domain:
     name: "Configure custom domain"
     runs-on: ubuntu-latest
+    environment: Production
     needs: terraform
     defaults:
       run:
