@@ -133,7 +133,7 @@ jobs:
 
       - name: Configure custom domain
         if: ${{ env.IS_DEPLOY == 'true' }}
-        run: ${{ github.workspace }}/.github/scripts/setup_custom_domain.sh
+        run: .github/scripts/setup_custom_domain.sh
         env:
           RESOURCE_GROUP: ${{ needs.terraform.outputs.resource_group_name }}
           DNS_ZONE: ${{ needs.terraform.outputs.dns_zone_name }}
