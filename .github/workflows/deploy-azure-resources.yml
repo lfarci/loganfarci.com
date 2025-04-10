@@ -116,6 +116,7 @@ jobs:
 
   custom_domain:
     name: "Configure custom domain"
+    if: ${{ github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'Deploy') }}
     runs-on: ubuntu-latest
     environment: Production
     needs: terraform
@@ -124,7 +125,6 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Azure CLI Login
-        if: ${{ env.IS_DEPLOY == 'true' }}
         uses: azure/login@v2
         with:
           client-id: ${{ secrets.ARM_CLIENT_ID }}
@@ -132,11 +132,10 @@ jobs:
           subscription-id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
 
       - name: Configure custom domain
-        if: ${{ env.IS_DEPLOY == 'true' }}
         run: .github/scripts/set_custom_domain.sh
         env:
           RESOURCE_GROUP: ${{ needs.terraform.outputs.resource_group_name }}
           DNS_ZONE: ${{ needs.terraform.outputs.dns_zone_name }}
-          STATIC_WEB_APP_CUSTOM_DOMAIN: ${{ env.CUSTOM_DOMAIN }}
+          STATIC_WEB_APP_CUSTOM_DOMAIN: "www.${{ env.CUSTOM_DOMAIN }}"
           STATIC_WEB_APP_NAME: ${{ needs.terraform.outputs.static_web_app_name }}
           STATIC_WEB_APP_HOST_NAME: ${{ needs.terraform.outputs.static_web_app_host_name }}
