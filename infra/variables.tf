@@ -6,7 +6,7 @@ variable "subscription_id" {
 variable "workload_name" {
   description = "A non-empty string used to describe the workload running on the deployed infrastructure."
   type        = string
-  default     = "lfarci"
+  default     = "loganfarci"
 }
 
 variable "location" {

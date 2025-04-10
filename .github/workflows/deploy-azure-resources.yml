@@ -23,6 +23,7 @@ permissions:
 env:
   IS_DEPLOY: ${{ github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'Deploy') }}
   IS_DESTROY: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'Destroy' }}
+  SUBDOMAIN: "www"
   CUSTOM_DOMAIN: "loganfarci.com"
 
 jobs:
@@ -136,6 +137,7 @@ jobs:
         env:
           RESOURCE_GROUP: ${{ needs.terraform.outputs.resource_group_name }}
           DNS_ZONE: ${{ needs.terraform.outputs.dns_zone_name }}
-          STATIC_WEB_APP_CUSTOM_DOMAIN: "www.${{ env.CUSTOM_DOMAIN }}"
+          DNS_CNAME_RECORD_NAME: "${{ env.SUBDOMAIN }}"
+          STATIC_WEB_APP_CUSTOM_DOMAIN: "${{ env.SUBDOMAIN }}.${{ env.CUSTOM_DOMAIN }}"
           STATIC_WEB_APP_NAME: ${{ needs.terraform.outputs.static_web_app_name }}
           STATIC_WEB_APP_HOST_NAME: ${{ needs.terraform.outputs.static_web_app_host_name }}

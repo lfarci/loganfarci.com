@@ -17,7 +17,7 @@ log() {
 
 create_cname_record() {
     log "Creating CNAME record for $STATIC_WEB_APP_CUSTOM_DOMAIN pointing to $STATIC_WEB_APP_HOST_NAME."
-    az network dns record-set cname set-record --resource-group "$RESOURCE_GROUP" --zone-name "$DNS_ZONE" --record-set-name "$STATIC_WEB_APP_CUSTOM_DOMAIN" --cname "$STATIC_WEB_APP_HOST_NAME"
+    az network dns record-set cname set-record --resource-group "$RESOURCE_GROUP" --zone-name "$DNS_ZONE" --record-set-name "$DNS_CNAME_RECORD_NAME" --cname "$STATIC_WEB_APP_HOST_NAME"
 }
 
 link_STATIC_WEB_APP_CUSTOM_DOMAIN() {
