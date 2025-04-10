@@ -14,19 +14,3 @@ resource "azurerm_dns_zone" "this" {
   name                = var.static_web_app_custom_domain
   resource_group_name = azurerm_resource_group.this.name
 }
-
-resource "azurerm_dns_cname_record" "this" {
-  name                = local.subdomain
-  zone_name           = azurerm_dns_zone.this.name
-  resource_group_name = azurerm_resource_group.this.name
-  ttl                 = 3600
-  record              = azurerm_static_web_app.this.default_host_name
-}
-
-resource "azurerm_static_web_app_custom_domain" "this" {
-  static_web_app_id = azurerm_static_web_app.this.id
-  domain_name       = "${local.subdomain}.${var.static_web_app_custom_domain}"
-  validation_type = "cname-delegation"
-
-  depends_on = [azurerm_dns_cname_record.this]
-}

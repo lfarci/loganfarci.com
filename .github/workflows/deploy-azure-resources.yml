@@ -25,8 +25,8 @@ env:
   IS_DESTROY: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'Destroy' }}
 
 jobs:
-  deploy:
-    name: "Deploy Azure Resources"
+  terraform:
+    name: "Deploy Terraform module"
     runs-on: ubuntu-latest
     environment:
       name: Production
@@ -34,6 +34,12 @@ jobs:
     defaults:
       run:
         working-directory: infra
+    outputs:
+      resource_group_name: ${{ steps.output.outputs.resource_group_name }}
+      static_web_app_name: ${{ steps.output.outputs.static_web_app_name }}
+      static_web_app_host_name: ${{ steps.output.outputs.static_web_app_host_name }}
+      dns_zone_name: ${{ steps.output.outputs.dns_zone_name }}
+      dns_name_servers: ${{ steps.output.outputs.dns_name_servers }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -82,20 +88,54 @@ jobs:
         if: ${{ env.IS_DEPLOY == 'true' }}
         id: output
         run: |
-          host_name="https://$(terraform output -raw static_web_host_name)"
+          resource_group_name="$(terraform output -raw resource_group_name)"
+          static_web_app_name="$(terraform output -raw static_web_app_name)"
+          static_web_app_host_name="https://$(terraform output -raw static_web_host_name)"
+          dns_zone_name=$(terraform output -raw dns_zone_name)
           name_servers=$(terraform output -json dns_zone_name_servers)
           cleaned_name_servers=${name_servers:1:-1}
-          echo "host_name=$host_name" >> $GITHUB_OUTPUT
-          echo "name_servers=$cleaned_name_servers" >> $GITHUB_OUTPUT
+
+          echo "resource_group_name=$resource_group_name" >> $GITHUB_OUTPUT
+          echo "static_web_app_name=$static_web_app_name" >> $GITHUB_OUTPUT
+          echo "static_web_app_host_name=$static_web_app_host_name" >> $GITHUB_OUTPUT
+          echo "dns_zone_name=$dns_zone_name" >> $GITHUB_OUTPUT
+          echo "dns_name_servers=$cleaned_name_servers" >> $GITHUB_OUTPUT
 
       - name: Write summary
         if: ${{ env.IS_DEPLOY == 'true' }}
         run: |
           echo "## ☁️ Azure Deployment Summary" >> $GITHUB_STEP_SUMMARY
-            echo "- Default host name: \`${{ steps.output.outputs.host_name }}\`." >> $GITHUB_STEP_SUMMARY
+            echo "- Default host name: \`${{ steps.output.outputs.static_web_app_host_name }}\`." >> $GITHUB_STEP_SUMMARY
           echo "- DNS name servers:" >> $GITHUB_STEP_SUMMARY
           
-          IFS=',' read -ra servers <<< "${{ steps.output.outputs.name_servers }}"
+          IFS=',' read -ra servers <<< "${{ steps.output.outputs.dns_name_servers }}"
           for server in "${servers[@]}"; do
             echo "  - \`$server\`" >> $GITHUB_STEP_SUMMARY
           done
+
+  custom_domain:
+    name: "Configure custom domain"
+    runs-on: ubuntu-latest
+    needs: terraform
+    defaults:
+      run:
+        working-directory: "${{ github.workspace }}/.github/scripts"
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Azure CLI Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.ARM_CLIENT_ID }}
+          tenant-id: ${{ secrets.ARM_TENANT_ID }}
+          subscription-id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+
+      - name: Configure custom domain
+        run: ./setup_custom_domain.sh
+        env:
+          RESOURCE_GROUP: ${{ needs.terraform.outputs.resource_group_name }}
+          DNS_ZONE: ${{ needs.terraform.outputs.dns_zone_name }}
+          STATIC_WEB_APP_CUSTOM_DOMAIN: 
+          STATIC_WEB_APP_NAME: ${{ needs.terraform.outputs.static_web_app_name }}
+          STATIC_WEB_APP_HOST_NAME: ${{ needs.terraform.outputs.static_web_app_host_name }}
