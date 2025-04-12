@@ -37,14 +37,14 @@ permissions:
 
 env:
   STORAGE_ACCOUNT_NAME: "${{ github.event.inputs.workload }}${{ github.run_id }}"
-  ENVIRONMENT_VARIABLE_FILE: ".env"
+  ENVIRONMENT_SECRET_FILE: ".env"
 
 jobs:
   deploy:
     name: "Deploy storage account"
     runs-on: ubuntu-latest
     environment:
-      name: Production
+      name: ${{ github.event.inputs.environment }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -56,7 +56,7 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Create Storage Account and Container
+      - name: Create ${{ env.STORAGE_ACCOUNT_NAME }} storage account and ${{ github.event.inputs.container_name }} container
         run: .github/scripts/deploy_storage_account.sh
         env:
           RESOURCE_GROUP: ${{ github.event.inputs.resource_group_name }}
@@ -64,29 +64,21 @@ jobs:
           STORAGE_ACCOUNT_NAME: "${{ env.STORAGE_ACCOUNT_NAME }}"
           CONTAINER_NAME: "${{ github.event.inputs.container_name }}"
 
-  set_environment:
-    name: "Set environment variables"
-    runs-on: ubuntu-latest
-    needs: deploy
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Retrieve access key
+      - name: Retrieve access key for ${{ env.STORAGE_ACCOUNT_NAME }} storage account
         id: get_access_key
         run: |
           ACCESS_KEY=$(az storage account keys list --account-name "${{ env.STORAGE_ACCOUNT_NAME }}" --query '[0].value' -o tsv)
-          echo "value=${ACCESS_KEY}" >> "$GITHUB_OUTPUT"
+          echo "value=$ACCESS_KEY" >> "$GITHUB_OUTPUT"
 
-      - name: Create environment variable file
+      - name: Create ${{ github.event.inputs.environment }} secrets file
         run: |
-          echo "TF_BACKEND_STORAGE_ACCOUNT_NAME=${{ env.STORAGE_ACCOUNT_NAME }}"          >> "${{ env.ENVIRONMENT_VARIABLE_FILE }}"
-          echo "TF_BACKEND_CONTAINER_NAME=${{ github.event.inputs.container_name }}"      >> "${{ env.ENVIRONMENT_VARIABLE_FILE }}"
-          echo "TF_BACKEND_RESOURCE_GROUP=${{ github.event.inputs.resource_group_name }}" >> "${{ env.ENVIRONMENT_VARIABLE_FILE }}"
-          echo "TF_BACKEND_LOCATION=${{ github.event.inputs.location }}"                  >> "${{ env.ENVIRONMENT_VARIABLE_FILE }}"
-          echo "TF_BACKEND_ACCESS_KEY=${{ steps.get_access_key.outputs.value }}"             >> "${{ env.ENVIRONMENT_VARIABLE_FILE }}"
+          echo "TF_BACKEND_STORAGE_ACCOUNT_NAME=${{ env.STORAGE_ACCOUNT_NAME }}"          >> "${{ env.ENVIRONMENT_SECRET_FILE }}"
+          echo "TF_BACKEND_CONTAINER_NAME=${{ github.event.inputs.container_name }}"      >> "${{ env.ENVIRONMENT_SECRET_FILE }}"
+          echo "TF_BACKEND_RESOURCE_GROUP=${{ github.event.inputs.resource_group_name }}" >> "${{ env.ENVIRONMENT_SECRET_FILE }}"
+          echo "TF_BACKEND_LOCATION=${{ github.event.inputs.location }}"                  >> "${{ env.ENVIRONMENT_SECRET_FILE }}"
+          echo "TF_BACKEND_ACCESS_KEY=${{ steps.get_access_key.outputs.key }}"          >> "${{ env.ENVIRONMENT_SECRET_FILE }}"
 
-      - name: Set environment secrets
-        run: gh secret set -f "${{ env.ENVIRONMENT_VARIABLE_FILE }}"
+      - name: Set ${{ github.event.inputs.environment }} secrets
+        run: gh secret set -f "${{ env.ENVIRONMENT_SECRET_FILE }}"
         env:
           GITHUB_TOKEN: ${{ github.token }}
