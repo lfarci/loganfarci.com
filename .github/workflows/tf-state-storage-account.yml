@@ -16,12 +16,12 @@ on:
         default: "management-rg"
         type: string
       location:
-        description: "Azure region for the storage account"
+        description: "Location"
         required: false
         default: "germanywestcentral"
         type: string
       storage_account_name:
-        description: "Descriptive name for the storage account name"
+        description: "Storage account name"
         required: false
         default: "loganfarci"
         type: string
@@ -35,13 +35,9 @@ permissions:
   id-token: write
   contents: read
 
-env:
-  STORAGE_ACCOUNT_NAME: "${{ github.event.inputs.workload }}${{ github.run_id }}"
-
 jobs:
   run:
     name: "Run storage account script"
-    if: ${{ github.event.inputs.action == 'Deploy' }}
     runs-on: ubuntu-latest
     environment:
       name: ${{ github.event.inputs.environment }}
