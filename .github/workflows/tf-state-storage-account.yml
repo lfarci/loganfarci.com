@@ -10,6 +10,12 @@ on:
         options:
           - Deploy
           - Destroy
+      environment:
+        description: "Environment"
+        required: true
+        type: choice
+        options:
+          - Production
       resource_group_name:
         description: "Resource group name"
         required: false
@@ -39,6 +45,7 @@ jobs:
   run:
     name: "Run storage account script"
     runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
