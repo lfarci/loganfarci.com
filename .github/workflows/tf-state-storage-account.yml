@@ -1,4 +1,4 @@
-name: "Manage Azure Storage Account"
+name: "Manage Terraform State Storage Account"
 
 on:
   workflow_dispatch:
@@ -10,13 +10,6 @@ on:
         options:
           - Deploy
           - Destroy
-      environment:
-        description: "Select the target environment"
-        required: false
-        type: choice
-        default: Production
-        options:
-          - Production
       resource_group_name:
         description: "Resource group name"
         required: false
