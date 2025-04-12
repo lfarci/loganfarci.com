@@ -58,7 +58,7 @@ jobs:
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: Create ${{ github.event.inputs.storage_account_name }} storage account and ${{ github.event.inputs.container_name }} container
-        run: .github/scripts/deploy_storage_account.sh
+        run: .github/scripts/storage_account.sh
         env:
           RESOURCE_GROUP: ${{ github.event.inputs.resource_group_name }}
           LOCATION: ${{ github.event.inputs.location }}
