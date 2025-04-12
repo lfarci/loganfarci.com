@@ -1,0 +1,86 @@
+name: "Deploy Azure Storage Account"
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Select the target environment"
+        required: false
+        type: choice
+        default: Production
+        options:
+          - Production
+      resource_group_name:
+        description: "Resource group name"
+        required: false
+        default: "management-rg"
+        type: string
+      location:
+        description: "Azure region for the storage account"
+        required: false
+        default: "germanywestcentral"
+        type: string
+      workload:
+        description: "Descriptive name for the workload"
+        required: false
+        default: "loganfarci"
+        type: string
+      container_name:
+        description: "Container name"
+        required: false
+        default: "terraformstate"
+        type: string
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  STORAGE_ACCOUNT_NAME: "${{ github.event.inputs.workload }}${{ github.run_id }}"
+
+jobs:
+  deploy:
+    name: "Deploy storage account"
+    runs-on: ubuntu-latest
+    environment:
+      name: Production
+    outputs:
+      access_key: ${{ steps.get_access_key.outputs.access_key }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Azure CLI Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Create Storage Account and Container
+        run: .github/scripts/deploy_storage_account.sh
+        env:
+          RESOURCE_GROUP: ${{ github.event.inputs.resource_group_name }}
+          LOCATION: ${{ github.event.inputs.location }}
+          STORAGE_ACCOUNT_NAME: "${{ env.STORAGE_ACCOUNT_NAME }}"
+          CONTAINER_NAME: "${{ github.event.inputs.container_name }}"
+
+      - name: Retrieve access key
+        id: get_access_key
+        run: |
+          ACCESS_KEY=$(az storage account keys list --account-name "${{ env.STORAGE_ACCOUNT_NAME }}" --query '[0].value' -o tsv)
+          echo "access_key=${ACCESS_KEY}" >> "$GITHUB_OUTPUT"
+
+  set_environment:
+    name: "Set environment variables"
+    runs-on: ubuntu-latest
+    needs: deploy
+    steps:
+      - name: Set environment variables
+        id: output
+        run: |
+          gh secret set TF_BACKEND_STORAGE_ACCOUNT_NAME "${{ env.STORAGE_ACCOUNT_NAME }}"                --env ${{ github.event.inputs.environment }}
+          gh secret set TF_BACKEND_CONTAINER_NAME       "${{ github.event.inputs.container_name }}"      --env ${{ github.event.inputs.environment }}
+          gh secret set TF_BACKEND_RESOURCE_GROUP       "${{ github.event.inputs.resource_group_name }}" --env ${{ github.event.inputs.environment }}
+          gh secret set TF_BACKEND_LOCATION             "${{ github.event.inputs.location }}"            --env ${{ github.event.inputs.environment }}
+          gh secret set TF_BACKEND_ACCESS_KEY           "${{ needs.deploy.outputs.access_key }}"         --env ${{ github.event.inputs.environment }}
