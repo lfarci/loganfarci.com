@@ -37,6 +37,7 @@ permissions:
 
 env:
   STORAGE_ACCOUNT_NAME: "${{ github.event.inputs.workload }}${{ github.run_id }}"
+  ENVIRONMENT_VARIABLE_FILE: ".env"
 
 jobs:
   deploy:
@@ -76,11 +77,14 @@ jobs:
     runs-on: ubuntu-latest
     needs: deploy
     steps:
-      - name: Set environment variables
-        id: output
+      - name: Create environment variable file
         run: |
-          gh secret set TF_BACKEND_STORAGE_ACCOUNT_NAME "${{ env.STORAGE_ACCOUNT_NAME }}"                --env ${{ github.event.inputs.environment }}
-          gh secret set TF_BACKEND_CONTAINER_NAME       "${{ github.event.inputs.container_name }}"      --env ${{ github.event.inputs.environment }}
-          gh secret set TF_BACKEND_RESOURCE_GROUP       "${{ github.event.inputs.resource_group_name }}" --env ${{ github.event.inputs.environment }}
-          gh secret set TF_BACKEND_LOCATION             "${{ github.event.inputs.location }}"            --env ${{ github.event.inputs.environment }}
-          gh secret set TF_BACKEND_ACCESS_KEY           "${{ needs.deploy.outputs.access_key }}"         --env ${{ github.event.inputs.environment }}
+          echo "TF_BACKEND_STORAGE_ACCOUNT_NAME=${{ env.STORAGE_ACCOUNT_NAME }}"          >> "${{ env.ENVIRONMENT_VARIABLE_FILE }}"
+          echo "TF_BACKEND_CONTAINER_NAME=${{ github.event.inputs.container_name }}"      >> "${{ env.ENVIRONMENT_VARIABLE_FILE }}"
+          echo "TF_BACKEND_RESOURCE_GROUP=${{ github.event.inputs.resource_group_name }}" >> "${{ env.ENVIRONMENT_VARIABLE_FILE }}"
+          echo "TF_BACKEND_LOCATION=${{ github.event.inputs.location }}"                  >> "${{ env.ENVIRONMENT_VARIABLE_FILE }}"
+          echo "TF_BACKEND_ACCESS_KEY=${{ needs.deploy.outputs.access_key }}"             >> "${{ env.ENVIRONMENT_VARIABLE_FILE }}"
+
+      - name: Set environment variables
+        run: |
+          gh secret set -f "${{ env.ENVIRONMENT_VARIABLE_FILE }}"
