@@ -32,7 +32,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: Production
-      url: "https://${{ steps.output.outputs.host_name }}"
+      url: "https://${{ env.SUBDOMAIN }}.${{ env.CUSTOM_DOMAIN }}"
     defaults:
       run:
         working-directory: infra
