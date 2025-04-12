@@ -1,8 +1,15 @@
-name: "Deploy Azure Storage Account"
+name: "Manage Azure Storage Account"
 
 on:
   workflow_dispatch:
     inputs:
+      action:
+        description: "Choose an action to perform"
+        required: true
+        type: choice
+        options:
+          - Deploy
+          - Destroy
       environment:
         description: "Select the target environment"
         required: false
@@ -39,8 +46,9 @@ env:
   STORAGE_ACCOUNT_NAME: "${{ github.event.inputs.workload }}${{ github.run_id }}"
 
 jobs:
-  deploy:
-    name: "Deploy storage account"
+  run:
+    name: "Run storage account script"
+    if: ${{ github.event.inputs.action == 'Deploy' }}
     runs-on: ubuntu-latest
     environment:
       name: ${{ github.event.inputs.environment }}
@@ -62,3 +70,4 @@ jobs:
           LOCATION: ${{ github.event.inputs.location }}
           STORAGE_ACCOUNT_NAME: "${{ env.STORAGE_ACCOUNT_NAME }}"
           CONTAINER_NAME: "${{ github.event.inputs.container_name }}"
+          DESTROY: ${{ github.event.inputs.action == 'Destroy' }}

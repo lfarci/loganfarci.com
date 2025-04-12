@@ -2,6 +2,17 @@
 
 set -e
 
+if [ "$DESTROY" == "true" ]; then
+    echo "DESTROY is set to true. Deleting storage account $STORAGE_ACCOUNT_NAME..."
+    if az storage account show --name $STORAGE_ACCOUNT_NAME --resource-group $RESOURCE_GROUP &>/dev/null; then
+        az storage account delete --name $STORAGE_ACCOUNT_NAME --resource-group $RESOURCE_GROUP --yes
+        echo "Storage account $STORAGE_ACCOUNT_NAME deleted successfully."
+    else
+        echo "Storage account $STORAGE_ACCOUNT_NAME does not exist."
+    fi
+    exit 0
+fi
+
 echo "Checking if resource group $RESOURCE_GROUP exists..."
 if ! az group show --name $RESOURCE_GROUP &>/dev/null; then
     echo "Creating resource group named $RESOURCE_GROUP..."
