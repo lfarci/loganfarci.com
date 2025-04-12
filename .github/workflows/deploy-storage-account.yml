@@ -85,6 +85,7 @@ jobs:
           echo "TF_BACKEND_LOCATION=${{ github.event.inputs.location }}"                  >> "${{ env.ENVIRONMENT_VARIABLE_FILE }}"
           echo "TF_BACKEND_ACCESS_KEY=${{ needs.deploy.outputs.access_key }}"             >> "${{ env.ENVIRONMENT_VARIABLE_FILE }}"
 
-      - name: Set environment variables
-        run: |
-          gh secret set -f "${{ env.ENVIRONMENT_VARIABLE_FILE }}"
+      - name: Set environment secrets
+        run: gh secret set -f "${{ env.ENVIRONMENT_VARIABLE_FILE }}"
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
