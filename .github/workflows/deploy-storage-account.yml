@@ -45,8 +45,6 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: Production
-    outputs:
-      access_key: ${{ steps.get_access_key.outputs.access_key }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -66,12 +64,6 @@ jobs:
           STORAGE_ACCOUNT_NAME: "${{ env.STORAGE_ACCOUNT_NAME }}"
           CONTAINER_NAME: "${{ github.event.inputs.container_name }}"
 
-      - name: Retrieve access key
-        id: get_access_key
-        run: |
-          ACCESS_KEY=$(az storage account keys list --account-name "${{ env.STORAGE_ACCOUNT_NAME }}" --query '[0].value' -o tsv)
-          echo "access_key=${ACCESS_KEY}" >> "$GITHUB_OUTPUT"
-
   set_environment:
     name: "Set environment variables"
     runs-on: ubuntu-latest
@@ -80,13 +72,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Retrieve access key
+        id: get_access_key
+        run: |
+          ACCESS_KEY=$(az storage account keys list --account-name "${{ env.STORAGE_ACCOUNT_NAME }}" --query '[0].value' -o tsv)
+          echo "value=${ACCESS_KEY}" >> "$GITHUB_OUTPUT"
+
       - name: Create environment variable file
         run: |
           echo "TF_BACKEND_STORAGE_ACCOUNT_NAME=${{ env.STORAGE_ACCOUNT_NAME }}"          >> "${{ env.ENVIRONMENT_VARIABLE_FILE }}"
           echo "TF_BACKEND_CONTAINER_NAME=${{ github.event.inputs.container_name }}"      >> "${{ env.ENVIRONMENT_VARIABLE_FILE }}"
           echo "TF_BACKEND_RESOURCE_GROUP=${{ github.event.inputs.resource_group_name }}" >> "${{ env.ENVIRONMENT_VARIABLE_FILE }}"
           echo "TF_BACKEND_LOCATION=${{ github.event.inputs.location }}"                  >> "${{ env.ENVIRONMENT_VARIABLE_FILE }}"
-          echo "TF_BACKEND_ACCESS_KEY=${{ needs.deploy.outputs.access_key }}"             >> "${{ env.ENVIRONMENT_VARIABLE_FILE }}"
+          echo "TF_BACKEND_ACCESS_KEY=${{ steps.get_access_key.outputs.value }}"             >> "${{ env.ENVIRONMENT_VARIABLE_FILE }}"
 
       - name: Set environment secrets
         run: gh secret set -f "${{ env.ENVIRONMENT_VARIABLE_FILE }}"
