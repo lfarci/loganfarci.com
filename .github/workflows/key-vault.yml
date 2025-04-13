@@ -54,7 +54,7 @@ jobs:
         id: generate_key_vault_name
         run: |
           if [ -z "${{ github.event.inputs.key_vault_name }}" ]; then
-            name=$(echo -n "${GITHUB_REPOSITORY}-${GITHUB_RUN_ID}" | sha256sum | cut -c1-8)kv
+            name="kv$(echo -n "${GITHUB_REPOSITORY}-${GITHUB_RUN_ID}" | sha256sum | cut -c1-8)"
           else
             name="${{ github.event.inputs.key_vault_name }}"
           fi
