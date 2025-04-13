@@ -25,6 +25,9 @@ on:
         description: "Location"
         required: false
         default: "germanywestcentral"
+      key_vault_name:
+        description: "Key Vault name"
+        required: false
         type: string
 
 permissions:
@@ -50,7 +53,12 @@ jobs:
       - name: Generate key vault name
         id: generate_key_vault_name
         run: |
-          name=$(echo -n "${GITHUB_REPOSITORY}-${GITHUB_RUN_ID}" | sha256sum | cut -c1-8)kv
+          if [ -z "${{ github.event.inputs.key_vault_name }}" ]; then
+            name=$(echo -n "${GITHUB_REPOSITORY}-${GITHUB_RUN_ID}" | sha256sum | cut -c1-8)kv
+          else
+            name="${{ github.event.inputs.key_vault_name }}"
+          fi
+
           echo "key_vault_name=${name}" >> $GITHUB_OUTPUT
 
       - name: Create ${{ steps.generate_key_vault_name.outputs.key_vault_name }} key vault
