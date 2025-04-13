@@ -21,7 +21,7 @@ if [ "$EXISTING_VAULT" == "$KEY_VAULT_NAME" ]; then
     exit 0
 fi
 
-echo "Creating Azure Key Vault: $KEY_VAULT_NAME in resource group: $RESOURCE_GROUP_NAME at location: $LOCATION..."
+echo "Creating Azure Key Vault $KEY_VAULT_NAME in resource group $RESOURCE_GROUP_NAME at location $LOCATION..."
 az keyvault create --name "$KEY_VAULT_NAME" --resource-group "$RESOURCE_GROUP_NAME" --location "$LOCATION"
 
 if [ $? -eq 0 ]; then

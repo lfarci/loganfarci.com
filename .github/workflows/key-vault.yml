@@ -53,10 +53,10 @@ jobs:
           name=$(echo -n "${GITHUB_REPOSITORY}-${GITHUB_RUN_ID}" | sha256sum | cut -c1-8)kv
           echo "key_vault_name=${name}" >> $GITHUB_OUTPUT
 
-      - name: Create ${{ github.event.inputs.storage_account_name }} key vault
+      - name: Create ${{ steps.generate_key_vault_name.outputs.key_vault_name }} key vault
         run: .github/scripts/key_vault.sh
         env:
-          RESOURCE_GROUP: "${{ github.event.inputs.resource_group_name }}"
+          RESOURCE_GROUP_NAME: "${{ github.event.inputs.resource_group_name }}"
           LOCATION: "${{ github.event.inputs.location }}"
           KEY_VAULT_NAME: "${{ steps.generate_key_vault_name.outputs.key_vault_name }}"
           DESTROY: ${{ github.event.inputs.action == 'Destroy' }}
