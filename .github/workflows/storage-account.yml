@@ -65,3 +65,16 @@ jobs:
           STORAGE_ACCOUNT_NAME: "${{ github.event.inputs.storage_account_name }}"
           CONTAINER_NAME: "${{ github.event.inputs.container_name }}"
           DESTROY: ${{ github.event.inputs.action == 'Destroy' }}
+
+      - name: Get storage account key
+        id: get_key
+        run: |
+          key=$(az storage account keys list --account-name "${{ github.event.inputs.storage_account_name }}" --query "[0].value" -o tsv)
+          echo "key=$key" >> $GITHUB_OUTPUT
+
+      - name: Set secrets in Key Vault
+        run: |
+          az keyvault secret set --vault-name ${{ secrets.AZURE_KEY_VAULT_NAME }} --name "TerraformBackendResourceGroup" --value "${{ github.event.inputs.resource_group_name }}"
+          az keyvault secret set --vault-name ${{ secrets.AZURE_KEY_VAULT_NAME }} --name "TerraformBackendStorageAccountName" --value "${{ github.event.inputs.storage_account_name }}"
+          az keyvault secret set --vault-name ${{ secrets.AZURE_KEY_VAULT_NAME }} --name "TerraformBackendStorageAccountKey" --value "${{ steps.get_key.outputs.key }}"
+          az keyvault secret set --vault-name ${{ secrets.AZURE_KEY_VAULT_NAME }} --name "TerraformBackendContainerName" --value "${{ github.event.inputs.container_name }}"
