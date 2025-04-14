@@ -87,7 +87,7 @@ jobs:
             -backend-config="storage_account_name=${{ needs.secrets.outputs.storage_account_name }}" \
             -backend-config="container_name=${{ needs.secrets.outputs.container_name }}" \
             -backend-config="key=state" \
-            -backend-config="access_key=${{ needs.secrets.outputs.access_key }}"
+            -backend-config="resource_group_name=${{ needs.secrets.outputs.resource_group }}" \
 
       - name: Terraform Plan
         if: ${{ env.IS_DEPLOY == 'true' }}
