@@ -140,6 +140,27 @@ jobs:
             echo "  - \`$server\`" >> $GITHUB_STEP_SUMMARY
           done
 
+  environment:
+    name: "Set secrets in environment"
+    if: ${{ github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'Deploy') }}
+    runs-on: ubuntu-latest
+    environment: Production
+    needs: terraform
+    steps:
+      - name: Azure CLI Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Set secrets in environment
+        run: |
+          az keyvault secret set --vault-name ${{ secrets.AZURE_KEY_VAULT_NAME }} --name "ResourceGroupName" --value "${{ needs.terraform.outputs.resource_group_name }}"
+          az keyvault secret set --vault-name ${{ secrets.AZURE_KEY_VAULT_NAME }} --name "StaticWebAppName" --value "${{ needs.terraform.outputs.static_web_app_name }}"
+          az keyvault secret set --vault-name ${{ secrets.AZURE_KEY_VAULT_NAME }} --name "StaticWebAppDefaultHostName" --value "${{ needs.terraform.outputs.static_web_app_host_name }}"
+          az keyvault secret set --vault-name ${{ secrets.AZURE_KEY_VAULT_NAME }} --name "StaticWebAppCustomHostName" --value "${{ env.SUBDOMAIN }}.${{ env.CUSTOM_DOMAIN }}"
+
   custom_domain:
     name: "Configure custom domain"
     if: ${{ github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'Deploy') }}
