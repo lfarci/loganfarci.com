@@ -49,7 +49,6 @@ jobs:
         run: |
           echo "terraform_backend_resource_group=$(az keyvault secret show --name TerraformBackendResourceGroup --vault-name ${{ secrets.AZURE_KEY_VAULT_NAME }} --query value -o tsv)" >> $GITHUB_OUTPUT
           echo "terraform_backend_storage_account=$(az keyvault secret show --name TerraformBackendStorageAccountName --vault-name ${{ secrets.AZURE_KEY_VAULT_NAME }} --query value -o tsv)" >> $GITHUB_OUTPUT
-          echo "terraform_backend_storage_account_key=$(az keyvault secret show --name TerraformBackendStorageAccountKey --vault-name ${{ secrets.AZURE_KEY_VAULT_NAME }} --query value -o tsv)" >> $GITHUB_OUTPUT
           echo "terraform_backend_container_name=$(az keyvault secret show --name TerraformBackendContainerName --vault-name ${{ secrets.AZURE_KEY_VAULT_NAME }} --query value -o tsv)" >> $GITHUB_OUTPUT
 
   terraform:

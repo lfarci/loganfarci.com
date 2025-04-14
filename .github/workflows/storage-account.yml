@@ -76,5 +76,4 @@ jobs:
         run: |
           az keyvault secret set --vault-name ${{ secrets.AZURE_KEY_VAULT_NAME }} --name "TerraformBackendResourceGroup" --value "${{ github.event.inputs.resource_group_name }}"
           az keyvault secret set --vault-name ${{ secrets.AZURE_KEY_VAULT_NAME }} --name "TerraformBackendStorageAccountName" --value "${{ github.event.inputs.storage_account_name }}"
-          az keyvault secret set --vault-name ${{ secrets.AZURE_KEY_VAULT_NAME }} --name "TerraformBackendStorageAccountKey" --value "${{ steps.get_key.outputs.key }}"
           az keyvault secret set --vault-name ${{ secrets.AZURE_KEY_VAULT_NAME }} --name "TerraformBackendContainerName" --value "${{ github.event.inputs.container_name }}"
