@@ -157,7 +157,7 @@ jobs:
       - name: Get deployment token
         id: get-token
         run: |
-          deployment_token=$(az staticwebapp deployment token --name "${{ needs.terraform.outputs.static_web_app_name }}" --resource-group "${{ needs.terraform.outputs.resource_group_name }}" --query "deployment_token" -o tsv)
+          deployment_token=$(az staticwebapp secrets list --name "${{ needs.terraform.outputs.static_web_app_name }}" --query "properties.apiKey" -o tsv)
           echo "deployment_token=$deployment_token" >> $GITHUB_OUTPUT
 
       - name: Set secrets in environment
