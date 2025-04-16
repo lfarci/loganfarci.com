@@ -3,6 +3,7 @@ import { Reddit_Mono } from "next/font/google";
 import "./globals.css";
 import NavigationBar from "@/components/layout/NavigationBar";
 import Footer from "@/components/layout/Footer";
+import { Providers } from "./providers";
 
 const redditMono = Reddit_Mono({
   variable: "--font-reddit-mono",
@@ -15,19 +16,17 @@ export const metadata: Metadata = {
   keywords: ["Software Engineer", "Logan Farci", "Developer", "Brussels", "Belgium"],
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode; }>) {
   return (
     <html lang="en">
       <body className={`${redditMono.variable}`}>
-        <NavigationBar title="Logan Farci" />
-        <main className="max-w-screen-lg mx-auto px-4">
-          {children}
-        </main>
-        <Footer />
+        <Providers>
+          <NavigationBar title="Logan Farci" />
+          <main className="max-w-screen-lg mx-auto px-4">
+            {children}
+          </main>
+          <Footer />
+        </Providers>
       </body>
     </html>
   );
