@@ -26,7 +26,7 @@ export default function RootLayout({
         </div>
         <hr className="border-t border-gray-300 my-8" />
         <footer className="text-center mt-8">
-          © 2023 Logan Farci. All rights reserved.
+          © 2025 Logan Farci. All rights reserved.
         </footer>
       </body>
     </html>
