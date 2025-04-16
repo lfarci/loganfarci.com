@@ -1,20 +1,16 @@
+"use client";
+
 import React from 'react';
-import Link from 'next/link';
+import { Navbar, NavbarBrand } from '@heroui/react';
 
 interface NavigationBarProps {
     title: string;
 }
 
-const NavigationBar: React.FC<NavigationBarProps> = ({ title }) => {
-    return (
-    <nav>
-        <div className="max-w-screen-lg mx-auto px-4">
-            <Link href="/" className="flex items-center space-x-2">
-                <span>{title}</span>
-            </Link>
-        </div>
-    </nav>
-    );
-};
+const NavigationBar: React.FC<NavigationBarProps> = ({ title }) => <Navbar isBordered>
+    <NavbarBrand>
+        <p className="font-bold text-inherit">{ title }</p>
+    </NavbarBrand>
+</Navbar>;
 
 export default NavigationBar;
