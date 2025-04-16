@@ -14,7 +14,7 @@ permissions:
 
 env:
   src_directory: ${{ github.workspace }}/src
-  out_directory: ${{ github.workspace }}/out
+  out_directory: ${{ github.workspace }}/src/out
 
 jobs:
   deploy:
