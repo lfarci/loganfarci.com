@@ -22,6 +22,9 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: Production
+    defaults:
+      run:
+        working-directory: ${{ github.workspace }}/src
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
