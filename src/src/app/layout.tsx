@@ -8,7 +8,7 @@ const redditMono = Reddit_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "lfarci",
+  title: "Logan Farci - Software Engineer",
   description: "Logan Farci, Software Engineer",
   keywords: ["Software Engineer", "Logan Farci", "Developer", "Brussels", "Belgium"],
 };
