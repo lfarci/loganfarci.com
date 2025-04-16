@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 const Introduction: React.FC = () => {
     return (
-        <div className="flex flex-col md:flex-row items-center md:items-start bg-white shadow-md rounded-lg p-4">
+        <div className="flex flex-col md:flex-row items-center md:items-start bg-white shadow-md rounded-lg p-4 space-y-4">
             <div className="md:mr-4 space-y-4">
                 <h1 className="text-2xl md:text-4xl">Hi 👋, I&apos;m Logan Farci</h1>
                 <p className="text-lg md:text-xl text-gray-600">
