@@ -12,6 +12,10 @@ permissions:
   id-token: write
   contents: read
 
+env:
+  src_directory: ${{ github.workspace }}/src
+  out_directory: ${{ github.workspace }}/out
+
 jobs:
   deploy:
     name: "Deploy Next Application"
@@ -31,7 +35,7 @@ jobs:
         with:
           path: |
             ${{ steps.npm-cache-dir.outputs.dir }}
-            ${{ github.workspace }}/.next/cache
+            ${{ env.src_directory }}/.next/cache
           key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/*.ts', '**/*.tsx') }}
           restore-keys: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
 
@@ -55,4 +59,4 @@ jobs:
 
       - name: Deploy to Azure Static Web Apps
         run: |
-          npx swa deploy ./out --deployment-token ${{ steps.get-secrets.outputs.deployment_token }} --env production
+          npx swa deploy ${{ env.out_directory }} --deployment-token ${{ steps.get-secrets.outputs.deployment_token }} --env production
