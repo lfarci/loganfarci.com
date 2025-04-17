@@ -8,38 +8,12 @@ interface NavigationBarProps {
 }
 
 const NavigationBar: React.FC<NavigationBarProps> = ({ title }) => {
-    const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-
-    const menuItems = [
-        "Home"
-    ];
-
-    return <Navbar isBordered onMenuOpenChange={setIsMenuOpen}>
+    return <Navbar isBordered>
         <NavbarContent>
-            <NavbarMenuToggle
-                aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-                className="sm:hidden"
-            />
             <NavbarBrand>
-                <p className="font-bold text-inherit">{title}</p>
+                <p className="font-bold text-inherit text-2xl">{title}</p>
             </NavbarBrand>
         </NavbarContent>
-        <NavbarMenu>
-            {menuItems.map((item, index) => (
-                <NavbarMenuItem key={`${item}-${index}`}>
-                    <Link
-                        className="w-full"
-                        color={
-                            index === 2 ? "primary" : index === menuItems.length - 1 ? "danger" : "foreground"
-                        }
-                        href="/"
-                        size="lg"
-                    >
-                        {item}
-                    </Link>
-                </NavbarMenuItem>
-            ))}
-        </NavbarMenu>
     </Navbar>;
 };
 
