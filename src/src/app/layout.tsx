@@ -16,6 +16,9 @@ export const metadata: Metadata = {
   keywords: ["Software Engineer", "Logan Farci", "Developer", "Brussels", "Belgium"],
 };
 
+const githubRepositoryUrl = process.env.NEXT_PUBLIC_GITHUB_REPOSITORY_URL;
+const latestCommitHash = process.env.NEXT_PUBLIC_COMMIT_HASH;
+
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode; }>) {
   return (
     <html lang="en">
@@ -25,7 +28,8 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           <main className="max-w-screen-lg mx-auto px-4">
             {children}
           </main>
-          <Footer />
+          <hr className="border-t border-gray-300 my-8" />
+          <Footer githubRepositoryUrl={githubRepositoryUrl} commitHash={latestCommitHash} />
         </Providers>
       </body>
     </html>

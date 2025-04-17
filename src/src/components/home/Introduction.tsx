@@ -1,10 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-
-interface ContactProps {
-    name: string;
-    url: string;
-}
+import ExternalLink, { ExternalLinkProps } from '../shared/ExternalLink';
 
 interface ImageProps {
     src: string;
@@ -17,14 +13,13 @@ interface IntroductionProps {
     heading: string;
     introduction: string;
     image?: ImageProps;
-    contacts?: ContactProps[]
+    contacts?: ExternalLinkProps[]
 }
 
-const Contact: React.FC<ContactProps> = ({ name, url }) => <a href={url} target="_blank" rel="noopener noreferrer" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">{ name }</a>;
 
-const Contacts: React.FC<{ contacts: ContactProps[] }> = ({ contacts }) => <div className="flex flex-wrap gap-4">
+const Contacts: React.FC<{ contacts: ExternalLinkProps[] }> = ({ contacts }) => <div className="flex flex-wrap gap-4">
     {contacts.map((contact, index) => (
-        <Contact key={index} {...contact} />
+        <ExternalLink key={index} {...contact} />
     ))}
 </div>;
 
