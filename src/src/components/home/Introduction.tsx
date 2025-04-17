@@ -27,13 +27,13 @@ const Introduction: React.FC<IntroductionProps> = ({ image, heading, introductio
     const showContacts = contacts.length > 0;
 
     return (
-        <div className="flex flex-col md:flex-row items-center md:items-start bg-white p-6 space-y-6">
-            <div className="md:mr-6 space-y-6 flex-1">
-                <h1 className="text-2xl md:text-4xl">{heading}</h1>
-                <p className="text-lg md:text-xl text-gray-600">{introduction}</p>
-                {showContacts && <Contacts contacts={contacts} />}
+        <div className="flex flex-col md:flex-row items-center pt-8">
+            <div className="md:mr-6 space-y-6 flex-1 flex flex-col justify-center">
+            <h1 className="text-2xl md:text-4xl">{heading}</h1>
+            <p className="text-lg md:text-xl text-gray-600">{introduction}</p>
+            {showContacts && <Contacts contacts={contacts} />}
             </div>
-            {image && <Image {...image} className="rounded-md w-full md:w-1/4" />}
+            {image && <Image {...image} className="rounded-md w-full md:w-1/3" />}
         </div>
     );
 };
