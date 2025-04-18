@@ -1,9 +1,8 @@
 import Introduction from "@/components/home/Introduction";
-import { content, Interest } from "./content";
+import { content } from "./content";
 
 
 import React from "react";
-import InterestCard from "@/components/home/Interests";
 import Interests from "@/components/home/Interests";
 
 
