@@ -11,7 +11,7 @@ const Icon: React.FC<IconProps> = ({ src, alt }) => <Image
     alt={alt}
     width={512}
     height={512}
-    className="w-1/6"
+    className="w-1/4"
 />;
 
 export default Icon;
