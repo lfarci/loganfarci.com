@@ -33,7 +33,7 @@ const Introduction: React.FC<IntroductionProps> = ({ image, heading, introductio
             <p className="text-lg md:text-xl text-gray-600">{introduction}</p>
             {showContacts && <Contacts contacts={contacts} />}
             </div>
-            {image && <Image {...image} className="rounded-md w-full md:w-1/3" />}
+            {image && <Image {...image} className="rounded-md w-full md:w-1/3 mt-6 md:mt-0" />}
         </div>
     );
 };
