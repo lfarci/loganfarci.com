@@ -13,7 +13,7 @@ const Footer: React.FC<FooterProps> = ({ githubRepositoryUrl, commitHash, commit
     const showCommitHash = commitHash && commitHash.length > 0;
 
     return (
-        <footer className="max-w-screen-lg mx-auto px-4 flex justify-between items-center">
+        <footer className="max-w-screen-lg mx-auto px-4 flex justify-between items-center pb-8">
             <div className="text-sm text-gray-400">
                 <span>© Logan Farci. Powered by </span>
                 <ExternalLink url="https://nextjs.org/" name="Next.js" />
