@@ -11,3 +11,8 @@ body {
   color: var(--foreground);
   background: var(--background);
 }
+
+.heading-font {
+  font-family: var(--font-manrope);
+  font-weight: 700;
+}
