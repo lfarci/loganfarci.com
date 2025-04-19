@@ -11,7 +11,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ title }) => {
     return <Navbar isBordered>
         <NavbarContent>
             <NavbarBrand>
-                <p className="font-bold text-inherit text-2xl">{title}</p>
+                <p className="text-xl font-thin heading-font">{title}</p>
             </NavbarBrand>
         </NavbarContent>
     </Navbar>;

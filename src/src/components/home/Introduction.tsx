@@ -28,7 +28,7 @@ const Introduction: React.FC<IntroductionProps> = ({ image, heading, introductio
     return (
         <div className="flex flex-col md:flex-row items-center pt-8">
             <div className="md:mr-6 space-y-6 flex-1 flex flex-col justify-center">
-                <h1 className="text-2xl md:text-4xl heading-font">{heading}</h1>
+                <h1 className="text-2xl md:text-4xl font-bold heading-font">{heading}</h1>
                 <p className="text-lg md:text-xl text-gray-600">{introduction}</p>
                 {showContacts && <Contacts contacts={contacts} />}
             </div>

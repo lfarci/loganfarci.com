@@ -13,8 +13,7 @@ const redditMono = Reddit_Mono({
 const manrope = Manrope({
   variable: "--font-manrope",
   subsets: ["latin"],
-  display: "swap",
-  weight: "800"
+  display: "swap"
 });
 
 
