@@ -1,6 +1,5 @@
 import { IconType } from "@/components/home/Interests";
 
-const heading = "Hi 👋, I'm Logan";
 const introduction = "Azure Associate Developer delivering cloud-native solutions that scale.";
 const about = "I'm a passionate and results-driven Software Engineer specializing in Microsoft technologies, with a focus on C#, .NET, Visual Studio, and Azure. With over three years of hands-on experience in the public, banking, and energy sectors across Belgium, I design and build robust, scalable solutions that drive digital transformation.";
 
@@ -61,7 +60,6 @@ const interests: Interest[] = [
 ];
 
 export const content = {
-    heading: heading,
     introduction: introduction,
     about: about,
     image: image,

@@ -1,7 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
 import ExternalLink, { ExternalLinkProps } from '../shared/ExternalLink';
-import Icon from '../shared/Icon';
 
 interface ImageProps {
     src: string;
@@ -11,7 +10,6 @@ interface ImageProps {
 }
 
 interface IntroductionProps {
-    heading: string;
     introduction: string;
     image?: ImageProps;
     contacts?: ExternalLinkProps[]
