@@ -15,7 +15,7 @@ interface IntroductionProps {
     contacts?: ExternalLinkProps[]
 }
 
-const WavingHandIcon: React.FC = () => <Image src="/icons/waving_hand.png" alt={'Waving hand'} width={256} height={256} className="inline-block w-10 h-10" />;
+const WavingHandIcon: React.FC = () => <Image src="/icons/waving_hand.png" alt="Waving hand" width={256} height={256} className="inline-block w-10 h-10" />;
 
 const Contacts: React.FC<{ contacts: ExternalLinkProps[] }> = ({ contacts }) => <div className="flex flex-wrap gap-4">
     {contacts.map((contact, index) => (
@@ -32,7 +32,7 @@ const Introduction: React.FC<IntroductionProps> = ({ image, introduction, contac
                 <h1 className="text-4xl font-bold heading-font flex items-center">
                     <span className="pr-1">Hi</span>
                     <WavingHandIcon />
-                    <span>, I'm Logan</span>
+                    <span>, I&apos;m Logan</span>
                 </h1>
                 <p className="important-text">{introduction}</p>
                 {showContacts && <Contacts contacts={contacts} />}
