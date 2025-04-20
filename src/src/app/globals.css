@@ -17,7 +17,7 @@ body {
 }
 
 .text {
-  @apply text-lg md:text-xl text-gray-400;
+  @apply text-lg md:text-xl text-gray-500;
 }
 
 .important-text {
