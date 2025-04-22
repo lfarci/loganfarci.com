@@ -6,7 +6,7 @@ interface AboutProps {
 }
 
 const About: React.FC<AboutProps> = ({heading, about}) => <HomeSection heading={heading}>
-    <p className="text">{about}</p>
+    <p className="text text-center">{about}</p>
 </HomeSection>;
 
 export default About;

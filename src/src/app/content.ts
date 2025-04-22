@@ -1,7 +1,7 @@
 import { IconType } from "@/components/home/Interests";
 
 const introduction = "Azure Associate Developer delivering cloud-native solutions that scale.";
-const about = "I'm a passionate and results-driven Software Engineer specializing in Microsoft technologies, with a focus on C#, .NET, Visual Studio, and Azure. With over three years of hands-on experience in the public, banking, and energy sectors across Belgium, I design and build robust, scalable solutions that drive digital transformation.";
+const about = "I'm a Software Engineer with a passion for building scalable, cloud-native solutions using C#, .NET, and Azure. With over three years of experience across Belgium’s public, banking, and energy sectors, I focus on creating clean, reliable systems that drive real impact.";
 
 const image = {
     src: "/avatar.png",
