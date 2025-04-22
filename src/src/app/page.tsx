@@ -3,7 +3,6 @@ import { content } from "./content";
 import React from "react";
 import Interests from "@/components/home/Interests";
 import About from "@/components/home/About";
-import HomeSection from "@/components/shared/HomeSection";
 import Credentials from "@/components/home/Credentials";
 
 export default function Home() {
