@@ -3,7 +3,14 @@ import { IconType } from "@/components/home/Interests";
 const introduction = "Azure Associate Developer delivering cloud-native solutions that scale.";
 const about = "I'm a Software Engineer with a passion for building scalable, cloud-native solutions using C#, .NET, and Azure. With over three years of experience across Belgium’s public, banking, and energy sectors, I focus on creating clean, reliable systems that drive real impact.";
 
-const image = {
+interface Image {
+    src: string;
+    alt: string;
+    width: number;
+    height: number;
+};
+
+const image: Image = {
     src: "/avatar.png",
     alt: "Picture of the author: Logan Farci",
     width: 1024,
@@ -28,7 +35,6 @@ const contacts = [
         url: "mailto:logan.farci@outlook.be",
     }
 ];
-
 
 export interface Interest {
     title: string;
@@ -59,10 +65,48 @@ const interests: Interest[] = [
     }
 ];
 
+
+
+interface Credential {
+    title: string;
+    badge: Image
+}
+
+const credentials: Credential[] = [
+    {
+        title: "Azure Developer Associate",
+        badge: {
+            src: "/credentials/azure-developer-associate.png",
+            alt: "Azure Developer Associate",
+            width: 64,
+            height: 64,
+        },
+    },
+    {
+        title: "PSD I",
+        badge: {
+            src: "/credentials/professional-scrum-developer.png",
+            alt: "Professional Scrum Developer",
+            width: 64,
+            height: 64
+        }
+    },
+    {
+        title: "GitHub Actions",
+        badge: {
+            src: "/credentials/github-actions.png",
+            alt: "GitHub Actions",
+            width: 64,
+            height: 64
+        }
+    }
+];
+
 export const content = {
     introduction: introduction,
     about: about,
     image: image,
     contacts: contacts,
-    interests: interests
+    interests: interests,
+    credentials: credentials
 };
