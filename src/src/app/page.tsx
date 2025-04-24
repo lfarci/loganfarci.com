@@ -10,6 +10,6 @@ export default function Home() {
     <Introduction introduction={content.introduction} image={content.image} contacts={content.contacts} />
     <About heading="About Me" about={content.about} />
     <Interests heading="What I Do" interests={content.interests} />
-    <Credentials heading="My Credentials" credentials={content.credentials} />
+    <Credentials heading="My Certifications" credentials={content.credentials} />
   </div>;
 }
