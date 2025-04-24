@@ -69,7 +69,8 @@ const interests: Interest[] = [
 
 interface Credential {
     title: string;
-    badge: Image
+    badge: Image;
+    link?: string;
 }
 
 const credentials: Credential[] = [
@@ -81,6 +82,7 @@ const credentials: Credential[] = [
             width: 64,
             height: 64,
         },
+        link: "https://learn.microsoft.com/api/credentials/share/en-us/avanade-logan-farci/982302979423E055?sharingId=C15D4BAF8E2D5DFD"
     },
     {
         title: "PSD I",
@@ -89,7 +91,8 @@ const credentials: Credential[] = [
             alt: "Professional Scrum Developer",
             width: 64,
             height: 64
-        }
+        },
+        link: "https://www.credly.com/badges/50d97296-5c28-4dfa-96bf-f06423b7dccc/public_url"
     },
     {
         title: "GitHub Actions",
@@ -98,7 +101,8 @@ const credentials: Credential[] = [
             alt: "GitHub Actions",
             width: 64,
             height: 64
-        }
+        },
+        link: "https://www.credly.com/badges/e686950e-c4d2-4055-9e31-a2726743f1ff/public_url"
     }
 ];
 
