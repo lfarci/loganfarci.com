@@ -1,11 +1,5 @@
 import Image from "next/image";
-
-interface ImageProps {
-    src: string;
-    alt: string;
-    width?: number;
-    height?: number;
-}
+import { ImageProps } from "../../types";
 
 interface CardProps {
     title: string;
@@ -13,22 +7,18 @@ interface CardProps {
     image?: ImageProps;
 }
 
-const Card: React.FC<CardProps> = ({ title, description, image }) => {
-    return (
-        <div className="p-4 border rounded-xl shadow-md bg-white flex items-center flex-col">
-            {image && <Image
-                className="w-1/2"
-                src={image.src}
-                alt={image.alt}
-                width={image.width}
-                height={image.height}
-            />}
-            <div className="flex flex-col items-center mt-6">
-                <h3 className="text-xl font-bold text-gray-500 heading-font">{title}</h3>
-                {description && <p className="text-center text mt-4">{description}</p>}
-            </div>
-        </div>
-    );
-};
+const Card: React.FC<CardProps> = ({ title, description, image }) => <div className="p-4 border rounded-xl shadow-md bg-white flex items-center flex-col">
+    {image && <Image
+        className="w-1/2"
+        src={image.src}
+        alt={image.alt}
+        width={image.width}
+        height={image.height}
+    />}
+    <div className="flex flex-col items-center mt-6">
+        <h3 className="text-xl font-bold text-gray-500 heading-font">{title}</h3>
+        {description && <p className="text-center text mt-4">{description}</p>}
+    </div>
+</div>;
 
 export default Card;
