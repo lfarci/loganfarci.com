@@ -1,5 +1,5 @@
 import React from 'react';
-import ExternalLink from '../shared/ExternalLink';
+import NewTabLink from '../shared/NewTabLink';
 
 interface FooterProps {
     githubRepositoryUrl?: string;
@@ -16,12 +16,12 @@ const Footer: React.FC<FooterProps> = ({ githubRepositoryUrl, commitHash, commit
         <footer className="max-w-screen-lg mx-auto px-4 flex justify-between items-center pb-8">
             <div className="text-sm text-gray-400">
                 <span>© Logan Farci. Powered by </span>
-                <ExternalLink url="https://nextjs.org/" name="Next.js" />
+                <NewTabLink url="https://nextjs.org/">Next.js</NewTabLink>
                 <span> and </span>
-                <ExternalLink url="https://azure.microsoft.com/en-us/products/app-service/static" name="Azure Static Web App." />
+                <NewTabLink url="https://azure.microsoft.com/en-us/products/app-service/static">Azure Static Web App.</NewTabLink>
             </div>
             {showCommitHash && <div className="text-sm text-gray-400">
-                Commit: <ExternalLink url={commitUrl} name={commitHashPortion ?? ""} />
+                Commit: <NewTabLink url={commitUrl}>{commitHashPortion ?? ""}</NewTabLink>
             </div>}
         </footer>
     );

@@ -1,5 +1,5 @@
 import React from 'react';
-import ExternalLink, { ExternalLinkProps } from '../shared/ExternalLink';
+import NewTabLink, { ExternalLinkProps } from '../shared/NewTabLink';
 
 interface ContactsProps {
     contacts: ExternalLinkProps[];
@@ -7,7 +7,7 @@ interface ContactsProps {
 
 const Contacts: React.FC<ContactsProps> = ({ contacts }) => <div className="flex flex-wrap gap-4">
     {contacts.map((contact, index) => (
-        <ExternalLink key={index} {...contact} />
+        <NewTabLink key={index} {...contact} />
     ))}
 </div>;
 

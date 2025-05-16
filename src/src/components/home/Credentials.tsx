@@ -1,5 +1,6 @@
 import HomeSection from "../shared/HomeSection";
 import Card from "../shared/Card";
+import NewTabLink from "../shared/NewTabLink";
 
 interface ImageProps {
   src: string;
@@ -12,6 +13,7 @@ interface CredentialCardProps {
   title: string;
   description?: string;
   badge: ImageProps;
+  link: string;
 }
 
 interface InterestsProps {
@@ -22,7 +24,9 @@ interface InterestsProps {
 const Credentials: React.FC<InterestsProps> = ({ heading, credentials }) => <HomeSection heading={heading}>
   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8">
     {credentials.map((credential, index) => (
-      <Card key={index} image={credential.badge} title={credential.title} />
+      <NewTabLink key={index} url={credential.link}>
+        <Card image={credential.badge} title={credential.title} />
+      </NewTabLink>
     ))}
   </div>
 </HomeSection>;

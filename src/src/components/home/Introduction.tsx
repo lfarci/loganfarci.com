@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import { ExternalLinkProps } from '../shared/ExternalLink';
+import { ExternalLinkProps } from '../shared/NewTabLink';
 import GreetingHeading from './GreetingHeading';
 import Contacts from './Contacts';
 
