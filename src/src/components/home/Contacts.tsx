@@ -1,13 +1,18 @@
 import React from 'react';
-import NewTabLink, { ExternalLinkProps } from '../shared/NewTabLink';
+import NewTabLink from '../shared/NewTabLink';
+
+export interface ContactProps {
+    name: string;
+    url: string;
+}
 
 interface ContactsProps {
-    contacts: ExternalLinkProps[];
+    contacts: ContactProps[];
 }
 
 const Contacts: React.FC<ContactsProps> = ({ contacts }) => <div className="flex flex-wrap gap-4">
     {contacts.map((contact, index) => (
-        <NewTabLink key={index} {...contact} />
+        <NewTabLink key={index} url={contact.url}>{contact.name}</NewTabLink>
     ))}
 </div>;
 

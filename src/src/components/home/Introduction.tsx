@@ -1,8 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
-import { ExternalLinkProps } from '../shared/NewTabLink';
 import GreetingHeading from './GreetingHeading';
-import Contacts from './Contacts';
+import Contacts, { ContactProps } from './Contacts';
 
 interface ImageProps {
     src: string;
@@ -14,7 +13,7 @@ interface ImageProps {
 interface IntroductionProps {
     introduction: string;
     image?: ImageProps;
-    contacts?: ExternalLinkProps[];
+    contacts?: ContactProps[];
 }
 
 const Introduction: React.FC<IntroductionProps> = ({ image, introduction, contacts = [] }) => <div className="flex flex-col md:flex-row items-center pt-8">

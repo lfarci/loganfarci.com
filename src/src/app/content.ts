@@ -70,7 +70,7 @@ const interests: Interest[] = [
 interface Credential {
     title: string;
     badge: Image;
-    link?: string;
+    link: string;
 }
 
 const credentials: Credential[] = [
