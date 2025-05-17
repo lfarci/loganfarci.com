@@ -21,7 +21,7 @@ interface InterestsProps {
   credentials: CredentialCardProps[];
 }
 
-const Credentials: React.FC<InterestsProps> = ({ heading, credentials }) => <Section heading={heading}>
+const Credentials: React.FC<InterestsProps> = ({ heading, credentials }) => <Section heading={heading} redirectPath="/about" redirectLabel="See all my certifications on the About page">
   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8">
     {credentials.map((credential, index) => (
       <NewTabLink key={index} url={credential.verificationUrl}>
