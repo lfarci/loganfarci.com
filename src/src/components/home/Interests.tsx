@@ -1,4 +1,4 @@
-import HomeSection from "../shared/HomeSection";
+import Section from "../shared/Section";
 import Icon from "../shared/Icon";
 
 export type IconType = "gear" | "cloud" | "infinity" | "robot";
@@ -24,11 +24,11 @@ const InterestCard: React.FC<InterestCardProps> = ({ icon, title, description })
   </div>;
 }
 
-const Interests: React.FC<InterestsProps> = ({ heading, interests }) => <HomeSection heading={heading}>
+const Interests: React.FC<InterestsProps> = ({ heading, interests }) => <Section heading={heading}>
   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8">
     {interests.map((interest, index) => <InterestCard key={index} icon={interest.icon} title={interest.title} description={interest.description} />)}
   </div>
-</HomeSection>;
+</Section>;
 
 
 export default Interests;

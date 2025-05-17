@@ -1,4 +1,4 @@
-import HomeSection from "../shared/HomeSection";
+import Section from "../shared/Section";
 import Card from "../shared/Card";
 import NewTabLink from "../shared/NewTabLink";
 
@@ -21,7 +21,7 @@ interface InterestsProps {
   credentials: CredentialCardProps[];
 }
 
-const Credentials: React.FC<InterestsProps> = ({ heading, credentials }) => <HomeSection heading={heading}>
+const Credentials: React.FC<InterestsProps> = ({ heading, credentials }) => <Section heading={heading}>
   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8">
     {credentials.map((credential, index) => (
       <NewTabLink key={index} url={credential.verificationUrl}>
@@ -29,6 +29,6 @@ const Credentials: React.FC<InterestsProps> = ({ heading, credentials }) => <Hom
       </NewTabLink>
     ))}
   </div>
-</HomeSection>;
+</Section>;
 
 export default Credentials;
