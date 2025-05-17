@@ -4,7 +4,7 @@ import React from "react";
 import Image from "next/image";
 import { Certification } from "@/content/types";
 
-function CredentialCard({ credential }: { credential: any }) {
+function CredentialCard({ credential }: { credential: Certification }) {
   const formattedDate = credential.date.toLocaleDateString(undefined, {
     year: "numeric",
     month: "long"
