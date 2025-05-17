@@ -16,7 +16,7 @@ const Card: React.FC<CardProps> = ({ title, description, image }) => <div classN
         height={image.height}
     />}
     <div className="flex flex-col items-center mt-6">
-        <h3 className="text-xl font-bold text-gray-500 heading-font">{title}</h3>
+        <h3 className="text-lg font-bold text-gray-500 heading-font">{title}</h3>
         {description && <p className="text-center text mt-4">{description}</p>}
     </div>
 </div>;

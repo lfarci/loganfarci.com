@@ -28,7 +28,7 @@ const certifications: Certification[] = [
         relevance: Relevance.Medium
     },
     {
-        title: "PSD I",
+        title: "Professional Scrum Developer I",
         issuer: "Scrum.org",
         date: new Date("2024-07-22"),
         badge: {
