@@ -1,5 +1,5 @@
 import Introduction from "@/components/home/Introduction";
-import { content } from "./content";
+import { content } from "../content/home";
 import React from "react";
 import Interests from "@/components/home/Interests";
 import About from "@/components/home/About";
