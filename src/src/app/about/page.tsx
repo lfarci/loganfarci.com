@@ -1,4 +1,3 @@
-import NewTabLink from "@/components/shared/NewTabLink";
 import Section from "@/components/shared/Section";
 import { content } from "@/content/home";
 import React from "react";
