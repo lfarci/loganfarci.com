@@ -13,7 +13,7 @@ interface CredentialCardProps {
   title: string;
   description?: string;
   badge: ImageProps;
-  link: string;
+  verificationUrl: string;
 }
 
 interface InterestsProps {
@@ -24,7 +24,7 @@ interface InterestsProps {
 const Credentials: React.FC<InterestsProps> = ({ heading, credentials }) => <HomeSection heading={heading}>
   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8">
     {credentials.map((credential, index) => (
-      <NewTabLink key={index} url={credential.link}>
+      <NewTabLink key={index} url={credential.verificationUrl}>
         <Card image={credential.badge} title={credential.title} />
       </NewTabLink>
     ))}
