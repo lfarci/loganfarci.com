@@ -66,11 +66,36 @@ const interests: Interest[] = [
     }
 ];
 
+interface Diploma {
+    name: string;
+    University: string;
+    logo: {
+        src: string;
+        alt: string;
+        width: number;
+        height: number;
+    };
+    details: string[];
+}
+
+const bachelor: Diploma = {
+    name: "Bachelor in Computer Science",
+    University: "École Supérieure d'Informatique (ÉSI)",
+    logo: {
+        src: "/credentials/esi.png",
+        alt: "ESI Logo",
+        width: 200,
+        height: 200
+    },
+    details: ["Brussels, Belgium", "2017 – 2020"]
+};
+
 export const content = {
     introduction: introduction,
     about: about,
     image: image,
     contacts: contacts,
     interests: interests,
-    credentials: certifications
+    credentials: certifications,
+    bachelor: bachelor
 };
