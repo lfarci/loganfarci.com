@@ -8,7 +8,6 @@ import SmallInfoCard, { SmallInfoCardProps } from "@/components/shared/cards/Sma
 import SmallInfoCardsGridSection from "@/components/shared/cards/SmallInfoCardsSection";
 import { Certification } from "@/content/types";
 import experiences from "@/content/experience";
-import { form } from "@heroui/react";
 
 const formatMonthYear = (date: Date) => {
   return date.toLocaleDateString(undefined, {
