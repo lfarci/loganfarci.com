@@ -1,5 +1,5 @@
 import React from "react";
-import SmallInfoCard, { SmallInfoCardProps } from "@/components/shared/cards/SmallInfoCard";
+import { SmallInfoCard, SmallInfoCardProps } from "@/components/shared/cards";
 import Section from "@/components/shared/Section";
 
 type SmallInfoCardsSectionProps = {
