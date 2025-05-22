@@ -7,6 +7,21 @@ import TextSection from "@/components/shared/TextSection";
 import SmallInfoCard, { SmallInfoCardProps } from "@/components/shared/cards/SmallInfoCard";
 import SmallInfoCardsGridSection from "@/components/shared/cards/SmallInfoCardsSection";
 import { Certification } from "@/content/types";
+import experiences from "@/content/experience";
+import { form } from "@heroui/react";
+
+const formatMonthYear = (date: Date) => {
+  return date.toLocaleDateString(undefined, {
+    year: "numeric",
+    month: "long"
+  });
+}
+
+const formatExperiencePeriod = (start: Date, end?: Date) => {
+  const startDate = formatMonthYear(start);
+  const endDate = end ? formatMonthYear(end) : "Present";
+  return `${startDate} - ${endDate}`;
+}
 
 export default function About() {
   const certifications: SmallInfoCardProps[] = [...content.credentials]
@@ -15,12 +30,7 @@ export default function About() {
       image: certification.badge,
       heading: certification.title,
       subtitle: certification.issuer,
-      details: [
-        certification.date.toLocaleDateString(undefined, {
-          year: "numeric",
-          month: "long"
-        })
-      ],
+      details: [formatMonthYear(certification.date)],
     }));
 
   const bachelor: SmallInfoCardProps = {
@@ -33,6 +43,16 @@ export default function About() {
   return (
     <div>
       <TextSection heading="About Me" text={content.about} />
+      <Section heading="Experience">
+        <div className="flex flex-col gap-4">
+          {experiences.map((experience, index) => <SmallInfoCard
+            key={index}
+            image={experience.company.logo}
+            heading={experience.name}
+            subtitle={`${experience.company.name} (${experience.type})`}
+            details={[experience.company.location, formatExperiencePeriod(experience.start, experience.end)]} />)}
+        </div>
+      </Section>
       <Section heading="Education">
         <SmallInfoCard {...bachelor} />
       </Section>
