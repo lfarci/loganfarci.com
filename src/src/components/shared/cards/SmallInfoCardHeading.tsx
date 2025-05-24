@@ -19,7 +19,7 @@ const SmallInfoCardHeading: React.FC<SmallInfoCardHeadingProps> = ({ children })
   const heading = (
     <h3
       ref={headingReference}
-      className="lg:text-base text-lg font-bold text-gray-500 heading-font whitespace-nowrap overflow-hidden text-ellipsis"
+      className="lg:text-base text-lg font-bold text-gray-500 heading-font lg:whitespace-nowrap lg:overflow-hidden lg:text-ellipsis"
     >
       {children}
     </h3>
