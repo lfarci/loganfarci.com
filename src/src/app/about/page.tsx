@@ -8,6 +8,7 @@ import SmallInfoCard, { SmallInfoCardProps } from "@/components/shared/cards/Sma
 import SmallInfoCardsGridSection from "@/components/shared/cards/SmallInfoCardsSection";
 import { Certification } from "@/content/types";
 import experiences from "@/content/experience";
+import TextPreview from "@/components/shared/TextPreview";
 
 const formatMonthYear = (date: Date) => {
   return date.toLocaleDateString(undefined, {
@@ -53,7 +54,9 @@ export default function About() {
         </div>
       </Section>
       <Section heading="Education">
-        <SmallInfoCard {...bachelor} />
+        <SmallInfoCard {...bachelor}>
+          <TextPreview>{content.bachelor.description}</TextPreview>
+        </SmallInfoCard>
       </Section>
       <SmallInfoCardsGridSection heading="Certications" items={certifications} />
     </div>

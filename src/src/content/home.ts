@@ -76,6 +76,7 @@ interface Diploma {
         height: number;
     };
     details: string[];
+    description: string;
 }
 
 const bachelor: Diploma = {
@@ -87,7 +88,8 @@ const bachelor: Diploma = {
         width: 200,
         height: 200
     },
-    details: ["Brussels, Belgium", "2017 – 2020"]
+    details: ["Brussels, Belgium", "2017 – 2020"],
+    description: "My academic background combines strong technical foundations with interdisciplinary knowledge. The curriculum included in-depth courses on operating systems (Linux), databases, algorithmics and data structures, web and Java development, C/C++, and microprocessors. I also studied complementary subjects such as economics, statistics, mathematics, law, and philosophy, alongside communication skills in English and software analysis using UML. As part of my training, I completed an internship at the Microsoft Innovation Center and Avanade, where I developed custom extensions for Azure and Azure DevOps, gaining hands-on experience with cloud technologies and modern development tools."
 };
 
 export const content = {
