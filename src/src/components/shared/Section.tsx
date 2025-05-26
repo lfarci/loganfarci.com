@@ -25,7 +25,7 @@ const Section: React.FC<SectionProps> = ({ heading, redirectPath, redirectLabel,
                     <Tooltip content={redirectLabel} placement='right'>
                         <span className="flex items-center">
                             <h2 className="text-3xl font-bold mb-0 heading-font">{heading}</h2>
-                            <ChevronRightIcon className="size-7 ml-2 flex-shrink-0 self-center text-gray-400 cursor-pointer" strokeWidth={3} />
+                            <ChevronRightIcon className="size-7 ml-2 flex-shrink-0 self-center text-gray-400 cursor-pointer" strokeWidth={2} />
                         </span>
                     </Tooltip>
                 ) : (
