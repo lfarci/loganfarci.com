@@ -10,7 +10,7 @@ function TextPreview({ children }: { children: React.ReactNode }) {
   return (
     <span className="w-full">
       {showFull || !isTruncated ? (
-        <span className="text-base text-gray-500 break-words w-full">{children}</span>
+        <span className="text-base/7 text-gray-500 break-words w-full">{children}</span>
       ) : (
         <span className="relative block w-full overflow-hidden">
           <span className="block w-full truncate text-base text-gray-500">{children}</span>
