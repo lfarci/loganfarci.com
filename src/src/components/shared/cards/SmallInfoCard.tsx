@@ -14,9 +14,18 @@ export type SmallInfoCardProps = {
   details?: Array<string | React.ReactNode>;
   tooltip?: string;
   children?: React.ReactNode;
+  imageSize?: "small" | "medium" | "large";
 };
 
-const SmallInfoCard: React.FC<SmallInfoCardProps> = ({ image, heading, subtitle, details, children }) => {
+const getImageSize = (imageSize: "small" | "medium" | "large" = "medium") => {
+  const sizeMap = { small: 10, medium: 16, large: 24 };
+  const size = sizeMap[imageSize];
+  return { width: size, height: size };
+};
+
+const SmallInfoCard: React.FC<SmallInfoCardProps> = ({ image, heading, subtitle, details, imageSize, children }) => {
+  const selectedImageSize = getImageSize(imageSize);
+
   return (
     <div className="flex bg-white rounded-lg shadow p-4 !lg:mt-4 w-full mx-auto items-start min-w-0">
       {image && (
@@ -25,7 +34,7 @@ const SmallInfoCard: React.FC<SmallInfoCardProps> = ({ image, heading, subtitle,
           alt={image.alt}
           width={image.width}
           height={image.height}
-          className="object-contain h-16 w-16 mr-4 flex-shrink-0"
+          className={`object-contain h-${selectedImageSize.height} w-${selectedImageSize.width} mr-4 flex-shrink-0`}
         />
       )}
       <div className="flex flex-col flex-1 min-w-0">

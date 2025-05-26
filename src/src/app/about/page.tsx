@@ -50,11 +50,12 @@ export default function About() {
             image={experience.company.logo}
             heading={experience.name}
             subtitle={`${experience.company.name} (${experience.type})`}
+            imageSize="small"
             details={[experience.company.location, formatExperiencePeriod(experience.start, experience.end)]} />)}
         </div>
       </Section>
       <Section heading="Education">
-        <SmallInfoCard {...bachelor}>
+        <SmallInfoCard {...bachelor} imageSize="small">
           <TextPreview>{content.bachelor.description}</TextPreview>
         </SmallInfoCard>
       </Section>
