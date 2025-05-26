@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { ChevronDownIcon } from "./icons";
 import { Tooltip } from "@heroui/react";
+import FadeoutText from "./FadeoutText";
 
 function TextPreview({ children }: { children: React.ReactNode }) {
     const [isExpanded, setIsExpanded] = useState(false);
@@ -13,12 +14,7 @@ function TextPreview({ children }: { children: React.ReactNode }) {
             {isExpanded ? (
                 <p className="text-base/7 text-gray-500 break-words">{children}</p>
             ) : (
-                <div className="relative overflow-hidden">
-                    <p className="truncate text-base md:text-sm text-gray-500">
-                        {children}
-                    </p>
-                    <div className="pointer-events-none absolute right-0 top-0 h-full w-96 bg-gradient-to-r from-transparent to-white" />
-                </div>
+                <FadeoutText>{children}</FadeoutText>
             )}
 
             <div className="flex justify-center mt-2">
