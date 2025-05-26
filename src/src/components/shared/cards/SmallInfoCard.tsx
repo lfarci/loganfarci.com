@@ -29,13 +29,15 @@ const SmallInfoCard: React.FC<SmallInfoCardProps> = ({ image, heading, subtitle,
   return (
     <div className="flex bg-white rounded-lg shadow p-4 !lg:mt-4 w-full mx-auto items-start min-w-0">
       {image && (
-        <Image
-          src={image.src}
-          alt={image.alt}
-          width={image.width}
-          height={image.height}
-          className={`object-contain h-${selectedImageSize.height} w-${selectedImageSize.width} mr-4 flex-shrink-0`}
-        />
+        <div className="flex items-start mt-1 mr-4 flex-shrink-0">
+          <Image
+            src={image.src}
+            alt={image.alt}
+            width={image.width}
+            height={image.height}
+            className={`object-contain h-${selectedImageSize.height} w-${selectedImageSize.width}`}
+          />
+        </div>
       )}
       <div className="flex flex-col flex-1 min-w-0">
         <SmallInfoCardHeading>{heading}</SmallInfoCardHeading>
