@@ -89,7 +89,7 @@ const bachelor: Diploma = {
         height: 200
     },
     details: ["Brussels, Belgium", "2017 – 2020"],
-    description: "My academic background combines strong technical foundations with interdisciplinary knowledge. The curriculum included in-depth courses on operating systems (Linux), databases, algorithmics and data structures, web and Java development, C/C++, and microprocessors. I also studied complementary subjects such as economics, statistics, mathematics, law, and philosophy, alongside communication skills in English and software analysis using UML. As part of my training, I completed an internship at the Microsoft Innovation Center and Avanade, where I developed custom extensions for Azure and Azure DevOps, gaining hands-on experience with cloud technologies and modern development tools."
+    description: "I gained a comprehensive foundation in **operating systems (Linux)**, **databases**, **algorithms and data structures**, **web and Java development**, **C/C++**, and **microprocessors**, complemented by interdisciplinary coursework in *economics*, *statistics*, *mathematics*, *law*, and *philosophy*, as well as **UML-based software analysis**. The program also emphasized **communication skills** in English for technical contexts. During an internship at *Avanade* in collaboration with the *Microsoft Innovation Center*, I developed **custom extensions for Azure DevOps** using **Azure**, **.NET**, and **React**, contributing to modernizing internal development workflows. This experience laid the foundation for my current work in **cloud solutions** and **backend development**."
 };
 
 export const content = {
