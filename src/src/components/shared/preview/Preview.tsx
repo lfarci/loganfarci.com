@@ -1,13 +1,18 @@
 import React, { useState, useRef, useEffect } from "react";
-import FadeoutText from "./FadeoutText";
-import ChevronToggleButton from "./ChevronToggleButton";
+import ChevronToggleButton from "../ChevronToggleButton";
 
-function TextPreview({ children }: { children: React.ReactNode }) {
+interface PreviewProps {
+    children: React.ReactNode;
+    collapsedContent: React.ReactNode;
+    expandedContent: React.ReactNode;
+}
+
+function Preview({ children, collapsedContent, expandedContent }: PreviewProps) {
     const [isExpanded, setIsExpanded] = useState(false);
     const [heights, setHeights] = useState({ collapsed: 0, expanded: 0 });
 
     const collapsedContentRef = useRef<HTMLDivElement>(null);
-    const expandedContentRef = useRef<HTMLParagraphElement>(null);
+    const expandedContentRef = useRef<HTMLDivElement>(null);
 
     // Measure content heights when children change
     useEffect(() => {
@@ -34,15 +39,15 @@ function TextPreview({ children }: { children: React.ReactNode }) {
                 style={{ height: shouldUseFixedHeight ? `${containerHeight}px` : "auto" }}
             >
                 <div ref={collapsedContentRef} className={getContentClasses(!isExpanded)}>
-                    <FadeoutText>{children}</FadeoutText>
+                    {collapsedContent}
                 </div>
 
-                <p
+                <div
                     ref={expandedContentRef}
-                    className={`text-base/7 text-gray-500 break-words ${getContentClasses(isExpanded)}`}
+                    className={getContentClasses(isExpanded)}
                 >
-                    {children}
-                </p>
+                    {expandedContent}
+                </div>
             </div>
 
             <ChevronToggleButton isExpanded={isExpanded} onToggle={handleToggle} />
@@ -50,4 +55,4 @@ function TextPreview({ children }: { children: React.ReactNode }) {
     );
 }
 
-export default TextPreview;
+export default Preview;
