@@ -17,9 +17,7 @@ function TextPreview({ children }: { children: React.ReactNode }) {
         <Preview
             collapsedContent={collapsedContent}
             expandedContent={expandedContent}
-        >
-            {children}
-        </Preview>
+        />
     );
 }
 
