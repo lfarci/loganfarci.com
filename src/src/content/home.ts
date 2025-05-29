@@ -1,4 +1,3 @@
-import { IconType } from "@/components/home/Interests";
 import certifications from "./certifications";
 import bachelor from "./education";
 
@@ -40,30 +39,50 @@ const contacts = [
 
 export interface Interest {
     title: string;
-    icon: IconType;
+    image: Image;
     description: string;
 }
 
 const interests: Interest[] = [
     {
         title: "Backend Development",
-        icon: "gear",
-        description: "Building robust and scalable backend systems using C#, .NET, and Azure."
+        description: "Building robust and scalable backend systems using C#, .NET, and Azure.",
+        image: {
+            src: "/icons/gear.png",
+            alt: "Gear icon",
+            width: 64,
+            height: 64
+        }
     },
     {
         title: "Cloud Computing",
-        icon: "cloud",
-        description: "Leveraging the power of Azure to deliver scalable and efficient solutions."
+        description: "Leveraging the power of Azure to deliver scalable and efficient solutions.",
+        image: {
+            src: "/icons/cloud.png",
+            alt: "Cloud icon",
+            width: 64,
+            height: 64
+        }
     },
     {
         title: "DevOps",
-        icon: "infinity",
-        description: "Implementing CI/CD pipelines and automating workflows to enhance development efficiency."
+        description: "Implementing CI/CD pipelines and automating workflows to enhance development efficiency.",
+        image: {
+            src: "/icons/infinity.png",
+            alt: "Infinity icon",
+            width: 64,
+            height: 64
+        }
     },
     {
         title: "Artificial Intelligence",
-        icon: "robot",
-        description: "Exploring machine learning models and AI-driven solutions to solve complex problems."
+        description: "Exploring machine learning models and AI-driven solutions to solve complex problems.",
+        image: {
+            src: "/icons/robot.png",
+            alt: "Robot icon",
+            width: 64,
+            height: 64
+        }
     }
 ];
 
