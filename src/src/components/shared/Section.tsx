@@ -26,7 +26,7 @@ const Section: React.FC<SectionProps> = ({ heading, redirectPath, redirectLabel,
     };
 
     return (
-        <section id={createSectionId(heading)} className="pt-8">
+        <section id={createSectionId(heading)} className="pt-8 scroll-mt-10">
             <div
                 className={`flex items-center mb-4${redirectPath ? ' cursor-pointer' : ''}`}
                 onClick={handleNavigation}
