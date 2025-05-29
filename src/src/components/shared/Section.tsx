@@ -1,7 +1,6 @@
 "use client";
 
 import { Tooltip } from '@heroui/react';
-import { useRouter } from 'next/navigation';
 import ChevronRightIcon from './icons/ChevronRightIcon';
 
 interface SectionProps {
@@ -11,15 +10,26 @@ interface SectionProps {
     children?: React.ReactNode;
 }
 
-
+const createSectionId = (heading: string): string => {
+    return heading.toLowerCase().replace(/\s+/g, '-');
+};
 
 const Section: React.FC<SectionProps> = ({ heading, redirectPath, redirectLabel, children }) => {
-    const router = useRouter();
+    const handleNavigation = () => {
+        if (!redirectPath) return;
+        
+        const url = redirectPath.startsWith('/') 
+            ? `${window.location.origin}${redirectPath}`
+            : redirectPath;
+
+        window.location.assign(url);
+    };
+
     return (
-        <section className="pt-8">
+        <section id={createSectionId(heading)} className="pt-8">
             <div
                 className={`flex items-center mb-4${redirectPath ? ' cursor-pointer' : ''}`}
-                onClick={() => redirectPath && router.push(redirectPath)}
+                onClick={handleNavigation}
             >
                 {redirectPath ? (
                     <Tooltip content={redirectLabel} placement='right'>
