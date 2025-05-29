@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import SmallInfoCardHeading from "@/components/shared/cards/SmallInfoCardHeading";
+import Card from "./Card";
 
 export type SmallInfoCardProps = {
   image?: {
@@ -26,8 +27,8 @@ const getImageSize = (imageSize: "small" | "medium" | "large" = "medium") => {
 const SmallInfoCard: React.FC<SmallInfoCardProps> = ({ image, heading, subtitle, details, imageSize, children }) => {
   const selectedImageSize = getImageSize(imageSize);
 
-  return (
-    <div className="flex bg-white rounded-3xl border border-gray-200 shadow-md p-4 !lg:mt-4 w-full mx-auto items-start min-w-0">
+  return <Card>
+    <div className="flex !lg:mt-4 w-full mx-auto items-start min-w-0">
       {image && (
         <div className="flex items-start mt-1 mr-4 flex-shrink-0">
           <Image
@@ -61,7 +62,7 @@ const SmallInfoCard: React.FC<SmallInfoCardProps> = ({ image, heading, subtitle,
         )}
       </div>
     </div>
-  );
+  </Card>;
 };
 
 export default SmallInfoCard;
