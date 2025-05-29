@@ -2,11 +2,13 @@ import Image from "next/image";
 import { ImageProps } from "../../../types";
 import Card from "./Card";
 
+export type ThumbnailCardImageSize = 'small' | 'medium' | 'large' | 'full';
+
 export type ThumbnailCardProps = {
     title: string;
     description?: string;
     image?: ImageProps;
-    size?: 'small' | 'medium' | 'large' | 'full';
+    size?: ThumbnailCardImageSize;
 }
 
 const sizeClasses = {

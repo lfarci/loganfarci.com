@@ -10,7 +10,7 @@ export default function Home() {
   return <div className="flex flex-col space-y-4">
     <Introduction introduction={content.introduction} image={content.image} contacts={content.contacts} />
     <TextSection heading="About Me" text={content.about} />
-    <ThumbnailGridSection heading="What I Do" columns={2} items={content.interests} />
-    <ThumbnailGridSection heading="My Certifications" columns={3} items={certifications} redirectPath="/about" redirectLabel="Show all my certifications" />
+    <ThumbnailGridSection heading="What I Do" size="small" columns={2} items={content.interests} />
+    <ThumbnailGridSection heading="My Certifications" size="medium" columns={3} items={certifications} redirectPath="/about" redirectLabel="Show all my certifications" />
   </div>;
 }
