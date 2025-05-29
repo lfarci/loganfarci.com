@@ -19,12 +19,12 @@ function Preview({ collapsedContent, expandedContent }: PreviewProps) {
                 style={{ 
                     height: isExpanded 
                         ? `${expandedContentRef.current?.scrollHeight || 0}px` 
-                        : '1.5em' 
+                        : '2em' 
                 }}
             >
                 <div className={`w-full transition-opacity duration-300 overflow-hidden ${
                     !isExpanded ? "opacity-100" : "opacity-0 pointer-events-none absolute top-0"
-                }`} style={{ maxHeight: '1.5em' }}>
+                }`} style={{ maxHeight: '2em' }}>
                     {collapsedContent}
                 </div>
 
