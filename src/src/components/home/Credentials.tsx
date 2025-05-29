@@ -1,5 +1,5 @@
 import Section from "../shared/Section";
-import Card from "../shared/Card";
+import ThumbnailCard from "../shared/cards/ThumbnailCard";
 import NewTabLink from "../shared/NewTabLink";
 
 interface ImageProps {
@@ -25,7 +25,7 @@ const Credentials: React.FC<InterestsProps> = ({ heading, credentials }) => <Sec
   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8">
     {credentials.map((credential, index) => (
       <NewTabLink key={index} url={credential.verificationUrl}>
-        <Card image={credential.badge} title={credential.title} />
+        <ThumbnailCard image={credential.badge} title={credential.title} />
       </NewTabLink>
     ))}
   </div>
