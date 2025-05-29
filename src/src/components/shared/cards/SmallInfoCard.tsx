@@ -27,7 +27,7 @@ const SmallInfoCard: React.FC<SmallInfoCardProps> = ({ image, heading, subtitle,
   const selectedImageSize = getImageSize(imageSize);
 
   return (
-    <div className="flex bg-white rounded-lg shadow p-4 !lg:mt-4 w-full mx-auto items-start min-w-0">
+    <div className="flex bg-white rounded-3xl border border-gray-200 shadow-md p-4 !lg:mt-4 w-full mx-auto items-start min-w-0">
       {image && (
         <div className="flex items-start mt-1 mr-4 flex-shrink-0">
           <Image

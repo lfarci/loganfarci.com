@@ -7,7 +7,7 @@ interface CardProps {
     image?: ImageProps;
 }
 
-const Card: React.FC<CardProps> = ({ title, description, image }) => <div className="p-4 border rounded-xl shadow-md bg-white flex items-center flex-col">
+const Card: React.FC<CardProps> = ({ title, description, image }) => <div className="p-4 bg-white rounded-3xl border border-gray-200 shadow-md flex items-center flex-col">
     {image && <Image
         className="w-1/2"
         src={image.src}

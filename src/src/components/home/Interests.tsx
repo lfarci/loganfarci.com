@@ -15,7 +15,7 @@ interface InterestsProps {
 }
 
 const InterestCard: React.FC<InterestCardProps> = ({ icon, title, description }) => {
-  return <div className="p-4 border rounded-xl shadow-md bg-white flex items-center flex-col">
+  return <div className="p-4 bg-white rounded-3xl border border-gray-200 shadow-md flex items-center flex-col">
     <Icon src={`/icons/${icon}.png`} alt={icon} />
     <div className="flex flex-col items-center mt-6">
       <h3 className="text-xl font-bold text-gray-500 heading-font">{title}</h3>
