@@ -9,6 +9,9 @@ import SmallInfoCardsGridSection from "@/components/shared/cards/SmallInfoCardsS
 import { Certification } from "@/content/types";
 import experiences from "@/content/experience";
 import { MarkdownPreview } from "@/components/shared/preview";
+import { skillCategories } from "@/content/skills";
+import { Chip } from "@heroui/react";
+import Image from "next/image";
 
 const formatMonthYear = (date: Date) => {
   return date.toLocaleDateString(undefined, {
@@ -43,6 +46,43 @@ export default function About() {
   return (
     <div>
       <TextSection heading="About Me" text={content.about} />
+      <Section heading="Skills">
+        <div className="flex flex-col gap-4">
+          {skillCategories.map((category) => (
+            <SmallInfoCard
+              key={category.name}
+              heading={category.name}
+              subtitle={`${category.skills.length} skills`}
+              details={[]}
+            >
+              <div className="flex flex-wrap gap-2 mt-2">
+                {category.skills.map((skill, skillIndex) => (
+                  <Chip 
+                    key={skillIndex}
+                    variant="bordered"
+                    size="lg"
+                    radius="md"
+                    className="text-base"
+                    startContent={
+                      skill.icon ? (
+                        <Image
+                          src={skill.icon}
+                          alt={`${skill.name} icon`}
+                          width={16}
+                          height={16}
+                          className="rounded-sm mr-1.5"
+                        />
+                      ) : undefined
+                    }
+                  >
+                    {skill.name}
+                  </Chip>
+                ))}
+              </div>
+            </SmallInfoCard>
+          ))}
+        </div>
+      </Section>
       <Section heading="Experience">
         <div className="flex flex-col gap-4">
           {experiences.map((experience, index) => <SmallInfoCard
