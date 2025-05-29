@@ -16,12 +16,14 @@ const experiences: Experience[] = [
                 height: 200
             }
         },
-        description: `- **Led the development** of enterprise-grade solutions using Microsoft Azure, .NET, and React for global clients.
-- **Architected and delivered** scalable cloud applications with Azure, Infrastructure as Code, and clean architectural patterns.
-- **Championed code quality:** Implemented clean code principles, resulting in maintainable and testable software.
-- **Mentored junior developers** and guided them through various clients and internal projects.
-- **Collaborated with clients** to translate business requirements into robust, secure, and high-performance solutions.
-- **Promoted agile methodologies:** Scrum practitioner focused on continuous improvement and team effectiveness.`
+        description: `A global leader in digital innovation and cloud services, created by Accenture and Microsoft to help organizations accelerate their digital transformation.
+
+- **Led development** of enterprise-grade solutions using Azure, .NET, and the Microsoft ecosystem for global clients.  
+- **Architected and delivered** scalable cloud applications using Azure, Infrastructure as Code, and clean architectural patterns.  
+- **Championed code quality** by applying clean code principles, resulting in maintainable, testable software.  
+- **Mentored junior developers** and interns across a variety of client and internal projects.  
+- **Collaborated with clients** to turn business requirements into secure, high-performance solutions.  
+- **Promoted agile practices** as a hands-on Scrum practitioner focused on continuous improvement and team effectiveness.`
     },
     {
         name: "Analyst Developer",
@@ -39,11 +41,14 @@ const experiences: Experience[] = [
                 height: 200
             }
         },
-        description: `- **Developed and maintained** critical .NET Core, ASP.NET, and SQL Server applications for the Belgian public sector.
-- **Designed and delivered** secure, high-availability backend services in collaboration with cross-functional teams.
-- **Contributed to cloud migration** projects and automated deployment pipelines using Azure DevOps.
-- **Advocated for best practices:** Code reviews, documentation, and high standards for code quality.
-- **Worked in agile teams** to ensure timely, robust delivery of business features.`
+        description: `A Belgian non-profit IT organization that partners with public sector institutions to design and deliver secure, innovative, and scalable digital services for citizens and government agencies. Worked at the Belgian National Employment Office (ONEM) through Smals.
+
+- **Contributed to mainframe system migration to Linux** and modernization of legacy systems.  
+- **Maintained and debugged** a C++ shared library on Linux and supported a custom mainframe emulator.  
+- **Developed web applications** using Angular, Spring Boot, Docker, and Kubernetes to support government workflows.  
+- **Automated deployments** using Atlassian Bamboo, improving release speed and reliability.  
+- **Worked within agile teams**, using Jira for sprint planning and Bitbucket for source control.  
+- **Implemented testing strategies** with Cypress, Cucumber, Jest, and JUnit to ensure code quality and coverage.`
     },
     {
         name: "Software Engineer Intern",
@@ -61,10 +66,13 @@ const experiences: Experience[] = [
                 height: 200
             }
         },
-        description: `- **Designed and built** a proof-of-concept cloud-native application using Azure Functions and .NET Core.
-- **Explored modern DevOps workflows:** Automated builds and deployments with best practices in mind.
-- **Applied clean code principles** and prioritized security and scalability.
-- **Presented technical demos** and findings to both technical and non-technical audiences.`
+        description: `A global leader in digital and cloud services, founded by Accenture and Microsoft to help organizations accelerate innovation through the Microsoft ecosystem.
+
+- **Designed and developed** a cloud-native proof-of-concept application using React, TypeScript, Azure Functions (.NET), Azure Storage Tables, and Azure Key Vault.  
+- **Created Azure DevOps web extensions** to support agile teams with mood tracking and reporting tools.  
+- **Implemented automated DevOps workflows** for builds and deployments within the Azure ecosystem.  
+- **Applied clean code and security best practices** with focus on scalability and maintainability.  
+- **Delivered technical demos** to both technical and non-technical stakeholders.`
     },
     {
         name: "Software Engineer Intern",
@@ -82,10 +90,14 @@ const experiences: Experience[] = [
                 height: 200
             }
         },
-        description: `- **Contributed to innovation projects** supporting startups and entrepreneurs in the local tech ecosystem.
-- **Developed prototypes and MVPs** using Microsoft Azure and modern web technologies.
-- **Participated in design sprints** and workshops, honing rapid solution development skills.
-- **Enhanced communication and teamwork** in a dynamic, fast-paced environment.`
+        description: `A specialized prototyping internship program bridging innovation and industry experience through partnerships with leading technology companies.
+
+- **Selected for competitive prototyping internship program** after rigorous selection sessions.  
+- **Worked on Avanade-sponsored project** while receiving training and mentorship at Microsoft.  
+- **Received training** on Scrum, Python, Node.js, Angular, React, Big Data, and IoT.  
+- **Developed technical and soft skills** through expert-led workshops and mentorship sessions.  
+- **Adapted to remote collaboration** during coronavirus outbreak, maintaining productivity through online supervision.  
+- **Contributed to innovation projects** supporting startups and entrepreneurs in the local tech ecosystem.`
     },
 ];
 

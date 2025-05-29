@@ -7,7 +7,7 @@ interface MarkdownProps {
 }
 
 function Markdown({ children, className = "" }: MarkdownProps) {
-    const markdownStyles = "[&_ul]:list-disc [&_ul]:ml-6 [&_ol]:list-decimal [&_ol]:ml-6 [&_li]:mb-1";
+    const markdownStyles = "[&_ul]:list-disc [&_ul]:ml-6 [&_ol]:list-decimal [&_ol]:ml-6 [&_li]:mb-1 [&_p]:mb-4";
     
     return (
         <div className={`${markdownStyles} ${className}`}>
