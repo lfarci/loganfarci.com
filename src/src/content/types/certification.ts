@@ -3,8 +3,8 @@ import { Relevance } from './relevance';
 
 export interface Certification {
     title: string;
-    badge: Image;
-    verificationUrl: string;
+    image: Image;
+    url: string;
     issuer: string;
     date: Date;
     relevance: Relevance;

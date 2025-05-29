@@ -27,7 +27,7 @@ export default function About() {
   const certifications: SmallInfoCardProps[] = [...content.credentials]
     .sort((a, b) => (b.relevance ?? 0) - (a.relevance ?? 0))
     .map((certification: Certification) => ({
-      image: certification.badge,
+      image: certification.image,
       heading: certification.title,
       subtitle: certification.issuer,
       details: [formatMonthYear(certification.date)],
@@ -59,7 +59,7 @@ export default function About() {
           <MarkdownPreview>{content.bachelor.description}</MarkdownPreview>
         </SmallInfoCard>
       </Section>
-      <SmallInfoCardsGridSection heading="Certications" items={certifications} />
+      <SmallInfoCardsGridSection heading="Certifications" items={certifications} />
     </div>
   );
 }
