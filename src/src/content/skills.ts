@@ -13,11 +13,10 @@ export const skillCategories: SkillCategory[] = [
   {
     name: "Backend Development",
     skills: [
-      { name: ".NET", icon: "/images/skills/dotnet.svg" },
-      { name: "C#", icon: "/images/skills/csharp.svg" },
+      { name: ".NET", icon: "/images/skills/backend/dotnet.svg" },
+      { name: "C#", icon: "/images/skills/backend/csharp.svg" },
       { name: "ASP.NET" },
       { name: "Entity Framework" },
-      { name: "Blazor", icon: "/images/skills/blazor.svg" },
       { name: "xUnit" },
       { name: "MSTest" },
     ]
@@ -63,24 +62,23 @@ export const skillCategories: SkillCategory[] = [
       { name: "LangChain" },
       { name: "Azure AI Foundry" },
     ]
-  },
-  {
+  },  {
     name: "Frontend Development",
     skills: [
-      { name: "TypeScript", icon: "/images/skills/typescript.svg" },
-      { name: "React", icon: "/images/skills/react.svg" },
-      { name: "Next.js", icon: "/images/skills/nextjs.svg" },
-      { name: "Angular", icon: "/images/skills/angular.svg" },
-      { name: "Tailwind CSS", icon: "/images/skills/tailwind.svg" },
+      { name: "TypeScript", icon: "/images/skills/frontend/typescript.svg" },
+      { name: "React", icon: "/images/skills/frontend/react.svg" },
+      { name: "Next.js", icon: "/images/skills/frontend/nextjs.svg" },
+      { name: "Angular", icon: "/images/skills/frontend/angular.svg" },
+      { name: "Blazor", icon: "/images/skills/frontend/blazor.svg" },
+      { name: "Tailwind CSS", icon: "/images/skills/frontend/tailwind.svg" },
     ]
-  },
-  {
+  },  {
     name: "Development Tools",
     skills: [
-      { name: "Visual Studio", icon: "/images/skills/vs.svg" },
-      { name: "Visual Studio Code", icon: "/images/skills/vscode.svg" },
+      { name: "Visual Studio", icon: "/images/skills/tools/vs.svg" },
+      { name: "Visual Studio Code", icon: "/images/skills/tools/vscode.svg" },
       { name: "Team Foundation Version Control" },
-      { name: "Git", icon: "/images/skills/git.svg" },
+      { name: "Git", icon: "/images/skills/tools/git.svg" },
     ]
   },
 ];
