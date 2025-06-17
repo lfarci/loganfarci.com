@@ -13,11 +13,11 @@ export const skillCategories: SkillCategory[] = [
   {
     name: "Backend Development",
     skills: [
-      { name: ".NET", icon: "/skills/dotnet.svg" },
-      { name: "C#", icon: "/skills/csharp.svg" },
+      { name: ".NET", icon: "/images/dotnet.svg" },
+      { name: "C#", icon: "/images/csharp.svg" },
       { name: "ASP.NET" },
       { name: "Entity Framework" },
-      { name: "Blazor", icon: "/skills/blazor.svg" },
+      { name: "Blazor", icon: "/images/blazor.svg" },
       { name: "xUnit" },
       { name: "MSTest" },
     ]
@@ -25,18 +25,18 @@ export const skillCategories: SkillCategory[] = [
   {
     name: "Cloud Computing",
     skills: [
-      { name: "Azure App Service", icon: "/skills/azure/app-service.svg" },
-      { name: "Azure Static Web App", icon: "/skills/azure/static-web-apps.svg" },
-      { name: "Azure Functions", icon: "/skills/azure/function-apps.svg" },
-      { name: "Azure Cosmos DB", icon: "/skills/azure/cosmos-db.svg" },
-      { name: "Azure SQL Database", icon: "/skills/azure/sql-database.svg" },
-      { name: "Azure Container Registry", icon: "/skills/azure/container-registry.svg" },
-      { name: "Azure Container Instances", icon: "/skills/azure/container-instances.svg" },
-      { name: "Azure Blob Storage", icon: "/skills/azure/blob-storage.svg" },
-      { name: "Azure Communication Services", icon: "/skills/azure/communication-services.svg" },
-      { name: "Azure Monitor", icon: "/skills/azure/monitor.svg" },
-      { name: "Azure Key Vault", icon: "/skills/azure/key-vault.svg" },
-      { name: "Azure API Management", icon: "/skills/azure/api-management.svg" },
+      { name: "Azure App Service", icon: "/images/azure/app-service.svg" },
+      { name: "Azure Static Web App", icon: "/images/azure/static-web-apps.svg" },
+      { name: "Azure Functions", icon: "/images/azure/function-apps.svg" },
+      { name: "Azure Cosmos DB", icon: "/images/azure/cosmos-db.svg" },
+      { name: "Azure SQL Database", icon: "/images/azure/sql-database.svg" },
+      { name: "Azure Container Registry", icon: "/images/azure/container-registry.svg" },
+      { name: "Azure Container Instances", icon: "/images/azure/container-instances.svg" },
+      { name: "Azure Blob Storage", icon: "/images/azure/blob-storage.svg" },
+      { name: "Azure Communication Services", icon: "/images/azure/communication-services.svg" },
+      { name: "Azure Monitor", icon: "/images/azure/monitor.svg" },
+      { name: "Azure Key Vault", icon: "/images/azure/key-vault.svg" },
+      { name: "Azure API Management", icon: "/images/azure/api-management.svg" },
     ]
   },
   {
@@ -67,20 +67,20 @@ export const skillCategories: SkillCategory[] = [
   {
     name: "Frontend Development",
     skills: [
-      { name: "TypeScript", icon: "/skills/typescript.svg" },
-      { name: "React", icon: "/skills/react.svg" },
-      { name: "Next.js", icon: "/skills/nextjs.svg" },
-      { name: "Angular", icon: "/skills/angular.svg" },
-      { name: "Tailwind CSS", icon: "/skills/tailwind.svg" },
+      { name: "TypeScript", icon: "/images/typescript.svg" },
+      { name: "React", icon: "/images/react.svg" },
+      { name: "Next.js", icon: "/images/nextjs.svg" },
+      { name: "Angular", icon: "/images/angular.svg" },
+      { name: "Tailwind CSS", icon: "/images/tailwind.svg" },
     ]
   },
   {
     name: "Development Tools",
     skills: [
-      { name: "Visual Studio", icon: "/skills/vs.svg" },
-      { name: "Visual Studio Code", icon: "/skills/vscode.svg" },
+      { name: "Visual Studio", icon: "/images/vs.svg" },
+      { name: "Visual Studio Code", icon: "/images/vscode.svg" },
       { name: "Team Foundation Version Control" },
-      { name: "Git", icon: "/skills/git.svg" },
+      { name: "Git", icon: "/images/git.svg" },
     ]
   },
 ];
