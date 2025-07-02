@@ -1,4 +1,5 @@
-import Section from "../shared/Section";
+import Section from "@/components/shared/Section";
+import Text from "@/components/shared/typography/Text";
 
 interface TextSection {
     heading: string;
@@ -6,7 +7,7 @@ interface TextSection {
 }
 
 const TextSection: React.FC<TextSection> = ({heading, text}) => <Section heading={heading}>
-    <p className="text">{text}</p>
+    <Text>{text}</Text>
 </Section>;
 
 export default TextSection;

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { ImageProps } from "../../../types";
 import Card from "./Card";
+import Text from "@/components/shared/typography/Text";
 
 export type ThumbnailCardImageSize = 'small' | 'medium' | 'large' | 'full';
 
@@ -30,7 +31,7 @@ const ThumbnailCard: React.FC<ThumbnailCardProps> = ({ title, description, image
             />}
             <div className="flex flex-col items-center mt-6">
                 <h3 className="text-lg font-bold text-gray-500 heading-font">{title}</h3>
-                {description && <p className="text-center text mt-4">{description}</p>}
+                {description && <Text className="text-center mt-4">{description}</Text>}
             </div>
         </div>
     </Card>;
