@@ -15,8 +15,3 @@ body {
 .heading-font {
   font-family: var(--font-manrope);
 }
-
-.text {
-  @apply text-lg md:text-xl text-gray-500;
-  line-height: 1.75;
-}

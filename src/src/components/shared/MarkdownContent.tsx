@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Components } from 'react-markdown';
+import Text from '@/components/shared/typography/Text';
 
 interface MarkdownContentProps {
   content: string;
@@ -27,11 +28,7 @@ const markdownComponents: Components = {
       {children}
     </h4>
   ),
-  p: ({ children }) => (
-    <p className="text-gray-700 leading-relaxed mb-4">
-      {children}
-    </p>
-  ),
+  p: ({ children }) => (<Text>{children}</Text>),
   ul: ({ children }) => (
     <ul className="list-disc list-inside mb-4 space-y-2 text-gray-700">
       {children}
