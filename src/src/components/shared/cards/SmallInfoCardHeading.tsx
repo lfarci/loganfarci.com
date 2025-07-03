@@ -1,5 +1,6 @@
 import { Tooltip } from "@heroui/react";
 import { useEffect, useRef, useState } from "react";
+import { Heading3 } from "@/components/shared/typography";
 
 type SmallInfoCardHeadingProps = {
   children: string;
@@ -17,12 +18,12 @@ const SmallInfoCardHeading: React.FC<SmallInfoCardHeadingProps> = ({ children })
   }, [children]);
 
   const heading = (
-    <h3
+    <Heading3
       ref={headingReference}
-      className="lg:text-base text-lg font-bold text-gray-500 heading-font lg:whitespace-nowrap lg:overflow-hidden lg:text-ellipsis"
+      className="lg:whitespace-nowrap lg:overflow-hidden lg:text-ellipsis"
     >
       {children}
-    </h3>
+    </Heading3>
   );
 
   return isOverflowing ? (
