@@ -2,7 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import GreetingHeading from './GreetingHeading';
 import Contacts, { ContactProps } from './Contacts';
-import Text from '@/components/shared/typography/Text';
+import { Text } from '@/components/shared/typography';
 
 interface ImageProps {
     src: string;

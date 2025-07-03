@@ -5,8 +5,7 @@ import { Article } from '@/content/types/article';
 import Card from '@/components/shared/cards/Card';
 import { formatDate } from '@/lib/date';
 import { Chip } from "@heroui/react";
-import Text from '@/components/shared/typography/Text';
-import Heading3 from '@/components/shared/typography/Heading3';
+import { Text, Heading3 } from '@/components/shared/typography';
 
 interface ArticleCardProps {
   article: Article;

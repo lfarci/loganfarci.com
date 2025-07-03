@@ -2,7 +2,7 @@
 
 import { Tooltip } from '@heroui/react';
 import ChevronRightIcon from './icons/ChevronRightIcon';
-import Heading2 from '@/components/shared/typography/Heading2';
+import { Heading2 } from '@/components/shared/typography';
 
 interface SectionProps {
     heading: string;

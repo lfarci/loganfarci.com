@@ -1,8 +1,7 @@
 import Image from "next/image";
 import { ImageProps } from "../../../types";
 import Card from "./Card";
-import Text from "@/components/shared/typography/Text";
-import Heading3 from "@/components/shared/typography/Heading3";
+import { Heading3, Text } from "@/components/shared/typography";
 
 export type ThumbnailCardImageSize = 'small' | 'medium' | 'large' | 'full';
 

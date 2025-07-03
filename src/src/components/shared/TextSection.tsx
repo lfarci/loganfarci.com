@@ -1,5 +1,5 @@
 import Section from "@/components/shared/Section";
-import Text from "@/components/shared/typography/Text";
+import { Text } from "@/components/shared/typography";
 
 interface TextSection {
     heading: string;
