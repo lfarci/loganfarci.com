@@ -1,5 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
+import { Heading1 } from '../shared/typography';
 
 interface GreetingHeadingProps {
     greeting?: string;
@@ -14,10 +15,10 @@ const WavingHandIcon: React.FC = () => <Image
     className="inline-block w-10 h-10"
 />;
 
-const GreetingHeading: React.FC<GreetingHeadingProps> = ({ greeting = "Hi", name }) => <h1 className="text-4xl font-bold heading-font flex items-center">
+const GreetingHeading: React.FC<GreetingHeadingProps> = ({ greeting = "Hi", name }) => <Heading1 className="flex items-center">
     <span className="pr-1">{greeting}</span> 
     <WavingHandIcon />
     <span>, I&apos;m {name}</span>
-</h1>;
+</Heading1>;
 
 export default GreetingHeading;

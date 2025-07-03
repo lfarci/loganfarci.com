@@ -1,18 +1,14 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Components } from 'react-markdown';
-import { Text, Heading2, Heading3, Heading4 } from '@/components/shared/typography';
+import { Text, Heading2, Heading3, Heading4, Heading1 } from '@/components/shared/typography';
 
 interface MarkdownContentProps {
   content: string;
 }
 
 const markdownComponents: Components = {
-  h1: ({ children }) => (
-    <h1 className="heading-font text-4xl font-bold text-gray-900 mb-6 mt-8 first:mt-0">
-      {children}
-    </h1>
-  ),
+  h1: ({ children }) => <Heading1 className="mb-6 mt-8">{children}</Heading1>,
   h2: ({ children }) => <Heading2 className="mb-4 mt-6">{children}</Heading2>,
   h3: ({ children }) => <Heading3 className="mb-3 mt-5">{children}</Heading3>,
   h4: ({ children }) => <Heading4 className="mb-2 mt-4">{children}</Heading4>,
