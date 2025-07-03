@@ -6,5 +6,6 @@ export { default as Heading4 } from '@/components/shared/typography/Heading4';
 export { default as UnorderedList } from '@/components/shared/typography/UnorderedList';
 export { default as OrderedList } from '@/components/shared/typography/OrderedList';
 export { default as ListItem } from '@/components/shared/typography/ListItem';
+export { default as Footnote } from '@/components/shared/typography/Footnote';
 
 export * as Typography from '@/components/shared/typography';

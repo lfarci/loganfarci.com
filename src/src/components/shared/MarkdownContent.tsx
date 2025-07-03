@@ -2,6 +2,7 @@ import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Components } from 'react-markdown';
 import { Text, Heading2, Heading3, Heading4, Heading1, UnorderedList, OrderedList, ListItem } from '@/components/shared/typography';
+import NewTabLink from './NewTabLink';
 
 interface MarkdownContentProps {
   content: string;
@@ -41,16 +42,7 @@ const markdownComponents: Components = {
       {children}
     </pre>
   ),
-  a: ({ href, children }) => (
-    <a 
-      href={href} 
-      className="text-blue-600 hover:text-blue-800 underline"
-      target={href?.startsWith('http') ? '_blank' : '_self'}
-      rel={href?.startsWith('http') ? 'noopener noreferrer' : undefined}
-    >
-      {children}
-    </a>
-  ),
+  a: ({ href, children }) => <NewTabLink url={href ?? ""}>{children}</NewTabLink>,
   strong: ({ children }) => (
     <strong className="font-semibold text-gray-900">
       {children}

@@ -1,5 +1,6 @@
 import React from 'react';
 import NewTabLink from '../shared/NewTabLink';
+import { Footnote } from '../shared/typography';
 
 interface FooterProps {
     githubRepositoryUrl?: string;
@@ -14,14 +15,14 @@ const Footer: React.FC<FooterProps> = ({ githubRepositoryUrl, commitHash, commit
 
     return (
         <footer className="max-w-screen-lg mx-auto px-4 flex justify-between items-center pb-8">
-            <div className="text-sm text-gray-400">
-                <span>© Logan Farci. Powered by </span>
-                <NewTabLink url="https://nextjs.org/">Next.js</NewTabLink>
-                <span> and </span>
-                <NewTabLink url="https://azure.microsoft.com/en-us/products/app-service/static">Azure Static Web App.</NewTabLink>
+            <div className="flex items-center gap-1">
+                <Footnote>© Logan Farci. Powered by </Footnote>
+                <NewTabLink url="https://nextjs.org/" size="footnote"> Next.js </NewTabLink>
+                <Footnote> and </Footnote>
+                <NewTabLink url="https://azure.microsoft.com/en-us/products/app-service/static" size="footnote"> Azure Static Web App. </NewTabLink>
             </div>
             {showCommitHash && <div className="text-sm text-gray-400">
-                Commit: <NewTabLink url={commitUrl}>{commitHashPortion ?? ""}</NewTabLink>
+                Commit: <NewTabLink url={commitUrl} size="footnote">{commitHashPortion ?? ""}</NewTabLink>
             </div>}
         </footer>
     );
