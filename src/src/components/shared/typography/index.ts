@@ -7,5 +7,7 @@ export { default as UnorderedList } from '@/components/shared/typography/Unorder
 export { default as OrderedList } from '@/components/shared/typography/OrderedList';
 export { default as ListItem } from '@/components/shared/typography/ListItem';
 export { default as Footnote } from '@/components/shared/typography/Footnote';
+export { default as Strong } from '@/components/shared/typography/Strong';
+export { default as Emphasis } from '@/components/shared/typography/Emphasis';
 
 export * as Typography from '@/components/shared/typography';
