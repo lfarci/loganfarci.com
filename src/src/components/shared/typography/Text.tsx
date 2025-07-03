@@ -4,7 +4,7 @@ type TextProps = {
 };
 
 const Text: React.FC<TextProps> = ({ children, className = "" }) => {
-    return <p className={`text-base md:text-base text-gray-500 !leading-relaxed ${className}`}>{children}</p>;
+    return <p className={`text-base md:text-lg text-gray-500 !leading-relaxed ${className}`}>{children}</p>;
 };
 
 export default Text;

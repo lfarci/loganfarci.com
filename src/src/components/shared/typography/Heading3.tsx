@@ -6,7 +6,7 @@ type Heading3Props = {
 };
 
 const Heading3 = forwardRef<HTMLHeadingElement, Heading3Props>(({ children, className = "" }, ref) => {
-    return <h3 className={`text-2xl font-bold text-gray-600 heading-font ${className}`} ref={ref}>{children}</h3>;
+    return <h3 className={`text-xl md:text-2xl font-bold text-gray-600 heading-font ${className}`} ref={ref}>{children}</h3>;
 });
 
 Heading3.displayName = "Heading3";
