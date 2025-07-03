@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Components } from 'react-markdown';
-import { Text, Heading2, Heading3, Heading4, Heading1 } from '@/components/shared/typography';
+import { Text, Heading2, Heading3, Heading4, Heading1, UnorderedList, OrderedList, ListItem } from '@/components/shared/typography';
 
 interface MarkdownContentProps {
   content: string;
@@ -13,21 +13,9 @@ const markdownComponents: Components = {
   h3: ({ children }) => <Heading3 className="mb-3 mt-5">{children}</Heading3>,
   h4: ({ children }) => <Heading4 className="mb-2 mt-4">{children}</Heading4>,
   p: ({ children }) => <Text className="mb-4">{children}</Text>,
-  ul: ({ children }) => (
-    <ul className="list-disc list-inside mb-4 space-y-2 text-gray-700">
-      {children}
-    </ul>
-  ),
-  ol: ({ children }) => (
-    <ol className="list-decimal list-inside mb-4 space-y-2 text-gray-700">
-      {children}
-    </ol>
-  ),
-  li: ({ children }) => (
-    <li className="leading-relaxed">
-      {children}
-    </li>
-  ),
+  ul: ({ children }) => <UnorderedList>{children}</UnorderedList>,
+  ol: ({ children }) => <OrderedList>{children}</OrderedList>,
+  li: ({ children }) => <ListItem>{children}</ListItem>,
   blockquote: ({ children }) => (
     <blockquote className="border-l-4 border-blue-500 pl-4 py-2 mb-4 bg-blue-50 italic text-gray-700">
       {children}
