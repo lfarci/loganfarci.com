@@ -2,6 +2,7 @@ import React from "react";
 import Image from "next/image";
 import SmallInfoCardHeading from "@/components/shared/cards/SmallInfoCardHeading";
 import Card from "./Card";
+import { Text } from "@/components/shared/typography";
 
 export type SmallInfoCardProps = {
   image?: {
@@ -43,9 +44,7 @@ const SmallInfoCard: React.FC<SmallInfoCardProps> = ({ image, heading, subtitle,
       <div className="flex flex-col flex-1 min-w-0">
         <SmallInfoCardHeading>{heading}</SmallInfoCardHeading>
         {subtitle && (
-          <span className="text-base text-gray-500 whitespace-nowrap overflow-hidden text-ellipsis">
-            {subtitle}
-          </span>
+          <Text className="whitespace-nowrap overflow-hidden text-ellipsis">{subtitle}</Text>
         )}
         {details && details.map((detail, idx) => (
           <span
