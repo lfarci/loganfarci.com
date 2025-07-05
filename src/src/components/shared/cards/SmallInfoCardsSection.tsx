@@ -8,7 +8,7 @@ type SmallInfoCardsSectionProps = {
 };
 
 const SmallInfoCardsGridSection: React.FC<SmallInfoCardsSectionProps> = ({ heading, items }) => <Section heading={heading}>
-    <div className="grid gap-4 mt-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="grid gap-4 mt-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-2">
         {items.map((item, index) => <SmallInfoCard key={index} {...item} />)}
     </div>
 </Section>;
