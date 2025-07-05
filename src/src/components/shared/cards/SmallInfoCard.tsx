@@ -31,9 +31,9 @@ const SmallInfoCard: React.FC<SmallInfoCardProps> = ({ image, heading, subtitle,
 
   return (
     <Card>
-      <div className={`flex w-full mx-auto min-w-0 ${isMediumSize ? 'gap-4 items-center' : '!lg:mt-4 items-start'}`}>
+      <div className={`flex w-full mx-auto min-w-0 ${isMediumSize ? 'gap-4 items-stretch' : '!lg:mt-4 items-stretch'}`}>
         {image && (
-          <div className={`flex ${isMediumSize ? 'items-center' : 'items-start'} flex-shrink-0 ${isMediumSize ? 'mt-0' : 'mt-1 mr-4'}`}>
+          <div className={`flex bg-green-500 items-center justify-center flex-shrink-0 ${isMediumSize ? 'mt-0' : 'mt-1 mr-4'}`}>
             <Image
               src={image.src}
               alt={image.alt}
@@ -47,7 +47,7 @@ const SmallInfoCard: React.FC<SmallInfoCardProps> = ({ image, heading, subtitle,
             />
           </div>
         )}
-        <div className="flex flex-col flex-1 min-w-0">
+        <div className="flex bg-green-500 flex-col flex-1 min-w-0">
           <SmallInfoCardHeading>{heading}</SmallInfoCardHeading>
           {subtitle && (
             <Text className="whitespace-nowrap overflow-hidden text-ellipsis">
