@@ -17,6 +17,7 @@ export type SmallInfoCardProps = {
   tooltip?: string;
   children?: React.ReactNode;
   imageSize?: "small" | "medium" | "large";
+  imagePosition?: "left" | "top-left";
 };
 
 const getImageSize = (imageSize: "small" | "medium" | "large" = "medium") => {
@@ -25,29 +26,36 @@ const getImageSize = (imageSize: "small" | "medium" | "large" = "medium") => {
   return { width: size, height: size };
 };
 
-const SmallInfoCard: React.FC<SmallInfoCardProps> = ({ image, heading, subtitle, details, imageSize = "medium", children }) => {
+const SmallInfoCard: React.FC<SmallInfoCardProps> = ({ image, heading, subtitle, details, imageSize = "medium", imagePosition = "left", children }) => {
   const selectedImageSize = getImageSize(imageSize);
   const isMediumSize = imageSize === "medium";
+  const isTopLeftPosition = imagePosition === "top-left";
 
   return (
     <Card>
-      <div className={`flex w-full mx-auto min-w-0 ${isMediumSize ? 'gap-4 items-stretch' : '!lg:mt-4 items-stretch'}`}>
+      <div className={`flex w-full mx-auto min-w-0 ${isMediumSize && !isTopLeftPosition ? 'gap-4 items-stretch' : 'items-stretch'}`}>
         {image && (
-          <div className={`flex bg-green-500 items-center justify-center flex-shrink-0 ${isMediumSize ? 'mt-0' : 'mt-1 mr-4'}`}>
+          <div className={`flex justify-center flex-shrink-0 ${
+            isTopLeftPosition 
+              ? 'items-start mt-1 mr-4' 
+              : isMediumSize 
+                ? 'items-center mt-0' 
+                : 'items-center mt-1 mr-4'
+          }`}>
             <Image
               src={image.src}
               alt={image.alt}
               width={image.width}
               height={image.height}
               className={
-                isMediumSize 
+                isMediumSize && !isTopLeftPosition
                   ? "object-contain w-16 h-16 md:w-20 md:h-20"
                   : `object-contain h-${selectedImageSize.height} w-${selectedImageSize.width}`
               }
             />
           </div>
         )}
-        <div className="flex bg-green-500 flex-col flex-1 min-w-0">
+        <div className="flex flex-col flex-1 min-w-0">
           <SmallInfoCardHeading>{heading}</SmallInfoCardHeading>
           {subtitle && (
             <Text className="whitespace-nowrap overflow-hidden text-ellipsis">
