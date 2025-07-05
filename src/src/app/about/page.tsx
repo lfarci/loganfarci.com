@@ -34,6 +34,7 @@ export default function About() {
       heading: certification.title,
       subtitle: certification.issuer,
       details: [formatMonthYear(certification.date)],
+      imageSize: "medium" as const,
     }));
 
   const bachelor: SmallInfoCardProps = {
