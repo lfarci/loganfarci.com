@@ -21,7 +21,7 @@ export type SmallInfoCardProps = {
 };
 
 const getImageSize = (imageSize: "small" | "medium" | "large" = "medium") => {
-  const sizeMap = { small: 10, medium: 20, large: 24 };
+  const sizeMap = { small: 16, medium: 20, large: 24 };
   const size = sizeMap[imageSize];
   return { width: size, height: size };
 };
