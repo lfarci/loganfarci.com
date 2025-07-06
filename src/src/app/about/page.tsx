@@ -92,12 +92,12 @@ export default function About() {
             heading={experience.name}
             subtitle={`${experience.company.name} (${experience.type})`}
             imageSize="small"
-            imagePosition="top-left"
+            imagePosition="start"
             details={[experience.company.location, formatExperiencePeriod(experience.start, experience.end)]}><MarkdownPreview>{experience.description}</MarkdownPreview></SmallInfoCard>)}
         </div>
       </Section>
       <Section heading="Education">
-        <SmallInfoCard {...bachelor} imageSize="small" imagePosition="top-left">
+        <SmallInfoCard {...bachelor} imageSize="small" imagePosition="start">
           <MarkdownPreview>{content.bachelor.description}</MarkdownPreview>
         </SmallInfoCard>
       </Section>
