@@ -4,7 +4,7 @@ const bachelor: Diploma = {
     name: "Bachelor in Computer Science",
     University: "École Supérieure d'Informatique (ÉSI)",
     logo: {
-        src: "/credentials/esi.png",
+        src: "/images/experience/esi.png",
         alt: "ESI Logo",
         width: 200,
         height: 200

@@ -10,7 +10,7 @@ const experiences: Experience[] = [
             website: "https://www.avanade.com",
             location: "Merelbeke, Flanders, Belgium",
             logo: {
-                src: "/avanade.png",
+                src: "/images/experience/avanade.png",
                 alt: "Avanade Logo",
                 width: 200,
                 height: 200
@@ -35,7 +35,7 @@ const experiences: Experience[] = [
             website: "https://smals.be/",
             location: "Brussels, Brussels-Capital Region, Belgium",
             logo: {
-                src: "/smals.png",
+                src: "/images/experience/smals.png",
                 alt: "Smals Logo",
                 width: 200,
                 height: 200
@@ -60,7 +60,7 @@ const experiences: Experience[] = [
             website: "https://www.avanade.com",
             location: "Merelbeke, Flanders, Belgium",
             logo: {
-                src: "/avanade.png",
+                src: "/images/experience/avanade.png",
                 alt: "Avanade Logo",
                 width: 200,
                 height: 200
@@ -84,7 +84,7 @@ const experiences: Experience[] = [
             website: "https://www.microsoftinnovationcenters.com",
             location: "Brussels, Brussels-Capital Region, Belgium",
             logo: {
-                src: "/microsoft.jpg",
+                src: "/images/experience/microsoft.jpg",
                 alt: "Microsoft Logo",
                 width: 200,
                 height: 200
