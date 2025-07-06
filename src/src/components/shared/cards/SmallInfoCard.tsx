@@ -21,9 +21,8 @@ export type SmallInfoCardProps = {
 };
 
 const getImageSize = (imageSize: "small" | "medium" | "large" = "medium") => {
-  const sizeMap = { small: 16, medium: 20, large: 24 };
-  const size = sizeMap[imageSize];
-  return { width: size, height: size };
+  const sizeMap = { small: "w-12 h-12 md:w-16 md:h-16", medium: "w-16 h-16 md:w-20 md:h-20", large: "w-20 h-20 md:w-24 md:h-24" };
+  return sizeMap[imageSize];
 };
 
 const SmallInfoCard: React.FC<SmallInfoCardProps> = ({ image, heading, subtitle, details, imageSize = "medium", imagePosition = "left", children }) => {
@@ -47,11 +46,7 @@ const SmallInfoCard: React.FC<SmallInfoCardProps> = ({ image, heading, subtitle,
               alt={image.alt}
               width={image.width}
               height={image.height}
-              className={
-                isMediumSize && !isTopLeftPosition
-                  ? "object-contain w-16 h-16 md:w-20 md:h-20"
-                  : `object-contain h-${selectedImageSize.height} w-${selectedImageSize.width}`
-              }
+              className={`object-contain ${selectedImageSize}`}
             />
           </div>
         )}
