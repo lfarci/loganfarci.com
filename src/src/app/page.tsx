@@ -12,6 +12,6 @@ export default function Home() {
     <TextSection heading="About Me" text={content.about} />
     <ThumbnailGridSection heading="What I Do" size="small" columns={2} items={content.interests} />
     <FeaturedArticles />
-    <ThumbnailGridSection heading="My Certifications" size="medium" columns={3} items={certifications} redirectPath="/about#certifications" redirectLabel="Show all my certifications" />
+    <ThumbnailGridSection heading="My Certifications" size="large" columns={3} items={certifications} redirectPath="/about#certifications" redirectLabel="Show all my certifications" />
   </div>;
 }
