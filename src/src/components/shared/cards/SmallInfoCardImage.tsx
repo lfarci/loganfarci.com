@@ -20,19 +20,16 @@ const getImageSize = (imageSize: SmallInfoCardImageSize = "medium") => {
     return sizeMap[imageSize];
 };
 
+const getImageContainerClass = (imageSize: SmallInfoCardImageSize, imagePosition: SmallInfoCardImagePosition) => {
+    const baseClass = "flex justify-center flex-shrink-0 ";
+    const positionClass = imagePosition === "start" ? "items-start mt-1 mr-4" : "items-center mt-0";
+    const sizeClass = imageSize !== "medium" && imagePosition !== "start" ? "mt-1 mr-4" : "";
+    return `${baseClass} ${positionClass} ${sizeClass}`.trim();
+};
+
 const SmallInfoCardImage: React.FC<SmallInfoCardImageProps> = ({ image, imageSize, imagePosition }) => {
     const selectedImageSize = getImageSize(imageSize);
-    const isMediumSize = imageSize === "medium";
-    const isStartPosition = imagePosition === "start";
-
-    let imageContainerClass = "flex justify-center flex-shrink-0 ";
-    if (isStartPosition) {
-        imageContainerClass += "items-start mt-1 mr-4";
-    } else if (isMediumSize) {
-        imageContainerClass += "items-center mt-0";
-    } else {
-        imageContainerClass += "items-center mt-1 mr-4";
-    }
+    const imageContainerClass = getImageContainerClass(imageSize, imagePosition);
 
     return (
         <div className={imageContainerClass}>
