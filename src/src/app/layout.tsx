@@ -32,7 +32,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body className={`${redditMono.variable} ${manrope.variable}`}>
         <Providers>
           <NavigationBar title="Logan Farci" />
-          <main className="max-w-screen-lg mx-auto px-4 md:px-0">
+          <main className="max-w-screen-lg mx-auto px-6">
             {children}
           </main>
           <hr className="border-t border-gray-300 my-8" />
