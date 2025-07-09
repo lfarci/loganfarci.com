@@ -7,7 +7,7 @@ export default function ArticlesPage() {
   const articles = getAllArticles();
 
   return (
-    <div className="max-w-4xl mx-auto py-8">
+    <div className="flex flex-col py-8">
       <Heading1 className="mb-8">Articles</Heading1>
 
       {articles.length === 0 ? (
