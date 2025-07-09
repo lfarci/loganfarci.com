@@ -2,7 +2,7 @@
 
 import { Tooltip } from '@heroui/react';
 import ChevronRightIcon from './icons/ChevronRightIcon';
-import { Heading2 } from '@/components/shared/typography';
+import { Heading1 } from '@/components/shared/typography';
 
 interface SectionProps {
     heading: string;
@@ -35,12 +35,12 @@ const Section: React.FC<SectionProps> = ({ heading, redirectPath, redirectLabel,
                 {redirectPath ? (
                     <Tooltip content={redirectLabel} placement='right'>
                         <span className="flex items-center">
-                            <Heading2 className="mb-0">{heading}</Heading2>
+                            <Heading1 className="mb-0">{heading}</Heading1>
                             <ChevronRightIcon className="size-7 ml-2 flex-shrink-0 self-center text-gray-400 cursor-pointer" strokeWidth={2} />
                         </span>
                     </Tooltip>
                 ) : (
-                    <Heading2 className="mb-0">{heading}</Heading2>
+                    <Heading1 className="mb-0">{heading}</Heading1>
                 )}
             </div>
             {children}
