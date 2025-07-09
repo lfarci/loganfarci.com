@@ -1,26 +1,46 @@
 "use client";
 
-import React from 'react';
-import { Navbar, NavbarBrand, NavbarContent } from '@heroui/react';
-import Link from 'next/link';
+import React, { useState } from 'react';
+import { Navbar, NavbarBrand, NavbarContent, NavbarMenuToggle, NavbarMenu, NavbarMenuItem } from '@heroui/react';
+import NavBarEntry from '@/components/shared/NavBarEntry';
 
 interface NavigationBarProps {
     title: string;
 }
 
 const NavigationBar: React.FC<NavigationBarProps> = ({ title }) => {
-    return <Navbar isBordered>
-        <NavbarContent>
-            <NavbarBrand>
-                <p className="text-xl font-thin heading-font">{title}</p>
-            </NavbarBrand>
-            <div className="flex space-x-8">
-                <Link href="/" className="hover:text-blue-500 transition-colors">Home</Link>
-                <Link href="/about" className="hover:text-blue-500 transition-colors">About</Link>
-                <Link href="/articles" className="hover:text-blue-500 transition-colors">Articles</Link>
-            </div>
-        </NavbarContent>
-    </Navbar>;
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+    const handleMenuItemClick = () => {
+        setIsMenuOpen(false);
+    };
+
+    return (
+        <Navbar isBordered isMenuOpen={isMenuOpen} onMenuOpenChange={setIsMenuOpen}>
+            <NavbarContent className="flex justify-between items-center md:justify-between md:items-center text-center">
+                <NavbarBrand className="w-full md:w-auto">
+                    <p className="text-xl font-thin heading-font">{title}</p>
+                </NavbarBrand>
+                <NavbarMenuToggle className="md:hidden" aria-label="Toggle navigation menu" />
+                <div className="hidden md:flex space-x-8">
+                    <NavBarEntry url="/" className="hover:text-blue-500 transition-colors">Home</NavBarEntry>
+                    <NavBarEntry url="/about" className="hover:text-blue-500 transition-colors">About</NavBarEntry>
+                    <NavBarEntry url="/articles" className="hover:text-blue-500 transition-colors">Articles</NavBarEntry>
+                </div>
+            </NavbarContent>
+            <NavbarMenu className="md:hidden text-center">
+                <NavbarMenuItem onClick={handleMenuItemClick}>
+                    <NavBarEntry url="/" className="hover:text-blue-500 transition-colors text-base py-2">Home</NavBarEntry>
+                </NavbarMenuItem>
+                <NavbarMenuItem onClick={handleMenuItemClick}>
+                    <NavBarEntry url="/about" className="hover:text-blue-500 transition-colors text-base py-2">About</NavBarEntry>
+                </NavbarMenuItem>
+                <NavbarMenuItem onClick={handleMenuItemClick}>
+                    <NavBarEntry url="/articles" className="hover:text-blue-500 transition-colors text-base py-2">Articles</NavBarEntry>
+                </NavbarMenuItem>
+            </NavbarMenu>
+        </Navbar>
+    );
 };
 
 export default NavigationBar;
