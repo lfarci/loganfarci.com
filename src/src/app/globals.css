@@ -31,6 +31,6 @@ header {
   * This ensures the element is aligned with the `px-4` class on smaller screens,
   * maintaining consistent padding and layout alignment across breakpoints.
   */
-  padding-left: 1rem !important;
-  padding-right: 1rem !important;
+  /* padding-left: 1rem !important;
+  padding-right: 1rem !important; */
 }
