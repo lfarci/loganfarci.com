@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Manrope, Noto_Sans, Reddit_Mono } from "next/font/google";
+import { Manrope, Noto_Sans, Reddit_Mono } from "next/font/google";
 import "./globals.css";
 import NavigationBar from "@/components/layout/NavigationBar";
 import Footer from "@/components/layout/Footer";
