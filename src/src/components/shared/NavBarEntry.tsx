@@ -12,7 +12,7 @@ const NavBarEntry: React.FC<NavBarEntryProps> = ({ children, url, className = ''
     return (
         <Link 
             href={url} 
-            className={`${spacingClasses} text-base md:text-lg ${className}`}
+            className={`${spacingClasses} text-base md:text-lg text-font ${className}`}
         >
             {children}
         </Link>

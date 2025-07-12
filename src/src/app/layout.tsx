@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Manrope, Reddit_Mono } from "next/font/google";
+import { Inter, Manrope, Noto_Sans, Reddit_Mono } from "next/font/google";
 import "./globals.css";
 import NavigationBar from "@/components/layout/NavigationBar";
 import Footer from "@/components/layout/Footer";
@@ -16,6 +16,12 @@ const manrope = Manrope({
   display: "swap"
 });
 
+const notoSans = Noto_Sans({
+    style: "normal",
+    variable: "--font-noto-sans",
+    subsets: ["latin"],
+    display: "swap"
+});
 
 export const metadata: Metadata = {
   title: "Logan Farci - Software Engineer",
@@ -29,7 +35,7 @@ const latestCommitHash = process.env.NEXT_PUBLIC_COMMIT_HASH;
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode; }>) {
   return (
     <html lang="en">
-      <body className={`${redditMono.variable} ${manrope.variable}`}>
+      <body className={`${redditMono.variable} ${manrope.variable} ${notoSans.variable}`}>
         <Providers>
           <NavigationBar title="Logan Farci" />
           <main className="max-w-screen-lg mx-auto px-6">

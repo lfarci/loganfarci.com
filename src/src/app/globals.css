@@ -15,3 +15,7 @@ body {
 .heading-font {
   font-family: var(--font-manrope);
 }
+
+.text-font {
+  font-family: var(--font-noto-sans);
+}
