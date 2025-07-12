@@ -22,7 +22,8 @@ const Footer: React.FC<FooterProps> = ({ githubRepositoryUrl, commitHash, commit
                 <NewTabLink url="https://azure.microsoft.com/en-us/products/app-service/static" size="footnote"> Azure Static Web App. </NewTabLink>
             </div>
             {showCommitHash && <div className="text-sm text-gray-400">
-                Commit: <NewTabLink url={commitUrl} size="footnote">{commitHashPortion ?? ""}</NewTabLink>
+                <Footnote>Commit:</Footnote>
+                <NewTabLink url={commitUrl} size="footnote">{commitHashPortion ?? ""}</NewTabLink>
             </div>}
         </footer>
     );
