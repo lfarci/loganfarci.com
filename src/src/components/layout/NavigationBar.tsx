@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { Navbar, NavbarBrand, NavbarContent, NavbarMenuToggle, NavbarMenu, NavbarMenuItem } from '@heroui/react';
 import NavBarEntry from '@/components/shared/NavBarEntry';
 
@@ -19,7 +20,9 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ title }) => {
         <Navbar isBordered isMenuOpen={isMenuOpen} onMenuOpenChange={setIsMenuOpen}>
             <NavbarContent className="flex justify-between items-center md:justify-between md:items-center text-center">
                 <NavbarBrand className="w-full md:w-auto">
-                    <p className="text-xl font-thin heading-font">{title}</p>
+                    <Link href="/" className="text-xl md:text-2xl font-thin heading-font cursor-pointer">
+                        {title}
+                    </Link>
                 </NavbarBrand>
                 <NavbarMenuToggle className="md:hidden" aria-label="Toggle navigation menu" />
                 <div className="hidden md:flex space-x-8">
