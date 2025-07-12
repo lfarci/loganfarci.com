@@ -22,10 +22,8 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   }
 
   return (
-    <div className="max-w-4xl mx-auto py-8">
-      <article className="max-w-none">
-        <MarkdownContent content={article.content} />
-      </article>
-    </div>
+    <article className="max-w-none">
+      <MarkdownContent content={article.content} />
+    </article>
   );
 }
