@@ -12,6 +12,7 @@ import { MarkdownPreview } from "@/components/shared/preview";
 import { skillCategories } from "@/content/skills";
 import { Chip } from "@heroui/react";
 import Image from "next/image";
+import { Text } from "@/components/shared/typography";
 
 const formatMonthYear = (date: Date) => {
   return date.toLocaleDateString(undefined, {
@@ -76,7 +77,7 @@ export default function About() {
                       ) : undefined
                     }
                   >
-                    {skill.name}
+                    <Text>{skill.name}</Text>
                   </Chip>
                 ))}
               </div>
