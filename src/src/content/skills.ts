@@ -62,11 +62,11 @@ export const skillCategories: SkillCategory[] = [
   {
     name: "Artificial Intelligence",
     skills: [
-      { name: "GitHub Copilot" },
-      { name: "GitHub Models" },
+      { name: "GitHub Copilot", icon: "/images/skills/ai/copilot.svg" },
+      { name: "GitHub Models", icon: "/images/skills/devops/github.svg" },
       { name: "Sementic Kernel" },
-      { name: "LangChain" },
-      { name: "Azure AI Foundry" },
+      { name: "LangChain", icon: "/images/skills/ai/langchain.svg" },
+      { name: "Azure AI Foundry", icon: "/images/skills/ai/foundry.svg" },
     ]
   },  {
     name: "Frontend Development",
