@@ -15,10 +15,16 @@ export const skillCategories: SkillCategory[] = [
     skills: [
       { name: ".NET", icon: "/images/skills/backend/dotnet.svg" },
       { name: "C#", icon: "/images/skills/backend/csharp.svg" },
-      { name: "ASP.NET" },
-      { name: "Entity Framework" },
-      { name: "xUnit" },
-      { name: "MSTest" },
+      { name: "xUnit", icon: "/images/skills/backend/xunit.svg" },
+      { name: "Node.js", icon: "/images/skills/backend/node.svg" },
+      { name: "TypeScript", icon: "/images/skills/frontend/typescript.svg" },
+      { name: "Spring Boot", icon: "/images/skills/backend/spring.svg" },
+      { name: "Java", icon: "/images/skills/backend/java.svg" },
+      { name: "SQL Server", icon: "/images/skills/backend/sqlserver.svg" },
+      { name: "MongoDB", icon: "/images/skills/backend/mongodb.svg" },
+      { name: "REST API" },
+      { name: "OAuth", icon: "/images/skills/backend/oauth.svg" },
+      { name: "JWT", icon: "/images/skills/backend/jwt.svg" },
     ]
   },
   {
