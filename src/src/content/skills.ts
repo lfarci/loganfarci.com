@@ -47,16 +47,16 @@ export const skillCategories: SkillCategory[] = [
   {
     name: "DevOps",
     skills: [
-      { name: "Docker" },
-      { name: "Kubernetes" },
-      { name: "OpenShift" },
-      { name: "Terraform" },
-      { name: "Bicep" },
-      { name: "Linux" },
-      { name: "Bash" },
-      { name: "PowerShell" },
-      { name: "GitHub" },
-      { name: "Azure DevOps" },
+      { name: "Docker", icon: "/images/skills/devops/docker.svg" },
+      { name: "Kubernetes", icon: "/images/skills/devops/kubernetes.svg" },
+      { name: "OpenShift", icon: "/images/skills/devops/openshift.svg" },
+      { name: "Terraform", icon: "/images/skills/devops/terraform.svg" },
+      { name: "Bicep", icon: "/images/skills/devops/bicep.svg" },
+      { name: "Linux", icon: "/images/skills/devops/linux.svg" },
+      { name: "Bash", icon: "/images/skills/devops/bash.svg" },
+      { name: "PowerShell", icon: "/images/skills/devops/powershell.svg" },
+      { name: "GitHub", icon: "/images/skills/devops/github.svg" },
+      { name: "Azure DevOps", icon: "/images/skills/devops/devops.svg" },
     ]
   },
   {
