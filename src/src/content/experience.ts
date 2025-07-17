@@ -1,4 +1,3 @@
-
 import { Experience } from "./types/experience";
 
 const imageSize = 128;
@@ -71,7 +70,12 @@ const experiences: Experience[] = [
             name: "Microsoft Innovation Center",
             website: "https://www.microsoftinnovationcenters.com",
             location: "Brussels, Brussels-Capital Region, Belgium",
-            logo: { src: "/images/experience/microsoft.avif", alt: "Microsoft Logo", width: imageSize, height: imageSize },
+            logo: {
+                src: "/images/experience/microsoft.avif",
+                alt: "Microsoft Logo",
+                width: imageSize,
+                height: imageSize,
+            },
         },
         description: `A specialized prototyping internship program bridging innovation and industry experience through partnerships with leading technology companies.
 
