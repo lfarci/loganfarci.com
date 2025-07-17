@@ -11,7 +11,7 @@ export default function Home() {
         <div className="flex flex-col space-y-4">
             <Introduction introduction={content.introduction} image={content.image} contacts={content.contacts} />
             <TextSection heading="About Me" text={content.about} />
-            <ThumbnailGridSection heading="What I Do" size="small" columns={2} items={content.interests} />
+            <ThumbnailGridSection heading="What I Do" size="large" columns={2} items={content.interests} />
             <FeaturedArticles />
             <ThumbnailGridSection
                 heading="My Certifications"
