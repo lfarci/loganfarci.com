@@ -5,11 +5,27 @@ import NavigationBar from "@/components/layout/NavigationBar";
 import Footer from "@/components/layout/Footer";
 import { Providers } from "./providers";
 
-const redditMono = Reddit_Mono({ variable: "--font-reddit-mono", subsets: ["latin"], display: "swap" });
+const redditMono = Reddit_Mono({
+    variable: "--font-reddit-mono",
+    subsets: ["latin"],
+    display: "swap",
+    fallback: ["monospace"],
+});
 
-const manrope = Manrope({ variable: "--font-manrope", subsets: ["latin"], display: "swap" });
+const manrope = Manrope({
+    variable: "--font-manrope",
+    subsets: ["latin"],
+    display: "swap",
+    fallback: ["Arial", "sans-serif"],
+});
 
-const notoSans = Noto_Sans({ style: "normal", variable: "--font-noto-sans", subsets: ["latin"], display: "swap" });
+const notoSans = Noto_Sans({
+    style: "normal",
+    variable: "--font-noto-sans",
+    subsets: ["latin"],
+    display: "swap",
+    fallback: ["Arial", "sans-serif"],
+});
 
 export const metadata: Metadata = {
     title: "Logan Farci - Software Engineer",
