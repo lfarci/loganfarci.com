@@ -13,6 +13,7 @@ The Model Context Protocol (MCP) has been gaining significant attention across t
 This article explores what MCP is, how it works, and whether it represents a lasting solution to AI tool integration challenges. We'll examine the current ecosystem, discover available servers and clients, and understand how this protocol might shape the future of AI development.
 
 ## What is MCP?
+
 Anthropic introduced the Model Context Protocol (MCP) in November 2024 through their [original announcement](https://www.anthropic.com/news/model-context-protocol). As of July 2025, MCP is still relatively new but gaining traction. Other influential companies are adopting it, including Microsoft, GitHub, OpenAI.
 
 To understand MCP, the [official introduction](https://modelcontextprotocol.io/introduction) is an excellent starting point. It provides a detailed overview of the protocol, its architecture, and core concepts.
@@ -58,11 +59,13 @@ The MCP ecosystem is rapidly expanding, with servers appearing across different 
 The [Model Context Protocol GitHub organization](https://github.com/modelcontextprotocol) serves as the central hub for development and discovery. The [`servers` repository](https://github.com/modelcontextprotocol/servers) provides the most curated collection of implementations, from reference examples to production-ready solutions.
 
 ### Microsoft
+
 Microsoft is already providing MCP servers for some of their products. They are maintaining a list of MCP servers in the [`microsoft/mcp`](https://github.com/microsoft/mcp) repository.
 
 I work daily with Visual Studio Code, so I was particularly interested in how MCP integrates with GitHub Copilot. The VS Code documentation provides an updated list of [MCP servers for agent mode](https://code.visualstudio.com/mcp), which serves as a good entry point.
 
 ### Community
+
 Besides the official sources, many community-driven MCP servers are emerging. I'm currently using [`punkpeye/awesome-mcp-servers`](https://github.com/punkpeye/awesome-mcp-servers), which includes a curated server list available in English, Japanese, Thai, and Portuguese. They've also set up a [web portal](https://glama.ai/mcp/servers) for easier browsing.
 
 ### Future of server discovery
@@ -71,18 +74,19 @@ The [MCP development roadmap](https://modelcontextprotocol.io/development/roadma
 
 ## MCP clients
 
-While exploring MCP servers, I discovered the client ecosystem is more diverse than I initially expected. Understanding this landscape helps identify where MCP fits into different development workflows. 
+While exploring MCP servers, I discovered the client ecosystem is more diverse than I initially expected. Understanding this landscape helps identify where MCP fits into different development workflows.
 
 The [official client directory](https://modelcontextprotocol.io/clients) reveals surprising breadth beyond Anthropic's applications. While Claude Desktop, Claude.ai, and Claude Code represent mature implementations, the community has developed clients for platforms I didn't anticipate. [`mcp.el`](https://github.com/lizqwerscott/mcp.el) is a good example as it offers MCP support for Emacs. Some new AI powered IDEs are also gaining a lot of traction, such as [Cursor](https://docs.cursor.com/context/model-context-protocol) and [Windsurf](https://windsurf.com/editor).
 
 ### Feature support
+
 The [feature support matrix](https://modelcontextprotocol.io/clients#feature-support-matrix) shows that complete MCP specification support remains limited. Currently, only [`fast-agent`](https://llmindset.co.uk/resources/fast-agent/) and GitHub Copilot Agent Mode support the full specification. This fragmentation suggests opportunities for developers. You can contribute more complete implementations or identify which features matter most for specific use cases.
 
 ### Building custom clients
 
 The protocol's openness enables custom development using multi-language SDKs. For .NET developers, Microsoft provides excellent resources:
 
-- [Create a minimal MCP client using .NET](https://learn.microsoft.com/en-us/dotnet/ai/quickstarts/build-mcp-client) 
+- [Create a minimal MCP client using .NET](https://learn.microsoft.com/en-us/dotnet/ai/quickstarts/build-mcp-client)
 - [Integrating MCP Tools with Semantic Kernel](https://devblogs.microsoft.com/semantic-kernel/integrating-model-context-protocol-tools-with-semantic-kernel-a-step-by-step-guide/)
 
 These resources open possibilities for custom AI applications that leverage the growing server ecosystem.

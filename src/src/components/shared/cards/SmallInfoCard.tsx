@@ -23,45 +23,30 @@ const SmallInfoCard: React.FC<SmallInfoCardProps> = ({
     details,
     imageSize = "medium",
     imagePosition = "center",
-    children
+    children,
 }) => {
     const isMediumSize = imageSize === "medium";
     const isStartPosition = imagePosition === "start";
 
     const containerClass = [
         "flex w-full mx-auto min-w-0",
-        isMediumSize && !isStartPosition ? "gap-4 items-stretch" : "items-stretch"
+        isMediumSize && !isStartPosition ? "gap-4 items-stretch" : "items-stretch",
     ].join(" ");
 
     return (
         <Card>
             <div className={containerClass}>
-                {image && (
-                    <SmallInfoCardImage
-                        image={image}
-                        imageSize={imageSize}
-                        imagePosition={imagePosition}
-                    />
-                )}
+                {image && <SmallInfoCardImage image={image} imageSize={imageSize} imagePosition={imagePosition} />}
                 <div className="flex flex-col flex-1 min-w-0">
                     <SmallInfoCardHeading>{heading}</SmallInfoCardHeading>
-                    {subtitle && (
-                        <Text className="whitespace-nowrap overflow-hidden text-ellipsis">
-                            {subtitle}
-                        </Text>
-                    )}
+                    {subtitle && <Text className="whitespace-nowrap overflow-hidden text-ellipsis">{subtitle}</Text>}
                     {details?.map((detail, idx) => (
-                        <Secondary
-                            key={idx}
-                            className="whitespace-nowrap overflow-hidden text-ellipsis"
-                        >
+                        <Secondary key={idx} className="whitespace-nowrap overflow-hidden text-ellipsis">
                             {detail}
                         </Secondary>
                     ))}
                     {children && (
-                        <div className="mt-4 flex flex-row gap-2 justify-start flex-1 min-w-0">
-                            {children}
-                        </div>
+                        <div className="mt-4 flex flex-row gap-2 justify-start flex-1 min-w-0">{children}</div>
                     )}
                 </div>
             </div>

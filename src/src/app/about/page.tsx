@@ -15,94 +15,99 @@ import Image from "next/image";
 import { Text } from "@/components/shared/typography";
 
 const formatMonthYear = (date: Date) => {
-  return date.toLocaleDateString(undefined, {
-    year: "numeric",
-    month: "long"
-  });
-}
+    return date.toLocaleDateString(undefined, { year: "numeric", month: "long" });
+};
 
 const formatExperiencePeriod = (start: Date, end?: Date) => {
-  const startDate = formatMonthYear(start);
-  const endDate = end ? formatMonthYear(end) : "Present";
-  return `${startDate} - ${endDate}`;
-}
+    const startDate = formatMonthYear(start);
+    const endDate = end ? formatMonthYear(end) : "Present";
+    return `${startDate} - ${endDate}`;
+};
 
 export default function About() {
-  const certifications: SmallInfoCardProps[] = [...content.credentials]
-    .sort((a, b) => (b.relevance ?? 0) - (a.relevance ?? 0))
-    .map((certification: Certification) => ({
-      image: certification.image,
-      heading: certification.title,
-      subtitle: certification.issuer,
-      details: [formatMonthYear(certification.date)],
-      imageSize: "medium" as const,
-    }));
+    const certifications: SmallInfoCardProps[] = [...content.credentials]
+        .sort((a, b) => (b.relevance ?? 0) - (a.relevance ?? 0))
+        .map((certification: Certification) => ({
+            image: certification.image,
+            heading: certification.title,
+            subtitle: certification.issuer,
+            details: [formatMonthYear(certification.date)],
+            imageSize: "medium" as const,
+        }));
 
-  const bachelor: SmallInfoCardProps = {
-    image: content.bachelor.logo,
-    heading: content.bachelor.name,
-    subtitle: content.bachelor.University,
-    details: content.bachelor.details
-  };
+    const bachelor: SmallInfoCardProps = {
+        image: content.bachelor.logo,
+        heading: content.bachelor.name,
+        subtitle: content.bachelor.University,
+        details: content.bachelor.details,
+    };
 
-  return (
-    <div>
-      <TextSection heading="About Me" text={content.about} />
-      <Section heading="Skills">
-        <div className="flex flex-col gap-4">
-          {skillCategories.map((category) => (
-            <SmallInfoCard
-              key={category.name}
-              heading={category.name}
-              subtitle={`${category.skills.length} skills`}
-              details={[]}
-            >
-              <div className="flex flex-wrap gap-2 mt-2">
-                {category.skills.map((skill, skillIndex) => (
-                  <Chip 
-                    key={skillIndex}
-                    variant="bordered"
-                    size="lg"
-                    radius="md"
-                    className="text-base"
-                    startContent={
-                      skill.icon ? (
-                        <Image
-                          src={skill.icon}
-                          alt={`${skill.name} icon`}
-                          width={16}
-                          height={16}
-                          className="rounded-sm mr-1.5"
-                        />
-                      ) : undefined
-                    }
-                  >
-                    <Text>{skill.name}</Text>
-                  </Chip>
-                ))}
-              </div>
-            </SmallInfoCard>
-          ))}
+    return (
+        <div>
+            <TextSection heading="About Me" text={content.about} />
+            <Section heading="Skills">
+                <div className="flex flex-col gap-4">
+                    {skillCategories.map((category) => (
+                        <SmallInfoCard
+                            key={category.name}
+                            heading={category.name}
+                            subtitle={`${category.skills.length} skills`}
+                            details={[]}
+                        >
+                            <div className="flex flex-wrap gap-2 mt-2">
+                                {category.skills.map((skill, skillIndex) => (
+                                    <Chip
+                                        key={skillIndex}
+                                        variant="bordered"
+                                        size="lg"
+                                        radius="md"
+                                        className="text-base"
+                                        startContent={
+                                            skill.icon ? (
+                                                <Image
+                                                    src={skill.icon}
+                                                    alt={`${skill.name} icon`}
+                                                    width={16}
+                                                    height={16}
+                                                    className="rounded-sm mr-1.5"
+                                                />
+                                            ) : undefined
+                                        }
+                                    >
+                                        <Text>{skill.name}</Text>
+                                    </Chip>
+                                ))}
+                            </div>
+                        </SmallInfoCard>
+                    ))}
+                </div>
+            </Section>
+            <Section heading="Experience">
+                <div className="flex flex-col gap-4">
+                    {experiences.map((experience, index) => (
+                        <SmallInfoCard
+                            key={index}
+                            image={experience.company.logo}
+                            heading={experience.name}
+                            subtitle={`${experience.company.name} (${experience.type})`}
+                            imageSize="small"
+                            imagePosition="start"
+                            details={[
+                                experience.company.location,
+                                formatExperiencePeriod(experience.start, experience.end),
+                            ]}
+                        >
+                            <MarkdownPreview>{experience.description}</MarkdownPreview>
+                        </SmallInfoCard>
+                    ))}
+                </div>
+            </Section>
+            <Section heading="Education">
+                <SmallInfoCard {...bachelor} imageSize="small" imagePosition="start">
+                    <MarkdownPreview>{content.bachelor.description}</MarkdownPreview>
+                </SmallInfoCard>
+            </Section>
+            <SmallInfoCardsGridSection heading="Certifications" items={certifications} />
         </div>
-      </Section>
-      <Section heading="Experience">
-        <div className="flex flex-col gap-4">
-          {experiences.map((experience, index) => <SmallInfoCard
-            key={index}
-            image={experience.company.logo}
-            heading={experience.name}
-            subtitle={`${experience.company.name} (${experience.type})`}
-            imageSize="small"
-            imagePosition="start"
-            details={[experience.company.location, formatExperiencePeriod(experience.start, experience.end)]}><MarkdownPreview>{experience.description}</MarkdownPreview></SmallInfoCard>)}
-        </div>
-      </Section>
-      <Section heading="Education">
-        <SmallInfoCard {...bachelor} imageSize="small" imagePosition="start">
-          <MarkdownPreview>{content.bachelor.description}</MarkdownPreview>
-        </SmallInfoCard>
-      </Section>
-      <SmallInfoCardsGridSection heading="Certifications" items={certifications} />
-    </div>
-  );
+    );
 }

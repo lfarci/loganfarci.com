@@ -1,1 +1,1 @@
-export type { ImageProps } from './props.types';
+export type { ImageProps } from "./props.types";

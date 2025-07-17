@@ -1,5 +1,5 @@
-import { Image } from './image';
-import { Relevance } from './relevance';
+import { Image } from "./image";
+import { Relevance } from "./relevance";
 
 export interface Certification {
     title: string;

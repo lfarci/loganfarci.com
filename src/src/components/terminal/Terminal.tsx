@@ -28,7 +28,7 @@ export default function Terminal() {
             appendToHistory({ type: "commandError", input: line, output: command.error ?? "" });
             return;
         }
-        
+
         if (command.clear) {
             clearHistory();
             return;

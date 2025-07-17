@@ -16,15 +16,14 @@ function Preview({ collapsedContent, expandedContent }: PreviewProps) {
         <div className="w-full">
             <div
                 className="relative transition-all duration-300 ease-in-out overflow-hidden"
-                style={{ 
-                    height: isExpanded 
-                        ? `${expandedContentRef.current?.scrollHeight || 0}px` 
-                        : '2em' 
-                }}
+                style={{ height: isExpanded ? `${expandedContentRef.current?.scrollHeight || 0}px` : "2em" }}
             >
-                <div className={`w-full transition-opacity duration-300 overflow-hidden ${
-                    !isExpanded ? "opacity-100" : "opacity-0 pointer-events-none absolute top-0"
-                }`} style={{ maxHeight: '2em' }}>
+                <div
+                    className={`w-full transition-opacity duration-300 overflow-hidden ${
+                        !isExpanded ? "opacity-100" : "opacity-0 pointer-events-none absolute top-0"
+                    }`}
+                    style={{ maxHeight: "2em" }}
+                >
                     {collapsedContent}
                 </div>
 

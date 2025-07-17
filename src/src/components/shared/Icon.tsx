@@ -6,12 +6,8 @@ interface IconProps {
     alt: string;
 }
 
-const Icon: React.FC<IconProps> = ({ src, alt }) => <Image
-    src={src}
-    alt={alt}
-    width={512}
-    height={512}
-    className="w-1/4"
-/>;
+const Icon: React.FC<IconProps> = ({ src, alt }) => (
+    <Image src={src} alt={alt} width={512} height={512} className="w-1/4" />
+);
 
 export default Icon;

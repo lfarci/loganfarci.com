@@ -6,8 +6,10 @@ interface TextSection {
     text: string;
 }
 
-const TextSection: React.FC<TextSection> = ({heading, text}) => <Section heading={heading}>
-    <Text>{text}</Text>
-</Section>;
+const TextSection: React.FC<TextSection> = ({ heading, text }) => (
+    <Section heading={heading}>
+        <Text>{text}</Text>
+    </Section>
+);
 
 export default TextSection;

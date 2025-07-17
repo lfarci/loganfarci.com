@@ -5,10 +5,12 @@ interface ICommand {
 }
 
 abstract class Command implements ICommand {
-    constructor(public name: string, public args: string[]) {}
+    constructor(
+        public name: string,
+        public args: string[],
+    ) {}
     abstract execute(): CommandResult;
 }
-
 
 class CommandResult {
     private _error: string | null;

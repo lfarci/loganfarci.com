@@ -1,6 +1,6 @@
-import { createTypographyComponent } from '../core/BaseTypography';
-import { typographyStyles } from '../core/styles';
+import { createTypographyComponent } from "../core/BaseTypography";
+import { typographyStyles } from "../core/styles";
 
-const Footnote = createTypographyComponent('p', typographyStyles.footnote, 'Footnote');
+const Footnote = createTypographyComponent("p", typographyStyles.footnote, "Footnote");
 
 export default Footnote;
