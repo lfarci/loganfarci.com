@@ -12,7 +12,7 @@ interface Image {
     height: number;
 }
 
-const image: Image = { src: "/avatar.png", alt: "Picture of the author: Logan Farci", width: 1024, height: 1024 };
+const image: Image = { src: "/images/avatar.avif", alt: "Picture of the author: Logan Farci", width: 512, height: 512 };
 
 const contacts = [
     { name: "LinkedIn", url: "https://www.linkedin.com/in/lfarci/" },
