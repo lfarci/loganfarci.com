@@ -5,7 +5,7 @@ import NavigationBar from "@/components/layout/NavigationBar";
 import Footer from "@/components/layout/Footer";
 import { Providers } from "./providers";
 
-const redditMono = Reddit_Mono({ variable: "--font-reddit-mono", subsets: ["latin"] });
+const redditMono = Reddit_Mono({ variable: "--font-reddit-mono", subsets: ["latin"], display: "swap" });
 
 const manrope = Manrope({ variable: "--font-manrope", subsets: ["latin"], display: "swap" });
 
