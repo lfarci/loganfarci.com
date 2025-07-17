@@ -1,6 +1,6 @@
 import { Certification, Relevance } from "./types";
 
-const imageSize = 140;
+const imageSize = 128;
 
 const certifications: Certification[] = [
     {
@@ -8,7 +8,7 @@ const certifications: Certification[] = [
         issuer: "Microsoft",
         date: new Date("2025-03-28"),
         image: {
-            src: "/images/certifications/azure-developer-associate.png",
+            src: "/images/certifications/azure-developer-associate.avif",
             alt: "Azure Developer Associate badge",
             width: imageSize,
             height: imageSize,
@@ -21,7 +21,7 @@ const certifications: Certification[] = [
         issuer: "Microsoft",
         date: new Date("2022-07-08"),
         image: {
-            src: "/images/certifications/azure-fundamentals.png",
+            src: "/images/certifications/azure-fundamentals.avif",
             alt: "Azure Fundamentals badge",
             width: imageSize,
             height: imageSize,
@@ -34,7 +34,7 @@ const certifications: Certification[] = [
         issuer: "Scrum.org",
         date: new Date("2024-07-22"),
         image: {
-            src: "/images/certifications/professional-scrum-developer.png",
+            src: "/images/certifications/professional-scrum-developer.avif",
             alt: "Professional Scrum Developer I badge",
             width: imageSize,
             height: imageSize,
@@ -47,7 +47,7 @@ const certifications: Certification[] = [
         issuer: "GitHub",
         date: new Date("2024-04-19"),
         image: {
-            src: "/images/certifications/github-foundations.png",
+            src: "/images/certifications/github-foundations.avif",
             alt: "GitHub Foundations badge",
             width: imageSize,
             height: imageSize,
@@ -60,7 +60,7 @@ const certifications: Certification[] = [
         issuer: "GitHub",
         date: new Date("2024-05-31"),
         image: {
-            src: "/images/certifications/github-actions.png",
+            src: "/images/certifications/github-actions.avif",
             alt: "Green Software for Practitioners badge",
             width: imageSize,
             height: imageSize,
@@ -73,7 +73,7 @@ const certifications: Certification[] = [
         issuer: "GitHub",
         date: new Date("2024-08-07"),
         image: {
-            src: "/images/certifications/github-copilot.png",
+            src: "/images/certifications/github-copilot.avif",
             alt: "GitHub Copilot badge",
             width: imageSize,
             height: imageSize,
@@ -86,7 +86,7 @@ const certifications: Certification[] = [
         issuer: "The Linux Foundation",
         date: new Date("2023-03-20"),
         image: {
-            src: "/images/certifications/green-software.png",
+            src: "/images/certifications/green-software.avif",
             alt: "GitHub Actions",
             width: imageSize,
             height: imageSize,
