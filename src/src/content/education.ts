@@ -3,7 +3,7 @@ import { Diploma } from "./types/diploma";
 const bachelor: Diploma = {
     name: "Bachelor in Computer Science",
     University: "École Supérieure d'Informatique (ÉSI)",
-    logo: { src: "/images/experience/esi.png", alt: "ESI Logo", width: 200, height: 200 },
+    logo: { src: "/images/experience/esi.avif", alt: "ESI Logo", width: 128, height: 128 },
     details: ["Brussels, Belgium", "2017 – 2020"],
     description: `I gained a comprehensive foundation in **operating systems (Linux)**,
     **databases**, **algorithms and data structures**, **web and Java development**,

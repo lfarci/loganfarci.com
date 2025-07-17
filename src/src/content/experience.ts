@@ -1,4 +1,7 @@
+
 import { Experience } from "./types/experience";
+
+const imageSize = 128;
 
 const experiences: Experience[] = [
     {
@@ -9,7 +12,7 @@ const experiences: Experience[] = [
             name: "Avanade",
             website: "https://www.avanade.com",
             location: "Merelbeke, Flanders, Belgium",
-            logo: { src: "/images/experience/avanade.png", alt: "Avanade Logo", width: 200, height: 200 },
+            logo: { src: "/images/experience/avanade.avif", alt: "Avanade Logo", width: imageSize, height: imageSize },
         },
         description: `A global leader in digital innovation and cloud services, created by Accenture and Microsoft to help organizations accelerate their digital transformation.
 
@@ -29,7 +32,7 @@ const experiences: Experience[] = [
             name: "Smals",
             website: "https://smals.be/",
             location: "Brussels, Brussels-Capital Region, Belgium",
-            logo: { src: "/images/experience/smals.png", alt: "Smals Logo", width: 200, height: 200 },
+            logo: { src: "/images/experience/smals.avif", alt: "Smals Logo", width: imageSize, height: imageSize },
         },
         description: `A Belgian non-profit IT organization that partners with public sector institutions to design and deliver secure, innovative, and scalable digital services for citizens and government agencies. Worked at the Belgian National Employment Office (ONEM) through Smals.
 
@@ -49,7 +52,7 @@ const experiences: Experience[] = [
             name: "Avanade",
             website: "https://www.avanade.com",
             location: "Merelbeke, Flanders, Belgium",
-            logo: { src: "/images/experience/avanade.png", alt: "Avanade Logo", width: 200, height: 200 },
+            logo: { src: "/images/experience/avanade.avif", alt: "Avanade Logo", width: imageSize, height: imageSize },
         },
         description: `A global leader in digital and cloud services, founded by Accenture and Microsoft to help organizations accelerate innovation through the Microsoft ecosystem.
 
@@ -68,7 +71,7 @@ const experiences: Experience[] = [
             name: "Microsoft Innovation Center",
             website: "https://www.microsoftinnovationcenters.com",
             location: "Brussels, Brussels-Capital Region, Belgium",
-            logo: { src: "/images/experience/microsoft.jpg", alt: "Microsoft Logo", width: 200, height: 200 },
+            logo: { src: "/images/experience/microsoft.avif", alt: "Microsoft Logo", width: imageSize, height: imageSize },
         },
         description: `A specialized prototyping internship program bridging innovation and industry experience through partnerships with leading technology companies.
 
