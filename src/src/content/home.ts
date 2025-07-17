@@ -31,22 +31,22 @@ const interests: Interest[] = [
     {
         title: "Backend Development",
         description: "Building robust and scalable backend systems using C#, .NET, and Azure.",
-        image: { src: "/icons/gear.avif", alt: "Gear icon", width: 128, height: 128 },
+        image: { src: "/images/icons/gear.avif", alt: "Gear icon", width: 128, height: 128 },
     },
     {
         title: "Cloud Computing",
         description: "Leveraging the power of Azure to deliver scalable and efficient solutions.",
-        image: { src: "/icons/cloud.avif", alt: "Cloud icon", width: 128, height: 128 },
+        image: { src: "/images/icons/cloud.avif", alt: "Cloud icon", width: 128, height: 128 },
     },
     {
         title: "DevOps",
         description: "Implementing CI/CD pipelines and automating workflows to enhance development efficiency.",
-        image: { src: "/icons/infinity.avif", alt: "Infinity icon", width: 128, height: 128 },
+        image: { src: "/images/icons/infinity.avif", alt: "Infinity icon", width: 128, height: 128 },
     },
     {
         title: "Artificial Intelligence",
         description: "Exploring machine learning models and AI-driven solutions to solve complex problems.",
-        image: { src: "/icons/robot.avif", alt: "Robot icon", width: 128, height: 128 },
+        image: { src: "/images/icons/robot.avif", alt: "Robot icon", width: 128, height: 128 },
     },
 ];
 
