@@ -14,5 +14,8 @@
     "htmlWhitespaceSensitivity": "css",
     "endOfLine": "lf",
     "embeddedLanguageFormatting": "auto",
-    "singleAttributePerLine": false
+    "singleAttributePerLine": false,
+    "printWidth": 120,
+    "requirePragma": false,
+    "insertPragma": false
 }
