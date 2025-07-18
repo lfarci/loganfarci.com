@@ -33,6 +33,8 @@ export function getArticleBySlug(slug: string): Article | null {
         publishedAt: data.publishedAt || "",
         featured: data.featured || false,
         tags: data.tags || [],
+        author: data.author || "",
+        coauthoredWithAgent: data.coauthoredWithAgent || false,
         content,
     };
 }

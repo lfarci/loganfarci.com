@@ -6,4 +6,6 @@ export interface Article {
     featured: boolean;
     tags: string[];
     content: string;
+    author: string;
+    coauthoredWithAgent: boolean;
 }

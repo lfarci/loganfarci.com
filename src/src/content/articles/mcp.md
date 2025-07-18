@@ -4,10 +4,9 @@ description: "Exploring the Model Context Protocol (MCP): A New Standard for AI 
 publishedAt: "2025-07-02"
 featured: true
 tags: ["MCP", "AI"]
-disclaimer: "Generative AI was used to write this article. Edited and reviewed by Logan Farci."
+author: "Logan Farci"
+coauthoredWithAgent: true
 ---
-
-# Model Context Protocol
 
 The Model Context Protocol (MCP) has been gaining significant attention across the AI development community. Major companies like GitHub, Microsoft, and Notion are rapidly releasing MCP servers, and the [official server list](https://github.com/modelcontextprotocol/servers) continues to expand.
 
