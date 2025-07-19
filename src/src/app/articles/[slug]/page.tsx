@@ -5,7 +5,7 @@ import { Heading1, Secondary } from "@/components/shared/typography";
 import { formatDate } from "@/lib/date";
 import { Divider } from "@heroui/react";
 import ClientTooltip from "@/components/shared/ClientTooltip";
-import ClientChip from "@/components/shared/ClientChip";
+import Tag from "@/components/shared/Tag";
 
 interface ArticlePageProps {
     params: Promise<{ slug: string }>;
@@ -38,15 +38,7 @@ function ArticleMeta({ publishedAt, author, coauthoredWithAgent, tags }: Article
                         <Divider orientation="vertical" className="h-6 mx-2" />
                         <span className="flex flex-wrap gap-2 align-middle">
                             {tags.map((tag: string) => (
-                                <ClientChip
-                                    key={tag}
-                                    variant="bordered"
-                                    size="lg"
-                                    radius="md"
-                                    className="text-base"
-                                >
-                                    {tag}
-                                </ClientChip>
+                                <Tag key={tag}>{tag}</Tag>
                             ))}
                         </span>
                     </>
