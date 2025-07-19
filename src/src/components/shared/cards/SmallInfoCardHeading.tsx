@@ -1,4 +1,6 @@
-import { Tooltip } from "@heroui/react";
+"use client";
+
+import ClientTooltip from "@/components/shared/ClientTooltip";
 import { useEffect, useRef, useState } from "react";
 import { Heading3 } from "@/components/shared/typography";
 
@@ -21,7 +23,7 @@ const SmallInfoCardHeading: React.FC<SmallInfoCardHeadingProps> = ({ children })
         </Heading3>
     );
 
-    return isOverflowing ? <Tooltip content={children}>{heading}</Tooltip> : heading;
+    return isOverflowing ? <ClientTooltip content={children}>{heading}</ClientTooltip> : heading;
 };
 
 export default SmallInfoCardHeading;

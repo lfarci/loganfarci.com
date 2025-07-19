@@ -1,5 +1,3 @@
-"use client";
-
 import Section from "@/components/shared/Section";
 import { content } from "@/content/home";
 import React from "react";
@@ -10,9 +8,7 @@ import { Certification } from "@/content/types";
 import experiences from "@/content/experience";
 import { MarkdownPreview } from "@/components/shared/preview";
 import { skillCategories } from "@/content/skills";
-import { Chip } from "@heroui/react";
-import Image from "next/image";
-import { Text } from "@/components/shared/typography";
+import Tag from "@/components/shared/Tag";
 
 const formatMonthYear = (date: Date) => {
     return date.toLocaleDateString(undefined, { year: "numeric", month: "long" });
@@ -56,26 +52,13 @@ export default function About() {
                         >
                             <div className="flex flex-wrap gap-2 mt-2">
                                 {category.skills.map((skill, skillIndex) => (
-                                    <Chip
+                                    <Tag
                                         key={skillIndex}
-                                        variant="bordered"
-                                        size="lg"
-                                        radius="md"
-                                        className="text-base"
-                                        startContent={
-                                            skill.icon ? (
-                                                <Image
-                                                    src={skill.icon}
-                                                    alt={`${skill.name} icon`}
-                                                    width={16}
-                                                    height={16}
-                                                    className="rounded-sm mr-1.5"
-                                                />
-                                            ) : undefined
-                                        }
+                                        imageSrc={skill.icon || undefined}
+                                        imageAlt={skill.icon ? `${skill.name} icon` : undefined}
                                     >
-                                        <Text>{skill.name}</Text>
-                                    </Chip>
+                                        {skill.name}
+                                    </Tag>
                                 ))}
                             </div>
                         </SmallInfoCard>
