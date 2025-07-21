@@ -46,7 +46,14 @@ Here's how you can use the GitHub MCP server in your daily workflow:
 Getting started with the remote server is straightforward. Simply add a `.vscode/mcp.json` configuration file to your repository:
 
 ```json
-{ "servers": { "github": { "type": "http", "url": "https://api.githubcopilot.com/mcp/" } } }
+{
+  "servers": {
+    "github": {
+      "type": "http",
+      "url": "https://api.githubcopilot.com/mcp/"
+    }
+  }
+}
 ```
 
 When you save this file, Visual Studio Code will automatically launch the OAuth flow. Once authenticated, you can start using the GitHub capabilities.
@@ -61,7 +68,14 @@ For more control, you can run the GitHub MCP server locally using Docker.
     ```
 2.  **Update your `mcp.json`:**
     ```json
-    { "servers": { "github": { "type": "http", "url": "http://localhost:8080" } } }
+    {
+      "servers": {
+        "github": {
+          "type": "http",
+          "url": "http://localhost:8080"
+        }
+      }
+    }
     ```
 
 ### Security

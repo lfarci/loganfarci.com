@@ -35,7 +35,6 @@ const markdownComponents: Components = {
         </blockquote>
     ),
     code: ({ children, className }) => <CodeSnippet className={className}>{children}</CodeSnippet>,
-    pre: ({ children }) => children,
     a: ({ href, children }) => <NewTabLink url={href ?? ""}>{children}</NewTabLink>,
     strong: ({ children }) => <Strong>{children}</Strong>,
     em: ({ children }) => <Emphasis>{children}</Emphasis>,
