@@ -3,21 +3,29 @@ import path from "path";
 import matter from "gray-matter";
 import { Article } from "@/content/types";
 
-const articlesDirectory = path.join(process.cwd(), "src/content/articles");
+function resolveArticlesDirectory(): string {
+    const envDir = process.env.ARTICLES_DIRECTORY?.trim();
+    if (envDir && envDir.length > 0) {
+        return path.isAbsolute(envDir) ? envDir : path.resolve(process.cwd(), envDir);
+    }
+    return path.join(process.cwd(), "content/articles");
+}
+
+const getArticlesDirectoryPath = (): string => resolveArticlesDirectory();
 
 export function getArticleSlugs(): string[] {
-    if (!fs.existsSync(articlesDirectory)) {
+    if (!fs.existsSync(getArticlesDirectoryPath())) {
         return [];
     }
 
     return fs
-        .readdirSync(articlesDirectory)
+        .readdirSync(getArticlesDirectoryPath())
         .filter((file) => file.endsWith(".md"))
         .map((file) => file.replace(/\.md$/, ""));
 }
 
 export function getArticleBySlug(slug: string): Article | null {
-    const articlePath = path.join(articlesDirectory, `${slug}.md`);
+    const articlePath = path.join(getArticlesDirectoryPath(), `${slug}.md`);
 
     if (!fs.existsSync(articlePath)) {
         return null;

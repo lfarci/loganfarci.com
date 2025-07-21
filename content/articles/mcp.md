@@ -98,11 +98,3 @@ MCP represents a significant step toward standardizing AI tool integration. Whil
 The rapid adoption by major players like Microsoft, combined with strong community engagement, suggests MCP is likely here to stay. For developers, this presents an opportunity to build tools that work across multiple AI platforms rather than being locked into proprietary ecosystems.
 
 As the protocol matures and more clients support the full specification, we can expect MCP to become as fundamental to AI development as REST APIs are to web development today.
-
-## Next steps
-
-If you're interested in exploring MCP, here's my personal approach:
-
-1. **Start as a user**: Try existing MCP servers with your client of choice to understand the user experience. I will be experimenting with GitHub Copilot Agent Mode in Visual Studio Code.
-2. **Explore the ecosystem**: Browse the [official servers repository](https://github.com/modelcontextprotocol/servers) to see what's available.
-3. **Build something**: Create a simple MCP server for a tool you use daily, or contribute to existing community projects

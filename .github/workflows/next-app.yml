@@ -15,6 +15,7 @@ permissions:
 env:
   src_directory: ${{ github.workspace }}/src
   out_directory: ${{ github.workspace }}/src/out
+  articles_directory: ${{ github.workspace }}/content/articles
 
 jobs:
   deploy:
@@ -48,6 +49,7 @@ jobs:
       - name: Build application
         run: npm run build
         env:
+          ARTICLES_DIRECTORY: "${{ env.articles_directory }}"
           NEXT_PUBLIC_GITHUB_REPOSITORY_URL: "${{ github.server_url }}/${{ github.repository }}"
           NEXT_PUBLIC_COMMIT_HASH: "${{ github.sha }}"
 
