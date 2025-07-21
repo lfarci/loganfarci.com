@@ -14,6 +14,7 @@ import {
     Emphasis,
 } from "@/components/shared/typography";
 import NewTabLink from "./NewTabLink";
+import CodeSnippet from "./CodeSnippet";
 
 interface MarkdownContentProps {
     content: string;
@@ -33,20 +34,8 @@ const markdownComponents: Components = {
             {children}
         </blockquote>
     ),
-    code: ({ children, className }) => {
-        const isInline = !className;
-        if (isInline) {
-            return <code className="bg-gray-100 text-gray-800 px-1 py-0.5 rounded text-sm font-mono">{children}</code>;
-        }
-        return (
-            <code className="block bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto mb-4 font-mono text-sm">
-                {children}
-            </code>
-        );
-    },
-    pre: ({ children }) => (
-        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto mb-4">{children}</pre>
-    ),
+    code: ({ children, className }) => <CodeSnippet className={className}>{children}</CodeSnippet>,
+    pre: ({ children }) => children,
     a: ({ href, children }) => <NewTabLink url={href ?? ""}>{children}</NewTabLink>,
     strong: ({ children }) => <Strong>{children}</Strong>,
     em: ({ children }) => <Emphasis>{children}</Emphasis>,
