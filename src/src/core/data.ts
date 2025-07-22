@@ -2,7 +2,7 @@ import { Certification } from "@/types/certification";
 import { resolveDirectoryFromEnvironment } from "./environment";
 import { existsSync, readFileSync } from "fs";
 import { join } from "path";
-import { Experience, SkillCategory } from "@/types";
+import { Experience, SkillCategory, Interest } from "@/types";
 
 /**
  * Returns the path to the data directory based on the environment variable or a default value.
@@ -33,22 +33,22 @@ const getDataFromJsonFile = <T>(fileName: string, encoding: BufferEncoding = "ut
  * Retrieves certifications from the JSON file.
  * @returns {Certification[]} Array of certifications.
  */
-export const getCertifications = (): Certification[] => {
-    return getDataFromJsonFile<Certification>("certifications.json");
-};
+export const getCertifications = (): Certification[] => getDataFromJsonFile<Certification>("certifications.json");
 
 /**
  * Retrieves experiences from the JSON file.
  * @returns {Experience[]} Array of experiences.
  */
-export const getExperiences = (): Experience[] => {
-    return getDataFromJsonFile<Experience>("experiences.json");
-};
+export const getExperiences = (): Experience[] => getDataFromJsonFile<Experience>("experiences.json");
 
 /**
  * Retrieves skill categories from the JSON file.
  * @returns {SkillCategory[]} Array of skill categories.
  */
-export const getSkillCategories = (): SkillCategory[] => {
-    return getDataFromJsonFile<SkillCategory>("skills.json");
-};
+export const getSkillCategories = (): SkillCategory[] => getDataFromJsonFile<SkillCategory>("skills.json");
+
+/**
+ * Retrieves interests from the JSON file.
+ * @returns {Interest[]} Array of interests.
+ */
+export const getInterests = (): Interest[] => getDataFromJsonFile<Interest>("interests.json");
