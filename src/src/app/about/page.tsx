@@ -1,5 +1,4 @@
 import Section from "@/components/shared/Section";
-import { content } from "@/content/home";
 import React from "react";
 import TextSection from "@/components/shared/TextSection";
 import SmallInfoCard, { SmallInfoCardProps } from "@/components/shared/cards/SmallInfoCard";
@@ -7,7 +6,7 @@ import SmallInfoCardsGridSection from "@/components/shared/cards/SmallInfoCardsS
 import { Certification, Skill, SkillCategory } from "@/types";
 import { MarkdownPreview } from "@/components/shared/preview";
 import Tag from "@/components/shared/Tag";
-import { getCertifications, getExperiences, getSkillCategories } from "@/core/data";
+import { getCertifications, getDiploma, getExperiences, getProfile, getSkillCategories } from "@/core/data";
 
 const formatMonthYear = (date: Date | string) => {
     const d = typeof date === "string" ? new Date(date) : date;
@@ -32,18 +31,20 @@ const certifications: SmallInfoCardProps[] = getCertifications()
 
 const experiences = getExperiences();
 const skillCategories = getSkillCategories();
+const diploma = getDiploma();
+const profile = getProfile();
 
 export default function About() {
     const bachelor: SmallInfoCardProps = {
-        image: content.bachelor.logo,
-        heading: content.bachelor.name,
-        subtitle: content.bachelor.University,
-        details: content.bachelor.details,
+        image: diploma.logo,
+        heading: diploma.name,
+        subtitle: diploma.University,
+        details: diploma.details,
     };
 
     return (
         <div>
-            <TextSection heading="About Me" text={content.about} />
+            <TextSection heading="About Me" text={profile.introduction} />
             <Section heading="Skills">
                 <div className="flex flex-col gap-4">
                     {skillCategories.map((category: SkillCategory) => (
@@ -90,7 +91,7 @@ export default function About() {
             </Section>
             <Section heading="Education">
                 <SmallInfoCard {...bachelor} imageSize="small" imagePosition="start">
-                    <MarkdownPreview>{content.bachelor.description}</MarkdownPreview>
+                    <MarkdownPreview>{diploma.description}</MarkdownPreview>
                 </SmallInfoCard>
             </Section>
             <SmallInfoCardsGridSection heading="Certifications" items={certifications} />
