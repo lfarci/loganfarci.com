@@ -1,7 +1,7 @@
 import Introduction from "@/components/home/Introduction";
 import FeaturedArticles from "@/components/home/FeaturedArticles";
 import { content } from "../content/home";
-import { Relevance } from "@/content/types";
+import { Relevance } from "@/types";
 import TextSection from "@/components/shared/TextSection";
 import ThumbnailGridSection from "@/components/shared/ThumbnailGridSection";
 

@@ -1,4 +1,4 @@
-import { Diploma } from "./types/diploma";
+import { Diploma } from "@/types/diploma";
 
 const bachelor: Diploma = {
     name: "Bachelor in Computer Science",

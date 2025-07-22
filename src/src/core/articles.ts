@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
-import { Article } from "@/content/types";
+import { Article } from "@/types";
 
 function resolveArticlesDirectory(): string {
     const envDir = process.env.ARTICLES_DIRECTORY?.trim();

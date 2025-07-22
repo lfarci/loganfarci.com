@@ -4,7 +4,7 @@ import React from "react";
 import TextSection from "@/components/shared/TextSection";
 import SmallInfoCard, { SmallInfoCardProps } from "@/components/shared/cards/SmallInfoCard";
 import SmallInfoCardsGridSection from "@/components/shared/cards/SmallInfoCardsSection";
-import { Certification } from "@/content/types";
+import { Certification } from "@/types";
 import experiences from "@/content/experience";
 import { MarkdownPreview } from "@/components/shared/preview";
 import { skillCategories } from "@/content/skills";

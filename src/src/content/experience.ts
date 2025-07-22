@@ -1,4 +1,4 @@
-import { Experience } from "./types/experience";
+import { Experience } from "@/types/experience";
 
 const imageSize = 128;
 
