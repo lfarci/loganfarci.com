@@ -1,4 +1,4 @@
-# Logan Farci's Personal Website
+# Personal Website
 
 Welcome! This repository contains the source code for my personal website: [www.loganfarci.com](https://www.loganfarci.com).
 
