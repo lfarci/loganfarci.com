@@ -29,7 +29,8 @@
                 "ms-azuretools.vscode-azure-github-copilot",
                 "esbenp.prettier-vscode",
                 "dbaeumer.vscode-eslint",
-                "bradlc.vscode-tailwindcss"
+                "bradlc.vscode-tailwindcss",
+                "1943time.inkdown"
             ]
         }
     }
