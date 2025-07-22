@@ -22,8 +22,6 @@
                 "GitHub.vscode-github-actions",
                 "hashicorp.terraform",
                 "ms-vscode.azurecli",
-                "ms-vscode.vscode-node-azure-pack",
-                "ms-azuretools.vscode-azureresourcegroups",
                 "ms-azuretools.vscode-azurestaticwebapps",
                 "ms-azuretools.vscode-azureterraform",
                 "ms-azuretools.vscode-azure-github-copilot",
