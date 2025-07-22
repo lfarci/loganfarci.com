@@ -4,20 +4,6 @@ Welcome! This repository contains the source code for my personal website: [www.
 
 **This site is the central entrypoint to my online presence and the content I share.** Here, you'll find my latest articles, technical notes, and resources, as well as a comprehensive overview of my professional profile—including work experience, education, and certifications.
 
-## Technology stack
-
-| Name                  | Description                                                  | Type  | Link                                                                                   |
-| --------------------- | ------------------------------------------------------------ | ----- | -------------------------------------------------------------------------------------- |
-| Next.js               | React framework for building web apps with SSR/SSG/ISR       | Web   | [Next.js](https://nextjs.org/)                                                         |
-| React                 | JavaScript library for building user interfaces              | Web   | [React](https://react.dev/)                                                            |
-| TypeScript            | Typed superset of JavaScript                                 | Web   | [TypeScript](https://www.typescriptlang.org/)                                          |
-| Tailwind CSS          | Utility-first CSS framework for rapid UI development         | Web   | [Tailwind CSS](https://tailwindcss.com/)                                               |
-| HeroUI                | Component library for Tailwind CSS                           | Web   | [HeroUI](https://heroui.com/)                                                          |
-| Azure Static Web Apps | Azure service for hosting static web applications            | Cloud | [Azure Static Web Apps](https://azure.microsoft.com/en-us/products/app-service/static) |
-| Terraform             | Infrastructure as Code tool for provisioning cloud resources | IaC   | [Terraform](https://www.terraform.io/)                                                 |
-| Azure CLI             | Command-line tool for managing Azure resources               | Cloud | [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/)                              |
-| GitHub Actions        | CI/CD platform for automating workflows and deployments      | CI/CD | [GitHub Actions](https://github.com/features/actions)                                  |
-
 ## Prerequisites
 
 > [!NOTE]
@@ -57,3 +43,17 @@ Before you begin, ensure you have the following tools installed on your workstat
    ```bash
    npm run lint
    ```
+
+## Technology stack
+
+| Name                  | Description                                                  | Type  | Link                                                                                   |
+| --------------------- | ------------------------------------------------------------ | ----- | -------------------------------------------------------------------------------------- |
+| Next.js               | React framework for building web apps with SSR/SSG/ISR       | Web   | [Next.js](https://nextjs.org/)                                                         |
+| React                 | JavaScript library for building user interfaces              | Web   | [React](https://react.dev/)                                                            |
+| TypeScript            | Typed superset of JavaScript                                 | Web   | [TypeScript](https://www.typescriptlang.org/)                                          |
+| Tailwind CSS          | Utility-first CSS framework for rapid UI development         | Web   | [Tailwind CSS](https://tailwindcss.com/)                                               |
+| HeroUI                | Component library for Tailwind CSS                           | Web   | [HeroUI](https://heroui.com/)                                                          |
+| Azure Static Web Apps | Azure service for hosting static web applications            | Cloud | [Azure Static Web Apps](https://azure.microsoft.com/en-us/products/app-service/static) |
+| Terraform             | Infrastructure as Code tool for provisioning cloud resources | IaC   | [Terraform](https://www.terraform.io/)                                                 |
+| Azure CLI             | Command-line tool for managing Azure resources               | Cloud | [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/)                              |
+| GitHub Actions        | CI/CD platform for automating workflows and deployments      | CI/CD | [GitHub Actions](https://github.com/features/actions)                                  |
