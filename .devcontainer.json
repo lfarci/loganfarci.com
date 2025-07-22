@@ -1,0 +1,31 @@
+{
+    "name": "Personal website development environment",
+    "image": "mcr.microsoft.com/devcontainers/typescript-node:22",
+    "forwardPorts": [3000],
+    "workspaceFolder": "/workspaces/loganfarci.com/src",
+
+    "features": {
+        "ghcr.io/devcontainers/features/azure-cli:1": {},
+        "ghcr.io/devcontainers/features/terraform:1": {},
+        "ghcr.io/devcontainers/features/github-cli:1": {}
+    },
+
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "editor.formatOnSave": true
+            },
+            "extensions": [
+                "github.copilot",
+                "github.copilot-chat",
+                "github.vscode-pull-request-github",
+
+                "hashicorp.terraform",
+                "ms-azuretools.vscode-azurestaticwebapps",
+
+                "esbenp.prettier-vscode",
+                "dbaeumer.vscode-eslint"
+            ]
+        }
+    }
+}
