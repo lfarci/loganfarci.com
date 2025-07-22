@@ -1,4 +1,3 @@
-import certifications from "./certifications";
 import bachelor from "./education";
 
 const introduction = "Azure Associate Developer delivering cloud-native solutions that scale.";
@@ -56,6 +55,5 @@ export const content = {
     image: image,
     contacts: contacts,
     interests: interests,
-    credentials: certifications,
     bachelor: bachelor,
 };

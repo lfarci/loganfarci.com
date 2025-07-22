@@ -9,9 +9,11 @@ import experiences from "@/content/experience";
 import { MarkdownPreview } from "@/components/shared/preview";
 import { skillCategories } from "@/content/skills";
 import Tag from "@/components/shared/Tag";
+import { getCertifications } from "@/core/data";
 
-const formatMonthYear = (date: Date) => {
-    return date.toLocaleDateString(undefined, { year: "numeric", month: "long" });
+const formatMonthYear = (date: Date | string) => {
+    const d = typeof date === "string" ? new Date(date) : date;
+    return d.toLocaleDateString(undefined, { year: "numeric", month: "long" });
 };
 
 const formatExperiencePeriod = (start: Date, end?: Date) => {
@@ -20,17 +22,17 @@ const formatExperiencePeriod = (start: Date, end?: Date) => {
     return `${startDate} - ${endDate}`;
 };
 
-export default function About() {
-    const certifications: SmallInfoCardProps[] = [...content.credentials]
-        .sort((a, b) => (b.relevance ?? 0) - (a.relevance ?? 0))
-        .map((certification: Certification) => ({
-            image: certification.image,
-            heading: certification.title,
-            subtitle: certification.issuer,
-            details: [formatMonthYear(certification.date)],
-            imageSize: "medium" as const,
-        }));
+const certifications: SmallInfoCardProps[] = getCertifications()
+    .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+    .map((certification: Certification) => ({
+        image: certification.image,
+        heading: certification.title,
+        subtitle: certification.issuer,
+        details: [formatMonthYear(certification.date)],
+        imageSize: "medium" as const,
+    }));
 
+export default function About() {
     const bachelor: SmallInfoCardProps = {
         image: content.bachelor.logo,
         heading: content.bachelor.name,
