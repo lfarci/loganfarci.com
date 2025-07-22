@@ -6,53 +6,5 @@
     "alt": "Picture of the author: Logan Farci",
     "width": 512,
     "height": 512
-  },
-  "contacts": [
-    { "name": "LinkedIn", "url": "https://www.linkedin.com/in/lfarci/" },
-    { "name": "GitHub", "url": "https://github.com/lfarci" },
-    { "name": "Bluesky", "url": "https://bsky.app/profile/lfarci.bsky.social" },
-    { "name": "Email", "url": "mailto:logan.farci@outlook.be" }
-  ],
-  "interests": [
-    {
-      "title": "Backend Development",
-      "description": "Building robust and scalable backend systems using C#, .NET, and Azure.",
-      "image": {
-        "src": "/images/icons/gear.avif",
-        "alt": "Gear icon",
-        "width": 128,
-        "height": 128
-      }
-    },
-    {
-      "title": "Cloud Computing",
-      "description": "Leveraging the power of Azure to deliver scalable and efficient solutions.",
-      "image": {
-        "src": "/images/icons/cloud.avif",
-        "alt": "Cloud icon",
-        "width": 128,
-        "height": 128
-      }
-    },
-    {
-      "title": "DevOps",
-      "description": "Implementing CI/CD pipelines and automating workflows to enhance development efficiency.",
-      "image": {
-        "src": "/images/icons/infinity.avif",
-        "alt": "Infinity icon",
-        "width": 128,
-        "height": 128
-      }
-    },
-    {
-      "title": "Artificial Intelligence",
-      "description": "Exploring machine learning models and AI-driven solutions to solve complex problems.",
-      "image": {
-        "src": "/images/icons/robot.avif",
-        "alt": "Robot icon",
-        "width": 128,
-        "height": 128
-      }
-    }
-  ]
+  }
 }

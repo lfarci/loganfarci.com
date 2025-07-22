@@ -9,3 +9,4 @@ export * from "./image";
 export * from "./skill";
 export * from "./skill-category";
 export * from "./interest";
+export * from "./contact";

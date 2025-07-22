@@ -13,17 +13,4 @@ interface Image {
 
 const image: Image = { src: "/images/avatar.avif", alt: "Picture of the author: Logan Farci", width: 512, height: 512 };
 
-const contacts = [
-    { name: "LinkedIn", url: "https://www.linkedin.com/in/lfarci/" },
-    { name: "GitHub", url: "https://github.com/lfarci" },
-    { name: "Bluesky", url: "https://bsky.app/profile/lfarci.bsky.social" },
-    { name: "Email", url: "mailto:logan.farci@outlook.be" },
-];
-
-export const content = {
-    introduction: introduction,
-    about: about,
-    image: image,
-    contacts: contacts,
-    bachelor: bachelor,
-};
+export const content = { introduction: introduction, about: about, image: image, bachelor: bachelor };

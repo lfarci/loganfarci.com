@@ -2,7 +2,7 @@ import { Certification } from "@/types/certification";
 import { resolveDirectoryFromEnvironment } from "./environment";
 import { existsSync, readFileSync } from "fs";
 import { join } from "path";
-import { Experience, SkillCategory, Interest } from "@/types";
+import { Experience, SkillCategory, Interest, Contact } from "@/types";
 
 /**
  * Returns the path to the data directory based on the environment variable or a default value.
@@ -52,3 +52,9 @@ export const getSkillCategories = (): SkillCategory[] => getDataFromJsonFile<Ski
  * @returns {Interest[]} Array of interests.
  */
 export const getInterests = (): Interest[] => getDataFromJsonFile<Interest>("interests.json");
+
+/**
+ * Retrieves contacts from the JSON file.
+ * @returns {Contact[]} Array of contacts.
+ */
+export const getContacts = (): Contact[] => getDataFromJsonFile<Contact>("contacts.json");
