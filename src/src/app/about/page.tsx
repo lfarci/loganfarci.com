@@ -4,11 +4,10 @@ import React from "react";
 import TextSection from "@/components/shared/TextSection";
 import SmallInfoCard, { SmallInfoCardProps } from "@/components/shared/cards/SmallInfoCard";
 import SmallInfoCardsGridSection from "@/components/shared/cards/SmallInfoCardsSection";
-import { Certification } from "@/types";
+import { Certification, Skill, SkillCategory } from "@/types";
 import { MarkdownPreview } from "@/components/shared/preview";
-import { skillCategories } from "@/content/skills";
 import Tag from "@/components/shared/Tag";
-import { getCertifications, getExperiences } from "@/core/data";
+import { getCertifications, getExperiences, getSkillCategories } from "@/core/data";
 
 const formatMonthYear = (date: Date | string) => {
     const d = typeof date === "string" ? new Date(date) : date;
@@ -32,6 +31,7 @@ const certifications: SmallInfoCardProps[] = getCertifications()
     }));
 
 const experiences = getExperiences();
+const skillCategories = getSkillCategories();
 
 export default function About() {
     const bachelor: SmallInfoCardProps = {
@@ -46,7 +46,7 @@ export default function About() {
             <TextSection heading="About Me" text={content.about} />
             <Section heading="Skills">
                 <div className="flex flex-col gap-4">
-                    {skillCategories.map((category) => (
+                    {skillCategories.map((category: SkillCategory) => (
                         <SmallInfoCard
                             key={category.name}
                             heading={category.name}
@@ -54,7 +54,7 @@ export default function About() {
                             details={[]}
                         >
                             <div className="flex flex-wrap gap-2 mt-2">
-                                {category.skills.map((skill, skillIndex) => (
+                                {category.skills.map((skill: Skill, skillIndex) => (
                                     <Tag
                                         key={skillIndex}
                                         imageSrc={skill.icon || undefined}

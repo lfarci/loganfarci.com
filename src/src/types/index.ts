@@ -6,3 +6,5 @@ export * from "./company";
 export * from "./diploma";
 export * from "./experience";
 export * from "./image";
+export * from "./skill";
+export * from "./skill-category";
