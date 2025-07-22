@@ -2,7 +2,7 @@ import { Certification } from "@/types/certification";
 import { resolveDirectoryFromEnvironment } from "./environment";
 import { existsSync, readFileSync } from "fs";
 import { join } from "path";
-import { Experience, SkillCategory, Interest, Contact } from "@/types";
+import { Experience, SkillCategory, Interest, Contact, Profile } from "@/types";
 
 /**
  * Returns the path to the data directory based on the environment variable or a default value.
@@ -13,48 +13,54 @@ const getDataDirectoryPath = (): string => {
 };
 
 /**
- * Generic function to read and parse a JSON file from the data directory.
- * @param fileName Name of the JSON file (e.g., "certifications.json")
- * @returns Parsed data of type T[] or an empty array if file does not exist.
+ * Generic function to read and parse JSON data (object or array) from the data directory.
+ * @param fileName Name of the JSON file (e.g., "profile.json")
+ * @returns Parsed JSON data of type T.
  */
-const getDataFromJsonFile = <T>(fileName: string, encoding: BufferEncoding = "utf8"): T[] => {
+const getObjectFromJsonFile = <T>(fileName: string, encoding: BufferEncoding = "utf8"): T => {
     const dataDirectory = getDataDirectoryPath();
     const filePath = join(dataDirectory, fileName);
 
     if (!existsSync(filePath)) {
-        return [];
+        throw new Error(`File not found: ${filePath}`);
     }
 
     const fileData = readFileSync(filePath, encoding);
-    return JSON.parse(fileData) as T[];
+    return JSON.parse(fileData) as T;
 };
 
 /**
  * Retrieves certifications from the JSON file.
  * @returns {Certification[]} Array of certifications.
  */
-export const getCertifications = (): Certification[] => getDataFromJsonFile<Certification>("certifications.json");
+export const getCertifications = (): Certification[] => getObjectFromJsonFile<Certification[]>("certifications.json");
 
 /**
  * Retrieves experiences from the JSON file.
  * @returns {Experience[]} Array of experiences.
  */
-export const getExperiences = (): Experience[] => getDataFromJsonFile<Experience>("experiences.json");
+export const getExperiences = (): Experience[] => getObjectFromJsonFile<Experience[]>("experiences.json");
 
 /**
  * Retrieves skill categories from the JSON file.
  * @returns {SkillCategory[]} Array of skill categories.
  */
-export const getSkillCategories = (): SkillCategory[] => getDataFromJsonFile<SkillCategory>("skills.json");
+export const getSkillCategories = (): SkillCategory[] => getObjectFromJsonFile<SkillCategory[]>("skills.json");
 
 /**
  * Retrieves interests from the JSON file.
  * @returns {Interest[]} Array of interests.
  */
-export const getInterests = (): Interest[] => getDataFromJsonFile<Interest>("interests.json");
+export const getInterests = (): Interest[] => getObjectFromJsonFile<Interest[]>("interests.json");
 
 /**
  * Retrieves contacts from the JSON file.
  * @returns {Contact[]} Array of contacts.
  */
-export const getContacts = (): Contact[] => getDataFromJsonFile<Contact>("contacts.json");
+export const getContacts = (): Contact[] => getObjectFromJsonFile<Contact[]>("contacts.json");
+
+/**
+ * Retrieves the profile data from the JSON file.
+ * @returns {Profile} The profile data.
+ */
+export const getProfile = (): Profile => getObjectFromJsonFile<Profile>("profile.json");
