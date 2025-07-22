@@ -1,4 +1,4 @@
-import { Certification, Relevance } from "./types";
+import { Certification, Relevance } from "@/types";
 
 const imageSize = 128;
 
