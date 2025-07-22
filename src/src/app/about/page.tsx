@@ -5,11 +5,10 @@ import TextSection from "@/components/shared/TextSection";
 import SmallInfoCard, { SmallInfoCardProps } from "@/components/shared/cards/SmallInfoCard";
 import SmallInfoCardsGridSection from "@/components/shared/cards/SmallInfoCardsSection";
 import { Certification } from "@/types";
-import experiences from "@/content/experience";
 import { MarkdownPreview } from "@/components/shared/preview";
 import { skillCategories } from "@/content/skills";
 import Tag from "@/components/shared/Tag";
-import { getCertifications } from "@/core/data";
+import { getCertifications, getExperiences } from "@/core/data";
 
 const formatMonthYear = (date: Date | string) => {
     const d = typeof date === "string" ? new Date(date) : date;
@@ -31,6 +30,8 @@ const certifications: SmallInfoCardProps[] = getCertifications()
         details: [formatMonthYear(certification.date)],
         imageSize: "medium" as const,
     }));
+
+const experiences = getExperiences();
 
 export default function About() {
     const bachelor: SmallInfoCardProps = {

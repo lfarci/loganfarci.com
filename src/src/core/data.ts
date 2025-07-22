@@ -2,6 +2,7 @@ import { Certification } from "@/types/certification";
 import { resolveDirectoryFromEnvironment } from "./environment";
 import { existsSync, readFileSync } from "fs";
 import { join } from "path";
+import { Experience } from "@/types";
 
 /**
  * Returns the path to the data directory based on the environment variable or a default value.
@@ -34,4 +35,12 @@ const getDataFromJsonFile = <T>(fileName: string, encoding: BufferEncoding = "ut
  */
 export const getCertifications = (): Certification[] => {
     return getDataFromJsonFile<Certification>("certifications.json");
+};
+
+/**
+ * Retrieves experiences from the JSON file.
+ * @returns {Experience[]} Array of experiences.
+ */
+export const getExperiences = (): Experience[] => {
+    return getDataFromJsonFile<Experience>("experiences.json");
 };
