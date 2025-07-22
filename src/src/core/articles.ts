@@ -1,39 +1,27 @@
-import fs from "fs";
 import path from "path";
+import { resolveDirectoryFromEnvironment } from "./environment";
+import { listFilesWithExtension } from "../../core/files";
 import matter from "gray-matter";
-import { Article } from "@/content/types";
+import { Article } from "@/types";
+import fs from "fs";
 
-function resolveArticlesDirectory(): string {
-    const envDir = process.env.ARTICLES_DIRECTORY?.trim();
-    if (envDir && envDir.length > 0) {
-        return path.isAbsolute(envDir) ? envDir : path.resolve(process.cwd(), envDir);
-    }
-    return path.join(process.cwd(), "content/articles");
-}
+const getArticlesDirectoryPath = (): string => {
+    return resolveDirectoryFromEnvironment("ARTICLES_DIRECTORY", "content/articles");
+};
 
-const getArticlesDirectoryPath = (): string => resolveArticlesDirectory();
+export const getArticleSlugs = (): string[] => {
+    const dir = getArticlesDirectoryPath();
+    const files = listFilesWithExtension(dir, ".md");
+    return files.map((file: string) => path.basename(file, ".md"));
+};
 
-export function getArticleSlugs(): string[] {
-    if (!fs.existsSync(getArticlesDirectoryPath())) {
-        return [];
-    }
-
-    return fs
-        .readdirSync(getArticlesDirectoryPath())
-        .filter((file) => file.endsWith(".md"))
-        .map((file) => file.replace(/\.md$/, ""));
-}
-
-export function getArticleBySlug(slug: string): Article | null {
+export const getArticleBySlug = (slug: string): Article | null => {
     const articlePath = path.join(getArticlesDirectoryPath(), `${slug}.md`);
-
     if (!fs.existsSync(articlePath)) {
         return null;
     }
-
     const article = fs.readFileSync(articlePath, "utf8");
     const { data, content } = matter(article);
-
     return {
         slug,
         title: data.title || "",
@@ -45,16 +33,16 @@ export function getArticleBySlug(slug: string): Article | null {
         coauthoredWithAgent: data.coauthoredWithAgent || false,
         content,
     };
-}
+};
 
-export function getAllArticles(): Article[] {
+export const getAllArticles = (): Article[] => {
     const slugs = getArticleSlugs();
     return slugs
         .map((slug) => getArticleBySlug(slug))
         .filter((article): article is Article => article !== null)
         .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
-}
+};
 
-export function getFeaturedArticles(): Article[] {
+export const getFeaturedArticles = (): Article[] => {
     return getAllArticles().filter((article) => article.featured);
-}
+};

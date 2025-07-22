@@ -1,17 +1,16 @@
 import Section from "@/components/shared/Section";
-import { content } from "@/content/home";
 import React from "react";
 import TextSection from "@/components/shared/TextSection";
 import SmallInfoCard, { SmallInfoCardProps } from "@/components/shared/cards/SmallInfoCard";
 import SmallInfoCardsGridSection from "@/components/shared/cards/SmallInfoCardsSection";
-import { Certification } from "@/content/types";
-import experiences from "@/content/experience";
+import { Certification, Skill, SkillCategory } from "@/types";
 import { MarkdownPreview } from "@/components/shared/preview";
-import { skillCategories } from "@/content/skills";
 import Tag from "@/components/shared/Tag";
+import { getCertifications, getDiploma, getExperiences, getProfile, getSkillCategories } from "@/core/data";
 
-const formatMonthYear = (date: Date) => {
-    return date.toLocaleDateString(undefined, { year: "numeric", month: "long" });
+const formatMonthYear = (date: Date | string) => {
+    const d = typeof date === "string" ? new Date(date) : date;
+    return d.toLocaleDateString(undefined, { year: "numeric", month: "long" });
 };
 
 const formatExperiencePeriod = (start: Date, end?: Date) => {
@@ -20,30 +19,35 @@ const formatExperiencePeriod = (start: Date, end?: Date) => {
     return `${startDate} - ${endDate}`;
 };
 
-export default function About() {
-    const certifications: SmallInfoCardProps[] = [...content.credentials]
-        .sort((a, b) => (b.relevance ?? 0) - (a.relevance ?? 0))
-        .map((certification: Certification) => ({
-            image: certification.image,
-            heading: certification.title,
-            subtitle: certification.issuer,
-            details: [formatMonthYear(certification.date)],
-            imageSize: "medium" as const,
-        }));
+const certifications: SmallInfoCardProps[] = getCertifications()
+    .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+    .map((certification: Certification) => ({
+        image: certification.image,
+        heading: certification.title,
+        subtitle: certification.issuer,
+        details: [formatMonthYear(certification.date)],
+        imageSize: "medium" as const,
+    }));
 
+const experiences = getExperiences();
+const skillCategories = getSkillCategories();
+const diploma = getDiploma();
+const profile = getProfile();
+
+export default function About() {
     const bachelor: SmallInfoCardProps = {
-        image: content.bachelor.logo,
-        heading: content.bachelor.name,
-        subtitle: content.bachelor.University,
-        details: content.bachelor.details,
+        image: diploma.logo,
+        heading: diploma.name,
+        subtitle: diploma.University,
+        details: diploma.details,
     };
 
     return (
         <div>
-            <TextSection heading="About Me" text={content.about} />
+            <TextSection heading="About Me" text={profile.introduction} />
             <Section heading="Skills">
                 <div className="flex flex-col gap-4">
-                    {skillCategories.map((category) => (
+                    {skillCategories.map((category: SkillCategory) => (
                         <SmallInfoCard
                             key={category.name}
                             heading={category.name}
@@ -51,7 +55,7 @@ export default function About() {
                             details={[]}
                         >
                             <div className="flex flex-wrap gap-2 mt-2">
-                                {category.skills.map((skill, skillIndex) => (
+                                {category.skills.map((skill: Skill, skillIndex) => (
                                     <Tag
                                         key={skillIndex}
                                         imageSrc={skill.icon || undefined}
@@ -87,7 +91,7 @@ export default function About() {
             </Section>
             <Section heading="Education">
                 <SmallInfoCard {...bachelor} imageSize="small" imagePosition="start">
-                    <MarkdownPreview>{content.bachelor.description}</MarkdownPreview>
+                    <MarkdownPreview>{diploma.description}</MarkdownPreview>
                 </SmallInfoCard>
             </Section>
             <SmallInfoCardsGridSection heading="Certifications" items={certifications} />
