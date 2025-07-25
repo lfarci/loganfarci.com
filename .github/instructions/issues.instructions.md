@@ -48,10 +48,6 @@ Always update issue status appropriately:
 ## Implementation Notes
 
 [Any relevant design/technical details]
-
-## Dependencies
-
-[List any blocking issues or prerequisites]
 ```
 
 ### Tasks
@@ -144,7 +140,7 @@ Milestone
 
 ## Quality Gates
 
-Before creating an issue, ensure:
+Before creating an issue, ensure, no need to mentioned normalization criteria in the issue itself:
 
 - [ ] Title is clear and actionable
 - [ ] Appropriate labels are applied
