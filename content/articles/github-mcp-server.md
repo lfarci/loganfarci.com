@@ -93,6 +93,12 @@ The GitHub MCP server can be configured to control the agent's permissions.
 - **Safety First:** Confirmation prompts for potentially destructive operations.
 - **Discovery:** Excellent for exploring repositories and understanding project structures.
 
+## Cool Setup Video
+
+Want to see the GitHub MCP Server in action? Check out this excellent video from Debbie O'Brien:
+
+- [How to Set Up the GitHub MCP Server (YouTube)](https://www.youtube.com/watch?v=FvR1b0nNoJA)
+
 ## Resources
 
 - [GitHub MCP Server Repository](https://github.com/github/github-mcp-server)
