@@ -3,7 +3,6 @@ mode: "agent"
 model: GPT-4.1
 tools: [
         "codebase",
-        "Microsoft Docs",
         "browser_click",
         "browser_close",
         "browser_handle_dialog",

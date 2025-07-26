@@ -25,15 +25,103 @@ In writing my first two articles, I found collaborating with Copilot surprisingl
 
 Through this process, I noticed I was repeating the same instructions to Copilot again and again. Typing out all the context each time isn't practical—and Copilot works best when it has the full picture. That led me to explore ways to streamline and automate these interactions.
 
+
 # Instructions
 
-The first challenge I ran into was having to repeat the same instructions to Copilot across different sessions, messages, and workspaces. For example, if I wanted Copilot to improve a specific section, I'd type something like: `Improve the readability and clarity of the section about X.` Copilot would make the edit, and I'd review it. But if I wanted more targeted changes, I'd have to explain my intent in detail every single time I submitted a new prompt. This approach quickly became tedious and didn't scale.
+title: "[Specific Title]"
+description: "[1-2 sentence summary]"
+publishedAt: "[YYYY-MM-DD]"
+
+One of the first challenges I faced was having to repeat the same instructions to Copilot across different sessions and prompts. For example, if I wanted Copilot to improve a section, I’d type something like: `Improve the readability and clarity of the section about X.` Copilot would make the edit, and I’d review it. But for more targeted changes, I had to explain my intent in detail every time. This quickly became tedious and didn’t scale.
+
+The solution is to define persistent, version-controlled instructions using markdown files. [Custom instructions](https://code.visualstudio.com/docs/copilot/copilot-customization#_custom-instructions) enable this. 
+
+I created a file called `.github/instructions/articles.instructions.md` in my repository. It contains all the guidelines and templates I want Copilot to follow when working on articles. This file is scoped to all Markdown files in the `content/articles` directory. Here’s a simplified example:
+
+> [!NOTE]
+> The following is a simplified version of the instructions file used in this repository. The full version is available here: [articles.instructions.md](https://github.com/lfarci/loganfarci.com/blob/main/.github/instructions/articles.instructions.md).
 
 ```markdown
 ---
 applyTo: "content/articles/*.md"
 ---
+
+# Article Instructions
+
+## Article Guidelines
+
+- Write for developers: clear, direct, and concise
+- Focus on one specific problem or concept per article
+- Use active voice and practical code examples
+- Structure with logical headings and minimal setup
+- Avoid tangents and broad overviews
+- Lead with code and practical implementation
+- Link to official docs for basics
+
+## Front Matter
+
+title: "[Specific Title]"
+description: "[1-2 sentence summary]"
+publishedAt: "[YYYY-MM-DD]"
+
+\`\`\`yaml
+---
+title: "[Specific Title]"
+description: "[1-2 sentence summary]"
+publishedAt: "[YYYY-MM-DD]"
+---
+\`\`\`
+
+- **title**: Use title case and be descriptive about the article content
+- **description**: Summarize the article's value in 1-2 sentences
+- **publishedAt**: Use YYYY-MM-DD format for consistency
+
+## Structure Template
+
+
+\`\`\`markdown
+---
+[front matter]
+---
+
+[Intro: what problem is solved]
+
+## [Solution]
+
+\`\`\`language
+// Code example
+\`\`\`
+
+[Brief explanation]
+
+## [Key Details]
+
+[Important notes/config]
+
+## [Usage]
+
+[How to use or next steps]
+
+---
+_[Optional: links to docs or related articles]_
+\`\`\`
+
+## Checklist
+
+- [ ] Front matter complete
+- [ ] Title is specific
+- [ ] Focused on one topic
+- [ ] Code is tested and usable
+- [ ] No unnecessary tangents
+- [ ] Links to official docs
+- [ ] Tags are accurate
 ```
+
+This custom instructions file provides as much detail as needed to enforce style and rules. It serves as a single source of truth for how Copilot should handle article writing in this repository. Because it’s scoped to the articles directory, you can have different instructions for different parts of your project if needed.
+
+This approach standardizes Copilot’s behavior for your articles, ensuring consistent edits and reviews without restating your requirements each time.
+
+The goal is to provide clear, actionable guidance to Copilot on the article writing process.
 
 # Reusable Prompts
 
