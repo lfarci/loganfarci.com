@@ -1,6 +1,6 @@
 ---
-title: "GitHub Copilot Customizations"
-description: "Learn how to leverage custom instructions and reusable prompts when working with GitHub Copilot in Visual Studio Code."
+title: "Practical Copilot Customization for Technical Writing"
+description: "How to use custom instructions and reusable prompts to automate, standardize, and streamline technical article writing and review workflows with GitHub Copilot."
 publishedAt: "2025-07-25"
 featured: true
 tags: ["GitHub Copilot", "Visual Studio Code"]
