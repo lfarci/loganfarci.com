@@ -8,38 +8,40 @@ author: "Logan Farci"
 coauthoredWithAgent: true
 ---
 
-You can tailor GitHub Copilot's responses by adding version-controlled instructions and reusable prompts directly to your repository. Just create markdown files that specify exactly how you want Copilot to behave for your workflows. This lets you define global instructions, task-specific rules, reusable prompts, and even custom chat modes. For details, see the official [Customize AI responses](https://code.visualstudio.com/docs/copilot/copilot-customization) documentation.
 
-I've started using these features to streamline and improve my workflow on this personal website.
+You can tailor GitHub Copilot's responses by adding version-controlled instructions and reusable prompts directly to your repository. Create markdown files that specify exactly how you want Copilot to behave for your workflows. This approach lets you define global instructions, task-specific rules, reusable prompts, and even custom chat modes. For details, see the official [Customize AI responses](https://code.visualstudio.com/docs/copilot/copilot-customization) documentation.
+
+I've adopted these features to streamline and improve my workflow on this personal website.
 
 # Objective
 
-I'm building this personal website as a place to collect and share content that interests me and maybe other developers too. It's my own corner of the web to document findings, experiments, and lessons learned, primarily for my future self. I use it to publish focused articles about whatever I'm currently working on or exploring, knowing the topics will shift over time. While I'm not a professional writer, I want my notes to be clear and useful, whether for myself or for anyone else who stumbles across them (even if that's just a curious future me).
 
-In writing my first two articles, I found collaborating with Copilot surprisingly enjoyable. So far, I've used Copilot to:
+This personal website is my space to collect and share content that interests me—and hopefully other developers. It's where I document findings, experiments, and lessons learned, primarily for my future self. I use it to publish focused articles about whatever I'm currently working on or exploring, knowing the topics will shift over time. While I'm not a professional writer, I want my notes to be clear and useful, whether for myself or for anyone else who stumbles across them (even if that's just a curious future me).
 
--   Scaffold new articles and ensure each file follows the required format (especially the front matter)
--   Catch spelling and grammar mistakes
--   Refine the tone and style of my writing
--   Review articles and provide actionable feedback
+In writing my first two articles, I found collaborating with Copilot surprisingly effective. So far, I've used Copilot to:
+
+
+- Scaffold new articles and ensure each file follows the required format (especially the front matter)
+- Catch spelling and grammar mistakes
+- Refine the tone and style of my writing
+- Review articles and provide actionable feedback
+
 
 Through this process, I noticed I was repeating the same instructions to Copilot again and again. Typing out all the context each time isn't practical—and Copilot works best when it has the full picture. That led me to explore ways to streamline and automate these interactions.
 
 
-# Instructions
 
-title: "[Specific Title]"
-description: "[1-2 sentence summary]"
-publishedAt: "[YYYY-MM-DD]"
+# Instructions
 
 One of the first challenges I faced was having to repeat the same instructions to Copilot across different sessions and prompts. For example, if I wanted Copilot to improve a section, I’d type something like: `Improve the readability and clarity of the section about X.` Copilot would make the edit, and I’d review it. But for more targeted changes, I had to explain my intent in detail every time. This quickly became tedious and didn’t scale.
 
-The solution is to define persistent, version-controlled instructions using markdown files. [Custom instructions](https://code.visualstudio.com/docs/copilot/copilot-customization#_custom-instructions) enable this. 
+The solution is to define persistent, version-controlled instructions using markdown files. [Custom instructions](https://code.visualstudio.com/docs/copilot/copilot-customization#_custom-instructions) make this possible.
 
 I created a file called `.github/instructions/articles.instructions.md` in my repository. It contains all the guidelines and templates I want Copilot to follow when working on articles. This file is scoped to all Markdown files in the `content/articles` directory. Here’s a simplified example:
 
+
 > [!NOTE]
-> The following is a simplified version of the instructions file used in this repository. The full version is available here: [articles.instructions.md](https://github.com/lfarci/loganfarci.com/blob/main/.github/instructions/articles.instructions.md).
+> This is a simplified version of the instructions file used in this repository. The full version is available here: [articles.instructions.md](https://github.com/lfarci/loganfarci.com/blob/main/.github/instructions/articles.instructions.md).
 
 ```markdown
 ---
@@ -117,15 +119,17 @@ _[Optional: links to docs or related articles]_
 - [ ] Tags are accurate
 ```
 
-This custom instructions file provides as much detail as needed to enforce style and rules. It serves as a single source of truth for how Copilot should handle article writing in this repository. Because it’s scoped to the articles directory, you can have different instructions for different parts of your project if needed.
+
+This custom instructions file provides the detail needed to enforce style and rules. It serves as a single source of truth for how Copilot should handle article writing in this repository. Because it’s scoped to the articles directory, you can have different instructions for different parts of your project if needed.
 
 This approach standardizes Copilot’s behavior for your articles, ensuring consistent edits and reviews without restating your requirements each time.
 
 The goal is to provide clear, actionable guidance to Copilot on the article writing process.
 
+
 # Reusable Prompts
 
-I found reusable prompts to be very useful as I found myself repeating the same instructions over and over again. Especially when trying out the GitHub MCP Server. This feature allows you to create a parameterized prompt that can be reused across different tasks. For example, I created a reusable prompt for reviewing articles in my repository:
+Reusable prompts are especially useful when you find yourself repeating the same instructions. This was particularly helpful when experimenting with the GitHub MCP Server. This feature allows you to create a parameterized prompt that can be reused across different tasks. For example, I created a reusable prompt for reviewing articles in my repository:
 
 ```markdown
 mode: "agent"
@@ -142,15 +146,18 @@ Act as a sceptical technical article reviewer and question the content of the ar
 Refer to the [Article Review Instructions file](../instructions/articles.instructions.md) for all formatting, templates, and conventions.
 ```
 
-I can then use this prompt in my tasks by providing the article name as a parameter. This saves me time and ensures consistency in my reviews.
+
+I can then use this prompt in my tasks by providing the article name as a parameter. This saves time and ensures consistency in my reviews.
 
 ```
 /article.review article=my-awesome-article.md
 ```
 
-GitHub maintains a repository which contains community-driven configuration for Copilot: [Awesome GitHub Copilot Customizations](https://github.com/github/awesome-copilot). Microsoft blog post: https://devblogs.microsoft.com/blog/introducing-awesome-github-copilot-customizations-repo
 
-Another great repository is [Awesome Copilot Instructions](https://github.com/Code-and-Sorts/awesome-copilot-instructions)
+GitHub maintains a repository with community-driven configuration for Copilot: [Awesome GitHub Copilot Customizations](https://github.com/github/awesome-copilot). See also the Microsoft blog post: https://devblogs.microsoft.com/blog/introducing-awesome-github-copilot-customizations-repo
+
+Another great resource is [Awesome Copilot Instructions](https://github.com/Code-and-Sorts/awesome-copilot-instructions).
+
 Reusable prompts let you define a template once and reuse it for similar tasks. For example, to review articles, you can create a simple prompt like:
 
 ```markdown
@@ -161,11 +168,13 @@ description: "Review a technical article"
 Review the article at articles/${input:article} for clarity and accuracy.
 ```
 
+
 You can then use this prompt by passing the article name as a parameter:
 
 ```
 /article.review article=my-article.md
 ```
+
 
 This approach saves time and keeps your reviews consistent.
 
