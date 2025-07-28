@@ -69,7 +69,7 @@ Ensure the issue is optimized for potential GitHub coding agent assignment:
 
 ### Step 6: Quality Validation
 
-Verify the updated issue meets quality gates:
+Verify the updated issue meets quality gates (only show the following in the chat):
 
 - [ ] Title is clear and actionable
 - [ ] Appropriate labels are applied
