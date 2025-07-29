@@ -1,18 +1,20 @@
 "use client";
 
 import React, { useEffect } from "react";
+import mermaid from "mermaid";
 
 interface MermaidDiagramProps {
+    className?: string;
     children: React.ReactNode;
 }
 
-export default function MermaidDiagram({ children }: MermaidDiagramProps) {
+const MermaidDiagram: React.FC<MermaidDiagramProps> = ({ children, className = "" }) => {
     useEffect(() => {
-        import("mermaid").then((mermaid) => {
-            mermaid.default.initialize({ startOnLoad: false, securityLevel: "strict" });
-            mermaid.default.run({ querySelector: ".mermaid" });
-        });
+        mermaid.initialize({ startOnLoad: false, securityLevel: "strict" });
+        mermaid.run({ querySelector: ".mermaid" });
     }, [children]);
 
-    return <pre className="mermaid">{children}</pre>;
-}
+    return <pre className={`mermaid w-full flex justify-center ${className}`}>{children}</pre>;
+};
+
+export default MermaidDiagram;

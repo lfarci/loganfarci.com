@@ -8,16 +8,28 @@ author: "Logan Farci"
 coauthoredWithAgent: true
 ---
 
-```mermaid
-    graph LR
-    A --- B
-    B-->C[fa:fa-ban forbidden]
-    B-->D(fa:fa-spinner);
-```
-
 You can tailor GitHub Copilot's responses by adding version-controlled instructions and reusable prompts directly to your repository. Create markdown files that specify exactly how you want Copilot to behave for your workflows. This approach lets you define global instructions, task-specific rules, reusable prompts, and even custom chat modes. For details, see the official [Customize AI responses](https://code.visualstudio.com/docs/copilot/copilot-customization) documentation.
 
 I've adopted these features to streamline and improve my workflow on this personal website.
+
+```mermaid
+graph TD
+    A[Custom Instructions<br/>.github/instructions/articles.instructions.md] --> B[Scoped to content/articles/*.md]
+    C[Reusable Prompts<br/>.github/copilot/prompts/]
+
+    B --> E[Copilot Chat Sessions]
+    C --> E
+
+    E --> F[Consistent Article Writing]
+    E --> G[Standardized Reviews]
+    E --> H[Automated Scaffolding]
+
+    A -.->|Provides Context| C
+
+    style A fill:#e1f5fe
+    style C fill:#f3e5f5
+    style E fill:#fff3e0
+```
 
 # Objective
 
