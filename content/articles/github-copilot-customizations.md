@@ -55,46 +55,21 @@ graph TD
 
 ### Articles Chat Mode
 
-Articles Chat Mode defines how Copilot interacts with articles in this repository. It specifies the tools, scope, and expected behavior for Copilot when assisting with technical writing tasks. This mode does not include instructions about article content or conventions; instead, it governs Copilot’s operational context for article creation. Effectively, it sets Copilot’s "personality" when working on articles.
+Think of Articles Chat Mode as Copilot putting on its technical editor hat. This mode shapes Copilot’s role, tools, and boundaries when working with articles, like switching between a code reviewer and a writing coach. It doesn’t dictate the content or style rules themselves, but it does control how Copilot approaches tasks, which tools it uses, and the kind of feedback it provides. For example, when you activate Articles Chat Mode, Copilot focuses on editing, reviewing, and enhancing Markdown articles, rather than suggesting code snippets or debugging tips. In short, it sets Copilot’s "persona" for technical writing sessions, ensuring its responses match your workflow needs.
 
 ### Articles Instructions
 
-Articles Instructions are the authoritative reference for technical articles in this repository. They enforce consistent quality, structure, and formatting. The file `.github/instructions/articles.instructions.md` contains all guidelines and is scoped using the `applyTo` field, targeting only Markdown files in the `content/articles` directory (glob pattern is supported).
+Articles Instructions are the single source of truth for technical articles in this repository. They enforce consistent quality, structure, and formatting for all Markdown files in `content/articles/`. The full guidelines are versioned in `.github/instructions/articles.instructions.md` and refined over time.
 
-```markdown
----
-applyTo: "content/articles/*.md"
----
+Key requirements for every article:
 
-<!-- Article Instructions -->
-```
-
-Refer to the full [Articles Instructions](https://github.com/lfarci/loganfarci.com/blob/main/.github/instructions/articles.instructions.md) for details. The instructions are continuously refined to improve results and adapt to evolving needs. Each section is designed to be concise and actionable, enabling clear commands for every aspect of article writing.
-
-#### Content Guidelines
-
-Clear writing style is essential for technical articles. Copilot instructions should be summarized in actionable bullet points. For technical writing assistants, start simple and expand as needed.
-
-```markdown
--   Use clear, concise language
--   Write in active voice
--   Focus on one problem or concept
--   Avoid tangents and broad overviews
+-   Use clear, concise language in active voice
+-   Focus on one problem or concept; avoid tangents
 -   Link to official documentation instead of re-explaining basics
--   Use relevant keywords naturally for SEO
-```
+-   Include relevant keywords naturally for SEO
+-   Start each article with complete front matter: `title`, `description`, `publishedAt`, `featured`, `tags`, `author`, `coauthoredWithAgent`.
 
-#### Front Matter
-
-Front matter enforces article metadata and structure. The schema should be consistent across all articles, and Copilot can help enforce it. With clear instructions, Copilot scaffolds new articles with the required front matter and structure. The instructions file describes each field and its expected value, ensuring the writing agent is aware of the required metadata.
-
-Each front matter field has specific guidelines. For example:
-
-```markdown
--   **title**: Use title case; be descriptive about the article content
--   **description**: Summarize the article's value in 1–2 sentences
--   **publishedAt**: Use YYYY-MM-DD format for consistency
-```
+Refer to my full [Articles Instructions](https://github.com/lfarci/loganfarci.com/blob/main/.github/instructions/articles.instructions.md) for details and the latest updates.
 
 ### Prompts
 
@@ -115,6 +90,24 @@ The Enhance Article Prompt is designed to improve the readability and clarity of
 The Review Article Prompt is used to evaluate articles for clarity, accuracy, and adherence to guidelines. It provides a framework for Copilot to assess content quality and suggest improvements. This prompt helps maintain high standards across all articles by ensuring thorough reviews before publication.
 
 # Workflow
+
+```mermaid
+flowchart TB
+    create["Author Invokes Create Article Prompt"]
+    write["Author Writes Content"]
+    enhance["Agent Enhances Content"]
+    review["Review"]
+    publish["Publish"]
+
+    create --> write
+    write -- "Ready for Review" --> review
+    write -- "Needs Enhancements" --> enhance
+    enhance -- "Author Feedback" --> enhance
+    enhance -- "OK" --> write
+
+    review --> publish
+    review -- "Publication denied" --> write
+```
 
 # References
 
