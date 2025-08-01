@@ -59,7 +59,7 @@ Articles Chat Mode defines how Copilot interacts with articles in this repositor
 
 ### Articles Instructions
 
-Articles Instructions are the single source of truth for all technical articles in this repository. They enforce consistent quality, structure, and formatting. The file `.github/instructions/articles.instructions.md` contains all guidelines and is scoped using the `applyTo` field, targeting only Markdown files in the `content/articles` directory (gglob pattern is supported).
+Articles Instructions are the authoritative reference for technical articles in this repository. They enforce consistent quality, structure, and formatting. The file `.github/instructions/articles.instructions.md` contains all guidelines and is scoped using the `applyTo` field, targeting only Markdown files in the `content/articles` directory (glob pattern is supported).
 
 ```markdown
 ---
@@ -69,30 +69,30 @@ applyTo: "content/articles/*.md"
 <!-- Article Instructions -->
 ```
 
-Refer to the full [Articles Instructions](https://github.com/lfarci/loganfarci.com/blob/main/.github/instructions/articles.instructions.md) for details. I still need to fine-tune it but I am getting good results using those instructions. I try to make it evolve while I am working on articles. Keep in mind that instructions should be concise and actionable. Personally I defined the following sections to structure the instructions. They help me define clear commands for different aspects of article writing.
+Refer to the full [Articles Instructions](https://github.com/lfarci/loganfarci.com/blob/main/.github/instructions/articles.instructions.md) for details. The instructions are continuously refined to improve results and adapt to evolving needs. Each section is designed to be concise and actionable, enabling clear commands for every aspect of article writing.
 
 #### Content Guidelines
 
-Defining a clear writing style is essential for technical articles. Copilot instructions should be concise and actionable, ideally summarized in a few bullet points. For technical writing assistants, the sky is the limit but here are some starting ideas. It can get as complex as needed.
+Clear writing style is essential for technical articles. Copilot instructions should be summarized in actionable bullet points. For technical writing assistants, start simple and expand as needed.
 
 ```markdown
--   Use clear and concise language
--   Write in an active voice
--   Focus on a single problem or concept
+-   Use clear, concise language
+-   Write in active voice
+-   Focus on one problem or concept
 -   Avoid tangents and broad overviews
--   Link to official documentation rather than re-explaining basics
--   Optimize articles for search engines by using relevant keywords naturally
+-   Link to official documentation instead of re-explaining basics
+-   Use relevant keywords naturally for SEO
 ```
 
 #### Front Matter
 
-Personally, I am using front matter to enforce article metadata and structure. The schema should be consistent across all articles and the agent is definitely able to help us enforce it. With the right instructions, it's able to scaffold new articles with the required front matter and structure. I just maintain a description of the front matter fields and their expected values right in the instructions file. So now the writing agent is aware of the required metadata and can work with it seamlessly.
+Front matter enforces article metadata and structure. The schema should be consistent across all articles, and Copilot can help enforce it. With clear instructions, Copilot scaffolds new articles with the required front matter and structure. The instructions file describes each field and its expected value, ensuring the writing agent is aware of the required metadata.
 
-I defined some instructions for each field. For example, the agent could be instructed to generate metadata based on the following guidelines:
+Each front matter field has specific guidelines. For example:
 
 ```markdown
--   **title**: Use title case and be descriptive about the article content
--   **description**: Summarize the article's value in 1-2 sentences
+-   **title**: Use title case; be descriptive about the article content
+-   **description**: Summarize the article's value in 1–2 sentences
 -   **publishedAt**: Use YYYY-MM-DD format for consistency
 ```
 

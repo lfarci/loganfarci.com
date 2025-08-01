@@ -15,6 +15,7 @@ description: "Enhance an article"
     -   `expand`: Focus on expanding the article or section with more details.
     -   `checks`: Focus on verifying the article or section for spelling and grammar.
     -   `simplify`: Focus on simplifying the article or section for better readability.
+    -   `creative`: Focus on generating ideas based on the existing content to improve the article or section.
 
 # Role
 
