@@ -93,20 +93,23 @@ The Review Article Prompt is used to evaluate articles for clarity, accuracy, an
 
 ```mermaid
 flowchart TB
-    create["Author Invokes Create Article Prompt"]
-    write["Author Writes Content"]
-    enhance["Agent Enhances Content"]
-    review["Review"]
+    subgraph Author Actions
+        create["Create Article (Prompt)"]
+        write["Write Content"]
+    end
+    subgraph Copilot Actions
+        enhance["Enhance Content (Prompt)"]
+        review["Review Article (Prompt)"]
+    end
     publish["Publish"]
 
     create --> write
-    write -- "Ready for Review" --> review
-    write -- "Needs Enhancements" --> enhance
-    enhance -- "Author Feedback" --> enhance
-    enhance -- "OK" --> write
-
-    review --> publish
-    review -- "Publication denied" --> write
+    write -- "Submit for Review" --> review
+    write -- "Request Enhancements" --> enhance
+    enhance -- "Return to Author" --> write
+    enhance -- "Ready for Review" --> review
+    review -- "Approved" --> publish
+    review -- "Needs Revisions" --> write
 ```
 
 # References
