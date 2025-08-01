@@ -27,7 +27,7 @@ What does customization actually offer? You can now tailor Copilot’s responses
 
 Key customization features in VS Code include:
 
--   **Custom instructions:** Persistent guidelines automatically included in chat sessions.
+-   **[Custom instructions](https://code.visualstudio.com/docs/copilot/copilot-customization#_custom-instructions):** Persistent guidelines automatically included in chat sessions.
 -   **Prompt files:** Reusable, parameterized prompts for common tasks.
 -   **Custom chat modes:** Control how Copilot interacts with your codebase and tools for different workflows.
 
@@ -35,181 +35,89 @@ These features standardize Copilot’s behavior and improve consistency across y
 
 # Create a technical writing assistant
 
-In this section, I focus on how to leverage customization to the fullest to make technical writing more efficient.
+This section explains how to use Copilot customization to build an efficient technical writing assistant. By integrating these features into my workflow, I’ve streamlined article creation and editing for this website. The goal is to improve quality and consistency without repeating instructions in every session.
 
-## Overview
-
-I've adopted these features to streamline and improve my workflow on this personal website. The idea is to leverage Copilot's customization features to improve the quality and consistency of my articles without having to repeat myself like described in the introduction.
+The diagram below illustrates the main elements involved in customizing Copilot for technical writing:
 
 ```mermaid
-graph TB
-    instructions[**Articles Instructions**<br/>_.github/instructions/articles.instructions.md_]
-    createPrompt[**Create Article Prompt**<br/>_.github/copilot/prompts/article.create.prompt.md_]
-    enhancePrompt[**Enhance Article Prompt**<br/>_.github/copilot/prompts/article.enhance.prompt.md_]
-    reviewPrompt[**Review Article Prompt**<br/>_.github/copilot/prompts/article.review.prompt.md_]
+graph TD
+    subgraph articlesChatMode[**Articles Chat Mode**]
+        instructions[**Articles Instructions**<br/>_.github/instructions/articles.instructions.md_]
+        createPrompt[**Create Article Prompt**<br/>_.github/copilot/prompts/article.create.prompt.md_]
+        enhancePrompt[**Enhance Article Prompt**<br/>_.github/copilot/prompts/article.enhance.prompt.md_]
+        reviewPrompt[**Review Article Prompt**<br/>_.github/copilot/prompts/article.review.prompt.md_]
 
-    instructions -- "Guidelines" --> createPrompt
-    instructions -- "Guidelines" --> enhancePrompt
-    instructions -- "Guidelines" --> reviewPrompt
+        instructions -- "Guidelines" --> createPrompt
+        instructions -- "Guidelines" --> enhancePrompt
+        instructions -- "Guidelines" --> reviewPrompt
+    end
 ```
 
-### Custom Instructions
+### Articles Chat Mode
 
-[Custom instructions](https://code.visualstudio.com/docs/copilot/copilot-customization#_custom-instructions) let you define persistent, version-controlled guidelines for Copilot. These instructions are included in every chat session, enforcing standards for structure, tone, and formatting.
+Articles Chat Mode defines how Copilot interacts with articles in this repository. It specifies the tools, scope, and expected behavior for Copilot when assisting with technical writing tasks. This mode does not include instructions about article content or conventions; instead, it governs Copilot’s operational context for article creation. Effectively, it sets Copilot’s "personality" when working on articles.
 
-For teams, storing instructions in your repository creates a single source of truth that evolves with your workflow. New members can quickly adopt conventions, and Copilot consistently follows client requirements or style guides without manual repetition.
+### Articles Instructions
 
-You can also enforce technology-specific best practices for your stack. The open-source community maintains lists of reusable instructions, such as [Awesome Copilot Instructions](https://github.com/Code-and-Sorts/awesome-copilot-instructions), which you can adapt for your projects.
-
-### Reusable Prompts
-
-[Reusable prompts](https://code.visualstudio.com/docs/copilot/copilot-customization#_prompt-files-experimental) Create parameterized prompts that can be reused across different sessions. They can reference the custom instructions and improve efficiency by avoiding repetitive explanations. For example, you can create a prompt for reviewing articles that references all the necessary context and guidelines.
-
-### Chat Modes
-
-[Custom chat modes](https://code.visualstudio.com/docs/copilot/copilot-customization#_custom-chat-modes)
-
-## Instructions library
-
-GitHub maintains a repository with community-driven configuration for Copilot: [Awesome GitHub Copilot Customizations](https://github.com/github/awesome-copilot). It's a great source of instructions for various technologies. I didn't find any specific instructions for technical writing, but browsing existing examples really helped drafting a practical outline. See also the Microsoft blog post: [Introducing the Awesome GitHub Copilot Customizations repo](https://devblogs.microsoft.com/blog/introducing-awesome-github-copilot-customizations-repo) regarding this repository.
-
-# My Customizations
-
-# Instructions
-
-One of the first challenges I faced was having to repeat the same instructions to Copilot across different sessions and prompts. For example, if I wanted Copilot to improve a section, I’d type something like: `Improve the readability and clarity of the section about X.` Copilot would make the edit, and I’d review it. But for more targeted changes, I had to explain my intent in detail every time. This quickly became tedious and didn’t scale.
-
-The solution is to define persistent, version-controlled instructions using markdown files. [Custom instructions](https://code.visualstudio.com/docs/copilot/copilot-customization#_custom-instructions) make this possible.
-
-I created a file called `.github/instructions/articles.instructions.md` in my repository. It contains all the guidelines and templates I want Copilot to follow when working on articles. This file is scoped to all Markdown files in the `content/articles` directory. Here’s a simplified example:
-
-> [!NOTE]  
-> This is a simplified version of the instructions file used in this repository. The full version is available here: [articles.instructions.md](https://github.com/lfarci/loganfarci.com/blob/main/.github/instructions/articles.instructions.md).
+Articles Instructions are the single source of truth for all technical articles in this repository. They enforce consistent quality, structure, and formatting. The file `.github/instructions/articles.instructions.md` contains all guidelines and is scoped using the `applyTo` field, targeting only Markdown files in the `content/articles` directory (gglob pattern is supported).
 
 ```markdown
 ---
 applyTo: "content/articles/*.md"
 ---
 
-# Article Instructions
+<!-- Article Instructions -->
+```
 
-## Article Guidelines
+Refer to the full [Articles Instructions](https://github.com/lfarci/loganfarci.com/blob/main/.github/instructions/articles.instructions.md) for details. I still need to fine-tune it but I am getting good results using those instructions. I try to make it evolve while I am working on articles. Keep in mind that instructions should be concise and actionable. Personally I defined the following sections to structure the instructions. They help me define clear commands for different aspects of article writing.
 
--   Write for developers: clear, direct, and concise
--   Focus on one specific problem or concept per article
--   Use active voice and practical code examples
--   Structure with logical headings and minimal setup
+#### Content Guidelines
+
+Defining a clear writing style is essential for technical articles. Copilot instructions should be concise and actionable, ideally summarized in a few bullet points. For technical writing assistants, the sky is the limit but here are some starting ideas. It can get as complex as needed.
+
+```markdown
+-   Use clear and concise language
+-   Write in an active voice
+-   Focus on a single problem or concept
 -   Avoid tangents and broad overviews
--   Lead with code and practical implementation
--   Link to official docs for basics
+-   Link to official documentation rather than re-explaining basics
+-   Optimize articles for search engines by using relevant keywords naturally
+```
 
-## Front Matter
+#### Front Matter
 
-title: "[Specific Title]"
-description: "[1-2 sentence summary]"
-publishedAt: "[YYYY-MM-DD]"
+Personally, I am using front matter to enforce article metadata and structure. The schema should be consistent across all articles and the agent is definitely able to help us enforce it. With the right instructions, it's able to scaffold new articles with the required front matter and structure. I just maintain a description of the front matter fields and their expected values right in the instructions file. So now the writing agent is aware of the required metadata and can work with it seamlessly.
 
-## \`\`\`yaml
+I defined some instructions for each field. For example, the agent could be instructed to generate metadata based on the following guidelines:
 
-title: "[Specific Title]"
-description: "[1-2 sentence summary]"
-publishedAt: "[YYYY-MM-DD]"
-
----
-
-\`\`\`
-
+```markdown
 -   **title**: Use title case and be descriptive about the article content
 -   **description**: Summarize the article's value in 1-2 sentences
 -   **publishedAt**: Use YYYY-MM-DD format for consistency
-
-## Structure Template
-
-## \`\`\`markdown
-
-## [front matter]
-
-[Intro: what problem is solved]
-
-## [Solution]
-
-\`\`\`language
-// Code example
-\`\`\`
-
-[Brief explanation]
-
-## [Key Details]
-
-[Important notes/config]
-
-## [Usage]
-
-[How to use or next steps]
-
----
-
-_[Optional: links to docs or related articles]_
-\`\`\`
-
-## Checklist
-
--   [ ] Front matter complete
--   [ ] Title is specific
--   [ ] Focused on one topic
--   [ ] Code is tested and usable
--   [ ] No unnecessary tangents
--   [ ] Links to official docs
--   [ ] Tags are accurate
 ```
 
-This custom instructions file provides the detail needed to enforce style and rules. It serves as a single source of truth for how Copilot should handle article writing in this repository. Because it’s scoped to the articles directory, you can have different instructions for different parts of your project if needed.
+### Prompts
 
-This approach standardizes Copilot’s behavior for your articles, ensuring consistent edits and reviews without restating your requirements each time.
+Prompts are reusable, parameterized templates for common tasks. Each prompt references the Articles Instructions to ensure consistent context. Use prompts for practical actions such as creating, enhancing, or reviewing articles to keep the workflow efficient and focused. Prompts act as "Job Descriptions" for Copilot, defining specific tasks and expectations for each assignment.
 
-The goal is to provide clear, actionable guidance to Copilot on the article writing process.
+#### Create Article Prompt
 
-# Reusable Prompts
+The Create Article Prompt is a reusable template for starting new articles. It includes the necessary front matter and structure, ensuring every article begins with a consistent format. This prompt can be used to scaffold new articles quickly, reducing setup time and maintaining uniformity across the repository.
 
-Reusable prompts are especially useful when you find yourself repeating the same instructions. This was particularly helpful when experimenting with the GitHub MCP Server. This feature allows you to create a parameterized prompt that can be reused across different tasks. For example, I created a reusable prompt for reviewing articles in my repository:
+[Reusable prompts](https://code.visualstudio.com/docs/copilot/copilot-customization#_prompt-files-experimental) Create parameterized prompts that can be reused across different sessions. They can reference the custom instructions and improve efficiency by avoiding repetitive explanations. For example, you can create a prompt for reviewing articles that references all the necessary context and guidelines.
 
-```markdown
-mode: "agent"
-model: GPT-4.1
-tools: ["codebase", "Microsoft Docs"]
-description: "Review a technical article in the loganfarci.com repository"
+#### Enhance Article Prompt
 
-# Context
+The Enhance Article Prompt is designed to improve the readability and clarity of existing articles. It provides a structured approach for Copilot to refine content, fix grammar, and enhance overall quality. This prompt ensures that enhancements align with the established guidelines in the Articles Instructions.
 
-# Role
+#### Review Article Prompt
 
-Act as a sceptical technical article reviewer and question the content of the article submitted for review. Provide feedback on the article's content, structure, and clarity. If the article is well-written and informative, approve it. If it requires significant changes or does not meet the standards, reject it with specific reasons for rejection.
+The Review Article Prompt is used to evaluate articles for clarity, accuracy, and adherence to guidelines. It provides a framework for Copilot to assess content quality and suggest improvements. This prompt helps maintain high standards across all articles by ensuring thorough reviews before publication.
 
-Refer to the [Article Review Instructions file](../instructions/articles.instructions.md) for all formatting, templates, and conventions.
-```
+# Workflow
 
-I can then use this prompt in my tasks by providing the article name as a parameter. This saves time and ensures consistency in my reviews.
+# References
 
-```
-/article.review article=my-awesome-article.md
-```
-
-Reusable prompts let you define a template once and reuse it for similar tasks. For example, to review articles, you can create a simple prompt like:
-
-```markdown
----
-description: "Review a technical article"
----
-
-Review the article at articles/${input:article} for clarity and accuracy.
-```
-
-You can then use this prompt by passing the article name as a parameter:
-
-```
-/article.review article=my-article.md
-```
-
-This approach saves time and keeps your reviews consistent.
+You can also enforce technology-specific best practices for your stack. The open-source community maintains lists of reusable instructions, such as [Awesome Copilot Instructions](https://github.com/Code-and-Sorts/awesome-copilot-instructions), which you can adapt for your projects.
 
 For more examples, see [Awesome GitHub Copilot Customizations](https://github.com/github/awesome-copilot) or [Awesome Copilot Instructions](https://github.com/Code-and-Sorts/awesome-copilot-instructions).

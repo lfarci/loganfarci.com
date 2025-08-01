@@ -98,51 +98,17 @@ coauthoredWithAgent: [true/false]
 -   Set to `true` if AI tools significantly contributed to writing or research
 -   Set to `false` if you wrote the article independently
 
-## Content Structure Template
-
-````markdown
----
-[front matter here]
----
-
-[One paragraph that clearly states the specific problem/topic and what the reader will accomplish]
-
-## [Implementation/Solution Section]
-
-[Jump directly into the main content with code examples]
-
-```language
-// Working code example
-```
-````
-
-[Brief explanation of what the code does and why]
-
-## [Key Details/Configuration Section]
-
-[Cover important details, gotchas, or configuration options]
-
-## [Usage/Next Steps]
-
-[Show how to use what was built, or immediate next actions]
-
----
-
-_[Optional: Link to related focused articles or relevant documentation]_
-
-```
-
 ## Quality Checklist
 
 Before publishing, ensure:
-- [ ] Front matter is complete and properly formatted
-- [ ] Title clearly indicates the specific topic covered
-- [ ] Article stays focused on one main concept/problem throughout
-- [ ] Code examples are tested, functional, and immediately usable
-- [ ] Content assumes appropriate developer knowledge level
-- [ ] No unnecessary tangents or broadly related topics
-- [ ] Article delivers on the promise made in the title and description
-- [ ] Links point to official docs rather than explaining basics
-- [ ] Reader can implement/understand the concept after reading
-- [ ] Tags accurately reflect the specific technologies/concepts covered
-```
+
+-   [ ] Front matter is complete and properly formatted
+-   [ ] Title clearly indicates the specific topic covered
+-   [ ] Article stays focused on one main concept/problem throughout
+-   [ ] Code examples are tested, functional, and immediately usable
+-   [ ] Content assumes appropriate developer knowledge level
+-   [ ] No unnecessary tangents or broadly related topics
+-   [ ] Article delivers on the promise made in the title and description
+-   [ ] Links point to official docs rather than explaining basics
+-   [ ] Reader can implement/understand the concept after reading
+-   [ ] Tags accurately reflect the specific technologies/concepts covered
