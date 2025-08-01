@@ -21,11 +21,37 @@ However, I quickly noticed a recurring problem: I was repeating the same instruc
 
 # Customizing GitHub Copilot
 
-You can tailor GitHub Copilot's responses by adding version-controlled instructions and reusable prompts directly to your repository. Create markdown files that specify exactly how you want Copilot to behave for your workflows. This approach lets you define global instructions, task-specific rules, reusable prompts, and even custom chat modes. For details, see the official [Customize AI responses](https://code.visualstudio.com/docs/copilot/copilot-customization) documentation.
+GitHub Copilot now supports powerful customization features in Visual Studio Code. I decided to leverage these capabilities to streamline my writing workflow and eliminate repetitive instructions. By customizing Copilot, I can automate common tasks like article reviews, edits, and scaffolding, ensuring every article remains consistent and follows established guidelines.
 
-## Features
+What does customization actually offer? You can now tailor Copilot’s responses by adding version-controlled instructions and reusable prompts directly to your repository. Simply create Markdown files that define exactly how Copilot should behave for your workflows. This lets you set global instructions, task-specific rules, reusable prompts, and custom chat modes. For more details, refer to the official [Customize AI responses](https://code.visualstudio.com/docs/copilot/copilot-customization) documentation.
 
-In this article, I focus on the GitHub Copilot customization features supported in Visual Studio Code because this is currently my primary development environment.
+Key customization features in VS Code include:
+
+-   **Custom instructions:** Persistent guidelines automatically included in chat sessions.
+-   **Prompt files:** Reusable, parameterized prompts for common tasks.
+-   **Custom chat modes:** Control how Copilot interacts with your codebase and tools for different workflows.
+
+These features standardize Copilot’s behavior and improve consistency across your writing and development workflows.
+
+# Create a technical writing assistant
+
+In this section, I focus on how to leverage customization to the fullest to make technical writing more efficient.
+
+## Overview
+
+I've adopted these features to streamline and improve my workflow on this personal website. The idea is to leverage Copilot's customization features to improve the quality and consistency of my articles without having to repeat myself like described in the introduction.
+
+```mermaid
+graph TB
+    instructions[**Articles Instructions**<br/>_.github/instructions/articles.instructions.md_]
+    createPrompt[**Create Article Prompt**<br/>_.github/copilot/prompts/article.create.prompt.md_]
+    enhancePrompt[**Enhance Article Prompt**<br/>_.github/copilot/prompts/article.enhance.prompt.md_]
+    reviewPrompt[**Review Article Prompt**<br/>_.github/copilot/prompts/article.review.prompt.md_]
+
+    instructions -- "Guidelines" --> createPrompt
+    instructions -- "Guidelines" --> enhancePrompt
+    instructions -- "Guidelines" --> reviewPrompt
+```
 
 ### Custom Instructions
 
@@ -48,27 +74,6 @@ You can also enforce technology-specific best practices for your stack. The open
 GitHub maintains a repository with community-driven configuration for Copilot: [Awesome GitHub Copilot Customizations](https://github.com/github/awesome-copilot). It's a great source of instructions for various technologies. I didn't find any specific instructions for technical writing, but browsing existing examples really helped drafting a practical outline. See also the Microsoft blog post: [Introducing the Awesome GitHub Copilot Customizations repo](https://devblogs.microsoft.com/blog/introducing-awesome-github-copilot-customizations-repo) regarding this repository.
 
 # My Customizations
-
-I've adopted these features to streamline and improve my workflow on this personal website. The idea is to leverage Copilot's customization features to improve the quality and consistency of my articles without having to repeat myself like described in the introduction.
-
-```mermaid
-graph TD
-    A[Custom Instructions<br/>.github/instructions/articles.instructions.md] --> B[Scoped to content/articles/*.md]
-    C[Reusable Prompts<br/>.github/copilot/prompts/]
-
-    B --> E[Copilot Chat Sessions]
-    C --> E
-
-    E --> F[Consistent Article Writing]
-    E --> G[Standardized Reviews]
-    E --> H[Automated Scaffolding]
-
-    A -.->|Provides Context| C
-
-    style A fill:#e1f5fe
-    style C fill:#f3e5f5
-    style E fill:#fff3e0
-```
 
 # Instructions
 
