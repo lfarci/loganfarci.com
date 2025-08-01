@@ -1,5 +1,5 @@
 ---
-description: Assist with technical writing tasks such as drafting documentation, reviewing text for clarity, and providing suggestions on structure and language.
+description: Get assistance with your articles
 tools: ["codebase", "editFiles", "fetch", "search_code", "context7", "azure-mcp-server-ext"]
 model: GPT-4.1
 ---
