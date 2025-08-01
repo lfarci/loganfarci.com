@@ -23,11 +23,29 @@ However, I quickly noticed a recurring problem: I was repeating the same instruc
 
 You can tailor GitHub Copilot's responses by adding version-controlled instructions and reusable prompts directly to your repository. Create markdown files that specify exactly how you want Copilot to behave for your workflows. This approach lets you define global instructions, task-specific rules, reusable prompts, and even custom chat modes. For details, see the official [Customize AI responses](https://code.visualstudio.com/docs/copilot/copilot-customization) documentation.
 
+## Features
+
+In this article, I focus on the GitHub Copilot customization features supported in Visual Studio Code because this is currently my primary development environment.
+
+### Custom Instructions
+
+[Custom instructions](https://code.visualstudio.com/docs/copilot/copilot-customization#_custom-instructions) let you define persistent, version-controlled guidelines for Copilot. These instructions are included in every chat session, enforcing standards for structure, tone, and formatting.
+
+For teams, storing instructions in your repository creates a single source of truth that evolves with your workflow. New members can quickly adopt conventions, and Copilot consistently follows client requirements or style guides without manual repetition.
+
+You can also enforce technology-specific best practices for your stack. The open-source community maintains lists of reusable instructions, such as [Awesome Copilot Instructions](https://github.com/Code-and-Sorts/awesome-copilot-instructions), which you can adapt for your projects.
+
+### Reusable Prompts
+
+[Reusable prompts](https://code.visualstudio.com/docs/copilot/copilot-customization#_prompt-files-experimental) Create parameterized prompts that can be reused across different sessions. They can reference the custom instructions and improve efficiency by avoiding repetitive explanations. For example, you can create a prompt for reviewing articles that references all the necessary context and guidelines.
+
+### Chat Modes
+
+[Custom chat modes](https://code.visualstudio.com/docs/copilot/copilot-customization#_custom-chat-modes)
+
 ## Instructions library
 
 GitHub maintains a repository with community-driven configuration for Copilot: [Awesome GitHub Copilot Customizations](https://github.com/github/awesome-copilot). It's a great source of instructions for various technologies. I didn't find any specific instructions for technical writing, but browsing existing examples really helped drafting a practical outline. See also the Microsoft blog post: [Introducing the Awesome GitHub Copilot Customizations repo](https://devblogs.microsoft.com/blog/introducing-awesome-github-copilot-customizations-repo) regarding this repository.
-
-Another great community driven resource is [Awesome Copilot Instructions](https://github.com/Code-and-Sorts/awesome-copilot-instructions).
 
 # My Customizations
 
