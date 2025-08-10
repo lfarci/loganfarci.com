@@ -8,7 +8,7 @@ author: "Logan Farci"
 coauthoredWithAgent: true
 ---
 
-This website is my technical workspace—a place to document findings, experiments, and lessons learned for myself and other developers. I use it to publish focused articles about current projects or topics I’m exploring, knowing the content will evolve over time. My goal is to keep these notes clear and actionable, whether for my own reference or for anyone else who finds them.
+This website is my technical workspace, a place to document findings, experiments, and lessons learned for myself and other developers. I use it to publish focused articles about current projects or topics I’m exploring, knowing the content will evolve over time. My goal is to keep these notes clear and actionable, whether for my own reference or for anyone else who finds them.
 
 While writing my first two articles ([MCP fundamentals](https://www.loganfarci.com/articles/mcp) and [GitHub MCP Server](https://www.loganfarci.com/articles/github-mcp-server)), I found GitHub Copilot surprisingly effective as a collaborator. It helped me:
 
@@ -27,11 +27,11 @@ What does customization actually offer? You can now tailor Copilot’s responses
 
 Key customization features in VS Code include:
 
--   **[Custom instructions](https://code.visualstudio.com/docs/copilot/copilot-customization#_custom-instructions):** Persistent guidelines automatically included in chat sessions.
+-   [Custom instructions](https://code.visualstudio.com/docs/copilot/copilot-customization#_custom-instructions)**:** Persistent guidelines automatically included in chat sessions.
 -   **Prompt files:** Reusable, parameterized prompts for common tasks.
 -   **Custom chat modes:** Control how Copilot interacts with your codebase and tools for different workflows.
 
-These features standardize Copilot’s behavior and improve consistency across your writing and development workflows.
+These features standardize Copilot’s behavior and ensure consistency across writing and development workflows. This article shows how I use them to set up an effective technical writing assistant.
 
 # Create a technical writing assistant
 
@@ -55,7 +55,11 @@ graph TD
 
 ### Articles Chat Mode
 
-Think of Articles Chat Mode as Copilot putting on its technical editor hat. This mode shapes Copilot’s role, tools, and boundaries when working with articles, like switching between a code reviewer and a writing coach. It doesn’t dictate the content or style rules themselves, but it does control how Copilot approaches tasks, which tools it uses, and the kind of feedback it provides. For example, when you activate Articles Chat Mode, Copilot focuses on editing, reviewing, and enhancing Markdown articles, rather than suggesting code snippets or debugging tips. In short, it sets Copilot’s "persona" for technical writing sessions, ensuring its responses match your workflow needs.
+Imagine Articles Chat Mode as Copilot stepping into the role of a technical writing studio director. Instead of juggling code reviews and bug fixes, Copilot now orchestrates your writing workflow—setting the stage, choosing the right tools, and focusing feedback on clarity and structure. This mode doesn’t rewrite your content rules or style guide; it simply ensures Copilot’s actions and suggestions are tailored for technical writing, not coding.
+
+For example, when you switch to Articles Chat Mode, Copilot stops offering code completions or debugging tips. Instead, it reviews your Markdown, polishes your prose, and highlights areas for improvement—just like a dedicated editor. If you ask for a section rewrite, Copilot draws on your repository’s writing guidelines and prompt files, not generic programming advice.
+
+To activate Articles Chat Mode, define it in `.github/copilot/chatmodes/articles.chatmode.md`. Once set up, select it from the Copilot chat mode picker in Visual Studio Code. This instantly shifts Copilot’s persona to match your technical writing workflow, making every edit session more focused and productive.
 
 ### Articles Instructions
 
