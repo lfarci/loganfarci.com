@@ -55,11 +55,14 @@ graph TD
 
 ### Articles Chat Mode
 
-Imagine Articles Chat Mode as Copilot stepping into the role of a technical writing studio director. Instead of juggling code reviews and bug fixes, Copilot now orchestrates your writing workflow—setting the stage, choosing the right tools, and focusing feedback on clarity and structure. This mode doesn’t rewrite your content rules or style guide; it simply ensures Copilot’s actions and suggestions are tailored for technical writing, not coding.
+Imagine Articles Chat Mode as Copilot stepping into the role of a technical writing professional. Instead of juggling code reviews and bug fixes, Copilot now orchestrates your writing workflow, setting the stage, choosing the right tools, and focusing feedback on clarity and structure. This mode doesn’t rewrite your content rules or style guide; it simply ensures Copilot’s actions and suggestions are tailored for technical writing, not coding.
 
 For example, when you switch to Articles Chat Mode, Copilot stops offering code completions or debugging tips. Instead, it reviews your Markdown, polishes your prose, and highlights areas for improvement—just like a dedicated editor. If you ask for a section rewrite, Copilot draws on your repository’s writing guidelines and prompt files, not generic programming advice.
 
 To activate Articles Chat Mode, define it in `.github/copilot/chatmodes/articles.chatmode.md`. Once set up, select it from the Copilot chat mode picker in Visual Studio Code. This instantly shifts Copilot’s persona to match your technical writing workflow, making every edit session more focused and productive.
+
+> ![NOTE]
+> I'm sure this mode can be improved further, but it already helps me focus on writing without getting distracted by coding tasks. It’s like having a personal writing assistant that understands my style and needs.
 
 ### Articles Instructions
 
