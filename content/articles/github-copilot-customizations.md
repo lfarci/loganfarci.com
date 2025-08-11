@@ -28,8 +28,8 @@ What does customization actually offer? You can now tailor Copilot’s responses
 Key customization features in VS Code include:
 
 -   [Custom instructions](https://code.visualstudio.com/docs/copilot/copilot-customization#_custom-instructions)**:** Persistent guidelines automatically included in chat sessions.
--   **Prompt files:** Reusable, parameterized prompts for common tasks.
--   **Custom chat modes:** Control how Copilot interacts with your codebase and tools for different workflows.
+-   [Prompt files](https://code.visualstudio.com/docs/copilot/copilot-customization#_prompt-files-experimental)**:** Reusable, parameterized prompts for common tasks.
+-   [Custom chat modes](https://code.visualstudio.com/docs/copilot/chat/chat-modes#_custom-chat-modes)**:** Control how Copilot interacts with your codebase and tools for different workflows. I recommend this [video](https://www.youtube.com/watch?v=rE6svXzyhg0&t=278s) to have a walkthrough.
 
 These features standardize Copilot’s behavior and ensure consistency across writing and development workflows. This article shows how I use them to set up an effective technical writing assistant.
 
@@ -57,11 +57,11 @@ graph TD
 
 Imagine Articles Chat Mode as Copilot stepping into the role of a technical writing professional. Instead of juggling code reviews and bug fixes, Copilot now orchestrates your writing workflow, setting the stage, choosing the right tools, and focusing feedback on clarity and structure. This mode doesn’t rewrite your content rules or style guide; it simply ensures Copilot’s actions and suggestions are tailored for technical writing, not coding.
 
-For example, when you switch to Articles Chat Mode, Copilot stops offering code completions or debugging tips. Instead, it reviews your Markdown, polishes your prose, and highlights areas for improvement—just like a dedicated editor. If you ask for a section rewrite, Copilot draws on your repository’s writing guidelines and prompt files, not generic programming advice.
+For example, when you switch to Articles Chat Mode, Copilot stops offering code completions or debugging tips. Instead, it reviews your Markdown, polishes your prose, and highlights areas for improvement, just like a dedicated editor. If you ask for a section rewrite, Copilot draws on your repository’s writing guidelines and prompt files, not generic programming advice.
 
 To activate Articles Chat Mode, define it in `.github/copilot/chatmodes/articles.chatmode.md`. Once set up, select it from the Copilot chat mode picker in Visual Studio Code. This instantly shifts Copilot’s persona to match your technical writing workflow, making every edit session more focused and productive.
 
-> ![NOTE]
+> ![NOTE]  
 > I'm sure this mode can be improved further, but it already helps me focus on writing without getting distracted by coding tasks. It’s like having a personal writing assistant that understands my style and needs.
 
 ### Articles Instructions
@@ -84,17 +84,59 @@ Prompts are reusable, parameterized templates for common tasks. Each prompt refe
 
 #### Create Article Prompt
 
-The Create Article Prompt is a reusable template for starting new articles. It includes the necessary front matter and structure, ensuring every article begins with a consistent format. This prompt can be used to scaffold new articles quickly, reducing setup time and maintaining uniformity across the repository.
+I use the Create Article Prompt to scaffold new articles with the required front matter and structure. This template ensures that every article I start has a consistent, high-quality foundation.
 
-[Reusable prompts](https://code.visualstudio.com/docs/copilot/copilot-customization#_prompt-files-experimental) Create parameterized prompts that can be reused across different sessions. They can reference the custom instructions and improve efficiency by avoiding repetitive explanations. For example, you can create a prompt for reviewing articles that references all the necessary context and guidelines.
+**Example usage from my workflow:**
+
+```shell
+/article.create topic="New .NET 10 features" tags=".NET, C#" title="Exploring .NET 10"
+```
+
+This prompt generates a Markdown file in `content/articles/` with the correct front matter and a placeholder for content.
+
+**Parameters:**
+
+| **Input** | **Required** | **Description**                                                                                 |
+| --------- | ------------ | ----------------------------------------------------------------------------------------------- |
+| **topic** | Yes          | Short description of the article I want to write.                                               |
+| **title** | No           | Optionally specify the article title. If omitted, Copilot generates a title based on the topic. |
+| **tags**  | No           | Optionally specify tags. If omitted, Copilot suggests tags based on the topic.                  |
+
+This prompt streamlines setup for me—I just provide a few details, and Copilot handles the rest. In the future, it could suggest outlines, generate draft sections, or pull in relevant references automatically. For now, it keeps things simple and leaves the content empty, but the foundation is ready for more advanced automation.
 
 #### Enhance Article Prompt
 
-The Enhance Article Prompt is designed to improve the readability and clarity of existing articles. It provides a structured approach for Copilot to refine content, fix grammar, and enhance overall quality. This prompt ensures that enhancements align with the established guidelines in the Articles Instructions.
+I rely on the Enhance Article Prompt to improve the readability and clarity of my articles. It gives Copilot a structured way to refine content, fix grammar, and raise overall quality, always following the Articles Instructions. This prompt is flexible and adapts to my needs using the parameters below.
+
+| **Input**   | **Required** | **Description**                                                                                                                                                                               |
+| ----------- | ------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **article** | No           | Most of the time I don't provide a value, as this defaults to the opened file (`${file}`). In some scenarios, I specify a different article.                                                  |
+| **section** | No           | I can provide a section title to focus enhancements on a specific section. If not provided, it enhances the selection.                                                                        |
+| **mode**    | No           | I choose from several modes, each with its own instructions: `auto`, `shorten`, `expand`, `checks`, `simplify`, `creative`. This lets me tailor enhancements to my specific needs or context. |
+
+For example, when I want to check for spelling and grammar issues, I use the `checks` mode:
+
+`/article.enhance article=dotnet.md section=Introduction mode=checks`
+
+To expand a section with more detail, I select the text and use the `expand` mode:
+
+`/article.enhance mode=expand`
+
+Most often, I run this prompt to apply generic enhancements based on the Articles Instructions while working on an article:
+
+`/article.enhance`
+
+This is the prompt I use most often. I jot down ideas quickly, then run this prompt to polish and refine the content. It helps me improve clarity, style, and structure—without getting bogged down in repetitive instructions.
 
 #### Review Article Prompt
 
-The Review Article Prompt is used to evaluate articles for clarity, accuracy, and adherence to guidelines. It provides a framework for Copilot to assess content quality and suggest improvements. This prompt helps maintain high standards across all articles by ensuring thorough reviews before publication.
+I use the Review Article Prompt as the final gatekeeper before publication, ensuring every article meets my quality standards. When I run this prompt, Copilot systematically checks for clarity, technical accuracy, and alignment with my writing guidelines, then suggests targeted improvements. For example, I might use:
+
+```shell
+/article.review
+```
+
+to trigger a comprehensive review of my draft. This process helps me catch overlooked issues and enforces consistency across my content, so every article published is polished and reliable.
 
 # Workflow
 
