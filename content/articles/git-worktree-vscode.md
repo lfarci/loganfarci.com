@@ -8,11 +8,11 @@ author: "Logan Farci"
 coauthoredWithAgent: true
 ---
 
-The latest Visual Studio Code release ([1.103](https://code.visualstudio.com/updates/v1_103#_git-worktree-support)) includes support for [Git worktrees](https://git-scm.com/docs/git-worktree), allowing developers to manage multiple branches more efficiently. Honestly, I didn't know about this Git feature and it was the occasion to learn about it. This guide will walk you through setting up and using Git worktrees within VS Code to enhance your workflow.
+The latest Visual Studio Code release ([1.103](https://code.visualstudio.com/updates/v1_103#_git-worktree-support)) includes support for [Git worktrees](https://git-scm.com/docs/git-worktree), allowing developers to manage multiple branches more efficiently. If you're new to Git worktrees, this guide will help you get started and make the most of this feature in your workflow.
 
 ## What are Git Worktrees?
 
-Git worktrees allow you to have multiple working directories associated with a single Git repository. This is particularly useful for working on multiple branches simultaneously without the need to constantly switch between them. Personally I often encounter myself having to stash changes before switching to another branch to apply a simple fix on another branch.
+[Git worktrees](https://git-scm.com/docs/git-worktree) allow you to have multiple working directories associated with a single Git repository. This is particularly useful for working on multiple branches simultaneously without the need to constantly switch between them. For example, you no longer need to stash your changes just to switch branches and apply a quick fix elsewhere.
 
 ## Setting Up Git Worktrees in VS Code
 
@@ -32,7 +32,7 @@ Open a terminal in VS Code, navigate to your main repository directory, and run:
 git worktree add ../feature-xxx feature/xxx
 ```
 
-Replace `feature-xxx` with your branch name. This command creates a new directory for the branch and checks it out, so you can work on it independently.
+Replace `feature-xxx` with your branch name. This command creates a new directory for the branch and checks it out, so you can work on it independently. The worktree directory is created relative to the main worktree as a sibling directory.
 
 **Create a Worktree and New Branch Simultaneously**  
 To quickly start a hotfix or feature without losing your current changes, create a new branch and worktree in one step:
@@ -41,7 +41,7 @@ To quickly start a hotfix or feature without losing your current changes, create
 git worktree add -b feature-xxx ../feature-xxx
 ```
 
-This creates both the branch (`feature-xxx`) and its worktree.
+This creates both the branch (`feature-xxx`) and its worktree. The `-b` flag specifies that a new branch should be created and checked out.
 
 **Open and Manage Worktrees in VS Code**  
 Open each worktree in a separate VS Code window. You can do this from the integrated terminal or via the source control pane menu:
@@ -68,3 +68,8 @@ git worktree remove ../feature-xxx
 ## Conclusion
 
 Git worktrees are a powerful feature that can significantly improve your workflow in Visual Studio Code. By allowing you to work on multiple branches simultaneously, they help you stay organized and focused on your tasks. Give them a try in your next project!
+
+## Troubleshooting and Common Pitfalls
+
+-   **Do not delete worktree directories manually:** Always use `git worktree remove <path>` to clean up worktrees. Manually deleting the folder can leave your repository in an inconsistent state.
+-   **Further reading:** See the [official VS Code documentation on worktree support](https://code.visualstudio.com/docs/sourcecontrol/worktrees) for more details and advanced usage.
