@@ -1,6 +1,7 @@
 import React from "react";
 import ReactMarkdown from "react-markdown";
 import { Components } from "react-markdown";
+import remarkGfm from "remark-gfm";
 import {
     Text,
     Heading2,
@@ -44,7 +45,9 @@ const markdownComponents: Components = {
 export default function MarkdownContent({ content }: MarkdownContentProps) {
     return (
         <div className="max-w-none">
-            <ReactMarkdown components={markdownComponents}>{content}</ReactMarkdown>
+            <ReactMarkdown components={markdownComponents} remarkPlugins={[remarkGfm]}>
+                {content}
+            </ReactMarkdown>
         </div>
     );
 }
