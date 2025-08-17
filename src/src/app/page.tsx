@@ -15,7 +15,6 @@ export default function Home() {
             <Introduction introduction={profile.role} image={profile.avatar} contacts={contacts} />
             <TextSection heading="About Me" text={profile.introduction} />
             <ThumbnailGridSection heading="What I Do" size="large" columns={2} items={interests} />
-            <FeaturedArticles />
             <ThumbnailGridSection
                 heading="My Certifications"
                 size="large"
@@ -24,6 +23,7 @@ export default function Home() {
                 redirectPath="/about#certifications"
                 redirectLabel="Show all my certifications"
             />
+            <FeaturedArticles />
         </div>
     );
 }

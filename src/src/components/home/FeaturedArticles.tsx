@@ -11,7 +11,7 @@ export default function FeaturedArticles() {
             {featuredArticles.length === 0 ? (
                 <EmptyState message="No featured articles found." />
             ) : (
-                <div className="grid gap-6 md:grid-cols-2">
+                <div className="flex flex-col gap-4">
                     {" "}
                     {featuredArticles.slice(0, 4).map((article) => (
                         <ArticleCard key={article.slug} article={article} />
