@@ -24,7 +24,7 @@ const Introduction: React.FC<IntroductionProps> = ({ image, introduction, contac
             <Text>{introduction}</Text>
             {contacts.length > 0 && <Contacts contacts={contacts} />}
         </div>
-        {image && <Image {...image} className="rounded-xl w-full md:w-1/3 mt-6 md:mt-0" />}
+        {image && <Image {...image} alt="That's me!" className="rounded-xl w-full md:w-1/3 mt-6 md:mt-0" />}
     </div>
 );
 
