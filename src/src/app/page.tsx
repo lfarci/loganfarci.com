@@ -16,7 +16,7 @@ export default function Home() {
             <TextSection 
                 heading="About Me" 
                 text={profile.introduction} 
-                redirectPath="/about"
+                redirectPath="/about#about-me"
                 redirectLabel="Read more about me"
             />
             <ThumbnailGridSection heading="What I Do" size="large" columns={2} items={interests} />
