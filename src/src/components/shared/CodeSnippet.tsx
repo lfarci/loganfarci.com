@@ -27,6 +27,8 @@ export default function CodeSnippet({ children, className }: CodeSnippetProps) {
             radius="md"
             hideSymbol={true}
             hideCopyButton={false} 
+            // Workaround: HeroUI Snippet doesn't provide props to position the copy button.
+            // Using Tailwind arbitrary selectors to target the button element and position it properly.
             className="w-full my-4 relative [&>*]:whitespace-pre-wrap [&>button]:absolute [&>button]:top-2 [&>button]:right-2 [&>button]:z-10"
         >
             {children}
