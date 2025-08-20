@@ -1,6 +1,6 @@
 [
-  { "name": "LinkedIn", "icon": "/images/socials/linkedin.svg", "url": "https://www.linkedin.com/in/lfarci/" },
-  { "name": "GitHub", "icon": "/images/socials/github.svg", "url": "https://github.com/lfarci" },
-  { "name": "Bluesky", "icon": "/images/socials/bluesky.svg", "url": "https://bsky.app/profile/lfarci.bsky.social" },
-  { "name": "Email", "icon": "/images/socials/email.svg", "url": "mailto:logan.farci@outlook.be" }
+  { "name": "Let's connect on LinkedIn", "icon": "/images/socials/linkedin.svg", "url": "https://www.linkedin.com/in/lfarci/" },
+  { "name": "Explore my GitHub", "icon": "/images/socials/github.svg", "url": "https://github.com/lfarci" },
+  { "name": "Follow me on Bluesky", "icon": "/images/socials/bluesky.svg", "url": "https://bsky.app/profile/lfarci.bsky.social" },
+  { "name": "Send me an email", "icon": "/images/socials/email.svg", "url": "mailto:logan.farci@outlook.be" }
 ]
