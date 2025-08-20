@@ -13,9 +13,13 @@ export default function Home() {
     return (
         <div className="flex flex-col space-y-4">
             <Introduction introduction={profile.role} image={profile.avatar} contacts={contacts} />
-            <TextSection heading="About Me" text={profile.introduction} />
+            <TextSection 
+                heading="About Me" 
+                text={profile.introduction} 
+                redirectPath="/about#about-me"
+                redirectLabel="Read more about me"
+            />
             <ThumbnailGridSection heading="What I Do" size="large" columns={2} items={interests} />
-            <FeaturedArticles />
             <ThumbnailGridSection
                 heading="My Certifications"
                 size="large"
@@ -24,6 +28,7 @@ export default function Home() {
                 redirectPath="/about#certifications"
                 redirectLabel="Show all my certifications"
             />
+            <FeaturedArticles />
         </div>
     );
 }

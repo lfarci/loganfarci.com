@@ -9,9 +9,10 @@ import { Text, Heading3 } from "@/components/shared/typography";
 
 interface ArticleCardProps {
     article: Article;
+    showTags?: boolean;
 }
 
-export default function ArticleCard({ article }: ArticleCardProps) {
+export default function ArticleCard({ article, showTags = false }: ArticleCardProps) {
     return (
         <Card>
             <div className="flex flex-col min-w-0 gap-2">
@@ -28,7 +29,7 @@ export default function ArticleCard({ article }: ArticleCardProps) {
                 </time>
                 {article.description && <Text>{article.description}</Text>}
 
-                {article.tags.length > 0 && (
+                {showTags && article.tags.length > 0 && (
                     <div className="flex flex-wrap gap-2 mt-4">
                         {article.tags.map((tag) => (
                             <Tag key={tag}>{tag}</Tag>

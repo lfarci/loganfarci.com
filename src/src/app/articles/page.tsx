@@ -15,7 +15,7 @@ export default function ArticlesPage() {
             ) : (
                 <div className="space-y-6">
                     {articles.map((article) => (
-                        <ArticleCard key={article.slug} article={article} />
+                        <ArticleCard key={article.slug} article={article} showTags />
                     ))}
                 </div>
             )}
