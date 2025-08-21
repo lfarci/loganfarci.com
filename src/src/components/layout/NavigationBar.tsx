@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { Navbar, NavbarBrand, NavbarContent, NavbarMenuToggle, NavbarMenu, NavbarMenuItem } from "@heroui/react";
 import NavBarEntry from "@/components/shared/NavBarEntry";
+import ThemeToggle from "@/components/shared/ThemeToggle";
 
 interface NavigationBarProps {
     title: string;
@@ -24,32 +25,36 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ title }) => {
                         {title}
                     </Link>
                 </NavbarBrand>
-                <NavbarMenuToggle className="md:hidden" aria-label="Toggle navigation menu" />
-                <div className="hidden md:flex space-x-8">
-                    <NavBarEntry url="/" className="hover:text-blue-500 transition-colors">
+                <div className="flex items-center gap-2 md:hidden">
+                    <ThemeToggle />
+                    <NavbarMenuToggle aria-label="Toggle navigation menu" />
+                </div>
+                <div className="hidden md:flex space-x-8 items-center">
+                    <NavBarEntry url="/" className="hover:text-blue-500 dark:hover:text-blue-400 transition-colors">
                         Home
                     </NavBarEntry>
-                    <NavBarEntry url="/about" className="hover:text-blue-500 transition-colors">
+                    <NavBarEntry url="/about" className="hover:text-blue-500 dark:hover:text-blue-400 transition-colors">
                         About
                     </NavBarEntry>
-                    <NavBarEntry url="/articles" className="hover:text-blue-500 transition-colors">
+                    <NavBarEntry url="/articles" className="hover:text-blue-500 dark:hover:text-blue-400 transition-colors">
                         Articles
                     </NavBarEntry>
+                    <ThemeToggle />
                 </div>
             </NavbarContent>
             <NavbarMenu className="md:hidden text-center">
                 <NavbarMenuItem onClick={handleMenuItemClick}>
-                    <NavBarEntry url="/" className="hover:text-blue-500 transition-colors text-base py-2">
+                    <NavBarEntry url="/" className="hover:text-blue-500 dark:hover:text-blue-400 transition-colors text-base py-2">
                         Home
                     </NavBarEntry>
                 </NavbarMenuItem>
                 <NavbarMenuItem onClick={handleMenuItemClick}>
-                    <NavBarEntry url="/about" className="hover:text-blue-500 transition-colors text-base py-2">
+                    <NavBarEntry url="/about" className="hover:text-blue-500 dark:hover:text-blue-400 transition-colors text-base py-2">
                         About
                     </NavBarEntry>
                 </NavbarMenuItem>
                 <NavbarMenuItem onClick={handleMenuItemClick}>
-                    <NavBarEntry url="/articles" className="hover:text-blue-500 transition-colors text-base py-2">
+                    <NavBarEntry url="/articles" className="hover:text-blue-500 dark:hover:text-blue-400 transition-colors text-base py-2">
                         Articles
                     </NavBarEntry>
                 </NavbarMenuItem>
