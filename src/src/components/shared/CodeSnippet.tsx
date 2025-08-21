@@ -27,10 +27,10 @@ export default function CodeSnippet({ children, className }: CodeSnippetProps) {
             radius="md"
             hideSymbol={true}
             hideCopyButton={false}
-            // Position copy button absolutely within the container using classNames.copyButton
+            // Position copy button vertically centered on the right using classNames.copyButton
             className="w-full my-4 relative [&>*]:whitespace-pre-wrap"
             classNames={{
-                copyButton: "absolute top-2 right-2 z-10"
+                copyButton: "absolute top-1/2 right-2 -translate-y-1/2 z-10"
             }}
         >
             {children}
