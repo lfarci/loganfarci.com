@@ -81,7 +81,7 @@ export default function ThemeDemo() {
                 <h3 className="text-lg font-semibold text-text-primary">Pre-built Component Classes</h3>
                 <div className="space-y-2">
                     <div className={cn(getComponentClasses('card'), 'p-4')}>
-                        Card component using getComponentClasses('card')
+                        Card component using getComponentClasses(&apos;card&apos;)
                     </div>
                     
                     <input

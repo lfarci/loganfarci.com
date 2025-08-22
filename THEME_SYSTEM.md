@@ -116,7 +116,36 @@ const className = cn('p-4', 'rounded', conditionalClass && 'border');
 const primaryColor = cssVariables.primary; // 'var(--color-primary)'
 ```
 
-## Component Examples
+## Using the Theme System
+
+### Theme Toggle Component
+
+```tsx
+import ThemeToggle from '@/components/shared/ThemeToggle';
+
+// The theme toggle button is automatically included in the NavigationBar
+// It can also be used independently in other components
+<ThemeToggle />
+```
+
+### Theme Context
+
+```tsx
+import { useTheme } from '@/contexts/ThemeContext';
+
+function MyComponent() {
+    const { theme, toggleTheme } = useTheme();
+    
+    return (
+        <div>
+            <p>Current theme: {theme}</p>
+            <button onClick={toggleTheme}>Toggle Theme</button>
+        </div>
+    );
+}
+```
+
+### Component Examples
 
 ### Card Component
 ```tsx
@@ -149,12 +178,14 @@ const primaryColor = cssVariables.primary; // 'var(--color-primary)'
 
 ## Dark Mode Support
 
-Dark mode is automatically handled through:
+Dark mode is handled through:
 
-1. **CSS Media Query**: `@media (prefers-color-scheme: dark)`
-2. **Manual Class**: `.dark` class for explicit control
+1. **Manual Class**: `.dark` class for explicit control via theme toggle button
+2. **Theme Toggle Component**: `ThemeToggle` component in the navigation bar
+3. **Theme Context**: React context for managing theme state across the application
+4. **Local Storage**: Theme preference is persisted in localStorage
 
-Both use the same theme variable overrides defined in the `@theme` directive.
+The automatic CSS media query detection has been removed in favor of manual control for better user experience.
 
 ## OKLCH Color Benefits
 

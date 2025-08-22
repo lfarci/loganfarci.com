@@ -2,8 +2,9 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Navbar, NavbarBrand, NavbarContent, NavbarMenuToggle, NavbarMenu, NavbarMenuItem } from "@heroui/react";
+import { Navbar, NavbarBrand, NavbarContent, NavbarMenu, NavbarMenuItem } from "@heroui/react";
 import NavBarEntry from "@/components/shared/NavBarEntry";
+import ThemeToggle from "@/components/shared/ThemeToggle";
 
 interface NavigationBarProps {
     title: string;
@@ -24,8 +25,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ title }) => {
                         {title}
                     </Link>
                 </NavbarBrand>
-                <NavbarMenuToggle className="md:hidden" aria-label="Toggle navigation menu" />
-                <div className="hidden md:flex space-x-8">
+                <div className="hidden md:flex items-center space-x-8">
                     <NavBarEntry url="/" className="hover:text-primary-hover transition-colors">
                         Home
                     </NavBarEntry>
@@ -35,6 +35,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ title }) => {
                     <NavBarEntry url="/articles" className="hover:text-primary-hover transition-colors">
                         Articles
                     </NavBarEntry>
+                    <ThemeToggle />
                 </div>
             </NavbarContent>
             <NavbarMenu className="md:hidden text-center">
@@ -52,6 +53,11 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ title }) => {
                     <NavBarEntry url="/articles" className="hover:text-primary-hover transition-colors text-base py-2">
                         Articles
                     </NavBarEntry>
+                </NavbarMenuItem>
+                <NavbarMenuItem className="mt-4 pt-4 border-t border-border">
+                    <div className="flex justify-center">
+                        <ThemeToggle />
+                    </div>
                 </NavbarMenuItem>
             </NavbarMenu>
         </Navbar>
