@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Navbar, NavbarBrand, NavbarContent, NavbarMenu, NavbarMenuItem } from "@heroui/react";
+import { Navbar, NavbarBrand, NavbarContent, NavbarMenu, NavbarMenuItem, NavbarMenuToggle } from "@heroui/react";
 import NavBarEntry from "@/components/shared/NavBarEntry";
 import ThemeToggle from "@/components/shared/ThemeToggle";
 
@@ -25,6 +25,10 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ title }) => {
                         {title}
                     </Link>
                 </NavbarBrand>
+                <NavbarMenuToggle
+                    aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+                    className="md:hidden"
+                />
                 <div className="hidden md:flex items-center space-x-8">
                     <NavBarEntry url="/" className="hover:text-primary-hover transition-colors">
                         Home
