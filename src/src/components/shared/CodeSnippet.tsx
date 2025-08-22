@@ -27,7 +27,7 @@ export default function CodeSnippet({ children, className }: CodeSnippetProps) {
             radius="md"
             hideSymbol={true}
             hideCopyButton={false}
-            className="w-full my-4 [&>*]:whitespace-pre-wrap"
+            className="w-full my-4 *:whitespace-pre-wrap"
         >
             {children}
         </Snippet>

@@ -21,7 +21,7 @@ const getImageSize = (imageSize: SmallInfoCardImageSize = "medium") => {
 };
 
 const getImageContainerClass = (imageSize: SmallInfoCardImageSize, imagePosition: SmallInfoCardImagePosition) => {
-    const baseClass = "flex justify-center flex-shrink-0 ";
+    const baseClass = "flex justify-center shrink-0 ";
     const positionClass = imagePosition === "start" ? "items-start mt-1 mr-4" : "items-center mt-0";
     const sizeClass = imageSize !== "medium" && imagePosition !== "start" ? "mt-1 mr-4" : "";
     return `${baseClass} ${positionClass} ${sizeClass}`.trim();

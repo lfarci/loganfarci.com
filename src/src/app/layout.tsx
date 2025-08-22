@@ -42,7 +42,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             <body className={`${redditMono.variable} ${manrope.variable} ${notoSans.variable}`}>
                 <Providers>
                     <NavigationBar title="Logan Farci" />
-                    <main className="max-w-screen-lg mx-auto px-6">{children}</main>
+                    <main className="max-w-(--breakpoint-lg) mx-auto px-6">{children}</main>
                     <hr className="border-t border-gray-300 my-8" />
                     <Footer githubRepositoryUrl={githubRepositoryUrl} commitHash={latestCommitHash} />
                 </Providers>

@@ -19,7 +19,7 @@ const ThumbnailCard: React.FC<ThumbnailCardProps> = ({ title, description, image
         <Card>
             <div className="flex items-center flex-col h-full">
                 {image && (
-                    <div className="flex-shrink-0 flex items-center justify-center mb-4">
+                    <div className="shrink-0 flex items-center justify-center mb-4">
                         <Image
                             className={sizeClasses[size]}
                             src={image.src}
@@ -29,7 +29,7 @@ const ThumbnailCard: React.FC<ThumbnailCardProps> = ({ title, description, image
                         />
                     </div>
                 )}
-                <div className="flex flex-col items-center justify-center flex-grow text-center">
+                <div className="flex flex-col items-center justify-center grow text-center">
                     <Heading3 className="text-center leading-tight">{title}</Heading3>
                     {description && <Text className="text-center mt-3 text-sm">{description}</Text>}
                 </div>

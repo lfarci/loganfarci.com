@@ -17,7 +17,7 @@ interface TagProps {
 }
 
 const TagIcon: React.FC<TagIconProps> = ({ src, alt }) => (
-    <Image src={src} alt={alt} width={16} height={16} className="rounded-sm mr-1.5" />
+    <Image src={src} alt={alt} width={16} height={16} className="rounded-xs mr-1.5" />
 );
 
 const Tag: React.FC<TagProps> = ({ children, imageSrc = "", imageAlt = "" }) => {
