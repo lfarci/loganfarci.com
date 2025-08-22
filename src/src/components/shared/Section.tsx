@@ -37,7 +37,7 @@ const Section: React.FC<SectionProps> = ({ heading, redirectPath, redirectLabel,
                         <span className="flex items-center">
                             <Heading1 className="mb-0">{heading}</Heading1>
                             <ChevronRightIcon
-                                className="size-7 md:size-9 ml-2 shrink-0 self-center text-gray-400 cursor-pointer"
+                                className="size-7 md:size-9 ml-2 shrink-0 self-center text-text-muted cursor-pointer"
                                 strokeWidth={2}
                             />
                         </span>

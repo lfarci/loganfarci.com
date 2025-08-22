@@ -26,30 +26,30 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ title }) => {
                 </NavbarBrand>
                 <NavbarMenuToggle className="md:hidden" aria-label="Toggle navigation menu" />
                 <div className="hidden md:flex space-x-8">
-                    <NavBarEntry url="/" className="hover:text-blue-500 transition-colors">
+                    <NavBarEntry url="/" className="hover:text-primary-hover transition-colors">
                         Home
                     </NavBarEntry>
-                    <NavBarEntry url="/about" className="hover:text-blue-500 transition-colors">
+                    <NavBarEntry url="/about" className="hover:text-primary-hover transition-colors">
                         About
                     </NavBarEntry>
-                    <NavBarEntry url="/articles" className="hover:text-blue-500 transition-colors">
+                    <NavBarEntry url="/articles" className="hover:text-primary-hover transition-colors">
                         Articles
                     </NavBarEntry>
                 </div>
             </NavbarContent>
             <NavbarMenu className="md:hidden text-center">
                 <NavbarMenuItem onClick={handleMenuItemClick}>
-                    <NavBarEntry url="/" className="hover:text-blue-500 transition-colors text-base py-2">
+                    <NavBarEntry url="/" className="hover:text-primary-hover transition-colors text-base py-2">
                         Home
                     </NavBarEntry>
                 </NavbarMenuItem>
                 <NavbarMenuItem onClick={handleMenuItemClick}>
-                    <NavBarEntry url="/about" className="hover:text-blue-500 transition-colors text-base py-2">
+                    <NavBarEntry url="/about" className="hover:text-primary-hover transition-colors text-base py-2">
                         About
                     </NavBarEntry>
                 </NavbarMenuItem>
                 <NavbarMenuItem onClick={handleMenuItemClick}>
-                    <NavBarEntry url="/articles" className="hover:text-blue-500 transition-colors text-base py-2">
+                    <NavBarEntry url="/articles" className="hover:text-primary-hover transition-colors text-base py-2">
                         Articles
                     </NavBarEntry>
                 </NavbarMenuItem>

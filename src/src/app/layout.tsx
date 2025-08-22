@@ -43,7 +43,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
                 <Providers>
                     <NavigationBar title="Logan Farci" />
                     <main className="max-w-(--breakpoint-lg) mx-auto px-6">{children}</main>
-                    <hr className="border-t border-gray-300 my-8" />
+                    <hr className="border-t border-border my-8" />
                     <Footer githubRepositoryUrl={githubRepositoryUrl} commitHash={latestCommitHash} />
                 </Providers>
             </body>
