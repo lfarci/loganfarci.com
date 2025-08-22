@@ -4,12 +4,12 @@ import NavigationBar from "@/components/layout/NavigationBar";
 import Footer from "@/components/layout/Footer";
 
 interface LayoutWrapperProps {
-    children: React.ReactNode;
-    githubRepositoryUrl?: string;
-    commitHash?: string;
+    readonly children: React.ReactNode;
+    readonly githubRepositoryUrl?: string;
+    readonly commitHash?: string;
 }
 
-export function LayoutWrapper({ children, githubRepositoryUrl, commitHash }: LayoutWrapperProps) {
+const LayoutWrapper: React.FC<Readonly<LayoutWrapperProps>> = ({ children, githubRepositoryUrl, commitHash }) => {
     return (
         <>
             <NavigationBar title="Logan Farci" />
@@ -18,4 +18,6 @@ export function LayoutWrapper({ children, githubRepositoryUrl, commitHash }: Lay
             <Footer githubRepositoryUrl={githubRepositoryUrl} commitHash={commitHash} />
         </>
     );
-}
+};
+
+export default LayoutWrapper;

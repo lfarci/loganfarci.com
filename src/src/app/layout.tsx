@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Manrope, Noto_Sans, Reddit_Mono } from "next/font/google";
 import "./globals.css";
-import { LayoutWrapper } from "@/components/layout/LayoutWrapper";
+import LayoutWrapper from "@/components/layout/LayoutWrapper";
 import { Providers } from "./providers";
 
 const redditMono = Reddit_Mono({
