@@ -6,14 +6,11 @@ import { useTheme } from '@/contexts/ThemeContext';
 const ThemeToggle: React.FC = () => {
   const [mounted, setMounted] = useState(false);
 
-  // Avoid hydration mismatch by only rendering after mount
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // Don't access theme context until after mounting to avoid SSR issues
   if (!mounted) {
-    // Return a placeholder with the same dimensions to prevent layout shift
     return (
       <div className="p-2 w-9 h-9 rounded-lg bg-surface-hover border border-border">
         <div className="w-5 h-5" />
@@ -21,23 +18,20 @@ const ThemeToggle: React.FC = () => {
     );
   }
 
-  // Now we can safely use the theme context
   return <ThemeToggleInner />;
 };
 
-// Separate component that uses the theme context
 const ThemeToggleInner: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
 
   return (
     <button
       onClick={toggleTheme}
-      className="p-2 rounded-lg bg-surface-hover border border-border hover:bg-surface-elevated transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+      className="p-2 rounded-lg bg-surface-hover border border-border hover:bg-surface-elevated transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 cursor-pointer"
       aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
       type="button"
     >
       {theme === 'light' ? (
-        // Moon icon for light mode (clicking will go to dark)
         <svg
           className="w-5 h-5 text-text-primary"
           fill="none"
@@ -53,7 +47,6 @@ const ThemeToggleInner: React.FC = () => {
           />
         </svg>
       ) : (
-        // Sun icon for dark mode (clicking will go to light)
         <svg
           className="w-5 h-5 text-text-primary"
           fill="none"
