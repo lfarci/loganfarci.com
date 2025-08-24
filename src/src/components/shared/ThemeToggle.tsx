@@ -27,7 +27,7 @@ const ThemeToggleInner: React.FC = () => {
   return (
     <button
       onClick={toggleTheme}
-      className="p-2 rounded-lg bg-surface-hover border border-border hover:bg-surface-elevated transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 cursor-pointer"
+      className="p-2 rounded-lg bg-surface-hover border border-border hover:bg-surface-elevated transition-colors duration-200 cursor-pointer"
       aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
       type="button"
     >
