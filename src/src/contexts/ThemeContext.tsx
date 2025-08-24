@@ -11,12 +11,15 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-export function ThemeProvider({ children }: { children: React.ReactNode }) {
+interface ThemeProviderProps {
+    readonly children: React.ReactNode;
+}
+
+export function ThemeProvider({ children }: ThemeProviderProps) {
     const [theme, setTheme] = useState<Theme>("light");
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
-        // Get theme from localStorage on mount
         const savedTheme = localStorage.getItem("theme") as Theme;
         if (savedTheme) {
             setTheme(savedTheme);
@@ -27,7 +30,6 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     useEffect(() => {
         if (!mounted) return;
 
-        // Apply theme to document
         const root = document.documentElement;
         if (theme === "dark") {
             root.classList.add("dark");
@@ -35,7 +37,6 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
             root.classList.remove("dark");
         }
 
-        // Save to localStorage
         localStorage.setItem("theme", theme);
     }, [theme, mounted]);
 
@@ -43,7 +44,6 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         setTheme((prev) => (prev === "light" ? "dark" : "light"));
     };
 
-    // Prevent hydration mismatch by not rendering until mounted
     if (!mounted) {
         return <>{children}</>;
     }
