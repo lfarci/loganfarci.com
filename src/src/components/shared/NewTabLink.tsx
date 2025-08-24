@@ -12,7 +12,7 @@ const NewTabLink: React.FC<ExternalLinkProps> = ({ children, url, size = "base" 
             href={url}
             target="_blank"
             rel="noopener noreferrer"
-            className={`${sizeClasses} font-medium text-font text-blue-400`}
+            className={`${sizeClasses} font-medium text-font text-primary`}
         >
             {children}
         </a>

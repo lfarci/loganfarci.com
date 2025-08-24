@@ -3,6 +3,6 @@ interface EmptyStateProps {
     className?: string;
 }
 
-export default function EmptyState({ message, className = "text-gray-600" }: EmptyStateProps) {
+export default function EmptyState({ message, className = "text-text-secondary" }: EmptyStateProps) {
     return <p className={className}>{message}</p>;
 }

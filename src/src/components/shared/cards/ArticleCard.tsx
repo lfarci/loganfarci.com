@@ -19,12 +19,12 @@ export default function ArticleCard({ article, showTags = false }: ArticleCardPr
                 <Heading3>
                     <Link
                         href={`/articles/${article.slug}`}
-                        className="hover:text-blue-600 transition-colors cursor-pointer"
+                        className="hover:text-primary-hover transition-colors cursor-pointer"
                     >
                         {article.title}
                     </Link>
                 </Heading3>
-                <time dateTime={article.publishedAt} className="text-base text-gray-400 mt-1">
+                <time dateTime={article.publishedAt} className="text-base text-text-muted mt-1">
                     {formatDate(article.publishedAt)}
                 </time>
                 {article.description && <Text>{article.description}</Text>}

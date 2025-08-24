@@ -17,11 +17,11 @@ function ChevronToggleButton({ isExpanded, onToggle }: ChevronToggleButtonProps)
                     onClick={onToggle}
                     type="button"
                     aria-label={toggleText}
-                    className="focus:outline-hidden focus:ring-2 focus:ring-gray-300 rounded-sm"
+                    className="focus:outline-hidden focus:ring-2 focus:ring-border rounded-sm"
                 >
                     <ChevronDownIcon
                         strokeWidth={1}
-                        className={`h-5 w-5 text-gray-500 transition-transform duration-300 ${
+                        className={`h-5 w-5 text-text-tertiary transition-transform duration-300 ${
                             isExpanded ? "rotate-180" : ""
                         }`}
                     />

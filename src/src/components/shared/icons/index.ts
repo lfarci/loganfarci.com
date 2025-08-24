@@ -1,3 +1,9 @@
 export { default as ChevronDownIcon } from "@/components/shared/icons/ChevronDownIcon";
 export { default as ChevronUpIcon } from "@/components/shared/icons/ChevronUpIcon";
 export { default as ChevronRightIcon } from "@/components/shared/icons/ChevronRightIcon";
+export { default as MoonIcon } from "@/components/shared/icons/MoonIcon";
+export { default as SunIcon } from "@/components/shared/icons/SunIcon";
+export { default as BlueskyIcon } from "@/components/shared/icons/BlueskyIcon";
+export { default as EmailIcon } from "@/components/shared/icons/EmailIcon";
+export { default as GitHubIcon } from "@/components/shared/icons/GitHubIcon";
+export { default as LinkedInIcon } from "@/components/shared/icons/LinkedInIcon";
