@@ -1,6 +1,6 @@
 import Section from "@/components/shared/Section";
 import React from "react";
-import TextSection from "@/components/shared/TextSection";
+import MarkdownSection from "@/components/shared/MarkdownSection";
 import SmallInfoCard, { SmallInfoCardProps } from "@/components/shared/cards/SmallInfoCard";
 import SmallInfoCardsGridSection from "@/components/shared/cards/SmallInfoCardsSection";
 import { Certification, Skill, SkillCategory } from "@/types";
@@ -44,7 +44,7 @@ export default function About() {
 
     return (
         <div>
-            <TextSection heading="About Me" text={profile.introduction} />
+            <MarkdownSection heading="About Me" content={profile.description} />
             <Section heading="Skills">
                 <div className="flex flex-col gap-4">
                     {skillCategories.map((category: SkillCategory) => (
