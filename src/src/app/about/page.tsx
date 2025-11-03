@@ -34,6 +34,10 @@ const skillCategories = getSkillCategories();
 const diploma = getDiploma();
 const profile = getProfile();
 
+const createCategoryId = (categoryName: string): string => {
+    return categoryName.toLowerCase().replace(/\s+/g, "-");
+};
+
 export default function About() {
     const bachelor: SmallInfoCardProps = {
         image: diploma.logo,
@@ -48,24 +52,25 @@ export default function About() {
             <Section heading="Skills">
                 <div className="flex flex-col gap-4">
                     {skillCategories.map((category: SkillCategory) => (
-                        <SmallInfoCard
-                            key={category.name}
-                            heading={category.name}
-                            subtitle={`${category.skills.length} skills`}
-                            details={[]}
-                        >
-                            <div className="flex flex-wrap gap-2 mt-2">
-                                {category.skills.map((skill: Skill, skillIndex) => (
-                                    <Tag
-                                        key={skillIndex}
-                                        imageSrc={skill.icon || undefined}
-                                        imageAlt={skill.icon ? `${skill.name} icon` : undefined}
-                                    >
-                                        {skill.name}
-                                    </Tag>
-                                ))}
-                            </div>
-                        </SmallInfoCard>
+                        <div key={category.name} id={createCategoryId(category.name)} className="scroll-mt-24">
+                            <SmallInfoCard
+                                heading={category.name}
+                                subtitle={`${category.skills.length} skills`}
+                                details={[]}
+                            >
+                                <div className="flex flex-wrap gap-2 mt-2">
+                                    {category.skills.map((skill: Skill, skillIndex) => (
+                                        <Tag
+                                            key={skillIndex}
+                                            imageSrc={skill.icon || undefined}
+                                            imageAlt={skill.icon ? `${skill.name} icon` : undefined}
+                                        >
+                                            {skill.name}
+                                        </Tag>
+                                    ))}
+                                </div>
+                            </SmallInfoCard>
+                        </div>
                     ))}
                 </div>
             </Section>
