@@ -15,7 +15,7 @@ interface ThumbnailItem {
     description?: string;
     image: ImageProps;
     url?: string;
-    internalPath?: string;
+    redirectPath?: string;
 }
 
 interface ThumbnailGridSectionProps {
@@ -59,9 +59,9 @@ const ThumbnailGridSection: React.FC<ThumbnailGridSectionProps> = ({
                     />
                 );
 
-                if (item.internalPath) {
+                if (item.redirectPath) {
                     return (
-                        <Link key={index} href={item.internalPath} className="transition-opacity hover:opacity-80">
+                        <Link key={index} href={item.redirectPath} className="transition-opacity hover:opacity-80">
                             {card}
                         </Link>
                     );

@@ -4,5 +4,5 @@ export interface Interest {
     title: string;
     image: Image;
     description: string;
-    internalPath?: string;
+    redirectPath?: string;
 }

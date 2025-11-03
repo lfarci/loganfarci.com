@@ -8,7 +8,7 @@
       "width": 128,
       "height": 128
     },
-    "internalPath": "/about#backend-development"
+    "redirectPath": "/about#backend-development"
   },
   {
     "title": "Cloud Computing",
@@ -19,7 +19,7 @@
       "width": 128,
       "height": 128
     },
-    "internalPath": "/about#cloud-computing"
+    "redirectPath": "/about#cloud-computing"
   },
   {
     "title": "DevOps",
@@ -30,7 +30,7 @@
       "width": 128,
       "height": 128
     },
-    "internalPath": "/about#devops"
+    "redirectPath": "/about#devops"
   },
   {
     "title": "Artificial Intelligence",
@@ -41,6 +41,6 @@
       "width": 128,
       "height": 128
     },
-    "internalPath": "/about#artificial-intelligence"
+    "redirectPath": "/about#artificial-intelligence"
   }
 ]
