@@ -17,7 +17,7 @@ function ChevronToggleButton({ isExpanded, onToggle }: ChevronToggleButtonProps)
                     onClick={onToggle}
                     type="button"
                     aria-label={toggleText}
-                    className="focus:outline-hidden focus:ring-2 focus:ring-border rounded-sm"
+                    className="cursor-pointer focus:outline-hidden focus:ring-2 focus:ring-border rounded-sm"
                 >
                     <ChevronDownIcon
                         strokeWidth={1}
