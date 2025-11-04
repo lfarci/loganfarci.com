@@ -1,4 +1,4 @@
-import skills from "@/../content/data/skills.json";
+import { getSkillCategories } from "./data";
 
 export interface SkillIcon {
     src: string;
@@ -16,7 +16,8 @@ function buildSkillIconMap(): Map<string, SkillIcon> {
     const map = new Map<string, SkillIcon>();
 
     // Flatten all skills from all categories
-    skills.forEach((category) => {
+    const skillCategories = getSkillCategories();
+    skillCategories.forEach((category) => {
         category.skills.forEach((skill) => {
             if (skill.icon) {
                 const icon: SkillIcon = {
