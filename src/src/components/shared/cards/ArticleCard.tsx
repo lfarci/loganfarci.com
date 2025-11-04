@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Article } from "@/types/article";
 import Card from "@/components/shared/cards/Card";
 import { formatDate } from "@/core/date";
-import Tag from "@/components/shared/Tag";
+import SkillTag from "@/components/shared/SkillTag";
 import { Text, Heading3 } from "@/components/shared/typography";
 
 interface ArticleCardProps {
@@ -32,7 +32,7 @@ export default function ArticleCard({ article, showTags = false }: ArticleCardPr
                 {showTags && article.tags.length > 0 && (
                     <div className="flex flex-wrap gap-2 mt-4">
                         {article.tags.map((tag) => (
-                            <Tag key={tag}>{tag}</Tag>
+                            <SkillTag key={tag}>{tag}</SkillTag>
                         ))}
                     </div>
                 )}
