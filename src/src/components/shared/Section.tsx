@@ -3,7 +3,7 @@
 import { Tooltip } from "@heroui/react";
 import ChevronRightIcon from "./icons/ChevronRightIcon";
 import { Heading1, Text } from "@/components/shared/typography";
-import { createId } from "@/lib/string";
+import { createId } from "@/core/string";
 
 interface SectionProps {
     heading: string;

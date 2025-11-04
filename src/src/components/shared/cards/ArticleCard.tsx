@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Article } from "@/types/article";
 import Card from "@/components/shared/cards/Card";
-import { formatDate } from "@/lib/date";
+import { formatDate } from "@/core/date";
 import Tag from "@/components/shared/Tag";
 import { Text, Heading3 } from "@/components/shared/typography";
 

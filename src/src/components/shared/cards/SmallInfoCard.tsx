@@ -4,7 +4,7 @@ import SmallInfoCardHeading from "@/components/shared/cards/SmallInfoCardHeading
 import Card from "./Card";
 import { Secondary, Text } from "@/components/shared/typography";
 import { ImageProps } from "@/types";
-import { createId } from "@/lib/string";
+import { createId } from "@/core/string";
 
 export type SmallInfoCardProps = {
     image?: ImageProps;
