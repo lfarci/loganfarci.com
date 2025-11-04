@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { getArticleBySlug, getArticleSlugs } from "@/core/articles";
 import MarkdownContent from "@/components/shared/MarkdownContent";
 import { Heading1, Secondary } from "@/components/shared/typography";
-import { formatDate } from "@/lib/date";
+import { formatDate } from "@/core/date";
 import { Divider } from "@heroui/react";
 import ClientTooltip from "@/components/shared/ClientTooltip";
 import Tag from "@/components/shared/Tag";

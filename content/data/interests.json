@@ -7,7 +7,8 @@
       "alt": "Gear icon",
       "width": 128,
       "height": 128
-    }
+    },
+    "redirectPath": "/about#backend-development"
   },
   {
     "title": "Cloud Computing",
@@ -17,7 +18,8 @@
       "alt": "Cloud icon",
       "width": 128,
       "height": 128
-    }
+    },
+    "redirectPath": "/about#cloud-computing"
   },
   {
     "title": "DevOps",
@@ -27,7 +29,8 @@
       "alt": "Infinity icon",
       "width": 128,
       "height": 128
-    }
+    },
+    "redirectPath": "/about#devops"
   },
   {
     "title": "Artificial Intelligence",
@@ -37,6 +40,7 @@
       "alt": "Robot icon",
       "width": 128,
       "height": 128
-    }
+    },
+    "redirectPath": "/about#artificial-intelligence"
   }
 ]

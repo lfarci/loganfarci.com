@@ -19,7 +19,14 @@ export default function Home() {
                 redirectPath="/about#about-me"
                 redirectLabel="Read more about me"
             />
-            <ThumbnailGridSection heading="What I Do" size="large" columns={2} items={interests} />
+            <ThumbnailGridSection 
+                heading="What I Do" 
+                size="large" 
+                columns={2} 
+                items={interests}
+                redirectPath="/about#skills"
+                redirectLabel="Explore my skills in detail"
+            />
             <ThumbnailGridSection
                 heading="My Certifications"
                 size="large"

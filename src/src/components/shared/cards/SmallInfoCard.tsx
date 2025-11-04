@@ -4,6 +4,7 @@ import SmallInfoCardHeading from "@/components/shared/cards/SmallInfoCardHeading
 import Card from "./Card";
 import { Secondary, Text } from "@/components/shared/typography";
 import { ImageProps } from "@/types";
+import { createId } from "@/core/string";
 
 export type SmallInfoCardProps = {
     image?: ImageProps;
@@ -14,6 +15,7 @@ export type SmallInfoCardProps = {
     children?: React.ReactNode;
     imageSize?: SmallInfoCardImageSize;
     imagePosition?: SmallInfoCardImagePosition;
+    id?: string;
 };
 
 const SmallInfoCard: React.FC<SmallInfoCardProps> = ({
@@ -24,6 +26,7 @@ const SmallInfoCard: React.FC<SmallInfoCardProps> = ({
     imageSize = "medium",
     imagePosition = "center",
     children,
+    id,
 }) => {
     const isMediumSize = imageSize === "medium";
     const isStartPosition = imagePosition === "start";
@@ -33,8 +36,10 @@ const SmallInfoCard: React.FC<SmallInfoCardProps> = ({
         isMediumSize && !isStartPosition ? "gap-4 items-stretch" : "items-stretch",
     ].join(" ");
 
+    const cardId = id ?? createId(heading);
+
     return (
-        <Card>
+        <Card id={cardId} className="scroll-mt-24">
             <div className={containerClass}>
                 {image && <SmallInfoCardImage image={image} imageSize={imageSize} imagePosition={imagePosition} />}
                 <div className="flex flex-col flex-1 min-w-0">

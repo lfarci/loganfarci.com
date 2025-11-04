@@ -3,6 +3,7 @@
 import { Tooltip } from "@heroui/react";
 import ChevronRightIcon from "./icons/ChevronRightIcon";
 import { Heading1, Text } from "@/components/shared/typography";
+import { createId } from "@/core/string";
 
 interface SectionProps {
     heading: string;
@@ -10,10 +11,6 @@ interface SectionProps {
     redirectLabel?: string;
     children?: React.ReactNode;
 }
-
-const createSectionId = (heading: string): string => {
-    return heading.toLowerCase().replace(/\s+/g, "-");
-};
 
 const Section: React.FC<SectionProps> = ({ heading, redirectPath, redirectLabel, children }) => {
     const handleNavigation = () => {
@@ -27,7 +24,7 @@ const Section: React.FC<SectionProps> = ({ heading, redirectPath, redirectLabel,
     const toolTip = <Text>{redirectLabel}</Text>;
 
     return (
-        <section id={createSectionId(heading)} className="pt-8 scroll-mt-10">
+        <section id={createId(heading)} className="pt-8 scroll-mt-10">
             <div
                 className={`flex items-center mb-4${redirectPath ? " cursor-pointer" : ""}`}
                 onClick={handleNavigation}

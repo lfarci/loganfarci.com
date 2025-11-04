@@ -1,6 +1,7 @@
 import Section from "./Section";
 import ThumbnailCard, { ThumbnailCardImageSize } from "./cards/ThumbnailCard";
 import NewTabLink from "./NewTabLink";
+import Link from "next/link";
 
 interface ImageProps {
     src: string;
@@ -14,6 +15,7 @@ interface ThumbnailItem {
     description?: string;
     image: ImageProps;
     url?: string;
+    redirectPath?: string;
 }
 
 interface ThumbnailGridSectionProps {
@@ -56,6 +58,14 @@ const ThumbnailGridSection: React.FC<ThumbnailGridSectionProps> = ({
                         description={item.description}
                     />
                 );
+
+                if (item.redirectPath) {
+                    return (
+                        <Link key={index} href={item.redirectPath} className="transition-opacity hover:opacity-80">
+                            {card}
+                        </Link>
+                    );
+                }
 
                 return item.url ? (
                     <NewTabLink key={index} url={item.url}>
