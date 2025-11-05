@@ -1,0 +1,227 @@
+[
+  {
+    "id": "-net",
+    "name": ".NET",
+    "icon": "/images/skills/backend/dotnet.svg"
+  },
+  {
+    "id": "angular",
+    "name": "Angular",
+    "icon": "/images/skills/frontend/angular.svg"
+  },
+  {
+    "id": "azure-ai-foundry",
+    "name": "Azure AI Foundry",
+    "icon": "/images/skills/ai/foundry.svg"
+  },
+  {
+    "id": "azure-api-management",
+    "name": "Azure API Management",
+    "icon": "/images/skills/azure/api-management.svg"
+  },
+  {
+    "id": "azure-app-service",
+    "name": "Azure App Service",
+    "icon": "/images/skills/azure/app-service.svg"
+  },
+  {
+    "id": "azure-blob-storage",
+    "name": "Azure Blob Storage",
+    "icon": "/images/skills/azure/blob-storage.svg"
+  },
+  {
+    "id": "azure-communication-services",
+    "name": "Azure Communication Services",
+    "icon": "/images/skills/azure/communication-services.svg"
+  },
+  {
+    "id": "azure-container-instances",
+    "name": "Azure Container Instances",
+    "icon": "/images/skills/azure/container-instances.svg"
+  },
+  {
+    "id": "azure-container-registry",
+    "name": "Azure Container Registry",
+    "icon": "/images/skills/azure/container-registry.svg"
+  },
+  {
+    "id": "azure-cosmos-db",
+    "name": "Azure Cosmos DB",
+    "icon": "/images/skills/azure/cosmos-db.svg"
+  },
+  {
+    "id": "azure-devops",
+    "name": "Azure DevOps",
+    "icon": "/images/skills/devops/devops.svg"
+  },
+  {
+    "id": "azure-functions",
+    "name": "Azure Functions",
+    "icon": "/images/skills/azure/function-apps.svg"
+  },
+  {
+    "id": "azure-key-vault",
+    "name": "Azure Key Vault",
+    "icon": "/images/skills/azure/key-vault.svg"
+  },
+  {
+    "id": "azure-monitor",
+    "name": "Azure Monitor",
+    "icon": "/images/skills/azure/monitor.svg"
+  },
+  {
+    "id": "azure-sql-database",
+    "name": "Azure SQL Database",
+    "icon": "/images/skills/azure/sql-database.svg"
+  },
+  {
+    "id": "azure-static-web-app",
+    "name": "Azure Static Web App",
+    "icon": "/images/skills/azure/static-web-apps.svg"
+  },
+  {
+    "id": "bash",
+    "name": "Bash",
+    "icon": "/images/skills/devops/bash.svg"
+  },
+  {
+    "id": "bicep",
+    "name": "Bicep",
+    "icon": "/images/skills/devops/bicep.svg"
+  },
+  {
+    "id": "blazor",
+    "name": "Blazor",
+    "icon": "/images/skills/frontend/blazor.svg"
+  },
+  {
+    "id": "csharp",
+    "name": "C#",
+    "icon": "/images/skills/backend/csharp.svg"
+  },
+  {
+    "id": "docker",
+    "name": "Docker",
+    "icon": "/images/skills/devops/docker.svg"
+  },
+  {
+    "id": "git",
+    "name": "Git",
+    "icon": "/images/skills/tools/git.svg"
+  },
+  {
+    "id": "github",
+    "name": "GitHub",
+    "icon": "/images/skills/devops/github.svg"
+  },
+  {
+    "id": "github-copilot",
+    "name": "GitHub Copilot",
+    "icon": "/images/skills/ai/copilot.svg"
+  },
+  {
+    "id": "github-models",
+    "name": "GitHub Models",
+    "icon": "/images/skills/devops/github.svg"
+  },
+  {
+    "id": "java",
+    "name": "Java",
+    "icon": "/images/skills/backend/java.svg"
+  },
+  {
+    "id": "jwt",
+    "name": "JWT",
+    "icon": "/images/skills/backend/jwt.svg"
+  },
+  {
+    "id": "kubernetes",
+    "name": "Kubernetes",
+    "icon": "/images/skills/devops/kubernetes.svg"
+  },
+  {
+    "id": "langchain",
+    "name": "LangChain",
+    "icon": "/images/skills/ai/langchain.svg"
+  },
+  {
+    "id": "linux",
+    "name": "Linux",
+    "icon": "/images/skills/devops/linux.svg"
+  },
+  {
+    "id": "mongodb",
+    "name": "MongoDB",
+    "icon": "/images/skills/backend/mongodb.svg"
+  },
+  {
+    "id": "next-js",
+    "name": "Next.js",
+    "icon": "/images/skills/frontend/nextjs.svg"
+  },
+  {
+    "id": "node-js",
+    "name": "Node.js",
+    "icon": "/images/skills/backend/node.svg"
+  },
+  {
+    "id": "oauth",
+    "name": "OAuth",
+    "icon": "/images/skills/backend/oauth.svg"
+  },
+  {
+    "id": "openshift",
+    "name": "OpenShift",
+    "icon": "/images/skills/devops/openshift.svg"
+  },
+  {
+    "id": "powershell",
+    "name": "PowerShell",
+    "icon": "/images/skills/devops/powershell.svg"
+  },
+  {
+    "id": "react",
+    "name": "React",
+    "icon": "/images/skills/frontend/react.svg"
+  },
+  {
+    "id": "spring-boot",
+    "name": "Spring Boot",
+    "icon": "/images/skills/backend/spring.svg"
+  },
+  {
+    "id": "sql-server",
+    "name": "SQL Server",
+    "icon": "/images/skills/backend/sqlserver.svg"
+  },
+  {
+    "id": "tailwind-css",
+    "name": "Tailwind CSS",
+    "icon": "/images/skills/frontend/tailwind.svg"
+  },
+  {
+    "id": "terraform",
+    "name": "Terraform",
+    "icon": "/images/skills/devops/terraform.svg"
+  },
+  {
+    "id": "typescript",
+    "name": "TypeScript",
+    "icon": "/images/skills/frontend/typescript.svg"
+  },
+  {
+    "id": "visual-studio",
+    "name": "Visual Studio",
+    "icon": "/images/skills/tools/vs.svg"
+  },
+  {
+    "id": "visual-studio-code",
+    "name": "Visual Studio Code",
+    "icon": "/images/skills/tools/vscode.svg"
+  },
+  {
+    "id": "xunit",
+    "name": "xUnit",
+    "icon": "/images/skills/backend/xunit.svg"
+  }
+]

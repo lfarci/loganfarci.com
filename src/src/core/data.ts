@@ -2,7 +2,7 @@ import { Certification } from "@/types/certification";
 import { resolveDirectoryFromEnvironment } from "./environment";
 import { existsSync, readFileSync } from "fs";
 import { join } from "path";
-import { Experience, SkillCategory, Interest, Contact, Profile, Diploma } from "@/types";
+import { Experience, SkillCategory, Interest, Contact, Profile, Diploma, Technology, Skill } from "@/types";
 
 /**
  * Returns the path to the data directory based on the environment variable or a default value.
@@ -48,6 +48,12 @@ export const getExperiences = (): Experience[] => getObjectFromJsonFile<Experien
 export const getSkillCategories = (): SkillCategory[] => getObjectFromJsonFile<SkillCategory[]>("skills.json");
 
 /**
+ * Retrieves technologies from the JSON file.
+ * @returns {Technology[]} Array of technologies.
+ */
+export const getTechnologies = (): Technology[] => getObjectFromJsonFile<Technology[]>("technologies.json");
+
+/**
  * Retrieves interests from the JSON file.
  * @returns {Interest[]} Array of interests.
  */
@@ -70,3 +76,16 @@ export const getProfile = (): Profile => getObjectFromJsonFile<Profile>("profile
  * @returns {Diploma} The diploma data.
  */
 export const getDiploma = (): Diploma => getObjectFromJsonFile<Diploma>("education.json");
+
+/**
+ * Enriches skills with technology data
+ */
+export function getEnrichedSkills(skills: Skill[]): Array<{ technology: Technology | null; yearsOfExperience?: number }> {
+    const technologies = getTechnologies();
+    const techMap = new Map(technologies.map(t => [t.id, t]));
+    
+    return skills.map(skill => ({
+        technology: skill.technologyId ? (techMap.get(skill.technologyId) || null) : null,
+        yearsOfExperience: skill.yearsOfExperience
+    }));
+}
