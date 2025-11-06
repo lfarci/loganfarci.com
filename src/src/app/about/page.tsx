@@ -56,19 +56,19 @@ export default function About() {
                         >
                             <div className="flex flex-wrap gap-2 mt-2">
                                 {getEnrichedSkills(category.skills).map((enrichedSkill, skillIndex) => {
-                                    const tech = enrichedSkill.technology;
-                                    if (tech) {
+                                    const icon = enrichedSkill.icon;
+                                    const skill = enrichedSkill.skill;
+                                    if (icon) {
                                         return (
                                             <Tag
                                                 key={skillIndex}
-                                                imageSrc={tech.icon}
-                                                imageAlt={`${tech.name} icon`}
+                                                imageSrc={icon.icon}
+                                                imageAlt={`${icon.name} icon`}
                                             >
-                                                {tech.name}
+                                                {skill.name}
                                             </Tag>
                                         );
                                     } else {
-                                        const skill = category.skills[skillIndex];
                                         return (
                                             <Tag key={skillIndex}>
                                                 {skill.name}

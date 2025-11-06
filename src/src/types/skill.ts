@@ -1,5 +1,5 @@
 export interface Skill {
-    technologyId?: string;
-    name?: string;
+    name: string;
+    iconId?: string;
     yearsOfExperience?: number;
 }

@@ -2,7 +2,7 @@ import { Certification } from "@/types/certification";
 import { resolveDirectoryFromEnvironment } from "./environment";
 import { existsSync, readFileSync } from "fs";
 import { join } from "path";
-import { Experience, SkillCategory, Interest, Contact, Profile, Diploma, Technology, Skill } from "@/types";
+import { Experience, SkillCategory, Interest, Contact, Profile, Diploma, Icon, Skill } from "@/types";
 
 /**
  * Returns the path to the data directory based on the environment variable or a default value.
@@ -48,10 +48,10 @@ export const getExperiences = (): Experience[] => getObjectFromJsonFile<Experien
 export const getSkillCategories = (): SkillCategory[] => getObjectFromJsonFile<SkillCategory[]>("skills.json");
 
 /**
- * Retrieves technologies from the JSON file.
- * @returns {Technology[]} Array of technologies.
+ * Retrieves icons from the JSON file.
+ * @returns {Icon[]} Array of icons.
  */
-export const getTechnologies = (): Technology[] => getObjectFromJsonFile<Technology[]>("technologies.json");
+export const getIcons = (): Icon[] => getObjectFromJsonFile<Icon[]>("icons.json");
 
 /**
  * Retrieves interests from the JSON file.
@@ -78,14 +78,14 @@ export const getProfile = (): Profile => getObjectFromJsonFile<Profile>("profile
 export const getDiploma = (): Diploma => getObjectFromJsonFile<Diploma>("education.json");
 
 /**
- * Enriches skills with technology data
+ * Enriches skills with icon data
  */
-export function getEnrichedSkills(skills: Skill[]): Array<{ technology: Technology | null; yearsOfExperience?: number }> {
-    const technologies = getTechnologies();
-    const techMap = new Map(technologies.map(t => [t.id, t]));
+export function getEnrichedSkills(skills: Skill[]): Array<{ skill: Skill; icon: Icon | null }> {
+    const icons = getIcons();
+    const iconMap = new Map(icons.map(i => [i.id, i]));
     
     return skills.map(skill => ({
-        technology: skill.technologyId ? (techMap.get(skill.technologyId) || null) : null,
-        yearsOfExperience: skill.yearsOfExperience
+        skill: skill,
+        icon: skill.iconId ? (iconMap.get(skill.iconId) || null) : null
     }));
 }

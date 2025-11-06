@@ -3,40 +3,51 @@
     "name": "Backend Development",
     "skills": [
       {
-        "technologyId": "-net"
+        "name": ".NET",
+        "iconId": "-net"
       },
       {
-        "technologyId": "csharp"
+        "name": "C#",
+        "iconId": "csharp"
       },
       {
-        "technologyId": "xunit"
+        "name": "xUnit",
+        "iconId": "xunit"
       },
       {
-        "technologyId": "node-js"
+        "name": "Node.js",
+        "iconId": "node-js"
       },
       {
-        "technologyId": "typescript"
+        "name": "TypeScript",
+        "iconId": "typescript"
       },
       {
-        "technologyId": "spring-boot"
+        "name": "Spring Boot",
+        "iconId": "spring-boot"
       },
       {
-        "technologyId": "java"
+        "name": "Java",
+        "iconId": "java"
       },
       {
-        "technologyId": "sql-server"
+        "name": "SQL Server",
+        "iconId": "sql-server"
       },
       {
-        "technologyId": "mongodb"
+        "name": "MongoDB",
+        "iconId": "mongodb"
       },
       {
         "name": "REST API"
       },
       {
-        "technologyId": "oauth"
+        "name": "OAuth",
+        "iconId": "oauth"
       },
       {
-        "technologyId": "jwt"
+        "name": "JWT",
+        "iconId": "jwt"
       }
     ]
   },
@@ -44,40 +55,52 @@
     "name": "Cloud Computing",
     "skills": [
       {
-        "technologyId": "azure-app-service"
+        "name": "Azure App Service",
+        "iconId": "azure-app-service"
       },
       {
-        "technologyId": "azure-static-web-app"
+        "name": "Azure Static Web App",
+        "iconId": "azure-static-web-app"
       },
       {
-        "technologyId": "azure-functions"
+        "name": "Azure Functions",
+        "iconId": "azure-functions"
       },
       {
-        "technologyId": "azure-cosmos-db"
+        "name": "Azure Cosmos DB",
+        "iconId": "azure-cosmos-db"
       },
       {
-        "technologyId": "azure-sql-database"
+        "name": "Azure SQL Database",
+        "iconId": "azure-sql-database"
       },
       {
-        "technologyId": "azure-container-registry"
+        "name": "Azure Container Registry",
+        "iconId": "azure-container-registry"
       },
       {
-        "technologyId": "azure-container-instances"
+        "name": "Azure Container Instances",
+        "iconId": "azure-container-instances"
       },
       {
-        "technologyId": "azure-blob-storage"
+        "name": "Azure Blob Storage",
+        "iconId": "azure-blob-storage"
       },
       {
-        "technologyId": "azure-communication-services"
+        "name": "Azure Communication Services",
+        "iconId": "azure-communication-services"
       },
       {
-        "technologyId": "azure-monitor"
+        "name": "Azure Monitor",
+        "iconId": "azure-monitor"
       },
       {
-        "technologyId": "azure-key-vault"
+        "name": "Azure Key Vault",
+        "iconId": "azure-key-vault"
       },
       {
-        "technologyId": "azure-api-management"
+        "name": "Azure API Management",
+        "iconId": "azure-api-management"
       }
     ]
   },
@@ -85,34 +108,44 @@
     "name": "DevOps",
     "skills": [
       {
-        "technologyId": "docker"
+        "name": "Docker",
+        "iconId": "docker"
       },
       {
-        "technologyId": "kubernetes"
+        "name": "Kubernetes",
+        "iconId": "kubernetes"
       },
       {
-        "technologyId": "openshift"
+        "name": "OpenShift",
+        "iconId": "openshift"
       },
       {
-        "technologyId": "terraform"
+        "name": "Terraform",
+        "iconId": "terraform"
       },
       {
-        "technologyId": "bicep"
+        "name": "Bicep",
+        "iconId": "bicep"
       },
       {
-        "technologyId": "linux"
+        "name": "Linux",
+        "iconId": "linux"
       },
       {
-        "technologyId": "bash"
+        "name": "Bash",
+        "iconId": "bash"
       },
       {
-        "technologyId": "powershell"
+        "name": "PowerShell",
+        "iconId": "powershell"
       },
       {
-        "technologyId": "github"
+        "name": "GitHub",
+        "iconId": "github"
       },
       {
-        "technologyId": "azure-devops"
+        "name": "Azure DevOps",
+        "iconId": "azure-devops"
       }
     ]
   },
@@ -120,19 +153,23 @@
     "name": "Artificial Intelligence",
     "skills": [
       {
-        "technologyId": "github-copilot"
+        "name": "GitHub Copilot",
+        "iconId": "github-copilot"
       },
       {
-        "technologyId": "github-models"
+        "name": "GitHub Models",
+        "iconId": "github-models"
       },
       {
         "name": "Sementic Kernel"
       },
       {
-        "technologyId": "langchain"
+        "name": "LangChain",
+        "iconId": "langchain"
       },
       {
-        "technologyId": "azure-ai-foundry"
+        "name": "Azure AI Foundry",
+        "iconId": "azure-ai-foundry"
       }
     ]
   },
@@ -140,22 +177,28 @@
     "name": "Frontend Development",
     "skills": [
       {
-        "technologyId": "typescript"
+        "name": "TypeScript",
+        "iconId": "typescript"
       },
       {
-        "technologyId": "react"
+        "name": "React",
+        "iconId": "react"
       },
       {
-        "technologyId": "next-js"
+        "name": "Next.js",
+        "iconId": "next-js"
       },
       {
-        "technologyId": "angular"
+        "name": "Angular",
+        "iconId": "angular"
       },
       {
-        "technologyId": "blazor"
+        "name": "Blazor",
+        "iconId": "blazor"
       },
       {
-        "technologyId": "tailwind-css"
+        "name": "Tailwind CSS",
+        "iconId": "tailwind-css"
       }
     ]
   },
@@ -163,16 +206,19 @@
     "name": "Development Tools",
     "skills": [
       {
-        "technologyId": "visual-studio"
+        "name": "Visual Studio",
+        "iconId": "visual-studio"
       },
       {
-        "technologyId": "visual-studio-code"
+        "name": "Visual Studio Code",
+        "iconId": "visual-studio-code"
       },
       {
         "name": "Team Foundation Version Control"
       },
       {
-        "technologyId": "git"
+        "name": "Git",
+        "iconId": "git"
       }
     ]
   }
