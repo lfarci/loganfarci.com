@@ -112,17 +112,12 @@
   {
     "id": "github",
     "name": "GitHub",
-    "icon": "/images/skills/devops/github.svg"
+    "icon": "/images/skills/devops/github-mono.svg"
   },
   {
     "id": "github-copilot",
     "name": "GitHub Copilot",
-    "icon": "/images/skills/ai/copilot.svg"
-  },
-  {
-    "id": "github-models",
-    "name": "GitHub Models",
-    "icon": "/images/skills/devops/github.svg"
+    "icon": "/images/skills/ai/copilot-mono.svg"
   },
   {
     "id": "java",
@@ -142,7 +137,7 @@
   {
     "id": "langchain",
     "name": "LangChain",
-    "icon": "/images/skills/ai/langchain.svg"
+    "icon": "/images/skills/ai/langchain-mono.svg"
   },
   {
     "id": "linux",
@@ -152,7 +147,7 @@
   {
     "id": "mcp",
     "name": "MCP",
-    "icon": "/images/skills/ai/mcp.svg"
+    "icon": "/images/skills/ai/mcp-mono.svg"
   },
   {
     "id": "mongodb",
@@ -162,7 +157,7 @@
   {
     "id": "next-js",
     "name": "Next.js",
-    "icon": "/images/skills/frontend/nextjs.svg"
+    "icon": "/images/skills/frontend/nextjs-mono.svg"
   },
   {
     "id": "node-js",
@@ -227,6 +222,6 @@
   {
     "id": "xunit",
     "name": "xUnit",
-    "icon": "/images/skills/backend/xunit.svg"
+    "icon": "/images/skills/backend/xunit-mono.svg"
   }
 ]

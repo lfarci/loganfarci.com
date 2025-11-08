@@ -16,9 +16,16 @@ interface TagProps {
     children: React.ReactNode;
 }
 
-const TagIcon: React.FC<TagIconProps> = ({ src, alt }) => (
-    <Image src={src} alt={alt} width={16} height={16} className="rounded-xs mr-1.5" />
-);
+const TagIcon: React.FC<TagIconProps> = ({ src, alt }) => {
+    const imageClasses = [];
+
+    // Auto-detect monochrome icons by -mono suffix and apply dark inversion
+    if (src.includes("-mono")) {
+        imageClasses.push("filter", "dark:invert", "dark:brightness-125");
+    }
+
+    return <Image src={src} alt={alt} width={16} height={16} className={imageClasses.join(" ")} />;
+};
 
 const Tag: React.FC<TagProps> = ({ children, imageSrc = "", imageAlt = "" }) => {
     let startContent: React.ReactNode = undefined;
