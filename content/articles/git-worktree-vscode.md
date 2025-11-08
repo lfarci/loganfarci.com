@@ -3,7 +3,7 @@ title: "Efficient Git Worktree Usage in VS Code"
 description: "A focused guide on using Git worktrees within Visual Studio Code to streamline multi-branch workflows and boost productivity."
 publishedAt: "2025-08-12"
 featured: false
-tags: ["Git", "VS Code", "Worktree", "Productivity"]
+tags: ["Git", "Visual Studio Code"]
 author: "Logan Farci"
 coauthoredWithAgent: true
 ---

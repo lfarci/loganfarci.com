@@ -3,7 +3,7 @@ title: "GitHub MCP Server"
 description: "Short note about the GitHub MCP server and how it can be used to enhance your development workflow."
 publishedAt: "2025-07-18"
 featured: true
-tags: ["MCP", "AI", "GitHub", "Copilot"]
+tags: ["GitHub Copilot"]
 author: "Logan Farci"
 coauthoredWithAgent: true
 ---
