@@ -1,5 +1,5 @@
 export interface Skill {
     name: string;
+    iconId?: string;
     yearsOfExperience?: number;
-    icon?: string;
 }

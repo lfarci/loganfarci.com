@@ -3,10 +3,10 @@ import React from "react";
 import MarkdownSection from "@/components/shared/MarkdownSection";
 import SmallInfoCard, { SmallInfoCardProps } from "@/components/shared/cards/SmallInfoCard";
 import SmallInfoCardsGridSection from "@/components/shared/cards/SmallInfoCardsSection";
-import { Certification, Skill, SkillCategory } from "@/types";
+import { Certification, SkillCategory } from "@/types";
 import { MarkdownPreview } from "@/components/shared/preview";
 import Tag from "@/components/shared/Tag";
-import { getCertifications, getDiploma, getExperiences, getProfile, getSkillCategories } from "@/core/data";
+import { getCertifications, getDiploma, getExperiences, getProfile, getSkillCategories, attemptToLoadIcons } from "@/core/data";
 
 const formatMonthYear = (date: Date | string) => {
     const d = typeof date === "string" ? new Date(date) : date;
@@ -55,15 +55,27 @@ export default function About() {
                             details={[]}
                         >
                             <div className="flex flex-wrap gap-2 mt-2">
-                                {category.skills.map((skill: Skill, skillIndex) => (
-                                    <Tag
-                                        key={skillIndex}
-                                        imageSrc={skill.icon || undefined}
-                                        imageAlt={skill.icon ? `${skill.name} icon` : undefined}
-                                    >
-                                        {skill.name}
-                                    </Tag>
-                                ))}
+                                {attemptToLoadIcons(category.skills).map((enrichedSkill, skillIndex) => {
+                                    const icon = enrichedSkill.icon;
+                                    const skill = enrichedSkill.skill;
+                                    if (icon) {
+                                        return (
+                                            <Tag
+                                                key={skillIndex}
+                                                imageSrc={icon.icon}
+                                                imageAlt={`${icon.name} icon`}
+                                            >
+                                                {skill.name}
+                                            </Tag>
+                                        );
+                                    } else {
+                                        return (
+                                            <Tag key={skillIndex}>
+                                                {skill.name}
+                                            </Tag>
+                                        );
+                                    }
+                                })}
                             </div>
                         </SmallInfoCard>
                     ))}

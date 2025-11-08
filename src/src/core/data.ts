@@ -2,7 +2,7 @@ import { Certification } from "@/types/certification";
 import { resolveDirectoryFromEnvironment } from "./environment";
 import { existsSync, readFileSync } from "fs";
 import { join } from "path";
-import { Experience, SkillCategory, Interest, Contact, Profile, Diploma } from "@/types";
+import { Experience, SkillCategory, Interest, Contact, Profile, Diploma, Icon, Skill } from "@/types";
 
 /**
  * Returns the path to the data directory based on the environment variable or a default value.
@@ -48,6 +48,12 @@ export const getExperiences = (): Experience[] => getObjectFromJsonFile<Experien
 export const getSkillCategories = (): SkillCategory[] => getObjectFromJsonFile<SkillCategory[]>("skills.json");
 
 /**
+ * Retrieves icons from the JSON file.
+ * @returns {Icon[]} Array of icons.
+ */
+export const getIcons = (): Icon[] => getObjectFromJsonFile<Icon[]>("icons.json");
+
+/**
  * Retrieves interests from the JSON file.
  * @returns {Interest[]} Array of interests.
  */
@@ -70,3 +76,16 @@ export const getProfile = (): Profile => getObjectFromJsonFile<Profile>("profile
  * @returns {Diploma} The diploma data.
  */
 export const getDiploma = (): Diploma => getObjectFromJsonFile<Diploma>("education.json");
+
+/**
+ * Enriches skills with icon data
+ */
+export function attemptToLoadIcons(skills: Skill[]): Array<{ skill: Skill; icon: Icon | null }> {
+    const icons = getIcons();
+    const iconMap = new Map(icons.map(i => [i.id, i]));
+    
+    return skills.map(skill => ({
+        skill: skill,
+        icon: skill.iconId ? (iconMap.get(skill.iconId) || null) : null
+    }));
+}
