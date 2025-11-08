@@ -80,7 +80,7 @@ export const getDiploma = (): Diploma => getObjectFromJsonFile<Diploma>("educati
 /**
  * Enriches skills with icon data
  */
-export function getEnrichedSkills(skills: Skill[]): Array<{ skill: Skill; icon: Icon | null }> {
+export function attemptToLoadIcons(skills: Skill[]): Array<{ skill: Skill; icon: Icon | null }> {
     const icons = getIcons();
     const iconMap = new Map(icons.map(i => [i.id, i]));
     

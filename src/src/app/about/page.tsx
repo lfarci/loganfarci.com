@@ -6,7 +6,7 @@ import SmallInfoCardsGridSection from "@/components/shared/cards/SmallInfoCardsS
 import { Certification, SkillCategory } from "@/types";
 import { MarkdownPreview } from "@/components/shared/preview";
 import Tag from "@/components/shared/Tag";
-import { getCertifications, getDiploma, getExperiences, getProfile, getSkillCategories, getEnrichedSkills } from "@/core/data";
+import { getCertifications, getDiploma, getExperiences, getProfile, getSkillCategories, attemptToLoadIcons } from "@/core/data";
 
 const formatMonthYear = (date: Date | string) => {
     const d = typeof date === "string" ? new Date(date) : date;
@@ -55,7 +55,7 @@ export default function About() {
                             details={[]}
                         >
                             <div className="flex flex-wrap gap-2 mt-2">
-                                {getEnrichedSkills(category.skills).map((enrichedSkill, skillIndex) => {
+                                {attemptToLoadIcons(category.skills).map((enrichedSkill, skillIndex) => {
                                     const icon = enrichedSkill.icon;
                                     const skill = enrichedSkill.skill;
                                     if (icon) {
