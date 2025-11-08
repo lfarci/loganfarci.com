@@ -150,6 +150,11 @@
     "icon": "/images/skills/devops/linux.svg"
   },
   {
+    "id": "mcp",
+    "name": "MCP",
+    "icon": "/images/skills/ai/mcp.svg"
+  },
+  {
     "id": "mongodb",
     "name": "MongoDB",
     "icon": "/images/skills/backend/mongodb.svg"
