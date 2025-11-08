@@ -1,5 +1,3 @@
-"use client";
-
 import Link from "next/link";
 import { Article } from "@/types/article";
 import Card from "@/components/shared/cards/Card";
