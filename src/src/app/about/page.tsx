@@ -44,7 +44,12 @@ export default function About() {
 
     return (
         <div>
-            <MarkdownSection heading="About Me" content={profile.description} />
+            <MarkdownSection 
+                heading="About Me" 
+                content={profile.description}
+                imageSrc={profile.avatar.src}
+                imageAlt={profile.avatar.alt}
+            />
             <Section heading="Skills">
                 <div className="flex flex-col gap-4">
                     {skillCategories.map((category: SkillCategory) => (
