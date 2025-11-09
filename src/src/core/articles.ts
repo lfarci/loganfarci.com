@@ -1,6 +1,6 @@
 import path from "path";
 import { resolveDirectoryFromEnvironment } from "./environment";
-import { listFilesWithExtension } from "../../core/files";
+import { listFilesWithExtension } from "./files";
 import matter from "gray-matter";
 import { Article } from "@/types";
 import fs from "fs";
