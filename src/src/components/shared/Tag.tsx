@@ -17,9 +17,8 @@ interface TagProps {
 }
 
 const TagIcon: React.FC<TagIconProps> = ({ src, alt }) => {
-    const imageClasses = [];
+    const imageClasses = ["mr-1"];
 
-    // Auto-detect monochrome icons by -mono suffix and apply dark inversion
     if (src.includes("-mono")) {
         imageClasses.push("filter", "dark:invert", "dark:brightness-125");
     }
