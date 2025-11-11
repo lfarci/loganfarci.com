@@ -50,7 +50,33 @@ export default function About() {
                 imageSrc={profile.avatar.src}
                 imageAlt={profile.avatar.alt}
             />
-            <Section heading="Skills">
+            <Section heading="Experience">
+                <div className="flex flex-col gap-4">
+                    {experiences.map((experience, index) => (
+                        <SmallInfoCard
+                            key={index}
+                            image={experience.company.logo}
+                            heading={experience.name}
+                            subtitle={`${experience.company.name} (${experience.type})`}
+                            imageSize="small"
+                            imagePosition="start"
+                            details={[
+                                experience.company.location,
+                                formatExperiencePeriod(experience.start, experience.end),
+                            ]}
+                        >
+                            <MarkdownPreview>{experience.description}</MarkdownPreview>
+                        </SmallInfoCard>
+                    ))}
+                </div>
+            </Section>
+            <Section heading="Education">
+                <SmallInfoCard {...bachelor} imageSize="small" imagePosition="start">
+                    <MarkdownPreview>{diploma.description}</MarkdownPreview>
+                </SmallInfoCard>
+            </Section>
+            <SmallInfoCardsGridSection heading="Certifications" items={certifications} />
+                        <Section heading="Skills">
                 <div className="flex flex-col gap-4">
                     {skillCategories.map((category: SkillCategory) => (
                         <SmallInfoCard
@@ -86,32 +112,6 @@ export default function About() {
                     ))}
                 </div>
             </Section>
-            <Section heading="Experience">
-                <div className="flex flex-col gap-4">
-                    {experiences.map((experience, index) => (
-                        <SmallInfoCard
-                            key={index}
-                            image={experience.company.logo}
-                            heading={experience.name}
-                            subtitle={`${experience.company.name} (${experience.type})`}
-                            imageSize="small"
-                            imagePosition="start"
-                            details={[
-                                experience.company.location,
-                                formatExperiencePeriod(experience.start, experience.end),
-                            ]}
-                        >
-                            <MarkdownPreview>{experience.description}</MarkdownPreview>
-                        </SmallInfoCard>
-                    ))}
-                </div>
-            </Section>
-            <Section heading="Education">
-                <SmallInfoCard {...bachelor} imageSize="small" imagePosition="start">
-                    <MarkdownPreview>{diploma.description}</MarkdownPreview>
-                </SmallInfoCard>
-            </Section>
-            <SmallInfoCardsGridSection heading="Certifications" items={certifications} />
         </div>
     );
 }
