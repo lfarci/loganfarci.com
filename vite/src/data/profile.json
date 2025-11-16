@@ -1,0 +1,11 @@
+{
+  "role": "Azure Associate Developer delivering cloud-native solutions that scale.",
+  "introduction": "I'm a Software Engineer with a passion for building scalable, cloud-native solutions using C#, .NET, and Azure. With over three years of experience across Belgium’s public, banking, and energy sectors, I focus on creating clean, reliable systems that drive real impact.",
+  "description": "I’m a Software Engineer with five years of experience delivering scalable cloud native solutions across Belgium’s public, banking, and energy sectors. I focus on building systems that are technically robust and aligned with business needs. I specialize in **GitHub**, **Azure**, **C#**, and **.NET**, with experience spanning backend and frontend development, DevOps, and cloud infrastructure. Certified as an **Azure Developer Associate** and **Professional Scrum Developer**, I’m exploring Terraform, Kubernetes, and AI driven tools to enhance software workflows.\n\nI thrive in collaborative teams, fostering knowledge sharing and trust. Recently, I’ve begun mentoring junior developers, supporting their growth while learning from their fresh perspectives. I emphasize peer reviews, pair programming, testing, and documentation to ensure solutions are reliable and maintainable. My career is moving toward DevOps and cloud engineering, with a focus on GitHub, Azure, and Terraform, while staying engaged in full stack development and exploring AI in .NET and cloud applications. Adaptability and continuous learning drive me to stay ahead of emerging trends in software engineering.\n\nOutside work, I enjoy exploring Europe, blending Belgian, Italian, and Colombian cultures at home, and cooking, with my carbonara becoming a house specialty.",
+  "avatar": {
+    "src": "/images/avatar.avif",
+    "alt": "Picture of the author: Logan Farci",
+    "width": 512,
+    "height": 512
+  }
+}

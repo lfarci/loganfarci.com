@@ -1,0 +1,6 @@
+[
+  { "name": "Let's connect on LinkedIn", "icon": "linkedin", "url": "https://www.linkedin.com/in/lfarci/" },
+  { "name": "Explore my GitHub", "icon": "github", "url": "https://github.com/lfarci" },
+  { "name": "Follow me on Bluesky", "icon": "bluesky", "url": "https://bsky.app/profile/lfarci.bsky.social" },
+  { "name": "Send me an email", "icon": "email", "url": "mailto:logan.farci@outlook.be" }
+]
