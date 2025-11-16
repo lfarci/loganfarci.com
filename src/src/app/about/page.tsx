@@ -5,8 +5,9 @@ import SmallInfoCard, { SmallInfoCardProps } from "@/components/shared/cards/Sma
 import SmallInfoCardsGridSection from "@/components/shared/cards/SmallInfoCardsSection";
 import { Certification, SkillCategory } from "@/types";
 import { MarkdownPreview } from "@/components/shared/preview";
-import { getCertifications, getDiploma, getExperiences, getProfile, getSkillCategories, attemptToLoadIcons } from "@/core/data";
+import { getCertifications, getDiploma, getExperiences, getProfile, getSkillCategories } from "@/core/data";
 import IconTag from "@/components/shared/IconTag";
+import { Text } from "@/components/shared/typography";
 
 const formatMonthYear = (date: Date | string) => {
     const d = typeof date === "string" ? new Date(date) : date;
@@ -83,9 +84,11 @@ export default function About() {
                             key={category.name}
                             heading={category.name}
                             subtitle={`${category.skills.length} skills`}
+                            flex="col"
                             details={[]}
                         >
-                            <div className="flex flex-wrap gap-2 mt-2">
+                            <Text>{category.description}</Text>
+                            <div className="flex flex-wrap gap-2 mt-6">
                                 {category.skills.map((skill) => <IconTag key={skill.name}>{skill.name}</IconTag>)}
                             </div>
                         </SmallInfoCard>
