@@ -1,16 +1,10 @@
+import LayoutWrapper from '@/components/LayoutWrapper';
+import { Providers } from '@/components/Providers';
 import React from 'react';
-import {Outlet, Link} from 'react-router-dom';
+import {Outlet} from 'react-router-dom';
 
 const Layout: React.FC = () => {
-  return <div>
-      <nav>
-        <Link to="/">Home</Link>
-        <Link to="/about">About</Link>
-      </nav>
-      <main>
-        <Outlet />
-      </main>
-    </div>;
+  return <Providers><LayoutWrapper><Outlet /></LayoutWrapper></Providers>;
 };
 
 export default Layout;

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Navbar, NavbarBrand, NavbarContent, NavbarMenu, NavbarMenuItem, NavbarMenuToggle } from "@heroui/react";
-import NavBarEntry from "@/components/shared/NavBarEntry";
-import ThemeToggle from "@/components/shared/ThemeToggle";
+import NavBarEntry from "@/components/NavBarEntry";
+import ThemeToggle from "@/components/ThemeToggle";
 
 interface NavigationBarProps {
     title: string;
