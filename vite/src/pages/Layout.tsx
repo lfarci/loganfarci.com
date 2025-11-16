@@ -2,8 +2,7 @@ import React from 'react';
 import {Outlet, Link} from 'react-router-dom';
 
 const Layout: React.FC = () => {
-  return (
-    <div>
+  return <div>
       <nav>
         <Link to="/">Home</Link>
         <Link to="/about">About</Link>
@@ -11,8 +10,7 @@ const Layout: React.FC = () => {
       <main>
         <Outlet />
       </main>
-    </div>
-  );
+    </div>;
 };
 
 export default Layout;

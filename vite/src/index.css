@@ -1,1 +1,14 @@
 @import "tailwindcss";
+@import "@fontsource/manrope";
+@import "@fontsource/noto-sans";
+@import "@fontsource/reddit-mono";
+
+:root {
+  --font-manrope: 'Manrope Variable', Arial, sans-serif;
+  --font-noto-sans: 'Noto Sans Variable', Arial, sans-serif;
+  --font-reddit-mono: 'Reddit Mono Variable', monospace;
+}
+
+body {
+  font-family: var(--font-manrope);
+}
