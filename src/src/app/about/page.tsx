@@ -5,8 +5,8 @@ import SmallInfoCard, { SmallInfoCardProps } from "@/components/shared/cards/Sma
 import SmallInfoCardsGridSection from "@/components/shared/cards/SmallInfoCardsSection";
 import { Certification, SkillCategory } from "@/types";
 import { MarkdownPreview } from "@/components/shared/preview";
-import Tag from "@/components/shared/Tag";
 import { getCertifications, getDiploma, getExperiences, getProfile, getSkillCategories, attemptToLoadIcons } from "@/core/data";
+import IconTag from "@/components/shared/IconTag";
 
 const formatMonthYear = (date: Date | string) => {
     const d = typeof date === "string" ? new Date(date) : date;
@@ -76,7 +76,7 @@ export default function About() {
                 </SmallInfoCard>
             </Section>
             <SmallInfoCardsGridSection heading="Certifications" items={certifications} />
-                        <Section heading="Skills">
+            <Section heading="Skills">
                 <div className="flex flex-col gap-4">
                     {skillCategories.map((category: SkillCategory) => (
                         <SmallInfoCard
@@ -86,27 +86,7 @@ export default function About() {
                             details={[]}
                         >
                             <div className="flex flex-wrap gap-2 mt-2">
-                                {attemptToLoadIcons(category.skills).map((enrichedSkill, skillIndex) => {
-                                    const icon = enrichedSkill.icon;
-                                    const skill = enrichedSkill.skill;
-                                    if (icon) {
-                                        return (
-                                            <Tag
-                                                key={skillIndex}
-                                                imageSrc={icon.icon}
-                                                imageAlt={`${icon.name} icon`}
-                                            >
-                                                {skill.name}
-                                            </Tag>
-                                        );
-                                    } else {
-                                        return (
-                                            <Tag key={skillIndex}>
-                                                {skill.name}
-                                            </Tag>
-                                        );
-                                    }
-                                })}
+                                {category.skills.map((skill) => <IconTag key={skill.name}>{skill.name}</IconTag>)}
                             </div>
                         </SmallInfoCard>
                     ))}
