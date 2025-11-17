@@ -1,0 +1,13 @@
+.commandError {
+    color: var(--color-error);
+}
+
+.terminal {
+    background-color: var(--color-surface);
+    color: var(--color-text-primary);
+    padding: 10px;
+    height: 100vh;
+    overflow-y: auto;
+    font-family: var(--font-reddit-mono), monospace;
+    border: 1px solid var(--color-border);
+}

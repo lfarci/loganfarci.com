@@ -8,6 +8,8 @@ import {
 import Layout from './pages/Layout'
 import Home from './pages/Home'
 import About from './pages/About'
+import Articles from './pages/Articles'
+import ArticlePage from './pages/Article'
 
 const router = createBrowserRouter([
   {
@@ -16,6 +18,8 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Home /> },
       { path: 'about', element: <About /> },
+      { path: 'articles', element: <Articles /> },
+      { path: 'articles/:slug', element: <ArticlePage /> },
     ],
   },
 ])

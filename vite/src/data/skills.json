@@ -1,0 +1,231 @@
+[
+  {
+    "name": "Backend Development",
+    "description": "Focused on building scalable backend systems and developer tooling for Azure. Experienced in designing robust APIs and services using ASP.NET or other modern technology stacks to deliver reliable, cloud-ready solutions.",
+    "skills": [
+      {
+        "name": ".NET",
+        "iconId": "-net"
+      },
+      {
+        "name": "C#",
+        "iconId": "csharp"
+      },
+      {
+        "name": "xUnit",
+        "iconId": "xunit"
+      },
+      {
+        "name": "Node.js",
+        "iconId": "node-js"
+      },
+      {
+        "name": "TypeScript",
+        "iconId": "typescript"
+      },
+      {
+        "name": "Spring Boot",
+        "iconId": "spring-boot"
+      },
+      {
+        "name": "Java",
+        "iconId": "java"
+      },
+      {
+        "name": "SQL Server",
+        "iconId": "sql-server"
+      },
+      {
+        "name": "MongoDB",
+        "iconId": "mongodb"
+      },
+      {
+        "name": "REST API"
+      },
+      {
+        "name": "OAuth",
+        "iconId": "oauth"
+      },
+      {
+        "name": "JWT",
+        "iconId": "jwt"
+      }
+    ]
+  },
+  {
+    "name": "Cloud Computing",
+    "description": "Experienced in designing, deploying, and managing scalable solutions on Microsoft Azure. Skilled in leveraging Azure services to build resilient cloud architectures, automate deployments, and deliver high-performing, maintainable applications.",
+    "skills": [
+      {
+        "name": "Azure App Service",
+        "iconId": "azure-app-service"
+      },
+      {
+        "name": "Azure Static Web App",
+        "iconId": "azure-static-web-app"
+      },
+      {
+        "name": "Azure Functions",
+        "iconId": "azure-functions"
+      },
+      {
+        "name": "Azure Cosmos DB",
+        "iconId": "azure-cosmos-db"
+      },
+      {
+        "name": "Azure SQL Database",
+        "iconId": "azure-sql-database"
+      },
+      {
+        "name": "Azure Container Registry",
+        "iconId": "azure-container-registry"
+      },
+      {
+        "name": "Azure Container Instances",
+        "iconId": "azure-container-instances"
+      },
+      {
+        "name": "Azure Blob Storage",
+        "iconId": "azure-blob-storage"
+      },
+      {
+        "name": "Azure Communication Services",
+        "iconId": "azure-communication-services"
+      },
+      {
+        "name": "Azure Monitor",
+        "iconId": "azure-monitor"
+      },
+      {
+        "name": "Azure Key Vault",
+        "iconId": "azure-key-vault"
+      },
+      {
+        "name": "Azure API Management",
+        "iconId": "azure-api-management"
+      }
+    ]
+  },
+  {
+    "name": "DevOps",
+    "description": "Focused on streamlining development and delivery through automated pipelines and infrastructure management. Experienced in implementing CI/CD, containerization, and monitoring practices to ensure reliable, efficient deployment on Azure.",
+    "skills": [
+      {
+        "name": "Docker",
+        "iconId": "docker"
+      },
+      {
+        "name": "Kubernetes",
+        "iconId": "kubernetes"
+      },
+      {
+        "name": "OpenShift",
+        "iconId": "openshift"
+      },
+      {
+        "name": "Terraform",
+        "iconId": "terraform"
+      },
+      {
+        "name": "Bicep",
+        "iconId": "bicep"
+      },
+      {
+        "name": "Linux",
+        "iconId": "linux"
+      },
+      {
+        "name": "Bash",
+        "iconId": "bash"
+      },
+      {
+        "name": "PowerShell",
+        "iconId": "powershell"
+      },
+      {
+        "name": "GitHub",
+        "iconId": "github"
+      },
+      {
+        "name": "Azure DevOps",
+        "iconId": "azure-devops"
+      }
+    ]
+  },
+  {
+    "name": "Artificial Intelligence",
+    "description": "Explores the integration of AI into applications to enhance developer workflows and user experiences. Experienced in building intelligent solutions using Azure AI services and modern frameworks for natural language processing and automation.",
+    "skills": [
+      {
+        "name": "GitHub Copilot",
+        "iconId": "github-copilot"
+      },
+      {
+        "name": "GitHub Models",
+        "iconId": "github"
+      },
+      {
+        "name": "Sementic Kernel"
+      },
+      {
+        "name": "LangChain",
+        "iconId": "langchain"
+      },
+      {
+        "name": "Azure AI Foundry",
+        "iconId": "azure-ai-foundry"
+      }
+    ]
+  },
+  {
+    "name": "Frontend Development",
+    "description": "Builds modern, responsive interfaces that connect seamlessly with cloud-powered backends. Focused on creating efficient, maintainable front-end solutions using contemporary frameworks and design systems to deliver clear, intuitive user experiences.",
+    "skills": [
+      {
+        "name": "TypeScript",
+        "iconId": "typescript"
+      },
+      {
+        "name": "React",
+        "iconId": "react"
+      },
+      {
+        "name": "Next.js",
+        "iconId": "next-js"
+      },
+      {
+        "name": "Angular",
+        "iconId": "angular"
+      },
+      {
+        "name": "Blazor",
+        "iconId": "blazor"
+      },
+      {
+        "name": "Tailwind CSS",
+        "iconId": "tailwind-css"
+      }
+    ]
+  },
+  {
+    "name": "Development Tools",
+    "description": "Utilizes a comprehensive suite of development tools to enhance productivity and streamline the software development lifecycle. Proficient in IDEs, version control systems, and collaboration platforms to support efficient coding, testing, and deployment processes.",
+    "skills": [
+      {
+        "name": "Visual Studio",
+        "iconId": "visual-studio"
+      },
+      {
+        "name": "Visual Studio Code",
+        "iconId": "visual-studio-code"
+      },
+      {
+        "name": "Team Foundation Version Control"
+      },
+      {
+        "name": "Git",
+        "iconId": "git"
+      }
+    ]
+  }
+]
