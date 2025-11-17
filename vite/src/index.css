@@ -1,13 +1,9 @@
 @import 'tailwindcss';
+@import '@fontsource/manrope';
+@import '@fontsource/noto-sans';
+@import '@fontsource/reddit-mono';
 
-@layer theme, base, components, utilities;
-
-/* Note: Adjust the path to hero.ts based on its actual location */
-@plugin './styles/hero.ts';
-
-/* This line is crucial for Tailwind v4 to scan HeroUI's theme files */
-/* Note: Adjust the path if your node_modules directory is not at the project root */
-@source '../../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}';
+@layer base, components, utilities;
 
 /*
   The default border color has changed to `currentcolor` in Tailwind CSS v4,
@@ -30,43 +26,6 @@
     color: var(--color-foreground);
     background: var(--color-background);
   }
-}
-
-/* Base theme configuration using Tailwind v4 @theme directive */
-@theme {
-    /* Core colors */
-    --color-background: oklch(100% 0 0); /* white */
-    --color-foreground: oklch(13% 0.028 261.692); /* gray-950 */
-    --color-primary: oklch(62.3% 0.214 259.815); /* blue-500 */
-    --color-primary-hover: oklch(54.6% 0.245 262.881); /* blue-600 */
-    --color-primary-light: oklch(97% 0.014 254.604); /* blue-50 */
-    --color-secondary: oklch(55.1% 0.027 264.364); /* gray-500 */
-    --color-secondary-hover: oklch(44.6% 0.03 256.802); /* gray-600 */
-    --color-accent: oklch(62.3% 0.214 259.815); /* Same as primary */
-    --color-accent-hover: oklch(54.6% 0.245 262.881); /* Same as primary-hover */
-    
-    /* Text semantic colors */
-    --color-text-primary: oklch(27.8% 0.033 256.848); /* gray-800 */
-    --color-text-secondary: oklch(44.6% 0.03 256.802); /* gray-600 */
-    --color-text-tertiary: oklch(55.1% 0.027 264.364); /* gray-500 */
-    --color-text-muted: oklch(70.7% 0.022 261.325); /* gray-400 */
-    --color-text-inverse: oklch(100% 0 0); /* white */
-    
-    /* Border semantic colors */
-    --color-border: oklch(87.2% 0.01 258.338); /* gray-300 */
-    --color-border-light: oklch(92.8% 0.006 264.531); /* gray-200 */
-    --color-border-strong: oklch(70.7% 0.022 261.325); /* gray-400 */
-    
-    /* Surface/background colors */
-    --color-surface: oklch(100% 0 0); /* white */
-    --color-surface-elevated: oklch(98.5% 0.002 247.839); /* gray-50 */
-    --color-surface-hover: oklch(96.7% 0.003 264.542); /* gray-100 */
-    
-    /* Status colors */
-    --color-success: oklch(69.6% 0.17 162.48); /* emerald-500 */
-    --color-warning: oklch(76.9% 0.188 70.08); /* amber-500 */
-    --color-error: oklch(63.7% 0.237 25.331); /* red-500 */
-    --color-info: oklch(62.3% 0.214 259.815); /* blue-500 */
 }
 
 /* Dark mode styles when .dark class is applied */
@@ -117,9 +76,46 @@
 :root {
     --background: var(--color-background);
     --foreground: var(--color-foreground);
-    --font-manrope: 'Manrope Variable', Arial, sans-serif;
-    --font-noto-sans: 'Noto Sans Variable', Arial, sans-serif;
-    --font-reddit-mono: 'Reddit Mono Variable', monospace;
+    --font-manrope: 'Manrope', Arial, sans-serif;
+    --font-noto-sans: 'Noto Sans', Arial, sans-serif;
+    --font-reddit-mono: 'Reddit Mono', monospace;
+    /* Tailwind expects --font-sans / --font-mono for default utilities */
+    --font-sans: var(--font-manrope);
+    --font-mono: var(--font-reddit-mono);
+
+    /* Core colors */
+    --color-background: oklch(100% 0 0); /* white */
+    --color-foreground: oklch(13% 0.028 261.692); /* gray-950 */
+    --color-primary: oklch(62.3% 0.214 259.815); /* blue-500 */
+    --color-primary-hover: oklch(54.6% 0.245 262.881); /* blue-600 */
+    --color-primary-light: oklch(97% 0.014 254.604); /* blue-50 */
+    --color-secondary: oklch(55.1% 0.027 264.364); /* gray-500 */
+    --color-secondary-hover: oklch(44.6% 0.03 256.802); /* gray-600 */
+    --color-accent: oklch(62.3% 0.214 259.815); /* Same as primary */
+    --color-accent-hover: oklch(54.6% 0.245 262.881); /* Same as primary-hover */
+    
+    /* Text semantic colors */
+    --color-text-primary: oklch(27.8% 0.033 256.848); /* gray-800 */
+    --color-text-secondary: oklch(44.6% 0.03 256.802); /* gray-600 */
+    --color-text-tertiary: oklch(55.1% 0.027 264.364); /* gray-500 */
+    --color-text-muted: oklch(70.7% 0.022 261.325); /* gray-400 */
+    --color-text-inverse: oklch(100% 0 0); /* white */
+    
+    /* Border semantic colors */
+    --color-border: oklch(87.2% 0.01 258.338); /* gray-300 */
+    --color-border-light: oklch(92.8% 0.006 264.531); /* gray-200 */
+    --color-border-strong: oklch(70.7% 0.022 261.325); /* gray-400 */
+    
+    /* Surface/background colors */
+    --color-surface: oklch(100% 0 0); /* white */
+    --color-surface-elevated: oklch(98.5% 0.002 247.839); /* gray-50 */
+    --color-surface-hover: oklch(96.7% 0.003 264.542); /* gray-100 */
+    
+    /* Status colors */
+    --color-success: oklch(69.6% 0.17 162.48); /* emerald-500 */
+    --color-warning: oklch(76.9% 0.188 70.08); /* amber-500 */
+    --color-error: oklch(63.7% 0.237 25.331); /* red-500 */
+    --color-info: oklch(62.3% 0.214 259.815); /* blue-500 */
 }
 
 .dark {

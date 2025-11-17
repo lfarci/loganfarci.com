@@ -9,6 +9,10 @@ export default {
     ],
     theme: { 
         extend: { 
+            fontFamily: {
+                sans: ['var(--font-sans)'],
+                mono: ['var(--font-mono)'],
+            },
             colors: { 
                 // Next.js compatibility
                 background: "var(--color-background)",
