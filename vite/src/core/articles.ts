@@ -1,9 +1,9 @@
 import matter from "gray-matter";
 import { Article } from "@/types";
 
-const articles = Object.entries(import.meta.glob("/content/articles/*.md", { query: '?raw', import: 'default' })).map(([path, content]) => {
+const articles = Object.entries(import.meta.glob("/content/articles/*.md", { as: "raw", eager: true })).map(([path, content]) => {
     const slug = path.split("/").pop()?.replace(".md", "") ?? "";
-    const { data } = matter(content);
+    const { data, content: mdContent } = matter(content);
     return {
         slug,
         title: data.title || "",
@@ -13,7 +13,7 @@ const articles = Object.entries(import.meta.glob("/content/articles/*.md", { que
         tags: data.tags || [],
         author: data.author || "",
         coauthoredWithAgent: data.coauthoredWithAgent || false,
-        content,
+        content: mdContent,
     };
 });
 

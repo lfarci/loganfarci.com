@@ -1,5 +1,14 @@
 @import 'tailwindcss';
 
+@layer theme, base, components, utilities;
+
+/* Note: Adjust the path to hero.ts based on its actual location */
+@plugin './styles/hero.ts';
+
+/* This line is crucial for Tailwind v4 to scan HeroUI's theme files */
+/* Note: Adjust the path if your node_modules directory is not at the project root */
+@source '../../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}';
+
 /*
   The default border color has changed to `currentcolor` in Tailwind CSS v4,
   so we've added these compatibility styles to make sure everything still
