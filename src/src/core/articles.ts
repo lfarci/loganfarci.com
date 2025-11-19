@@ -5,6 +5,20 @@ import matter from "gray-matter";
 import { Article } from "@/types";
 import fs from "fs";
 
+type ArticleFrontmatter = {
+    title?: string;
+    description?: string;
+    publishedAt?: string;
+    featured?: boolean;
+    tags?: string[];
+    author?: string;
+    coauthoredWithAgent?: boolean;
+};
+
+const isArticleFrontmatter = (value: unknown): value is ArticleFrontmatter => {
+    return typeof value === "object" && value !== null;
+};
+
 const getArticlesDirectoryPath = (): string => {
     return resolveDirectoryFromEnvironment("ARTICLES_DIRECTORY", "content/articles");
 };
@@ -21,16 +35,19 @@ export const getArticleBySlug = (slug: string): Article | null => {
         return null;
     }
     const article = fs.readFileSync(articlePath, "utf8");
-    const { data, content } = matter(article);
+    const parsed = matter(article);
+    const rawData: unknown = parsed.data;
+    const metadata: ArticleFrontmatter = isArticleFrontmatter(rawData) ? rawData : {};
+    const { content } = parsed;
     return {
         slug,
-        title: data.title || "",
-        description: data.description || "",
-        publishedAt: data.publishedAt || "",
-        featured: data.featured || false,
-        tags: data.tags || [],
-        author: data.author || "",
-        coauthoredWithAgent: data.coauthoredWithAgent || false,
+        title: metadata.title ?? "",
+        description: metadata.description ?? "",
+        publishedAt: metadata.publishedAt ?? "",
+        featured: metadata.featured ?? false,
+        tags: metadata.tags ?? [],
+        author: metadata.author ?? "",
+        coauthoredWithAgent: metadata.coauthoredWithAgent ?? false,
         content,
     };
 };

@@ -7,8 +7,12 @@ import { Divider } from "@heroui/react";
 import ClientTooltip from "@/components/shared/ClientTooltip";
 import IconTag from "@/components/shared/IconTag";
 
+interface ArticlePageParams {
+    slug: string;
+}
+
 interface ArticlePageProps {
-    params: Promise<{ slug: string }>;
+    params: ArticlePageParams;
 }
 
 interface ArticleMetaProps {
@@ -48,13 +52,13 @@ function ArticleMeta({ publishedAt, author, coauthoredWithAgent, tags }: Article
     );
 }
 
-export async function generateStaticParams() {
+export function generateStaticParams() {
     const slugs = getArticleSlugs();
     return slugs.map((slug) => ({ slug }));
 }
 
-export default async function ArticlePage({ params }: ArticlePageProps) {
-    const { slug } = await params;
+export default function ArticlePage({ params }: ArticlePageProps) {
+    const { slug } = params;
     const article = getArticleBySlug(slug);
 
     if (!article) {
