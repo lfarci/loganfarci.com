@@ -1,9 +1,9 @@
 ---
-title: "Setting Up Azure VMs with Entra ID SSH Authentication"
+title: "Setup of Entra ID Authentication from a Self-Hosted Runner to a Linux VM"
 description: "Automate Azure VM deployment with passwordless SSH authentication using Entra ID, Terraform, and GitHub Actions OIDC."
 publishedAt: "2025-11-25"
-featured: true
-tags: ["Azure", "SSH", "Entra ID", "Terraform", "GitHub Actions"]
+featured: false
+tags: ["Terraform", "GitHub Actions", "Azure"]
 author: "Logan Farci"
 coauthoredWithAgent: true
 ---
