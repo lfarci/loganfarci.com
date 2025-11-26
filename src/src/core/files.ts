@@ -9,14 +9,22 @@ import path from "path";
  */
 export const listFilesWithExtension = (dir: string, extension: string): string[] => {
     let results: string[] = [];
-    const entries = fs.readdirSync(dir, { withFileTypes: true });
-    for (const entry of entries) {
-        const fullPath = path.join(dir, entry.name);
-        if (entry.isDirectory()) {
-            results = results.concat(listFilesWithExtension(fullPath, extension));
-        } else if (entry.isFile() && fullPath.endsWith(extension)) {
-            results.push(fullPath);
+    try {
+        if (!fs.existsSync(dir)) {
+            console.error(`Directory does not exist: ${dir}`);
+            return results;
         }
+        const entries = fs.readdirSync(dir, { withFileTypes: true });
+        for (const entry of entries) {
+            const fullPath = path.join(dir, entry.name);
+            if (entry.isDirectory()) {
+                results = results.concat(listFilesWithExtension(fullPath, extension));
+            } else if (entry.isFile() && fullPath.endsWith(extension)) {
+                results.push(fullPath);
+            }
+        }
+    } catch (error) {
+        console.error(`Error reading directory ${dir}:`, error);
     }
     return results;
 };

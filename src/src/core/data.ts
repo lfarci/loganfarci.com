@@ -9,7 +9,7 @@ import { Experience, SkillCategory, Interest, Contact, Profile, Diploma, Icon, S
  * @returns {string} The path to the data directory.
  */
 const getDataDirectoryPath = (): string => {
-    return resolveDirectoryFromEnvironment("DATA_DIRECTORY", "content/data");
+    return resolveDirectoryFromEnvironment("DATA_DIRECTORY", "../content/data");
 };
 
 /**

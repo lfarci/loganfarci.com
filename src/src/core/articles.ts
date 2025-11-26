@@ -20,12 +20,14 @@ const isArticleFrontmatter = (value: unknown): value is ArticleFrontmatter => {
 };
 
 const getArticlesDirectoryPath = (): string => {
-    return resolveDirectoryFromEnvironment("ARTICLES_DIRECTORY", "content/articles");
+    return resolveDirectoryFromEnvironment("ARTICLES_DIRECTORY", "../content/articles");
 };
 
 export const getArticleSlugs = (): string[] => {
     const dir = getArticlesDirectoryPath();
+    console.log(`[getArticleSlugs] Articles directory: ${dir}`);
     const files = listFilesWithExtension(dir, ".md");
+    console.log(`[getArticleSlugs] Found ${files.length} article files`);
     return files.map((file: string) => path.basename(file, ".md"));
 };
 
