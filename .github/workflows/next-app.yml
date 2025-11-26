@@ -7,6 +7,13 @@ on:
     paths:
       - "src/**"
       - "content/**"
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - main
+    paths:
+      - "src/**"
+      - "content/**"
   workflow_dispatch:
 
 permissions:
@@ -68,6 +75,15 @@ jobs:
         run: |
           echo "deployment_token=$(az keyvault secret show --name StaticWebAppDeploymentKey --vault-name ${{ secrets.AZURE_KEY_VAULT_NAME }} --query value -o tsv)" >> $GITHUB_OUTPUT
 
+      - name: Determine environment
+        id: environment
+        run: |
+          ENVIRONMENT_NAME="production"
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            ENVIRONMENT_NAME="preview"
+          fi
+          echo "name=$ENVIRONMENT_NAME" >> $GITHUB_OUTPUT
+
       - name: Deploy to Azure Static Web Apps
         run: |
-          npx swa deploy ${{ env.out_directory }} --deployment-token ${{ steps.get-secrets.outputs.deployment_token }} --env production
+          npx swa deploy ${{ env.out_directory }} --deployment-token ${{ steps.get-secrets.outputs.deployment_token }} --env ${{ steps.environment.outputs.name }}
