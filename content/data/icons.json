@@ -15,6 +15,11 @@
     "icon": "/images/skills/ai/foundry.svg"
   },
   {
+    "id": "azure",
+    "name": "Azure",
+    "icon": "/images/icons/azure.svg"
+  },
+  {
     "id": "azure-api-management",
     "name": "Azure API Management",
     "icon": "/images/skills/azure/api-management.svg"
@@ -112,6 +117,11 @@
   {
     "id": "github",
     "name": "GitHub",
+    "icon": "/images/skills/devops/github-mono.svg"
+  },
+  {
+    "id": "github-actions",
+    "name": "GitHub Actions",
     "icon": "/images/skills/devops/github-mono.svg"
   },
   {
