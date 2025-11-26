@@ -20,7 +20,7 @@ const isArticleFrontmatter = (value: unknown): value is ArticleFrontmatter => {
 };
 
 const getArticlesDirectoryPath = (): string => {
-    return resolveDirectoryFromEnvironment("ARTICLES_DIRECTORY", "content/articles");
+    return resolveDirectoryFromEnvironment("ARTICLES_DIRECTORY", "../content/articles");
 };
 
 export const getArticleSlugs = (): string[] => {
