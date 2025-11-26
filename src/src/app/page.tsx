@@ -14,7 +14,7 @@ export default function Home() {
         <div className="flex flex-col space-y-4">
             <Introduction introduction={profile.role} image={profile.avatar} contacts={contacts} />
             <TextSection 
-                heading="About Me" 
+                heading="About Me (Preview)" 
                 text={profile.introduction} 
                 redirectPath="/about#about-me"
                 redirectLabel="Read more about me"
