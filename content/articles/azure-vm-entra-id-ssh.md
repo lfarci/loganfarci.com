@@ -8,16 +8,46 @@ author: "Logan Farci"
 coauthoredWithAgent: true
 ---
 
-Setting up Azure VMs with Entra ID SSH authentication enables passwordless, centrally managed access to your cloud infrastructure. This approach eliminates SSH key sprawl and integrates seamlessly with your organization's identity management. This article walks through the automated setup process using the [azssh-demo](https://github.com/lfarci/azssh-demo) repository.
+When deploying infrastructure at scale, you often need to automate VM provisioning and configuration. A common challenge arises when your GitHub Actions runner needs to SSH into newly provisioned VMs to set them up.
 
-## Why Entra ID SSH?
+The traditional approach requires creating a dedicated automation user on each new VM, which means:
 
-Traditional SSH authentication relies on manually managing public/private key pairs across teams and VMs. Entra ID SSH authentication offers:
+- Creating local accounts on every VM
+- Configuring permissions for those accounts
+- Generating and distributing SSH key pairs
+- Securing private keys (Azure Key Vault, GitHub secrets, etc.)
+- Managing key rotation
 
-- **Passwordless access** using your Azure credentials
+This manual user and key management quickly becomes untenable at scale.
+
+## The Solution: Entra ID SSH with Service Principals
+
+Rather than managing individual SSH keys for each automation user, you can leverage **Entra ID authentication for SSH**. This enables the GitHub Actions runner to authenticate to VMs using an Entra ID service principal, eliminating the need to pre-stage automation users.
+
+Initially, the goal was to use the **managed identity assigned to the runner VM itself**. However, during implementation, it became clear that Entra ID SSH requires a **service principal** rather than a managed identity. While this adds an extra step, it unlocks powerful automation capabilities.
+
+### Why Entra ID SSH?
+
+- **Passwordless access** using Entra ID credentials
 - **Centralized identity management** through Entra ID
 - **RBAC integration** for granular access control
 - **No manual key distribution** or rotation
+- **Service principal automation** for unattended VM setup and configuration
+
+### Automation Use Cases
+
+Once Entra ID SSH is configured with a service principal, you can:
+
+- **Configure freshly provisioned VMs** without pre-staging automation users
+- **Run custom scripts** on remote VMs for post-deployment setup
+- **Execute Ansible playbooks** from the runner for infrastructure automation
+- **Perform maintenance tasks** without manual key management
+
+This pattern is particularly valuable in CI/CD pipelines where runners need to quickly bootstrap new infrastructure with minimal pre-configuration.
+
+## The Demo
+
+This article walks through the automated setup process using the [lfarci/azssh-demo](https://github.com/lfarci/azssh-demo) repository. The demo provides a complete, working example of setting up Entra ID SSH authentication from a GitHub Actions runner to Azure VMs using Terraform and OIDC. The repository is not the cleanest codebase but it is definitely helpful for future reference.
 
 ## Prerequisites
 
@@ -30,7 +60,7 @@ Before starting, ensure you have:
 
 ## The Setup Process
 
-The azssh-demo repository provides automated bash scripts that handle the entire setup. Run them sequentially from the `scripts/` directory.
+The `azssh-demo` repository provides automated bash scripts that handle the entire setup. Run them sequentially from the `scripts/` directory.
 
 ### 1. Setup Service Principal with OIDC
 
@@ -45,7 +75,7 @@ This script creates an Entra ID service principal configured for GitHub Actions 
 - Assigns Contributor and User Access Administrator roles
 - Sets GitHub repository secrets (`AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`)
 
-The script prompts for the service principal name and federation subject (branch, PR, environment, or tag). OIDC federation eliminates the need for storing long-lived credentials in GitHub.
+The script prompts for the service principal name and federation subject (branch, PR, environment, or tag). OIDC federation eliminates the need for storing long-lived credentials in GitHub, while the service principal becomes the identity the runner uses to authenticate to VMs.
 
 ### 2. Deploy Terraform State Storage
 
@@ -149,7 +179,9 @@ No secrets are stored beyond the identity metadata needed for OIDC federation.
 
 ## Using the VM as a GitHub Runner
 
-The deployed VM can serve as a self-hosted GitHub Actions runner:
+The deployed VM can serve as a self-hosted GitHub Actions runner. More importantly, the **service principal identity authenticated through the runner can SSH into other VMs** to perform automation tasks.
+
+### Setting up the Runner
 
 1. SSH into the VM: `az ssh vm -g <rg-name> -n <vm-name>`
 2. Navigate to your repository Settings → Actions → Runners → New self-hosted runner
@@ -161,6 +193,17 @@ The repository includes a script to trigger SSH workflows that run on the self-h
 ```bash
 ./08-trigger-ssh-workflow.sh
 ```
+
+### Automating VM Setup from the Runner
+
+Once the service principal is authenticated, you can use the runner to:
+
+- **SSH to other VMs** using the service principal identity
+- **Run provisioning scripts** on newly deployed VMs
+- **Execute Ansible playbooks** for infrastructure automation
+- **Perform configuration management** without pre-staging automation users
+
+This pattern enables a fully automated infrastructure setup pipeline where the runner provisions new VMs and immediately configures them, all using Entra ID authentication managed through RBAC.
 
 ## Cleanup
 
@@ -176,6 +219,6 @@ Each script prompts for confirmation before deleting resources.
 
 ## Resources
 
-- [azssh-demo Repository](https://github.com/lfarci/azssh-demo)
-- [Azure AD SSH Documentation](https://learn.microsoft.com/en-us/entra/identity/devices/howto-vm-sign-in-azure-ad-linux)
-- [GitHub Actions OIDC with Azure](https://docs.github.com/en/actions/security-for-github-actions/security-hardening-your-deployments/configuring-openid-connect-in-azure)
+- [`lfarci/azssh-demo`](https://github.com/lfarci/azssh-demo)
+- [Sign in to a Linux virtual machine in Azure by using Microsoft Entra ID and OpenSSH](https://learn.microsoft.com/en-us/entra/identity/devices/howto-vm-sign-in-azure-ad-linux)
+- [Configuring OpenID Connect in Azure](https://docs.github.com/en/actions/security-for-github-actions/security-hardening-your-deployments/configuring-openid-connect-in-azure)
