@@ -1,7 +1,6 @@
 ---
-mode: "agent"
-model: GPT-4.1
-tools: ['codebase', 'editFiles']
+model: Claude Haiku 4.5 (copilot)
+tools: ['edit/editFiles', 'search/readFile', 'search/codebase', 'Microsoft Docs/*', 'changes', 'githubRepo', 'todos']
 description: "Enhance an article"
 ---
 

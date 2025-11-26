@@ -1,20 +1,6 @@
 ---
-mode: "agent"
-model: GPT-4.1
-tools: [
-        "codebase",
-        "browser_click",
-        "browser_close",
-        "browser_handle_dialog",
-        "browser_hover",
-        "browser_navigate",
-        "browser_navigate_back",
-        "browser_navigate_forward",
-        "browser_press_key",
-        "browser_select_option",
-        "browser_type",
-        "browser_wait_for",
-    ]
+model: Claude Haiku 4.5 (copilot)
+tools: ['edit', 'search', 'Microsoft Docs/*', 'changes', 'fetch', 'githubRepo', 'todos']
 description: "Review a technical article in the loganfarci.com repository"
 ---
 
