@@ -23,22 +23,33 @@ Before you begin, ensure you have the following tools installed on your workstat
 1. **Install dependencies:**
 
    ```bash
+   cd src
    npm install
    ```
 
-2. **Start development server:**
+2. **(Optional) Configure environment variables:**
+
+   Copy the example environment file and customize it if needed:
+
+   ```bash
+   cp .env.local.example .env.local
+   ```
+
+   The application works out of the box with default values. Environment variables are only needed if you want to customize paths or run in special configurations.
+
+3. **Start development server:**
 
    ```bash
    npm run dev
    ```
 
-3. **Build for production:**
+4. **Build for production:**
 
    ```bash
    npm run build
    ```
 
-4. **Lint code:**
+5. **Lint code:**
 
    ```bash
    npm run lint
