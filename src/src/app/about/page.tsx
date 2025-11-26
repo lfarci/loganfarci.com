@@ -66,14 +66,14 @@ export default function About() {
                                 formatExperiencePeriod(experience.start, experience.end),
                             ]}
                         >
-                            <MarkdownPreview>{experience.description}</MarkdownPreview>
+                            <MarkdownPreview content={experience.description} />
                         </SmallInfoCard>
                     ))}
                 </div>
             </Section>
             <Section heading="Education">
                 <SmallInfoCard {...bachelor} imageSize="small" imagePosition="start">
-                    <MarkdownPreview>{diploma.description}</MarkdownPreview>
+                    <MarkdownPreview content={diploma.description} />
                 </SmallInfoCard>
             </Section>
             <SmallInfoCardsGridSection heading="Certifications" items={certifications} />
