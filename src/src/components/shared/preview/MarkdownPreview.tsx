@@ -4,11 +4,11 @@ import FadeoutText from "../FadeoutText";
 import MarkdownContent from "@/components/shared/MarkdownContent";
 
 interface MarkdownPreviewProps {
-    content?: string;
+    children?: string;
 }
 
-function MarkdownPreview({ content = "" }: MarkdownPreviewProps) {
-    const expandedContent = <MarkdownContent content={content} />;
+function MarkdownPreview({ children = "" }: MarkdownPreviewProps) {
+    const expandedContent = <MarkdownContent content={children} />;
     const collapsedContent = <FadeoutText>{expandedContent}</FadeoutText>;
 
     return <Preview collapsedContent={collapsedContent} expandedContent={expandedContent} />;
