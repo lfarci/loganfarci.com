@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { Heading1, Heading2, Text } from "@/components/shared/typography";
 
 export default function GlobalError({
     error,
@@ -21,15 +22,15 @@ export default function GlobalError({
 
     return (
         <div className="flex flex-col items-center justify-center min-h-[60vh] text-center px-4">
-            <h1 className="text-6xl md:text-8xl font-bold heading-font text-text-primary mb-4">
+            <Heading1 className="text-6xl md:text-8xl mb-4">
                 Oops!
-            </h1>
-            <h2 className="text-2xl md:text-3xl font-semibold heading-font text-text-secondary mb-6">
+            </Heading1>
+            <Heading2 className="mb-6">
                 Something went wrong
-            </h2>
-            <p className="text-base md:text-lg text-text-tertiary mb-8 max-w-md text-font">
+            </Heading2>
+            <Text className="mb-8 max-w-md">
                 An unexpected error has occurred. Please try again or return to the home page.
-            </p>
+            </Text>
             <div className="flex gap-4">
                 <button
                     onClick={() => reset()}
