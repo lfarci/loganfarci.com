@@ -57,8 +57,8 @@ export function generateStaticParams() {
     return slugs.map((slug) => ({ slug }));
 }
 
-export default async function ArticlePage({ params }: ArticlePageProps) {
-    const { slug } = await params;
+export default function ArticlePage({ params }: ArticlePageProps) {
+    const { slug } = params;
     const article = getArticleBySlug(slug);
 
     if (!article) {
