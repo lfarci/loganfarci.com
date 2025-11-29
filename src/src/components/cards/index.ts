@@ -1,10 +1,8 @@
-export { default as ArticleCard } from "./ArticleCard";
-export { default as SmallInfoCard } from "./SmallInfoCard";
-export type { SmallInfoCardProps } from "./SmallInfoCard";
-export { default as SmallInfoCardHeading } from "./SmallInfoCardHeading";
-export { default as SmallInfoCardsSection } from "./SmallInfoCardsSection";
-export { default as ThumbnailCard } from "./ThumbnailCard";
-export type { ThumbnailCardImageSize, ThumbnailCardProps } from "./ThumbnailCard";
+export { default as InfoCard } from "./InfoCard";
+export { default as MediaTileCard } from "./MediaTileCard";
+export type { MediaTileSize } from "./MediaTileCard";
+export { default as ArticleListCard } from "./ArticleListCard";
+export { default as CardTitleWithTooltip } from "./CardTitleWithTooltip";
 export {
     default as Card,
     CardBody,

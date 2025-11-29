@@ -1,7 +1,9 @@
 import Section from "@/components/shared/Section";
 import React from "react";
 import MarkdownSection from "@/components/shared/MarkdownSection";
-import { SmallInfoCard, SmallInfoCardProps, SmallInfoCardsSection } from "@/components/cards";
+import { Card, CardBody, CardGrid, CardHeader, CardSubtitle, CardTitle } from "@/components/cards";
+import InfoCard from "@/components/cards/InfoCard";
+import MediaTileCard from "@/components/cards/MediaTileCard";
 import { Certification, SkillCategory } from "@/types";
 import { MarkdownPreview } from "@/components/shared/preview";
 import { getCertifications, getDiploma, getExperiences, getProfile, getSkillCategories } from "@/core/data";
@@ -19,14 +21,13 @@ const formatExperiencePeriod = (start: Date, end?: Date) => {
     return `${startDate} - ${endDate}`;
 };
 
-const certifications: SmallInfoCardProps[] = getCertifications()
+const certifications = getCertifications()
     .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
     .map((certification: Certification) => ({
         image: certification.image,
-        heading: certification.title,
-        subtitle: certification.issuer,
-        details: [formatMonthYear(certification.date)],
-        imageSize: "medium" as const,
+        title: certification.title,
+        description: certification.issuer,
+        date: formatMonthYear(certification.date),
     }));
 
 const experiences = getExperiences();
@@ -35,12 +36,6 @@ const diploma = getDiploma();
 const profile = getProfile();
 
 export default function About() {
-    const bachelor: SmallInfoCardProps = {
-        image: diploma.logo,
-        heading: diploma.name,
-        subtitle: diploma.University,
-        details: diploma.details,
-    };
 
     return (
         <div>
@@ -52,45 +47,68 @@ export default function About() {
             />
             <Section heading="Experience">
                 <div className="flex flex-col gap-4">
-                    {experiences.map((experience, index) => (
-                        <SmallInfoCard
-                            key={index}
-                            image={experience.company.logo}
-                            heading={experience.name}
+                    {experiences.map((experience) => (
+                        <InfoCard
+                            key={`${experience.name}-${experience.company.name}`}
+                            title={experience.name}
                             subtitle={`${experience.company.name} (${experience.type})`}
-                            imageSize="small"
-                            imagePosition="start"
                             details={[
                                 experience.company.location,
                                 formatExperiencePeriod(experience.start, experience.end),
                             ]}
+                            media={experience.company.logo}
+                            mediaSize="small"
+                            mediaAlign="start"
+                            align="start"
+                            showTitleTooltip
                         >
                             <MarkdownPreview>{experience.description}</MarkdownPreview>
-                        </SmallInfoCard>
+                        </InfoCard>
                     ))}
                 </div>
             </Section>
             <Section heading="Education">
-                <SmallInfoCard {...bachelor} imageSize="small" imagePosition="start">
+                <InfoCard
+                    title={diploma.name}
+                    subtitle={diploma.University}
+                    details={diploma.details}
+                    media={diploma.logo}
+                    mediaSize="small"
+                    mediaAlign="start"
+                    align="start"
+                    showTitleTooltip
+                >
                     <MarkdownPreview>{diploma.description}</MarkdownPreview>
-                </SmallInfoCard>
+                </InfoCard>
             </Section>
-            <SmallInfoCardsSection heading="Certifications" items={certifications} />
+            <Section heading="Certifications">
+                <CardGrid columns={2} className="mt-4">
+                    {certifications.map((certification) => (
+                        <MediaTileCard
+                            key={certification.title}
+                            title={certification.title}
+                            description={certification.description}
+                            image={certification.image}
+                            size="small"
+                        />
+                    ))}
+                </CardGrid>
+            </Section>
             <Section heading="Skills">
                 <div className="flex flex-col gap-4">
                     {skillCategories.map((category: SkillCategory) => (
-                        <SmallInfoCard
-                            key={category.name}
-                            heading={category.name}
-                            subtitle={`${category.skills.length} skills`}
-                            flex="col"
-                            details={[]}
-                        >
-                            <Text>{category.description}</Text>
-                            <div className="flex flex-wrap gap-2 mt-6">
-                                {category.skills.map((skill) => <IconTag key={skill.name}>{skill.name}</IconTag>)}
-                            </div>
-                        </SmallInfoCard>
+                        <Card key={category.name}>
+                            <CardHeader className="gap-1.5">
+                                <CardTitle>{category.name}</CardTitle>
+                                <CardSubtitle>{`${category.skills.length} skills`}</CardSubtitle>
+                            </CardHeader>
+                            <CardBody className="pt-1 gap-2">
+                                <Text>{category.description}</Text>
+                                <div className="flex flex-wrap gap-2 mt-6">
+                                    {category.skills.map((skill) => <IconTag key={skill.name}>{skill.name}</IconTag>)}
+                                </div>
+                            </CardBody>
+                        </Card>
                     ))}
                 </div>
             </Section>

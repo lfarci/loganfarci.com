@@ -1,14 +1,9 @@
 import Link from "next/link";
 import Section from "./Section";
-import { ThumbnailCard, ThumbnailCardImageSize, CardGrid } from "@/components/cards";
+import { CardGrid, MediaTileCard } from "@/components/cards";
 import NewTabLink from "./NewTabLink";
-
-interface ImageProps {
-    src: string;
-    alt: string;
-    width?: number;
-    height?: number;
-}
+import { ImageProps } from "@/types";
+import type { MediaTileSize } from "@/components/cards/MediaTileCard";
 
 interface ThumbnailItem {
     title: string;
@@ -22,7 +17,7 @@ interface ThumbnailGridSectionProps {
     heading: string;
     items: ThumbnailItem[];
     columns?: number;
-    size?: ThumbnailCardImageSize;
+    size?: MediaTileSize;
     redirectPath?: string;
     redirectLabel?: string;
 }
@@ -39,11 +34,11 @@ const ThumbnailGridSection: React.FC<ThumbnailGridSectionProps> = ({
         <CardGrid columns={columns} className="mt-8">
             {items.map((item, index) => {
                 const card = (
-                    <ThumbnailCard
-                        image={item.image}
-                        size={thumbnailSize}
+                    <MediaTileCard
                         title={item.title}
                         description={item.description}
+                        image={item.image}
+                        size={thumbnailSize}
                     />
                 );
 
