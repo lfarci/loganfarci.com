@@ -1,4 +1,4 @@
-import { ImageProps } from "../../../types";
+import { ImageProps } from "@/types";
 import Card, { CardBody, CardMedia, CardTitle } from "./Card";
 import { Text } from "@/components/shared/typography";
 
