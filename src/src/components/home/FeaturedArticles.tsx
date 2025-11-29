@@ -1,6 +1,6 @@
 import { getFeaturedArticles } from "@/core/articles";
 import Section from "@/components/shared/Section";
-import ArticleCard from "@/components/shared/cards/ArticleCard";
+import { ArticleCard } from "@/components/cards";
 import EmptyState from "@/components/shared/EmptyState";
 
 export default function FeaturedArticles() {

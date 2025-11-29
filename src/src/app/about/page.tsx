@@ -1,8 +1,7 @@
 import Section from "@/components/shared/Section";
 import React from "react";
 import MarkdownSection from "@/components/shared/MarkdownSection";
-import SmallInfoCard, { SmallInfoCardProps } from "@/components/shared/cards/SmallInfoCard";
-import SmallInfoCardsGridSection from "@/components/shared/cards/SmallInfoCardsSection";
+import { SmallInfoCard, SmallInfoCardProps, SmallInfoCardsSection } from "@/components/cards";
 import { Certification, SkillCategory } from "@/types";
 import { MarkdownPreview } from "@/components/shared/preview";
 import { getCertifications, getDiploma, getExperiences, getProfile, getSkillCategories } from "@/core/data";
@@ -76,7 +75,7 @@ export default function About() {
                     <MarkdownPreview>{diploma.description}</MarkdownPreview>
                 </SmallInfoCard>
             </Section>
-            <SmallInfoCardsGridSection heading="Certifications" items={certifications} />
+            <SmallInfoCardsSection heading="Certifications" items={certifications} />
             <Section heading="Skills">
                 <div className="flex flex-col gap-4">
                     {skillCategories.map((category: SkillCategory) => (

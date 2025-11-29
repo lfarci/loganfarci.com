@@ -1,5 +1,5 @@
 import { getAllArticles } from "@/core/articles";
-import ArticleCard from "@/components/shared/cards/ArticleCard";
+import { ArticleCard } from "@/components/cards";
 import EmptyState from "@/components/shared/EmptyState";
 import { Heading1 } from "@/components/shared/typography";
 
