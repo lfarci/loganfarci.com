@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Heading1, Heading2, Text } from "@/components/shared/typography";
+import ErrorMessage from "@/components/shared/ErrorMessage";
 
 export default function GlobalError({
     error,
@@ -21,16 +21,11 @@ export default function GlobalError({
     }, [error]);
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-[60vh] text-center px-4">
-            <Heading1 className="text-6xl md:text-8xl mb-4">
-                Oops!
-            </Heading1>
-            <Heading2 className="mb-6">
-                Something went wrong
-            </Heading2>
-            <Text className="mb-8 max-w-md">
-                An unexpected error has occurred. Please try again or return to the home page.
-            </Text>
+        <ErrorMessage
+            title="Oops!"
+            heading="Something went wrong"
+            message="An unexpected error has occurred. Please try again or return to the home page."
+        >
             <div className="flex gap-4">
                 <button
                     onClick={() => reset()}
@@ -45,6 +40,6 @@ export default function GlobalError({
                     Back to Home
                 </button>
             </div>
-        </div>
+        </ErrorMessage>
     );
 }
