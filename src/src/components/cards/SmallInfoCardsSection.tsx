@@ -1,16 +1,17 @@
 import React from "react";
-import { SmallInfoCard, SmallInfoCardProps } from "@/components/shared/cards";
+import { CardGrid } from "./Card";
+import SmallInfoCard, { SmallInfoCardProps } from "./SmallInfoCard";
 import Section from "@/components/shared/Section";
 
 type SmallInfoCardsSectionProps = { heading: string; items: SmallInfoCardProps[] };
 
 const SmallInfoCardsGridSection: React.FC<SmallInfoCardsSectionProps> = ({ heading, items }) => (
     <Section heading={heading}>
-        <div className="grid gap-4 mt-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-2">
+        <CardGrid columns={2} className="mt-4">
             {items.map((item, index) => (
                 <SmallInfoCard key={index} {...item} />
             ))}
-        </div>
+        </CardGrid>
     </Section>
 );
 

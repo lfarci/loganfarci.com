@@ -1,7 +1,7 @@
-import Section from "./Section";
-import ThumbnailCard, { ThumbnailCardImageSize } from "./cards/ThumbnailCard";
-import NewTabLink from "./NewTabLink";
 import Link from "next/link";
+import Section from "./Section";
+import { ThumbnailCard, ThumbnailCardImageSize, CardGrid } from "@/components/cards";
+import NewTabLink from "./NewTabLink";
 
 interface ImageProps {
     src: string;
@@ -27,18 +27,6 @@ interface ThumbnailGridSectionProps {
     redirectLabel?: string;
 }
 
-const getGridClasses = (columns: number): string => {
-    const columnMap: Record<number, string> = {
-        1: "grid-cols-1",
-        2: "grid-cols-1 sm:grid-cols-2",
-        3: "grid-cols-1 sm:grid-cols-3",
-        4: "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4",
-        5: "grid-cols-1 sm:grid-cols-2 lg:grid-cols-5",
-        6: "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6",
-    };
-    return columnMap[columns] || "grid-cols-1 sm:grid-cols-3";
-};
-
 const ThumbnailGridSection: React.FC<ThumbnailGridSectionProps> = ({
     heading,
     items,
@@ -48,7 +36,7 @@ const ThumbnailGridSection: React.FC<ThumbnailGridSectionProps> = ({
     redirectLabel,
 }) => (
     <Section heading={heading} redirectPath={redirectPath} redirectLabel={redirectLabel}>
-        <div className={`grid ${getGridClasses(columns)} gap-4 mt-8`}>
+        <CardGrid columns={columns} className="mt-8">
             {items.map((item, index) => {
                 const card = (
                     <ThumbnailCard
@@ -75,7 +63,7 @@ const ThumbnailGridSection: React.FC<ThumbnailGridSectionProps> = ({
                     <div key={index}>{card}</div>
                 );
             })}
-        </div>
+        </CardGrid>
     </Section>
 );
 
