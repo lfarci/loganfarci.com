@@ -19,7 +19,7 @@ const renderContactIcon = (icon: Contact["icon"], size: number) => {
         case "bluesky":
             return <BlueskyIcon {...iconProps} />;
         case "email":
-            return <EmailIcon {...iconProps} size={size + 4} />;
+            return <EmailIcon {...iconProps} />;
         case "github":
             return <GitHubIcon {...iconProps} />;
         case "linkedin":
