@@ -1,5 +1,7 @@
+"use client";
+
 import { ReactNode } from "react";
-import { Heading1, Heading2, Text } from "@/components/shared/typography";
+import { typographyStyles } from "@/components/shared/typography/core/styles";
 
 interface ErrorMessageProps {
     title: string;
@@ -10,17 +12,17 @@ interface ErrorMessageProps {
 
 export default function ErrorMessage({ title, heading, message, children }: ErrorMessageProps) {
     return (
-        <div className="flex flex-col items-center justify-center min-h-[60vh] text-center px-4">
-            <Heading1 className="text-6xl md:text-8xl mb-4">
+        <section className="flex flex-col items-center justify-center min-h-[60vh] text-center px-4">
+            <h1 className={`${typographyStyles.heading1} text-6xl md:text-8xl mb-4`}>
                 {title}
-            </Heading1>
-            <Heading2 className="mb-6">
+            </h1>
+            <h2 className={`${typographyStyles.heading2} mb-6`}>
                 {heading}
-            </Heading2>
-            <Text className="mb-8 max-w-md">
+            </h2>
+            <p className={`${typographyStyles.text} mb-8 max-w-md`}>
                 {message}
-            </Text>
+            </p>
             {children}
-        </div>
+        </section>
     );
 }
