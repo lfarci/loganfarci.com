@@ -1,7 +1,6 @@
 import { getAllArticles } from "@/core/articles";
 import { ArticleListCard } from "@/components/cards";
-import EmptyState from "@/components/shared/EmptyState";
-import { Heading1 } from "@/components/shared/typography";
+import { Heading1, Text } from "@/components/shared/typography";
 
 export default function ArticlesPage() {
     const articles = getAllArticles();
@@ -11,7 +10,7 @@ export default function ArticlesPage() {
             <Heading1 className="mb-8">Articles</Heading1>
 
             {articles.length === 0 ? (
-                <EmptyState message="No articles published yet." />
+                <Text className="text-text-secondary">No articles published yet.</Text>
             ) : (
                 <div className="space-y-6">
                     {articles.map((article) => (

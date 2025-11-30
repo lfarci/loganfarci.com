@@ -1,18 +1,28 @@
-import Introduction from "@/components/home/Introduction";
-import FeaturedArticles from "@/components/home/FeaturedArticles";
+import ArticleListSection from "@/components/ArticleListSection";
+import ContactLinks from "@/components/ContactLinks";
+import GreetingHeading from "@/components/GreetingHeading";
+import HeroSection from "@/components/HeroSection";
+import ColumnContainer from "@/components/layout/ColumnContainer";
 import TextSection from "@/components/shared/TextSection";
 import ThumbnailGridSection from "@/components/shared/ThumbnailGridSection";
+import { getFeaturedArticles } from "@/core/articles";
 import { getCertifications, getContacts, getInterests, getProfile } from "@/core/data";
 
 const featuredCertifications = getCertifications().filter((c) => c.relevance == "High");
 const interests = getInterests();
 const contacts = getContacts();
 const profile = getProfile();
+const featuredArticles = getFeaturedArticles();
 
 export default function Home() {
     return (
-        <div className="flex flex-col space-y-4">
-            <Introduction introduction={profile.role} image={profile.avatar} contacts={contacts} />
+        <ColumnContainer>
+            <HeroSection
+                heading={<GreetingHeading greeting="Hi" name="Logan" />}
+                description={profile.role}
+                image={profile.avatar}
+                actions={<ContactLinks contacts={contacts} />}
+            />
             <TextSection 
                 heading="About Me" 
                 text={profile.introduction} 
@@ -35,7 +45,14 @@ export default function Home() {
                 redirectPath="/about#certifications"
                 redirectLabel="Show all my certifications"
             />
-            <FeaturedArticles />
-        </div>
+            <ArticleListSection
+                heading="Featured Articles"
+                articles={featuredArticles}
+                limit={4}
+                redirectPath="/articles"
+                redirectLabel="View all my articles"
+                emptyMessage="No featured articles found."
+            />
+        </ColumnContainer>
     );
 }
