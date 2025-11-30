@@ -9,10 +9,11 @@ interface SectionProps {
     heading: string;
     redirectPath?: string;
     redirectLabel?: string;
+    id?: string;
     children?: React.ReactNode;
 }
 
-const Section: React.FC<SectionProps> = ({ heading, redirectPath, redirectLabel, children }) => {
+const Section: React.FC<SectionProps> = ({ heading, redirectPath, redirectLabel, children, id }) => {
     const handleNavigation = () => {
         if (!redirectPath) return;
 
@@ -24,7 +25,7 @@ const Section: React.FC<SectionProps> = ({ heading, redirectPath, redirectLabel,
     const toolTip = <Text>{redirectLabel}</Text>;
 
     return (
-        <section id={createId(heading)} className="pt-8 scroll-mt-10">
+        <section id={id ?? createId(heading)} className="pt-8 scroll-mt-24">
             <div
                 className={`flex items-center mb-4${redirectPath ? " cursor-pointer" : ""}`}
                 onClick={handleNavigation}

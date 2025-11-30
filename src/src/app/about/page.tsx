@@ -9,6 +9,7 @@ import { MarkdownPreview } from "@/components/shared/preview";
 import { getCertifications, getDiploma, getExperiences, getProfile, getSkillCategories } from "@/core/data";
 import IconTag from "@/components/shared/IconTag";
 import { Text } from "@/components/shared/typography";
+import { createId } from "@/core/string";
 
 const formatMonthYear = (date: Date | string) => {
     const d = typeof date === "string" ? new Date(date) : date;
@@ -94,10 +95,10 @@ export default function About() {
                     ))}
                 </CardGrid>
             </Section>
-            <Section heading="Skills">
+            <Section heading="Skills" id="skills">
                 <div className="flex flex-col gap-4">
                     {skillCategories.map((category: SkillCategory) => (
-                        <Card key={category.name}>
+                        <Card key={category.name} id={createId(category.name)} className="scroll-mt-24">
                             <CardHeader className="gap-1.5">
                                 <CardTitle>{category.name}</CardTitle>
                                 <CardSubtitle>{`${category.skills.length} skills`}</CardSubtitle>
