@@ -11,7 +11,9 @@ interface MermaidDiagramProps {
 const MermaidDiagram: React.FC<MermaidDiagramProps> = ({ children, className = "" }) => {
     useEffect(() => {
         mermaid.initialize({ startOnLoad: false, securityLevel: "strict" });
-        void mermaid.run({ querySelector: ".mermaid" });
+        mermaid.run({ querySelector: ".mermaid" }).catch((error) => {
+            console.error("Failed to render Mermaid diagram", error);
+        });
     }, [children]);
 
     return <pre className={`mermaid w-full flex justify-center ${className}`}>{children}</pre>;
