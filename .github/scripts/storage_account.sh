@@ -2,7 +2,7 @@
 
 set -e
 
-if [ "$DESTROY" == "true" ]; then
+if [[ "$DESTROY" == "true" ]]; then
     echo "DESTROY is set to true. Deleting storage account $STORAGE_ACCOUNT_NAME..."
     if az storage account show --name $STORAGE_ACCOUNT_NAME --resource-group $RESOURCE_GROUP &>/dev/null; then
         az storage account delete --name $STORAGE_ACCOUNT_NAME --resource-group $RESOURCE_GROUP --yes

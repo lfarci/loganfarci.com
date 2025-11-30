@@ -27,7 +27,7 @@ link_STATIC_WEB_APP_CUSTOM_DOMAIN() {
 
 retry() {
     local n=0
-    until [ $n -ge $MAX_RETRIES ]; do
+    until [[ $n -ge $MAX_RETRIES ]]; do
         "$@" && return 0
         n=$((n + 1))
         log "Attempt $n failed. Retrying in $RETRY_DELAY seconds..."
@@ -44,7 +44,7 @@ retry() {
 log "Starting custom domain setup."
 
 retry create_cname_record
-if [ $? -ne 0 ]; then
+if [[ $? -ne 0 ]]; then
     log "Failed to create CNAME record. Exiting."
     exit 1
 fi
@@ -53,7 +53,7 @@ log "Waiting for DNS propagation (optional). Sleeping for $RETRY_DELAY seconds."
 sleep $RETRY_DELAY
 
 retry link_STATIC_WEB_APP_CUSTOM_DOMAIN
-if [ $? -ne 0 ]; then
+if [[ $? -ne 0 ]]; then
     log "Failed to link custom domain. Exiting."
     exit 1
 fi
