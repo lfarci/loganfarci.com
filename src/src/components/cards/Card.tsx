@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Heading3 } from "@/components/shared/typography";
 import { ImageProps } from "@/types";
+import GridContainer from "@/components/layout/GridContainer";
 
 type PolymorphicProps<E extends React.ElementType> = {
     as?: E;
@@ -33,15 +34,6 @@ type CardLinkProps = {
 };
 
 const baseCardClass = "p-6 bg-surface rounded-3xl border border-border-light shadow-md h-full";
-
-const gridColumns: Record<number, string> = {
-    1: "grid-cols-1",
-    2: "grid-cols-1 sm:grid-cols-2",
-    3: "grid-cols-1 sm:grid-cols-3",
-    4: "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4",
-    5: "grid-cols-1 sm:grid-cols-2 lg:grid-cols-5",
-    6: "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6",
-};
 
 const mediaSizes: Record<NonNullable<CardMediaProps["size"]>, string> = {
     small: "w-1/3",
@@ -116,7 +108,9 @@ export const CardMedia: React.FC<CardMediaProps> = ({
 );
 
 export const CardGrid: React.FC<CardGridProps> = ({ columns = 3, className, children }) => (
-    <div className={cn("grid gap-4", gridColumns[columns] ?? gridColumns[3], className)}>{children}</div>
+    <GridContainer columns={columns} className={className}>
+        {children}
+    </GridContainer>
 );
 
 export const CardLink: React.FC<CardLinkProps> = ({ href, external = false, className, children }) => {
