@@ -33,7 +33,8 @@ type CardLinkProps = {
     children: React.ReactNode;
 };
 
-const baseCardClass = "p-6 bg-surface rounded-3xl border border-border-light shadow-md h-full";
+const baseCardClass =
+    "p-6 bg-surface rounded-3xl border border-border-light shadow-md h-full transition-shadow duration-200 hover:shadow-xl active:shadow-xl";
 
 const mediaSizes: Record<NonNullable<CardMediaProps["size"]>, string> = {
     small: "w-1/3",
