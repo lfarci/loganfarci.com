@@ -10,6 +10,7 @@ import { getCertifications, getDiploma, getExperiences, getProfile, getSkillCate
 import IconTag from "@/components/shared/IconTag";
 import { Text } from "@/components/shared/typography";
 import { createId } from "@/core/string";
+import ColumnContainer from "@/components/layout/ColumnContainer";
 
 const formatMonthYear = (date: Date | string) => {
     const d = typeof date === "string" ? new Date(date) : date;
@@ -47,7 +48,7 @@ export default function About() {
                 imageAlt={profile.avatar.alt}
             />
             <Section heading="Experience">
-                <div className="flex flex-col gap-4">
+                <ColumnContainer>
                     {experiences.map((experience) => (
                         <InfoCard
                             key={`${experience.name}-${experience.company.name}`}
@@ -66,7 +67,7 @@ export default function About() {
                             <MarkdownPreview>{experience.description}</MarkdownPreview>
                         </InfoCard>
                     ))}
-                </div>
+                </ColumnContainer>
             </Section>
             <Section heading="Education">
                 <InfoCard
@@ -96,7 +97,7 @@ export default function About() {
                 </CardGrid>
             </Section>
             <Section heading="Skills" id="skills">
-                <div className="flex flex-col gap-4">
+                <ColumnContainer>
                     {skillCategories.map((category: SkillCategory) => (
                         <Card key={category.name} id={createId(category.name)} className="scroll-mt-24">
                             <CardHeader className="gap-1.5">
@@ -111,7 +112,7 @@ export default function About() {
                             </CardBody>
                         </Card>
                     ))}
-                </div>
+                </ColumnContainer>
             </Section>
         </div>
     );
