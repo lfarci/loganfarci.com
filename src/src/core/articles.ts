@@ -25,9 +25,7 @@ const getArticlesDirectoryPath = (): string => {
 
 export const getArticleSlugs = (): string[] => {
     const dir = getArticlesDirectoryPath();
-    console.log(`[getArticleSlugs] Articles directory: ${dir}`);
     const files = listFilesWithExtension(dir, ".md");
-    console.log(`[getArticleSlugs] Found ${files.length} article files`);
     return files.map((file: string) => path.basename(file, ".md"));
 };
 
