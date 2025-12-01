@@ -1,5 +1,22 @@
 [
   {
+    "name": "Consultant, Full-Stack Developer",
+    "start": "2025-12-01",
+    "type": "Full-Time",
+    "company": {
+      "name": "Avanade",
+      "website": "https://www.avanade.com",
+      "location": "Merelbeke, Flanders, Belgium",
+      "logo": {
+        "src": "/images/experience/avanade.avif",
+        "alt": "Avanade Logo",
+        "width": 128,
+        "height": 128
+      }
+    },
+    "description": "A global leader in digital innovation and cloud services, created by Accenture and Microsoft to help organizations accelerate their digital transformation.\n\n- Led development of enterprise-grade solutions using Azure, .NET, and the Microsoft ecosystem for global clients.  \n- Architected and delivered scalable cloud applications using Azure, Infrastructure as Code, and clean architectural patterns.  \n- Championed code quality by applying clean code principles, resulting in maintainable, testable software.  \n- Mentored junior developers and interns across a variety of client and internal projects.  \n- Collaborated with clients to turn business requirements into secure, high-performance solutions.  \n- Promoted agile practices as a hands-on Scrum practitioner focused on continuous improvement and team effectiveness."
+  },
+  {
     "name": "Senior Analyst, Full-Stack Developer",
     "start": "2022-06-01",
     "type": "Full-Time",
