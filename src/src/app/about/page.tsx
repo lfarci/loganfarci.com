@@ -11,6 +11,7 @@ import IconTag from "@/components/shared/IconTag";
 import { Text } from "@/components/shared/typography";
 import { createId } from "@/core/string";
 import ColumnContainer from "@/components/layout/ColumnContainer";
+import NewTabLink from "@/components/shared/NewTabLink";
 
 const formatMonthYear = (date: Date | string) => {
     const d = typeof date === "string" ? new Date(date) : date;
@@ -30,6 +31,7 @@ const certifications = getCertifications()
         title: certification.title,
         description: certification.issuer,
         date: formatMonthYear(certification.date),
+        url: certification.url,
     }));
 
 const experiences = getExperiences();
@@ -85,15 +87,25 @@ export default function About() {
             </Section>
             <Section heading="Certifications">
                 <CardGrid columns={2} className="mt-4">
-                    {certifications.map((certification) => (
-                        <MediaTileCard
-                            key={certification.title}
-                            title={certification.title}
-                            description={certification.description}
-                            image={certification.image}
-                            size="small"
-                        />
-                    ))}
+                    {certifications.map((certification) => {
+                        const card = (
+                            <MediaTileCard
+                                key={certification.title}
+                                title={certification.title}
+                                description={certification.description}
+                                image={certification.image}
+                                size="small"
+                            />
+                        );
+
+                        return certification.url ? (
+                            <NewTabLink key={certification.title} url={certification.url}>
+                                {card}
+                            </NewTabLink>
+                        ) : (
+                            <div key={certification.title}>{card}</div>
+                        );
+                    })}
                 </CardGrid>
             </Section>
             <Section heading="Skills" id="skills">
