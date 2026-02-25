@@ -1,9 +1,8 @@
 import Section from "@/components/shared/Section";
 import React from "react";
 import MarkdownSection from "@/components/shared/MarkdownSection";
-import { Card, CardBody, CardGrid, CardHeader, CardSubtitle, CardTitle } from "@/components/cards";
+import { Card, CardBody, CardHeader, CardSubtitle, CardTitle } from "@/components/cards";
 import InfoCard from "@/components/cards/InfoCard";
-import MediaTileCard from "@/components/cards/MediaTileCard";
 import { Certification, SkillCategory } from "@/types";
 import { MarkdownPreview } from "@/components/shared/preview";
 import { getCertifications, getDiploma, getExperiences, getProfile, getSkillCategories } from "@/core/data";
@@ -11,6 +10,7 @@ import IconTag from "@/components/shared/IconTag";
 import { Text } from "@/components/shared/typography";
 import { createId } from "@/core/string";
 import ColumnContainer from "@/components/layout/ColumnContainer";
+import ThumbnailGridSection from "@/components/shared/ThumbnailGridSection";
 
 const formatMonthYear = (date: Date | string) => {
     const d = typeof date === "string" ? new Date(date) : date;
@@ -29,7 +29,7 @@ const certifications = getCertifications()
         image: certification.image,
         title: certification.title,
         description: certification.issuer,
-        date: formatMonthYear(certification.date),
+        url: certification.url,
     }));
 
 const experiences = getExperiences();
@@ -83,19 +83,12 @@ export default function About() {
                     <MarkdownPreview>{diploma.description}</MarkdownPreview>
                 </InfoCard>
             </Section>
-            <Section heading="Certifications">
-                <CardGrid columns={2} className="mt-4">
-                    {certifications.map((certification) => (
-                        <MediaTileCard
-                            key={certification.title}
-                            title={certification.title}
-                            description={certification.description}
-                            image={certification.image}
-                            size="small"
-                        />
-                    ))}
-                </CardGrid>
-            </Section>
+            <ThumbnailGridSection
+                heading="Certifications"
+                items={certifications}
+                columns={2}
+                size="small"
+            />
             <Section heading="Skills" id="skills">
                 <ColumnContainer>
                     {skillCategories.map((category: SkillCategory) => (
