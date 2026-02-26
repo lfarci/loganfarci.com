@@ -8,7 +8,7 @@ export default function NotFoundPage() {
             heading="Page Not Found"
             message="Sorry, the page you are looking for does not exist or has been moved."
         >
-            <Link
+            <Link 
                 to="/"
                 className="px-6 py-3 bg-primary text-text-inverse font-medium rounded-lg hover:bg-primary-hover transition-colors duration-200"
             >
