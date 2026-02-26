@@ -13,3 +13,5 @@ export function render(url: string) {
 
     return { html };
 }
+
+export { getStaticRoutes } from "./routes";

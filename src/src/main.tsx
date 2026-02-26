@@ -11,10 +11,20 @@ import "@fontsource/reddit-mono";
 // Global styles (Tailwind + theme)
 import "./globals.css";
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
+const rootElement = document.getElementById("root")!;
+
+const app = (
     <React.StrictMode>
         <BrowserRouter>
             <App />
         </BrowserRouter>
     </React.StrictMode>
 );
+
+if (rootElement.innerHTML.trim()) {
+    // Prerendered HTML exists — hydrate it
+    ReactDOM.hydrateRoot(rootElement, app);
+} else {
+    // No prerendered HTML (dev mode) — create fresh root
+    ReactDOM.createRoot(rootElement).render(app);
+}
