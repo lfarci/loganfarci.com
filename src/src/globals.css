@@ -97,13 +97,6 @@
     --color-surface-hover: oklch(37.3% 0.034 259.733); /* gray-700 */
 }
 
-/* Font variables (set by Fontsource imports in main.tsx) */
-:root {
-    --font-manrope: "Manrope Variable", sans-serif;
-    --font-noto-sans: "Noto Sans", sans-serif;
-    --font-reddit-mono: "Reddit Mono", monospace;
-}
-
 /* Font utilities */
 .heading-font {
     font-family: var(--font-manrope);
@@ -113,8 +106,11 @@
     font-family: var(--font-noto-sans);
 }
 
-/* Keep compatibility with Next.js background/foreground */
+/* Font CSS variables (Fontsource self-hosted fonts) */
 :root {
+    --font-manrope: "Manrope Variable", sans-serif;
+    --font-noto-sans: "Noto Sans", sans-serif;
+    --font-reddit-mono: "Reddit Mono", monospace;
     --background: var(--color-background);
     --foreground: var(--color-foreground);
 }
