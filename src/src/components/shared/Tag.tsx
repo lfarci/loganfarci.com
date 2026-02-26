@@ -1,5 +1,3 @@
-"use client";
-
 import { Chip } from "@heroui/react";
 import React from "react";
 import { Text } from "@/components/shared/typography";
