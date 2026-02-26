@@ -4,6 +4,14 @@ import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
+function injectHelmet(page, helmet) {
+    if (!helmet) return page;
+    return page.replace(
+        "</head>",
+        `${helmet.title.toString()}${helmet.meta.toString()}${helmet.link.toString()}</head>`
+    );
+}
+
 async function prerender() {
     const distDir = path.resolve(__dirname, "../dist");
     const template = fs.readFileSync(path.join(distDir, "index.html"), "utf-8");
@@ -18,19 +26,12 @@ async function prerender() {
     for (const route of routes) {
         const { html, helmet } = render(route);
 
-        // Inject rendered HTML into the template
+        // Inject rendered HTML and helmet metadata into the template
         let page = template.replace(
             '<div id="root"></div>',
             `<div id="root">${html}</div>`
         );
-
-        // Inject helmet metadata (title, meta tags)
-        if (helmet) {
-            page = page.replace(
-                "</head>",
-                `${helmet.title.toString()}${helmet.meta.toString()}${helmet.link.toString()}</head>`
-            );
-        }
+        page = injectHelmet(page, helmet);
 
         // Write to dist/{route}/index.html
         const routePath = route === "/" ? "" : route;
@@ -47,12 +48,7 @@ async function prerender() {
         '<div id="root"></div>',
         `<div id="root">${notFoundHtml}</div>`
     );
-    if (notFoundHelmet) {
-        notFoundPage = notFoundPage.replace(
-            "</head>",
-            `${notFoundHelmet.title.toString()}${notFoundHelmet.meta.toString()}</head>`
-        );
-    }
+    notFoundPage = injectHelmet(notFoundPage, notFoundHelmet);
     fs.writeFileSync(path.join(distDir, "404.html"), notFoundPage);
     console.log("  Prerendered: /404 → 404.html");
 }
