@@ -1,4 +1,4 @@
-name: "Deploy Next Application"
+name: "Deploy Application"
 
 on:
   push:
@@ -22,13 +22,11 @@ permissions:
 
 env:
   src_directory: ${{ github.workspace }}/src
-  out_directory: ${{ github.workspace }}/src/out
-  articles_directory: ${{ github.workspace }}/content/articles
-  data_directory: ${{ github.workspace }}/content/data
+  out_directory: ${{ github.workspace }}/src/dist
 
 jobs:
   deploy:
-    name: "Deploy Next Application"
+    name: "Deploy Application"
     runs-on: ubuntu-latest
     environment:
       name: Production
@@ -43,14 +41,14 @@ jobs:
         id: npm-cache-dir
         run: echo "dir=$(npm config get cache)" >> $GITHUB_OUTPUT
 
-      - name: Cache Next.js build
+      - name: Cache build
         uses: actions/cache@v4
         with:
           path: |
             ${{ steps.npm-cache-dir.outputs.dir }}
-            ${{ env.src_directory }}/.next/cache
-          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/*.ts', '**/*.tsx') }}
-          restore-keys: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
+            ${{ env.src_directory }}/node_modules/.vite
+          key: ${{ runner.os }}-vite-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/*.ts', '**/*.tsx') }}
+          restore-keys: ${{ runner.os }}-vite-${{ hashFiles('**/package-lock.json') }}-
 
       - name: Install dependencies
         run: npm clean-install
@@ -58,10 +56,8 @@ jobs:
       - name: Build application
         run: npm run build
         env:
-          ARTICLES_DIRECTORY: "${{ env.articles_directory }}"
-          DATA_DIRECTORY: "${{ env.data_directory }}"
-          NEXT_PUBLIC_GITHUB_REPOSITORY_URL: "${{ github.server_url }}/${{ github.repository }}"
-          NEXT_PUBLIC_COMMIT_HASH: "${{ github.sha }}"
+          VITE_GITHUB_REPOSITORY_URL: "${{ github.server_url }}/${{ github.repository }}"
+          VITE_COMMIT_HASH: "${{ github.sha }}"
 
       - name: Azure CLI Login
         uses: azure/login@v2
