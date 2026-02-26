@@ -6,8 +6,8 @@ const articleModules = import.meta.glob<{
     content: string;
 }>("@content/articles/*.md", { eager: true });
 
-const parseArticle = (path: string, mod: { frontmatter: Record<string, unknown>; content: string }): Article => {
-    const slug = path.split("/").pop()!.replace(".md", "");
+const parseArticle = (modulePath: string, mod: { frontmatter: Record<string, unknown>; content: string }): Article => {
+    const slug = modulePath.split("/").pop()!.replace(".md", "");
     const fm = mod.frontmatter;
     return {
         slug,
@@ -23,7 +23,7 @@ const parseArticle = (path: string, mod: { frontmatter: Record<string, unknown>;
 };
 
 const allArticles: Article[] = Object.entries(articleModules)
-    .map(([path, mod]) => parseArticle(path, mod))
+    .map(([modulePath, mod]) => parseArticle(modulePath, mod))
     .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
 
 export const getArticleSlugs = (): string[] => allArticles.map((a) => a.slug);

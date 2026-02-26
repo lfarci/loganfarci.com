@@ -10,10 +10,10 @@ export default function markdownPlugin(): Plugin {
             const { data: frontmatter, content } = matter(code);
 
             return {
-                code: `
-                    export const frontmatter = ${JSON.stringify(frontmatter)};
-                    export const content = ${JSON.stringify(content)};
-                `,
+                code: [
+                    `export const frontmatter = ${JSON.stringify(frontmatter)};`,
+                    `export const content = ${JSON.stringify(content)};`,
+                ].join("\n"),
                 map: null,
             };
         },
