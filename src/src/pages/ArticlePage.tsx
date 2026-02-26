@@ -1,5 +1,4 @@
 import { useParams, Navigate } from "react-router";
-import { Helmet } from "react-helmet-async";
 import { getArticleBySlug } from "@/core/articles";
 import MarkdownContent from "@/components/shared/MarkdownContent";
 import { Heading1, Secondary } from "@/components/shared/typography";
@@ -55,10 +54,8 @@ export default function ArticlePage() {
 
     return (
         <>
-            <Helmet>
-                <title>{article.title} - Logan Farci</title>
-                <meta name="description" content={article.description} />
-            </Helmet>
+            <title>{article.title} - Logan Farci</title>
+            <meta name="description" content={article.description} />
             <article className="max-w-none">
                 <Heading1 className="mb-6 mt-8">{article.title}</Heading1>
                 <ArticleMeta

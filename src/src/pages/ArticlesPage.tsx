@@ -1,5 +1,4 @@
 import { getAllArticles } from "@/core/articles";
-import { Helmet } from "react-helmet-async";
 import { ArticleListCard } from "@/components/cards";
 import { Heading1, Text } from "@/components/shared/typography";
 
@@ -8,10 +7,8 @@ export default function ArticlesPage() {
 
     return (
         <>
-            <Helmet>
-                <title>Articles - Logan Farci</title>
-                <meta name="description" content="Articles by Logan Farci, Software Engineer." />
-            </Helmet>
+            <title>Articles - Logan Farci</title>
+            <meta name="description" content="Articles by Logan Farci, Software Engineer." />
             <div className="flex flex-col py-8">
                 <Heading1 className="mb-8">Articles</Heading1>
 

@@ -1,7 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router";
-import { HelmetProvider } from "react-helmet-async";
 import App from "./App";
 
 // Fontsource font imports (self-hosted, no external requests)
@@ -16,11 +15,9 @@ const rootElement = document.getElementById("root")!;
 
 const app = (
     <React.StrictMode>
-        <HelmetProvider>
-            <BrowserRouter>
-                <App />
-            </BrowserRouter>
-        </HelmetProvider>
+        <BrowserRouter>
+            <App />
+        </BrowserRouter>
     </React.StrictMode>
 );
 

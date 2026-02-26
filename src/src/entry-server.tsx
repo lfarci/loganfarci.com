@@ -1,22 +1,17 @@
 import React from "react";
 import ReactDOMServer from "react-dom/server";
 import { StaticRouter } from "react-router";
-import { HelmetProvider, HelmetServerState } from "react-helmet-async";
 import App from "./App";
 import "./globals.css";
 
 export function render(url: string) {
-    const helmetContext: { helmet?: HelmetServerState } = {};
-
     const html = ReactDOMServer.renderToString(
-        <HelmetProvider context={helmetContext}>
-            <StaticRouter location={url}>
-                <App />
-            </StaticRouter>
-        </HelmetProvider>
+        <StaticRouter location={url}>
+            <App />
+        </StaticRouter>
     );
 
-    return { html, helmet: helmetContext.helmet };
+    return { html };
 }
 
 export { getStaticRoutes } from "./routes";
