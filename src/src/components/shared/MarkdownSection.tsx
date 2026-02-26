@@ -1,6 +1,5 @@
 import Section from "@/components/shared/Section";
 import MarkdownContent from "@/components/shared/MarkdownContent";
-import Image from "next/image";
 
 interface MarkdownSectionProps {
     heading: string;
@@ -22,7 +21,7 @@ const MarkdownSection: React.FC<MarkdownSectionProps> = ({
     <Section heading={heading} redirectPath={redirectPath} redirectLabel={redirectLabel}>
         <div className="text-justify">
             {imageSrc && (
-                <Image
+                <img
                     src={imageSrc}
                     alt={imageAlt}
                     width={300}

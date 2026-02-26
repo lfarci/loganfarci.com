@@ -1,4 +1,3 @@
-import Image from "next/image";
 import React from "react";
 import { Heading1 } from "@/components/shared/typography";
 
@@ -20,7 +19,7 @@ const GreetingHeading: React.FC<GreetingHeadingProps> = ({
 }) => (
     <Heading1 className="flex items-center">
         <span className="pr-1">{greeting}</span>
-        <Image
+        <img
             src={iconSrc}
             alt={iconAlt}
             width={iconSize}
