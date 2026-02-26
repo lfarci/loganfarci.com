@@ -7,6 +7,7 @@ on:
     paths:
       - "src/**"
       - "content/**"
+      - ".github/workflows/deploy-app.yml"
   pull_request:
     types: [opened, synchronize, reopened]
     branches:
@@ -14,6 +15,7 @@ on:
     paths:
       - "src/**"
       - "content/**"
+      - ".github/workflows/deploy-app.yml"
   workflow_dispatch:
 
 permissions:
