@@ -1,10 +1,11 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
 import markdownPlugin from "./plugins/vite-plugin-markdown";
 import path from "path";
 
 export default defineConfig({
-    plugins: [react(), markdownPlugin()],
+    plugins: [tailwindcss(), react(), markdownPlugin()],
     resolve: {
         alias: {
             "@/": path.resolve(__dirname, "src") + "/",
