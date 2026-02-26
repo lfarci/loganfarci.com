@@ -1,4 +1,5 @@
 import { useRoutes } from "react-router";
+import { Helmet } from "react-helmet-async";
 import { HeroUIProvider } from "@heroui/react";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import LayoutWrapper from "@/components/layout/LayoutWrapper";
@@ -13,9 +14,11 @@ export default function App() {
     return (
         <HeroUIProvider>
             <ThemeProvider>
-                <title>Logan Farci - Software Engineer</title>
-                <meta name="description" content="Logan Farci, Software Engineer" />
-                <meta name="keywords" content="Software Engineer, Logan Farci, Developer, Brussels, Belgium" />
+                <Helmet>
+                    <title>Logan Farci - Software Engineer</title>
+                    <meta name="description" content="Logan Farci, Software Engineer" />
+                    <meta name="keywords" content="Software Engineer, Logan Farci, Developer, Brussels, Belgium" />
+                </Helmet>
                 <LayoutWrapper
                     githubRepositoryUrl={githubRepositoryUrl}
                     commitHash={latestCommitHash}

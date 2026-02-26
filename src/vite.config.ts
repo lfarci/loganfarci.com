@@ -15,6 +15,9 @@ export default defineConfig({
     build: {
         outDir: "dist",
     },
+    ssr: {
+        noExternal: ["react-helmet-async"],
+    },
     server: {
         fs: {
             allow: [".."], // Allow reading content/ outside project root

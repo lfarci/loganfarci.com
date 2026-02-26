@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import ArticleListSection from "@/components/ArticleListSection";
 import ContactLinks from "@/components/ContactLinks";
 import GreetingHeading from "@/components/GreetingHeading";
@@ -17,8 +18,10 @@ const featuredArticles = getFeaturedArticles();
 export default function HomePage() {
     return (
         <>
-            <title>Logan Farci - Software Engineer</title>
-            <meta name="description" content="Logan Farci, Software Engineer" />
+            <Helmet>
+                <title>Logan Farci - Software Engineer</title>
+                <meta name="description" content="Logan Farci, Software Engineer" />
+            </Helmet>
             <ColumnContainer>
                 <HeroSection
                     heading={<GreetingHeading greeting="Hi" name="Logan" />}
