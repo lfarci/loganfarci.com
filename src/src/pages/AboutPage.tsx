@@ -1,4 +1,3 @@
-import { Helmet } from "react-helmet-async";
 import Section from "@/components/shared/Section";
 import React from "react";
 import MarkdownSection from "@/components/shared/MarkdownSection";
@@ -41,10 +40,8 @@ const profile = getProfile();
 export default function AboutPage() {
     return (
         <>
-            <Helmet>
-                <title>About - Logan Farci</title>
-                <meta name="description" content="Learn more about Logan Farci, Software Engineer." />
-            </Helmet>
+            <title>About - Logan Farci</title>
+            <meta name="description" content="Learn more about Logan Farci, Software Engineer." />
             <div>
                 <MarkdownSection 
                     heading="About Me" 
