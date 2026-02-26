@@ -1,12 +1,13 @@
-import { useParams, Navigate } from "react-router";
+import { useParams } from "react-router";
 import { getArticleBySlug } from "@/core/articles";
+import NotFoundPage from "./NotFoundPage";
 
 export default function ArticlePage() {
     const { slug } = useParams<{ slug: string }>();
     const article = slug ? getArticleBySlug(slug) : null;
 
     if (!article) {
-        return <Navigate to="/404" replace />;
+        return <NotFoundPage />;
     }
 
     return <div>Article: {article.title}</div>;

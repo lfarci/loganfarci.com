@@ -17,6 +17,7 @@ export default function App() {
                 <Helmet>
                     <title>Logan Farci - Software Engineer</title>
                     <meta name="description" content="Logan Farci, Software Engineer" />
+                    <meta name="keywords" content="Software Engineer, Logan Farci, Developer, Brussels, Belgium" />
                 </Helmet>
                 <LayoutWrapper
                     githubRepositoryUrl={githubRepositoryUrl}
