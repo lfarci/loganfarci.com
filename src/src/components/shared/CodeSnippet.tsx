@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import MermaidDiagram from "./MermaidDiagram";
 import { Code, Snippet } from "@heroui/react";

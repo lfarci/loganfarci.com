@@ -1,4 +1,4 @@
-import { notFound } from "next/navigation";
+import { Navigate } from "react-router";
 import { getArticleBySlug, getArticleSlugs } from "@/core/articles";
 import MarkdownContent from "@/components/shared/MarkdownContent";
 import { Heading1, Secondary } from "@/components/shared/typography";
@@ -65,7 +65,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     const article = getArticleBySlug(slug);
 
     if (!article) {
-        notFound();
+        return <Navigate to="/404" replace />;
     }
 
     return (

@@ -1,7 +1,5 @@
-"use client";
-
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useNavigate } from "react-router";
 import ErrorMessage from "@/components/shared/ErrorMessage";
 
 export default function GlobalError({
@@ -11,11 +9,11 @@ export default function GlobalError({
     error: Error & { digest?: string };
     reset: () => void;
 }) {
-    const router = useRouter();
+    const navigate = useNavigate();
 
     useEffect(() => {
         // Log errors in development for debugging
-        if (process.env.NODE_ENV === "development") {
+        if (import.meta.env.DEV) {
             console.error(error);
         }
     }, [error]);
@@ -34,7 +32,7 @@ export default function GlobalError({
                     Try Again
                 </button>
                 <button
-                    onClick={() => router.push("/")}
+                    onClick={() => navigate("/")}
                     className="px-6 py-3 bg-surface-hover text-text-primary font-medium rounded-lg border border-border hover:bg-surface-elevated transition-colors duration-200"
                 >
                     Back to Home

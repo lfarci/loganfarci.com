@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "react-router";
 import ErrorMessage from "@/components/shared/ErrorMessage";
 
 export default function NotFound() {
@@ -9,7 +9,7 @@ export default function NotFound() {
             message="Sorry, the page you are looking for does not exist or has been moved."
         >
             <Link 
-                href="/"
+                to="/"
                 className="px-6 py-3 bg-primary text-text-inverse font-medium rounded-lg hover:bg-primary-hover transition-colors duration-200"
             >
                 Back to Home

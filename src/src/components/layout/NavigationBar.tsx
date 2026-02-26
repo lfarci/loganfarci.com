@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useState } from "react";
 import { Link } from "react-router";
 import { Navbar, NavbarBrand, NavbarContent, NavbarMenu, NavbarMenuItem, NavbarMenuToggle } from "@heroui/react";
