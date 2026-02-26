@@ -1,14 +1,11 @@
 import { Link } from "react-router";
-import { Helmet } from "react-helmet-async";
 import ErrorMessage from "@/components/shared/ErrorMessage";
 
 export default function NotFoundPage() {
     return (
         <>
-            <Helmet>
-                <title>Page Not Found - Logan Farci</title>
-                <meta name="description" content="The page you are looking for does not exist or has been moved." />
-            </Helmet>
+            <title>Page Not Found - Logan Farci</title>
+            <meta name="description" content="The page you are looking for does not exist or has been moved." />
             <ErrorMessage
                 title="404"
                 heading="Page Not Found"

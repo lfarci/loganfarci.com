@@ -1,7 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router";
-import { HelmetProvider } from "react-helmet-async";
 import App from "./App";
 
 // Fontsource font imports (self-hosted, no external requests)
@@ -14,10 +13,8 @@ import "./globals.css";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
     <React.StrictMode>
-        <HelmetProvider>
-            <BrowserRouter>
-                <App />
-            </BrowserRouter>
-        </HelmetProvider>
+        <BrowserRouter>
+            <App />
+        </BrowserRouter>
     </React.StrictMode>
 );
