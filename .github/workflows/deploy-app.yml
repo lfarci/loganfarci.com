@@ -1,4 +1,4 @@
-name: "Deploy Application"
+name: "Deploy App to SWA"
 
 on:
   push:
@@ -28,7 +28,7 @@ env:
 
 jobs:
   deploy:
-    name: "Deploy Application"
+    name: "Deploy App to SWA"
     runs-on: ubuntu-latest
     environment:
       name: Production
