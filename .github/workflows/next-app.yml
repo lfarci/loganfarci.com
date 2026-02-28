@@ -16,10 +16,6 @@ on:
       - "content/**"
   workflow_dispatch:
 
-permissions:
-  id-token: write
-  contents: read
-
 env:
   src_directory: ${{ github.workspace }}/src
   out_directory: ${{ github.workspace }}/src/out
@@ -31,6 +27,9 @@ jobs:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     name: "Deploy Next Application"
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
     environment:
       name: Production
     defaults:
@@ -93,6 +92,8 @@ jobs:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
     name: "Close Pull Request"
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
     steps:
       - name: Azure CLI Login
         uses: azure/login@v2
