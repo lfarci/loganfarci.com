@@ -1,0 +1,113 @@
+name: "Deploy Next Application"
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "src/**"
+      - "content/**"
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+    branches:
+      - main
+    paths:
+      - "src/**"
+      - "content/**"
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  src_directory: ${{ github.workspace }}/src
+  out_directory: ${{ github.workspace }}/src/out
+  articles_directory: ${{ github.workspace }}/content/articles
+  data_directory: ${{ github.workspace }}/content/data
+
+jobs:
+  deploy:
+    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
+    name: "Deploy Next Application"
+    runs-on: ubuntu-latest
+    environment:
+      name: Production
+    defaults:
+      run:
+        working-directory: ${{ github.workspace }}/src
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Get npm cache directory
+        id: npm-cache-dir
+        run: echo "dir=$(npm config get cache)" >> $GITHUB_OUTPUT
+
+      - name: Cache Next.js build
+        uses: actions/cache@v4
+        with:
+          path: |
+            ${{ steps.npm-cache-dir.outputs.dir }}
+            ${{ env.src_directory }}/.next/cache
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/*.ts', '**/*.tsx') }}
+          restore-keys: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
+
+      - name: Install dependencies
+        run: npm clean-install
+
+      - name: Build application
+        run: npm run build
+        env:
+          ARTICLES_DIRECTORY: "${{ env.articles_directory }}"
+          DATA_DIRECTORY: "${{ env.data_directory }}"
+          NEXT_PUBLIC_GITHUB_REPOSITORY_URL: "${{ github.server_url }}/${{ github.repository }}"
+          NEXT_PUBLIC_COMMIT_HASH: "${{ github.sha }}"
+
+      - name: Azure CLI Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Get secrets from Key Vault
+        id: get-secrets
+        run: |
+          echo "deployment_token=$(az keyvault secret show --name StaticWebAppDeploymentKey --vault-name ${{ secrets.AZURE_KEY_VAULT_NAME }} --query value -o tsv)" >> $GITHUB_OUTPUT
+
+      - name: Determine environment
+        id: environment
+        run: |
+          ENVIRONMENT_NAME="production"
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            ENVIRONMENT_NAME="preview"
+          fi
+          echo "name=$ENVIRONMENT_NAME" >> $GITHUB_OUTPUT
+
+      - name: Deploy to Azure Static Web Apps
+        run: |
+          npx swa deploy ${{ env.out_directory }} --deployment-token ${{ steps.get-secrets.outputs.deployment_token }} --env ${{ steps.environment.outputs.name }}
+
+  close_pull_request:
+    if: github.event_name == 'pull_request' && github.event.action == 'closed'
+    name: "Close Pull Request"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Azure CLI Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Get secrets from Key Vault
+        id: get-secrets
+        run: |
+          echo "deployment_token=$(az keyvault secret show --name StaticWebAppDeploymentKey --vault-name ${{ secrets.AZURE_KEY_VAULT_NAME }} --query value -o tsv)" >> $GITHUB_OUTPUT
+
+      - name: Close preview environment
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ steps.get-secrets.outputs.deployment_token }}
+          action: "close"
