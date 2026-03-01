@@ -5,10 +5,10 @@ import ErrorMessage from "@/components/shared/ErrorMessage";
 export default function ErrorPage({
     error,
     resetErrorBoundary,
-}: {
+}: Readonly<{
     error: Error;
     resetErrorBoundary: () => void;
-}) {
+}>) {
     const navigate = useNavigate();
 
     useEffect(() => {

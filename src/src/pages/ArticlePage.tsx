@@ -14,7 +14,7 @@ interface ArticleMetaProps {
     tags?: string[];
 }
 
-function ArticleMeta({ publishedAt, author, coauthoredWithAgent, tags }: ArticleMetaProps) {
+function ArticleMeta({ publishedAt, author, coauthoredWithAgent, tags }: Readonly<ArticleMetaProps>) {
     return (
         <Secondary className="mb-4">
             <span className="flex flex-row flex-wrap items-center gap-2">
