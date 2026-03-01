@@ -1,4 +1,3 @@
-import Image from "next/image";
 import React from "react";
 
 interface IconProps {
@@ -7,7 +6,7 @@ interface IconProps {
 }
 
 const Icon: React.FC<IconProps> = ({ src, alt }) => (
-    <Image src={src} alt={alt} width={512} height={512} className="w-1/4" />
+    <img src={src} alt={alt} width={512} height={512} className="w-1/4" />
 );
 
 export default Icon;

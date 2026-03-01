@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useRef, useState } from "react";
 import ClientTooltip from "@/components/shared/ClientTooltip";
 import { Heading3 } from "@/components/shared/typography";

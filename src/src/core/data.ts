@@ -1,91 +1,29 @@
-import { Certification } from "@/types/certification";
-import { resolveDirectoryFromEnvironment } from "./environment";
-import { existsSync, readFileSync } from "fs";
-import { join } from "path";
-import { Experience, SkillCategory, Interest, Contact, Profile, Diploma, Icon, Skill } from "@/types";
+import { Certification, Experience, SkillCategory, Interest, Contact, Profile, Diploma, Icon, Skill } from "@/types";
 
-/**
- * Returns the path to the data directory based on the environment variable or a default value.
- * @returns {string} The path to the data directory.
- */
-const getDataDirectoryPath = (): string => {
-    return resolveDirectoryFromEnvironment("DATA_DIRECTORY", "../content/data");
-};
+// Vite resolves JSON imports at build time — inlined into the bundle
+import certifications from "@content/data/certifications.json";
+import experiences from "@content/data/experiences.json";
+import skills from "@content/data/skills.json";
+import icons from "@content/data/icons.json";
+import interests from "@content/data/interests.json";
+import contacts from "@content/data/contacts.json";
+import profile from "@content/data/profile.json";
+import education from "@content/data/education.json";
 
-/**
- * Generic function to read and parse JSON data (object or array) from the data directory.
- * @param fileName Name of the JSON file (e.g., "profile.json")
- * @returns Parsed JSON data of type T.
- */
-const getObjectFromJsonFile = <T>(fileName: string, encoding: BufferEncoding = "utf8"): T => {
-    const dataDirectory = getDataDirectoryPath();
-    const filePath = join(dataDirectory, fileName);
+export const getCertifications = (): Certification[] => certifications as Certification[];
+export const getExperiences = (): Experience[] => experiences as Experience[];
+export const getSkillCategories = (): SkillCategory[] => skills as SkillCategory[];
+export const getIcons = (): Icon[] => icons as Icon[];
+export const getInterests = (): Interest[] => interests as Interest[];
+export const getContacts = (): Contact[] => contacts as Contact[];
+export const getProfile = (): Profile => profile as Profile;
+export const getDiploma = (): Diploma => education as Diploma;
 
-    if (!existsSync(filePath)) {
-        throw new Error(`File not found: ${filePath}`);
-    }
-
-    const fileData = readFileSync(filePath, encoding);
-    return JSON.parse(fileData) as T;
-};
-
-/**
- * Retrieves certifications from the JSON file.
- * @returns {Certification[]} Array of certifications.
- */
-export const getCertifications = (): Certification[] => getObjectFromJsonFile<Certification[]>("certifications.json");
-
-/**
- * Retrieves experiences from the JSON file.
- * @returns {Experience[]} Array of experiences.
- */
-export const getExperiences = (): Experience[] => getObjectFromJsonFile<Experience[]>("experiences.json");
-
-/**
- * Retrieves skill categories from the JSON file.
- * @returns {SkillCategory[]} Array of skill categories.
- */
-export const getSkillCategories = (): SkillCategory[] => getObjectFromJsonFile<SkillCategory[]>("skills.json");
-
-/**
- * Retrieves icons from the JSON file.
- * @returns {Icon[]} Array of icons.
- */
-export const getIcons = (): Icon[] => getObjectFromJsonFile<Icon[]>("icons.json");
-
-/**
- * Retrieves interests from the JSON file.
- * @returns {Interest[]} Array of interests.
- */
-export const getInterests = (): Interest[] => getObjectFromJsonFile<Interest[]>("interests.json");
-
-/**
- * Retrieves contacts from the JSON file.
- * @returns {Contact[]} Array of contacts.
- */
-export const getContacts = (): Contact[] => getObjectFromJsonFile<Contact[]>("contacts.json");
-
-/**
- * Retrieves the profile data from the JSON file.
- * @returns {Profile} The profile data.
- */
-export const getProfile = (): Profile => getObjectFromJsonFile<Profile>("profile.json");
-
-/**
- * Retrieves the diploma data from the JSON file.
- * @returns {Diploma} The diploma data.
- */
-export const getDiploma = (): Diploma => getObjectFromJsonFile<Diploma>("education.json");
-
-/**
- * Enriches skills with icon data
- */
 export function attemptToLoadIcons(skills: Skill[]): Array<{ skill: Skill; icon: Icon | null }> {
-    const icons = getIcons();
-    const iconMap = new Map(icons.map(i => [i.id, i]));
-    
-    return skills.map(skill => ({
-        skill: skill,
-        icon: skill.iconId ? (iconMap.get(skill.iconId) || null) : null
+    const iconList = getIcons();
+    const iconMap = new Map(iconList.map((i) => [i.id, i]));
+    return skills.map((skill) => ({
+        skill,
+        icon: skill.iconId ? iconMap.get(skill.iconId) || null : null,
     }));
 }

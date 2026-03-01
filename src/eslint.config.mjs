@@ -1,7 +1,6 @@
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 import js from "@eslint/js";
-import nextPlugin from "@next/eslint-plugin-next";
 import tseslint from "typescript-eslint";
 import prettierConfig from "eslint-config-prettier";
 
@@ -24,10 +23,9 @@ const typeCheckedConfigs = tseslint.configs.recommendedTypeChecked.map((config) 
 
 export default tseslint.config(
     {
-        ignores: ["node_modules", ".next", "out", "dist", "coverage"],
+        ignores: ["dist", "node_modules", "coverage"],
     },
     js.configs.recommended,
     ...typeCheckedConfigs,
-    nextPlugin.configs["core-web-vitals"],
     prettierConfig,
 );

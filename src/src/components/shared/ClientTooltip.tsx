@@ -1,5 +1,3 @@
-"use client";
-
 import { Tooltip, TooltipProps } from "@heroui/react";
 import React from "react";
 

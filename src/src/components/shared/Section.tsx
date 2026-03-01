@@ -1,5 +1,3 @@
-"use client";
-
 import { Tooltip } from "@heroui/react";
 import ChevronRightIcon from "./icons/ChevronRightIcon";
 import { Heading1, Text } from "@/components/shared/typography";

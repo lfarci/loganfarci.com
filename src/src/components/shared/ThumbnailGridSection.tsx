@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "react-router";
 import Section from "./Section";
 import { CardGrid, MediaTileCard } from "@/components/cards";
 import NewTabLink from "./NewTabLink";
@@ -44,7 +44,7 @@ const ThumbnailGridSection: React.FC<ThumbnailGridSectionProps> = ({
 
                 if (item.redirectPath) {
                     return (
-                        <Link key={index} href={item.redirectPath} className="transition-opacity hover:opacity-80">
+                        <Link key={index} to={item.redirectPath} className="transition-opacity hover:opacity-80">
                             {card}
                         </Link>
                     );

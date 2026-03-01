@@ -1,5 +1,3 @@
-"use client";
-
 import { ReactNode } from "react";
 import { typographyStyles } from "@/components/shared/typography/core/styles";
 

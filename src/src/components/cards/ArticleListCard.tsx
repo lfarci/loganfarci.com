@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "react-router";
 import { formatDate } from "@/core/date";
 import Card, { CardBody, CardFooter, CardHeader, CardSubtitle, CardTitle } from "./Card";
 import IconTag from "@/components/shared/IconTag";
@@ -15,7 +15,7 @@ const ArticleListCard: React.FC<ArticleListCardProps> = ({ article, showTags = f
         <CardHeader className="gap-1.5">
             <CardTitle>
                 <Link
-                    href={`/articles/${article.slug}`}
+                    to={`/articles/${article.slug}`}
                     className="hover:text-primary-hover transition-colors cursor-pointer"
                 >
                     {article.title}

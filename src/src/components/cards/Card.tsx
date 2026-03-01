@@ -1,6 +1,5 @@
 import type React from "react";
-import Link from "next/link";
-import Image from "next/image";
+import { Link } from "react-router";
 import { Heading3 } from "@/components/shared/typography";
 import { ImageProps } from "@/types";
 import GridContainer from "@/components/layout/GridContainer";
@@ -98,7 +97,7 @@ export const CardMedia: React.FC<CardMediaProps> = ({
             containerClassName,
         )}
     >
-        <Image
+        <img
             src={media.src}
             alt={media.alt}
             width={media.width}
@@ -125,7 +124,7 @@ export const CardLink: React.FC<CardLinkProps> = ({ href, external = false, clas
             {children}
         </a>
     ) : (
-        <Link href={href} className={linkClass}>
+        <Link to={href} className={linkClass}>
             {children}
         </Link>
     );

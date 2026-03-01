@@ -1,4 +1,3 @@
-import Image from "next/image";
 import React from "react";
 import { Heading1, Text } from "@/components/shared/typography";
 import type { ImageProps } from "@/types";
@@ -31,7 +30,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ heading, description, image, 
                 {actions}
             </div>
             {image && (
-                <Image
+                <img
                     src={image.src}
                     alt={image.alt}
                     width={image.width ?? 512}
