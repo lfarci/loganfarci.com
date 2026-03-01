@@ -70,8 +70,10 @@ jobs:
 
       - name: Get secrets from Key Vault
         id: get-secrets
+        env:
+          AZURE_KEY_VAULT_NAME: ${{ secrets.AZURE_KEY_VAULT_NAME }}
         run: |
-          echo "deployment_token=$(az keyvault secret show --name StaticWebAppDeploymentKey --vault-name ${{ secrets.AZURE_KEY_VAULT_NAME }} --query value -o tsv)" >> $GITHUB_OUTPUT
+          echo "deployment_token=$(az keyvault secret show --name StaticWebAppDeploymentKey --vault-name "$AZURE_KEY_VAULT_NAME" --query value -o tsv)" >> $GITHUB_OUTPUT
 
       - name: Determine environment
         id: environment
@@ -102,8 +104,10 @@ jobs:
 
       - name: Get secrets from Key Vault
         id: get-secrets
+        env:
+          AZURE_KEY_VAULT_NAME: ${{ secrets.AZURE_KEY_VAULT_NAME }}
         run: |
-          echo "deployment_token=$(az keyvault secret show --name StaticWebAppDeploymentKey --vault-name ${{ secrets.AZURE_KEY_VAULT_NAME }} --query value -o tsv)" >> $GITHUB_OUTPUT
+          echo "deployment_token=$(az keyvault secret show --name StaticWebAppDeploymentKey --vault-name "$AZURE_KEY_VAULT_NAME" --query value -o tsv)" >> $GITHUB_OUTPUT
 
       - name: Close preview environment
         uses: Azure/static-web-apps-deploy@v1
