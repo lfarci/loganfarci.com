@@ -53,7 +53,9 @@ async function prerender() {
     console.log("  Prerendered: /404 → 404.html");
 }
 
-prerender().catch((err) => {
+try {
+    await prerender();
+} catch (err) {
     console.error("Prerender failed:", err);
     process.exit(1);
-});
+}
