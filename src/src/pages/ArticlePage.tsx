@@ -1,21 +1,11 @@
-import { notFound } from "next/navigation";
-import { getArticleBySlug, getArticleSlugs } from "@/core/articles";
+import { useParams, Navigate } from "react-router";
+import { getArticleBySlug } from "@/core/articles";
 import MarkdownContent from "@/components/shared/MarkdownContent";
 import { Heading1, Secondary } from "@/components/shared/typography";
 import { formatDate } from "@/core/date";
 import { Divider } from "@heroui/react";
 import ClientTooltip from "@/components/shared/ClientTooltip";
 import IconTag from "@/components/shared/IconTag";
-
-interface ArticlePageParams {
-    slug: string;
-}
-
-type ResolvableArticleParams = ArticlePageParams | Promise<ArticlePageParams>;
-
-interface ArticlePageProps {
-    params: ResolvableArticleParams;
-}
 
 interface ArticleMetaProps {
     publishedAt: string;
@@ -24,7 +14,7 @@ interface ArticleMetaProps {
     tags?: string[];
 }
 
-function ArticleMeta({ publishedAt, author, coauthoredWithAgent, tags }: ArticleMetaProps) {
+function ArticleMeta({ publishedAt, author, coauthoredWithAgent, tags }: Readonly<ArticleMetaProps>) {
     return (
         <Secondary className="mb-4">
             <span className="flex flex-row flex-wrap items-center gap-2">
@@ -54,32 +44,30 @@ function ArticleMeta({ publishedAt, author, coauthoredWithAgent, tags }: Article
     );
 }
 
-export function generateStaticParams() {
-    const slugs = getArticleSlugs();
-    return slugs.map((slug) => ({ slug }));
-}
-
-export default async function ArticlePage({ params }: ArticlePageProps) {
-    const resolvedParams = await Promise.resolve(params);
-    const { slug } = resolvedParams;
-    const article = getArticleBySlug(slug);
+export default function ArticlePage() {
+    const { slug } = useParams<{ slug: string }>();
+    const article = slug ? getArticleBySlug(slug) : null;
 
     if (!article) {
-        notFound();
+        return <Navigate to="/404" replace />;
     }
 
     return (
-        <article className="max-w-none">
-            <Heading1 className="mb-6 mt-8">{article.title}</Heading1>
-            <ArticleMeta
-                publishedAt={article.publishedAt}
-                author={article.author}
-                coauthoredWithAgent={article.coauthoredWithAgent}
-                tags={article.tags}
-            />
-            <Secondary className="italic">{article.description}</Secondary>
-            <Divider className="mt-4 mb-8" />
-            <MarkdownContent content={article.content} />
-        </article>
+        <>
+            <title>{article.title} - Logan Farci</title>
+            <meta name="description" content={article.description} />
+            <article className="max-w-none">
+                <Heading1 className="mb-6 mt-8">{article.title}</Heading1>
+                <ArticleMeta
+                    publishedAt={article.publishedAt}
+                    author={article.author}
+                    coauthoredWithAgent={article.coauthoredWithAgent}
+                    tags={article.tags}
+                />
+                <Secondary className="italic">{article.description}</Secondary>
+                <Divider className="mt-4 mb-8" />
+                <MarkdownContent content={article.content} />
+            </article>
+        </>
     );
 }
