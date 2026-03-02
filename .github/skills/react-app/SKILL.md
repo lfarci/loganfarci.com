@@ -5,7 +5,7 @@ description: Handles implementation tasks in the loganfarci.com React + Vite + T
 
 ## Overview
 
-This project is a **Vite + React (TypeScript)** single-page application with SSR prerendering, styled with **Tailwind CSS v4** and the **Heroui** component library. All source code lives under `src/src/`, and all build commands must be run from the `src/` directory.
+This project is a **Vite + React 19 (TypeScript)** single-page application with SSR prerendering, styled with **Tailwind CSS v4** and the **Heroui** component library. All source code lives under `src/src/`, and all build commands must be run from the `src/` directory.
 
 ## Project Structure
 
@@ -25,8 +25,8 @@ src/                          # Vite project root (run all commands here)
 ├── scripts/
 │   └── prerender.mjs         # Generates static HTML for all routes
 └── src/                      # Application source
-    ├── main.tsx              # Client entry point
-    ├── entry-server.tsx      # SSR entry point
+    ├── main.tsx              # Client entry point (wraps app in HelmetProvider)
+    ├── entry-server.tsx      # SSR entry point (wraps app in HelmetProvider + StaticRouter)
     ├── App.tsx               # Root app component
     ├── routes.tsx            # React Router route definitions
     ├── globals.css           # Global CSS variables and base styles
@@ -55,7 +55,10 @@ content/
 ## Coding Conventions
 
 - **TypeScript** for all code. No plain JS files in `src/src/`.
+- **No React import needed** in JSX files — the Vite JSX transform handles it. Only import specific hooks/types you use.
 - **Functional React components** with hooks only. No class components.
+- **Ref as prop** (React 19): pass `ref` directly — no `forwardRef` needed.
+- **Context without `.Provider`** (React 19): render `<MyContext value={...}>` directly.
 - **Tailwind CSS** for all styling. Extend the theme in `src/tailwind.config.ts`. Never use inline styles unless absolutely necessary.
 - **Heroui** components for UI primitives (buttons, cards, modals, etc.). Import from `@heroui/react`.
 - **Import aliases**:
@@ -71,20 +74,23 @@ This project uses **Tailwind CSS v4** via `@tailwindcss/vite` (Vite plugin integ
 
 The theme is extended in `src/tailwind.config.ts` with semantic CSS variable-backed colors:
 
-| Token | CSS Variable |
-|-------|-------------|
-| `bg-background` | `--color-background` |
-| `text-foreground` | `--color-foreground` |
-| `text-primary` | `--color-text-primary` |
-| `text-secondary` | `--color-text-secondary` |
-| `text-tertiary` | `--color-text-tertiary` |
-| `text-muted` | `--color-text-muted` |
-| `bg-surface` | `--color-surface` |
-| `bg-surface-elevated` | `--color-surface-elevated` |
-| `border-border` | `--color-border` |
-| `text-success/warning/error/info` | status color variables |
+| Token | CSS Variable | Usage |
+|-------|-------------|-------|
+| `bg-background` | `--color-background` | Page background |
+| `text-foreground` | `--color-foreground` | Default text |
+| `text-primary` | `--color-text-primary` | Primary text |
+| `text-secondary` | `--color-text-secondary` | Secondary text |
+| `text-tertiary` | `--color-text-tertiary` | Tertiary/label text |
+| `text-muted` | `--color-text-muted` | Muted/disabled text |
+| `bg-surface` | `--color-surface` | Card/panel background |
+| `bg-surface-elevated` | `--color-surface-elevated` | Elevated surface (dropdowns, modals) |
+| `bg-surface-hover` | `--color-surface-hover` | Hover state background |
+| `border-border` | `--color-border` | Default border |
+| `border-border-light` | `--color-border-light` | Subtle border |
+| `border-border-strong` | `--color-border-strong` | Prominent border |
+| `text-success/warning/error/info` | status color variables | Status indicators |
 
-CSS variables are defined in `src/src/globals.css`. Always use these semantic tokens instead of raw Tailwind color classes to ensure dark mode consistency. Dark mode is toggled via `class` strategy (`darkMode: "class"` in `tailwind.config.ts`).
+CSS variables are defined in `src/src/globals.css`. Always use these semantic tokens instead of raw Tailwind color classes (e.g., `text-slate-700`) to ensure dark mode consistency. Dark mode is toggled via `class` strategy (`darkMode: "class"` in `tailwind.config.ts`).
 
 ## Developer Commands
 
@@ -107,30 +113,92 @@ npm run lint           # ESLint (TypeScript + React rules)
 npm run preview        # Preview the production build locally
 ```
 
+## React 19 Patterns
+
+### Ref as Prop (no forwardRef)
+
+```tsx
+// React 19: pass ref directly as a prop
+interface InputProps {
+  ref?: React.Ref<HTMLInputElement>;
+  placeholder?: string;
+}
+
+const Input = ({ ref, placeholder }: InputProps) => (
+  <input ref={ref} placeholder={placeholder} className="border border-border rounded px-3 py-2" />
+);
+```
+
+### Context Without Provider
+
+```tsx
+// React 19: render context directly (no Context.Provider wrapper needed)
+const ThemeContext = createContext<"light" | "dark">("light");
+
+function App() {
+  return (
+    <ThemeContext value="dark">
+      <Main />
+    </ThemeContext>
+  );
+}
+```
+
+### useOptimistic for Optimistic UI
+
+```tsx
+import { useOptimistic, useTransition, useState } from "react";
+
+function LikeButton({ initialCount }: { initialCount: number }) {
+  const [count, setCount] = useState(initialCount);
+  const [optimisticCount, addOptimistic] = useOptimistic(
+    count,
+    (current, increment: number) => current + increment
+  );
+  const [, startTransition] = useTransition();
+
+  const handleLike = () => {
+    addOptimistic(1);
+    startTransition(async () => {
+      await fetch("/api/like", { method: "POST" });
+      setCount((c) => c + 1);
+    });
+  };
+
+  return (
+    <button onClick={handleLike} className="text-text-secondary hover:text-primary transition-colors">
+      ♥ {optimisticCount}
+    </button>
+  );
+}
+```
+
 ## Adding New Components
 
 1. Create the component in `src/src/components/` (or a sub-folder matching its category).
-2. Use TypeScript with explicit prop types.
+2. Use TypeScript with explicit prop types — always define a `Props` interface or type.
 3. Use Tailwind utility classes for all styling; reference semantic color tokens.
 4. Use Heroui components where appropriate instead of building from scratch.
+5. Ensure accessibility: semantic elements, ARIA labels, keyboard support.
 
 Example:
 ```tsx
 import type { FC } from "react";
 
-interface MyCardProps {
+interface SectionCardProps {
   title: string;
   description: string;
+  className?: string;
 }
 
-const MyCard: FC<MyCardProps> = ({ title, description }) => (
-  <div className="rounded-lg border border-border bg-surface p-4">
+const SectionCard: FC<SectionCardProps> = ({ title, description, className = "" }) => (
+  <article className={`rounded-lg border border-border bg-surface p-4 ${className}`}>
     <h3 className="text-lg font-semibold text-text-primary">{title}</h3>
     <p className="mt-1 text-sm text-text-secondary">{description}</p>
-  </div>
+  </article>
 );
 
-export default MyCard;
+export default SectionCard;
 ```
 
 ## Adding New Pages
@@ -140,11 +208,95 @@ export default MyCard;
 3. Register the route in `src/src/routes.tsx`.
 4. Add the route path to the `routes` array in `src/scripts/prerender.mjs` so it is prerendered.
 
+Example:
+```tsx
+import { Helmet } from "react-helmet-async";
+
+export default function ExamplePage() {
+  return (
+    <>
+      <Helmet>
+        <title>Example – Logan Farci</title>
+        <meta name="description" content="Brief description for SEO." />
+      </Helmet>
+      <main className="container mx-auto px-4 py-12">
+        <h1 className="text-3xl font-bold text-text-primary">Example</h1>
+      </main>
+    </>
+  );
+}
+```
+
+## Custom Hooks
+
+Extract reusable logic into typed custom hooks. Place them in `src/src/core/` or a dedicated `src/src/hooks/` folder.
+
+```tsx
+import { useState, useEffect } from "react";
+
+interface UseFetchResult<T> {
+  data: T | null;
+  loading: boolean;
+  error: Error | null;
+}
+
+export function useFetch<T>(url: string): UseFetchResult<T> {
+  const [data, setData] = useState<T | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch(url)
+      .then((r) => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        return r.json() as Promise<T>;
+      })
+      .then((d) => { if (!cancelled) setData(d); })
+      .catch((e) => { if (!cancelled) setError(e instanceof Error ? e : new Error(String(e))); })
+      .finally(() => { if (!cancelled) setLoading(false); });
+    return () => { cancelled = true; };
+  }, [url]);
+
+  return { data, loading, error };
+}
+```
+
 ## SSR Considerations
 
-- Both `src/src/main.tsx` (client) and `src/src/entry-server.tsx` (SSR) must wrap the app in `<HelmetProvider>`.
-- Do not use browser-only APIs (`window`, `document`, `localStorage`) at the module top level or in components without guarding with `typeof window !== "undefined"`.
-- Lazy-load heavy client-only libraries with `React.lazy` + `Suspense` where possible.
+- Both `src/src/main.tsx` (client) and `src/src/entry-server.tsx` (SSR) wrap the app in `<HelmetProvider>`.
+- `StaticRouter` (from `react-router` directly — in v7.12+ it is NOT exported from `react-router/server`) is used in the SSR entry point.
+- Do not use browser-only APIs (`window`, `document`, `localStorage`) at the module top level or in render logic without guarding with `typeof window !== "undefined"`.
+- Use `useEffect` for client-only side-effects (event listeners, DOM manipulation, etc.).
+- Lazy-load heavy client-only libraries (e.g., Mermaid) with `React.lazy` + `Suspense`.
+
+## Code Splitting
+
+Use `React.lazy` with `Suspense` to defer loading of heavy components:
+
+```tsx
+import { lazy, Suspense } from "react";
+
+const HeavyDiagram = lazy(() => import("@/components/HeavyDiagram"));
+
+function ArticlePage() {
+  return (
+    <Suspense fallback={<div className="text-text-muted">Loading diagram…</div>}>
+      <HeavyDiagram />
+    </Suspense>
+  );
+}
+```
+
+## Accessibility Checklist
+
+When creating interactive components, verify:
+- [ ] Semantic element used (`<button>`, `<nav>`, `<main>`, `<article>`, etc.)
+- [ ] Every interactive element reachable via keyboard (`Tab`, `Enter`, `Space`)
+- [ ] Inputs have associated `<label>` or `aria-label`
+- [ ] Images have meaningful `alt` text (or `alt=""` for decorative images)
+- [ ] Color is not the only way to convey information
+- [ ] Focus styles are visible (Tailwind `focus-visible:ring`)
 
 ## Verification Workflow
 
