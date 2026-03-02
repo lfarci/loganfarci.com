@@ -1,0 +1,75 @@
+name: "Setup Repository Labels"
+
+# Creates all labels required by agentic workflows (e.g., issue-triage).
+# Run this workflow once after the repository is set up, or whenever labels
+# are deleted and need to be recreated.
+on:
+  workflow_dispatch:
+
+permissions:
+  issues: write
+
+jobs:
+  create-labels:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create required labels
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const labels = [
+              {
+                name: 'enhancement',
+                color: 'a2eeef',
+                description: 'New feature or request'
+              },
+              {
+                name: 'question',
+                color: 'd876e3',
+                description: 'Further information is requested'
+              },
+              {
+                name: 'duplicate',
+                color: 'cfd3d7',
+                description: 'This issue or pull request already exists'
+              },
+              {
+                name: 'priority:high',
+                color: 'e11d48',
+                description: 'High priority - broken functionality or security issue'
+              },
+              {
+                name: 'priority:medium',
+                color: 'f97316',
+                description: 'Medium priority - notable UX problems or missing features'
+              },
+              {
+                name: 'priority:low',
+                color: '86efac',
+                description: 'Low priority - cosmetic issues or minor improvements'
+              },
+              {
+                name: 'needs-clarification',
+                color: 'fef3c7',
+                description: 'Needs more information before work can begin'
+              },
+            ];
+
+            for (const label of labels) {
+              try {
+                await github.rest.issues.createLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  name: label.name,
+                  color: label.color,
+                  description: label.description
+                });
+                console.log(`✓ Created label: ${label.name}`);
+              } catch (e) {
+                if (e.status === 422) {
+                  console.log(`  Label already exists: ${label.name}`);
+                } else {
+                  throw e;
+                }
+              }
+            }
