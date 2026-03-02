@@ -1,7 +1,7 @@
 ---
 description: React + Vite + Tailwind CSS implementation agent for loganfarci.com. Use when implementing frontend features, creating components and pages, styling with Tailwind, or working with the React app source code.
 tools: ["changes", "codebase", "editFiles", "fetch", "findTestFiles", "problems", "runCommands", "runTasks", "search", "usages", "context7"]
-model: claude-sonnet-4-5
+model: claude-sonnet-4-6
 ---
 
 # React App Agent
