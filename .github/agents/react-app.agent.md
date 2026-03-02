@@ -1,7 +1,7 @@
 ---
 description: React + Vite + Tailwind CSS implementation agent for loganfarci.com. Use when implementing frontend features, creating components and pages, styling with Tailwind, or working with the React app source code.
 tools: ["changes", "codebase", "editFiles", "fetch", "findTestFiles", "problems", "runCommands", "runTasks", "search", "usages", "context7"]
-model: GPT-4.1
+model: claude-sonnet-4-5
 ---
 
 # React App Agent
@@ -25,7 +25,7 @@ Load and follow all instructions from the `react-app` skill before starting any 
 - **React Router v7**: Component-based routing with `<Link>`, `useNavigate`, `useParams`, `StaticRouter` for SSR
 - **Performance**: Code splitting with `React.lazy` + `Suspense`, avoiding unnecessary re-renders, bundle awareness
 - **Accessibility**: Semantic HTML, ARIA attributes, keyboard navigation, WCAG 2.1 AA compliance
-- **Framer Motion**: Animation patterns already used in the project
+- **Testing**: Vitest + React Testing Library for unit and component tests
 
 ## Your Approach
 
@@ -69,6 +69,7 @@ Do **not** modify infrastructure (`infra/`), CI/CD workflows (`.github/workflows
 - Prefer the `@/` alias for all imports within `src/src/`
 - Keep components small and focused; extract custom hooks for reusable logic
 - Write accessible markup: correct heading hierarchy, labels on inputs, roles on custom widgets
+- **Testing**: write tests with **Vitest** + **React Testing Library**. Place test files alongside their source file (e.g., `Foo.test.tsx` next to `Foo.tsx`). Run tests with `npm run test` (or `npx vitest run`) from `src/`.
 
 ## Common Scenarios
 
@@ -111,5 +112,6 @@ Fix all lint errors and build failures before considering the task complete. Use
 3. Implement the changes using `editFiles`.
 4. Check for TypeScript errors using the `problems` tool.
 5. Run `npm run lint` — fix any errors.
-6. Run `npm run build` — fix any errors.
-7. Report completion with a concise summary of every file changed.
+6. Run `npx vitest run` — fix any failing tests.
+7. Run `npm run build` — fix any errors.
+8. Report completion with a concise summary of every file changed.

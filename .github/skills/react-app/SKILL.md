@@ -110,6 +110,7 @@ npm run prerender      # Static HTML for all routes → dist/
 
 # Quality
 npm run lint           # ESLint (TypeScript + React rules)
+npm run test           # Vitest unit/component tests (npx vitest run if no script yet)
 npm run preview        # Preview the production build locally
 ```
 
@@ -288,6 +289,64 @@ function ArticlePage() {
 }
 ```
 
+## Testing with Vitest
+
+Use **Vitest** + **React Testing Library** for unit and component tests.
+
+- Place test files alongside their source (e.g., `Button.test.tsx` next to `Button.tsx`).
+- Use `@testing-library/react` for rendering components and `@testing-library/user-event` for interactions.
+- Prefer queries that reflect how users interact with the UI: `getByRole`, `getByLabelText`, `getByText`.
+- Run tests from `src/`:
+  ```bash
+  npx vitest run        # single run (CI)
+  npx vitest            # watch mode (development)
+  ```
+
+Example component test:
+
+```tsx
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { describe, it, expect, vi } from "vitest";
+import SectionCard from "@/components/SectionCard";
+
+describe("SectionCard", () => {
+  it("renders title and description", () => {
+    render(<SectionCard title="Hello" description="World" />);
+
+    expect(screen.getByRole("article")).toBeInTheDocument();
+    expect(screen.getByText("Hello")).toBeInTheDocument();
+    expect(screen.getByText("World")).toBeInTheDocument();
+  });
+});
+```
+
+Example hook test:
+
+```tsx
+import { renderHook, waitFor } from "@testing-library/react";
+import { describe, it, expect, vi } from "vitest";
+import { useFetch } from "@/core/useFetch";
+
+describe("useFetch", () => {
+  it("returns data on successful fetch", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve({ id: 1 }),
+    }));
+
+    const { result } = renderHook(() => useFetch<{ id: number }>("/api/test"));
+
+    await waitFor(() => expect(result.current.loading).toBe(false));
+
+    expect(result.current.data).toEqual({ id: 1 });
+    expect(result.current.error).toBeNull();
+
+    vi.unstubAllGlobals();
+  });
+});
+```
+
 ## Accessibility Checklist
 
 When creating interactive components, verify:
@@ -302,5 +361,6 @@ When creating interactive components, verify:
 
 After making changes:
 1. Run `npm run lint` from `src/` — fix all lint errors.
-2. Run `npm run build` from `src/` — ensure the full 3-step pipeline succeeds.
-3. Run `npm run preview` to manually verify the result in the browser.
+2. Run `npx vitest run` from `src/` — all tests must pass.
+3. Run `npm run build` from `src/` — ensure the full 3-step pipeline succeeds.
+4. Run `npm run preview` to manually verify the result in the browser.
