@@ -1,0 +1,48 @@
+name: "Unit Tests"
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "src/src/**"
+      - "src/tests/unit/**"
+      - "src/package.json"
+      - "src/package-lock.json"
+      - "src/vite.config.ts"
+      - ".github/workflows/unit-tests.yml"
+
+jobs:
+  test:
+    name: "Run Unit Tests"
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ github.workspace }}/src
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Get npm cache directory
+        id: npm-cache-dir
+        run: echo "dir=$(npm config get cache)" >> $GITHUB_OUTPUT
+
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.npm-cache-dir.outputs.dir }}
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: ${{ runner.os }}-npm-
+
+      - name: Install dependencies
+        run: npm clean-install --legacy-peer-deps
+
+      - name: Run unit tests
+        run: npm run test -- --reporter=verbose --reporter=junit --outputFile=test-results.xml
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unit-test-results
+          path: ${{ github.workspace }}/src/test-results.xml
