@@ -161,6 +161,14 @@
         "iconId": "github-copilot"
       },
       {
+        "name": "GitHub Copilot CLI",
+        "iconId": "github-copilot"
+      },
+      {
+        "name": "GitHub Copilot SDK",
+        "iconId": "github-copilot"
+      },
+      {
         "name": "GitHub Models",
         "iconId": "github"
       },
