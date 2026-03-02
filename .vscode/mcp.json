@@ -6,15 +6,24 @@
         },
         "playwright": {
             "command": "npx",
-            "args": ["@playwright/mcp@latest", "--headless", "--browser", "msedge"]
+            "args": [
+                "@playwright/mcp@latest",
+                "--headless",
+                "--browser",
+                "msedge"
+            ]
         },
         "context7": {
             "type": "http",
             "url": "https://mcp.context7.com/mcp"
         },
-        "next-devtools": {
-            "command": "npx",
-            "args": ["-y", "next-devtools-mcp@latest"]
+        "github-agentic-workflows": {
+            "command": "gh",
+            "args": [
+                "aw",
+                "mcp-server"
+            ],
+            "cwd": "${workspaceFolder}"
         }
     }
 }
