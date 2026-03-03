@@ -45,7 +45,7 @@ const InfoCard: React.FC<InfoCardProps> = ({
 
     const subtitleNode =
         typeof subtitle === "string" ? (
-            <CardSubtitle className="whitespace-nowrap overflow-hidden text-ellipsis">{subtitle}</CardSubtitle>
+            <CardSubtitle className="w-full whitespace-nowrap overflow-hidden text-ellipsis">{subtitle}</CardSubtitle>
         ) : (
             subtitle
         );
@@ -69,7 +69,7 @@ const InfoCard: React.FC<InfoCardProps> = ({
                         {titleNode}
                         {subtitleNode}
                         {details?.map((detail, idx) => (
-                            <Secondary key={idx} className="whitespace-nowrap overflow-hidden text-ellipsis">
+                            <Secondary key={idx} className="w-full whitespace-nowrap overflow-hidden text-ellipsis">
                                 {detail}
                             </Secondary>
                         ))}
