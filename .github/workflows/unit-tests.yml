@@ -12,13 +12,12 @@ on:
       - "src/vite.config.ts"
       - ".github/workflows/unit-tests.yml"
 
-permissions:
-  contents: read
-
 jobs:
   test:
     name: "Run Unit Tests"
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     defaults:
       run:
         working-directory: ${{ github.workspace }}/src
