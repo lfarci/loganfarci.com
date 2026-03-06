@@ -24,7 +24,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: "20"
+          node-version: "24"
           cache: "npm"
           cache-dependency-path: src/package-lock.json
 
@@ -32,4 +32,37 @@ jobs:
         run: npm ci
 
       - name: Run unit tests
-        run: npm test -- --reporter=verbose --reporter=github-actions
+        run: npm test -- --reporter=verbose --reporter=github-actions --reporter=json --outputFile=test-results.json
+
+      - name: Write test summary
+        if: always()
+        run: |
+          node -e "
+            const fs = require('fs');
+            const r = JSON.parse(fs.readFileSync('test-results.json', 'utf8'));
+            const suites = (r.testResults || []).filter(s => s.assertionResults && s.assertionResults.length > 0);
+            const lines = [
+              '## Unit Test Results',
+              '',
+              \`| | Count |\`,
+              \`|---|---|\`,
+              \`| ✅ Passed | \${r.numPassedTests} |\`,
+              \`| ❌ Failed | \${r.numFailedTests} |\`,
+              \`| ⏭️ Skipped | \${r.numPendingTests} |\`,
+              \`| 📁 Test files | \${suites.length} |\`,
+              '',
+            ];
+            if (suites.length > 0) {
+              lines.push('### Files');
+              lines.push('');
+              for (const suite of suites) {
+                const rel = suite.name.replace(process.cwd() + '/', '');
+                const passed = suite.assertionResults.filter(a => a.status === 'passed').length;
+                const failed = suite.assertionResults.filter(a => a.status === 'failed').length;
+                const icon = suite.status === 'passed' ? '✅' : '❌';
+                lines.push(\`- \${icon} \\\`\${rel}\\\` (\${passed} passed, \${failed} failed)\`);
+              }
+            }
+            fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, lines.join('\n'));
+          "
+
