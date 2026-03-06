@@ -8,7 +8,7 @@ on:
       - "src/**"
       - "content/**"
       - ".github/workflows/deploy-app.yml"
-      - ".github/workflows/deploy-app-swa.yml"
+      - ".github/workflows/reusable-deploy-static-web-app.yml"
   pull_request:
     types: [opened, synchronize, reopened, closed]
     branches:
@@ -17,19 +17,19 @@ on:
       - "src/**"
       - "content/**"
       - ".github/workflows/deploy-app.yml"
-      - ".github/workflows/deploy-app-swa.yml"
+      - ".github/workflows/reusable-deploy-static-web-app.yml"
   workflow_dispatch:
 
 jobs:
   deploy_production:
     if: github.event_name == 'push'
     name: "Deploy App to Production"
-    uses: ./.github/workflows/deploy-app-swa.yml
+    uses: ./.github/workflows/reusable-deploy-static-web-app.yml
     permissions:
       id-token: write
       contents: read
     with:
-      github_environment: Production
+      github_environment_name: Production
       commit_hash: ${{ github.sha }}
       repository_url: "${{ github.server_url }}/${{ github.repository }}"
     secrets:
@@ -41,13 +41,13 @@ jobs:
   deploy_preview:
     if: github.event_name == 'pull_request' && github.event.action != 'closed'
     name: "Deploy App to Preview"
-    uses: ./.github/workflows/deploy-app-swa.yml
+    uses: ./.github/workflows/reusable-deploy-static-web-app.yml
     permissions:
       id-token: write
       contents: read
     with:
-      github_environment: Preview
-      deployment_environment: pr-${{ github.event.pull_request.number }}
+      github_environment_name: Preview
+      static_web_app_environment_name: pr-${{ github.event.pull_request.number }}
       commit_hash: ${{ github.sha }}
       repository_url: "${{ github.server_url }}/${{ github.repository }}"
     secrets:

@@ -3,11 +3,11 @@ name: "Deploy App to SWA (reusable)"
 on:
   workflow_call:
     inputs:
-      github_environment:
+      github_environment_name:
         required: true
         type: string
         description: "GitHub environment name (e.g., Production or Preview)"
-      deployment_environment:
+      static_web_app_environment_name:
         required: false
         type: string
         default: ""
@@ -37,7 +37,7 @@ jobs:
     permissions:
       id-token: write
       contents: read
-    environment: ${{ inputs.github_environment }}
+    environment: ${{ inputs.github_environment_name }}
     defaults:
       run:
         working-directory: ${{ github.workspace }}/src
@@ -89,4 +89,4 @@ jobs:
           app_location: src/dist
           output_location: ""
           skip_app_build: true
-          deployment_environment: ${{ inputs.deployment_environment }}
+          deployment_environment: ${{ inputs.static_web_app_environment_name }}
