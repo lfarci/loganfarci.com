@@ -94,6 +94,9 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       id-token: write
+      contents: read
+    environment:
+      name: Production
     steps:
       - name: Azure CLI Login
         uses: azure/login@v2
