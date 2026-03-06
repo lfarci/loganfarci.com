@@ -32,7 +32,11 @@ jobs:
       github_environment: Production
       commit_hash: ${{ github.sha }}
       repository_url: "${{ github.server_url }}/${{ github.repository }}"
-    secrets: inherit
+    secrets:
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      AZURE_KEY_VAULT_NAME: ${{ secrets.AZURE_KEY_VAULT_NAME }}
 
   deploy_preview:
     if: github.event_name == 'pull_request' && github.event.action != 'closed'
@@ -46,7 +50,11 @@ jobs:
       deployment_environment: pr-${{ github.event.pull_request.number }}
       commit_hash: ${{ github.sha }}
       repository_url: "${{ github.server_url }}/${{ github.repository }}"
-    secrets: inherit
+    secrets:
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      AZURE_KEY_VAULT_NAME: ${{ secrets.AZURE_KEY_VAULT_NAME }}
 
   close_pull_request:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
