@@ -1,0 +1,92 @@
+name: "Deploy App to SWA (reusable)"
+
+on:
+  workflow_call:
+    inputs:
+      github_environment:
+        required: true
+        type: string
+        description: "GitHub environment name (e.g., Production or Preview)"
+      deployment_environment:
+        required: false
+        type: string
+        default: ""
+        description: "SWA deployment environment name (e.g., pr-123, empty for production)"
+      commit_hash:
+        required: true
+        type: string
+        description: "Commit SHA for VITE_COMMIT_HASH"
+      repository_url:
+        required: true
+        type: string
+        description: "GitHub repository URL for VITE_GITHUB_REPOSITORY_URL"
+    secrets:
+      AZURE_CLIENT_ID:
+        required: true
+      AZURE_TENANT_ID:
+        required: true
+      AZURE_SUBSCRIPTION_ID:
+        required: true
+      AZURE_KEY_VAULT_NAME:
+        required: true
+
+jobs:
+  deploy:
+    name: "Deploy App"
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    environment: ${{ inputs.github_environment }}
+    defaults:
+      run:
+        working-directory: ${{ github.workspace }}/src
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Get npm cache directory
+        id: npm-cache-dir
+        run: echo "dir=$(npm config get cache)" >> $GITHUB_OUTPUT
+
+      - name: Cache build
+        uses: actions/cache@v5
+        with:
+          path: |
+            ${{ steps.npm-cache-dir.outputs.dir }}
+            ${{ github.workspace }}/src/node_modules/.vite
+          key: ${{ runner.os }}-vite-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/*.ts', '**/*.tsx') }}
+          restore-keys: ${{ runner.os }}-vite-${{ hashFiles('**/package-lock.json') }}-
+
+      - name: Install dependencies
+        run: npm clean-install
+
+      - name: Build application
+        run: npm run build
+        env:
+          VITE_GITHUB_REPOSITORY_URL: "${{ inputs.repository_url }}"
+          VITE_COMMIT_HASH: "${{ inputs.commit_hash }}"
+
+      - name: Azure CLI Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Get secrets from Key Vault
+        id: get-secrets
+        env:
+          AZURE_KEY_VAULT_NAME: ${{ secrets.AZURE_KEY_VAULT_NAME }}
+        run: |
+          echo "deployment_token=$(az keyvault secret show --name StaticWebAppDeploymentKey --vault-name "$AZURE_KEY_VAULT_NAME" --query value -o tsv)" >> $GITHUB_OUTPUT
+
+      - name: Deploy to Azure Static Web Apps
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ steps.get-secrets.outputs.deployment_token }}
+          action: upload
+          app_location: /
+          output_location: src/dist
+          skip_app_build: true
+          deployment_environment: ${{ inputs.deployment_environment }}
