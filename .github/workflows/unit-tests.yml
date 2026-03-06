@@ -37,32 +37,29 @@ jobs:
       - name: Write test summary
         if: always()
         run: |
-          node -e "
-            const fs = require('fs');
-            const r = JSON.parse(fs.readFileSync('test-results.json', 'utf8'));
-            const suites = (r.testResults || []).filter(s => s.assertionResults && s.assertionResults.length > 0);
-            const lines = [
-              '## Unit Test Results',
-              '',
-              \`| | Count |\`,
-              \`|---|---|\`,
-              \`| ✅ Passed | \${r.numPassedTests} |\`,
-              \`| ❌ Failed | \${r.numFailedTests} |\`,
-              \`| ⏭️ Skipped | \${r.numPendingTests} |\`,
-              \`| 📁 Test files | \${suites.length} |\`,
-              '',
-            ];
-            if (suites.length > 0) {
-              lines.push('### Files');
-              lines.push('');
-              for (const suite of suites) {
-                const rel = suite.name.replace(process.cwd() + '/', '');
-                const passed = suite.assertionResults.filter(a => a.status === 'passed').length;
-                const failed = suite.assertionResults.filter(a => a.status === 'failed').length;
-                const icon = suite.status === 'passed' ? '✅' : '❌';
-                lines.push(\`- \${icon} \\\`\${rel}\\\` (\${passed} passed, \${failed} failed)\`);
-              }
-            }
-            fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, lines.join('\n'));
-          "
+          passed=$(jq '.numPassedTests' test-results.json)
+          failed=$(jq '.numFailedTests' test-results.json)
+          skipped=$(jq '.numPendingTests' test-results.json)
+          cwd=$(pwd)
+
+          {
+            echo "## Unit Test Results"
+            echo ""
+            echo "| | Count |"
+            echo "|---|---|"
+            echo "| ✅ Passed | $passed |"
+            echo "| ❌ Failed | $failed |"
+            echo "| ⏭️ Skipped | $skipped |"
+            echo ""
+            echo "### Files"
+            echo ""
+            jq -r --arg cwd "$cwd/" '
+              .testResults[]
+              | select(.assertionResults | length > 0)
+              | (if .status == "passed" then "✅" else "❌" end) as $icon
+              | (.assertionResults | map(select(.status == "passed")) | length) as $p
+              | (.assertionResults | map(select(.status == "failed")) | length) as $f
+              | "- \($icon) `\(.name | ltrimstr($cwd))` (\($p) passed, \($f) failed)"
+            ' test-results.json
+          } >> "$GITHUB_STEP_SUMMARY"
 
