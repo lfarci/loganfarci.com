@@ -30,21 +30,20 @@ jobs:
     permissions:
       id-token: write
       contents: read
-    environment:
-      name: Production
+    environment: Production
     defaults:
       run:
         working-directory: ${{ github.workspace }}/src
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Get npm cache directory
         id: npm-cache-dir
         run: echo "dir=$(npm config get cache)" >> $GITHUB_OUTPUT
 
       - name: Cache build
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             ${{ steps.npm-cache-dir.outputs.dir }}
@@ -86,21 +85,20 @@ jobs:
     permissions:
       id-token: write
       contents: read
-    environment:
-      name: Preview
+    environment: Preview
     defaults:
       run:
         working-directory: ${{ github.workspace }}/src
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Get npm cache directory
         id: npm-cache-dir
         run: echo "dir=$(npm config get cache)" >> $GITHUB_OUTPUT
 
       - name: Cache build
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             ${{ steps.npm-cache-dir.outputs.dir }}
@@ -132,8 +130,14 @@ jobs:
           echo "deployment_token=$(az keyvault secret show --name StaticWebAppDeploymentKey --vault-name "$AZURE_KEY_VAULT_NAME" --query value -o tsv)" >> $GITHUB_OUTPUT
 
       - name: Deploy to Azure Static Web Apps
-        run: |
-          npx swa deploy ${{ env.out_directory }} --deployment-token ${{ steps.get-secrets.outputs.deployment_token }} --env preview
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ steps.get-secrets.outputs.deployment_token }}
+          action: upload
+          app_location: /
+          output_location: src/dist
+          skip_app_build: true
+          deployment_environment: pr-${{ github.event.pull_request.number }}
 
   close_pull_request:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
@@ -142,8 +146,7 @@ jobs:
     permissions:
       id-token: write
       contents: read
-    environment:
-      name: Preview
+    environment: Preview
     steps:
       - name: Azure CLI Login
         uses: azure/login@v2
@@ -163,4 +166,5 @@ jobs:
         uses: Azure/static-web-apps-deploy@v1
         with:
           azure_static_web_apps_api_token: ${{ steps.get-secrets.outputs.deployment_token }}
-          action: "close"
+          action: close
+          deployment_environment: pr-${{ github.event.pull_request.number }}
