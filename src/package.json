@@ -32,7 +32,6 @@
         "@fontsource/noto-sans": "*",
         "@fontsource/reddit-mono": "*",
         "@tailwindcss/vite": "^4.2.1",
-        "@testing-library/jest-dom": "^6.9.1",
         "@testing-library/react": "^16.3.2",
         "@types/node": "^20.19.9",
         "@types/react": "^19.1.9",
