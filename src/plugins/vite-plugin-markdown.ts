@@ -15,6 +15,7 @@ export default function markdownPlugin(): Plugin {
                     `export const content = ${JSON.stringify(content)};`,
                 ].join("\n"),
                 map: null,
+                moduleType: "js",
             };
         },
     };
