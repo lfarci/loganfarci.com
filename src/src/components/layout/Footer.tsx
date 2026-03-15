@@ -16,9 +16,9 @@ const Footer: React.FC<FooterProps> = ({ githubRepositoryUrl, commitHash, commit
         <footer className="max-w-(--breakpoint-lg) mx-auto px-4 flex flex-wrap justify-between items-center pb-8 gap-y-2">
             <div className="flex flex-wrap items-center gap-1 min-w-0">
                 <Footnote>© Logan Farci. Powered by </Footnote>
-                <NewTabLink url="https://nextjs.org/" size="footnote">
+                <NewTabLink url="https://vite.dev/" size="footnote">
                     {" "}
-                    Next.js{" "}
+                    Vite{" "}
                 </NewTabLink>
                 <Footnote> and </Footnote>
                 <NewTabLink url="https://azure.microsoft.com/en-us/products/app-service/static" size="footnote">
