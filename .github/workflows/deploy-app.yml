@@ -8,6 +8,7 @@ on:
       - "src/**"
       - "content/**"
       - ".github/workflows/deploy-app.yml"
+      - ".github/workflows/reusable-deploy-static-web-app.yml"
   pull_request:
     types: [opened, synchronize, reopened, closed]
     branches:
@@ -16,77 +17,44 @@ on:
       - "src/**"
       - "content/**"
       - ".github/workflows/deploy-app.yml"
+      - ".github/workflows/reusable-deploy-static-web-app.yml"
   workflow_dispatch:
 
-env:
-  src_directory: ${{ github.workspace }}/src
-  out_directory: ${{ github.workspace }}/src/dist
-
 jobs:
-  deploy:
-    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
-    name: "Deploy App to SWA"
-    runs-on: ubuntu-latest
+  deploy_production:
+    if: github.event_name == 'push'
+    name: "Deploy App to Production"
+    uses: ./.github/workflows/reusable-deploy-static-web-app.yml
     permissions:
       id-token: write
       contents: read
-    environment:
-      name: Production
-    defaults:
-      run:
-        working-directory: ${{ github.workspace }}/src
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+    with:
+      github_environment_name: Production
+      commit_hash: ${{ github.sha }}
+      repository_url: "${{ github.server_url }}/${{ github.repository }}"
+    secrets:
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      AZURE_KEY_VAULT_NAME: ${{ secrets.AZURE_KEY_VAULT_NAME }}
 
-      - name: Get npm cache directory
-        id: npm-cache-dir
-        run: echo "dir=$(npm config get cache)" >> $GITHUB_OUTPUT
-
-      - name: Cache build
-        uses: actions/cache@v4
-        with:
-          path: |
-            ${{ steps.npm-cache-dir.outputs.dir }}
-            ${{ env.src_directory }}/node_modules/.vite
-          key: ${{ runner.os }}-vite-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/*.ts', '**/*.tsx') }}
-          restore-keys: ${{ runner.os }}-vite-${{ hashFiles('**/package-lock.json') }}-
-
-      - name: Install dependencies
-        run: npm clean-install
-
-      - name: Build application
-        run: npm run build
-        env:
-          VITE_GITHUB_REPOSITORY_URL: "${{ github.server_url }}/${{ github.repository }}"
-          VITE_COMMIT_HASH: "${{ github.sha }}"
-
-      - name: Azure CLI Login
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-
-      - name: Get secrets from Key Vault
-        id: get-secrets
-        env:
-          AZURE_KEY_VAULT_NAME: ${{ secrets.AZURE_KEY_VAULT_NAME }}
-        run: |
-          echo "deployment_token=$(az keyvault secret show --name StaticWebAppDeploymentKey --vault-name "$AZURE_KEY_VAULT_NAME" --query value -o tsv)" >> $GITHUB_OUTPUT
-
-      - name: Determine environment
-        id: environment
-        run: |
-          ENVIRONMENT_NAME="production"
-          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
-            ENVIRONMENT_NAME="preview"
-          fi
-          echo "name=$ENVIRONMENT_NAME" >> $GITHUB_OUTPUT
-
-      - name: Deploy to Azure Static Web Apps
-        run: |
-          npx swa deploy ${{ env.out_directory }} --deployment-token ${{ steps.get-secrets.outputs.deployment_token }} --env ${{ steps.environment.outputs.name }}
+  deploy_preview:
+    if: github.event_name == 'pull_request' && github.event.action != 'closed'
+    name: "Deploy App to Preview"
+    uses: ./.github/workflows/reusable-deploy-static-web-app.yml
+    permissions:
+      id-token: write
+      contents: read
+    with:
+      github_environment_name: Preview
+      static_web_app_environment_name: pr-${{ github.event.pull_request.number }}
+      commit_hash: ${{ github.sha }}
+      repository_url: "${{ github.server_url }}/${{ github.repository }}"
+    secrets:
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      AZURE_KEY_VAULT_NAME: ${{ secrets.AZURE_KEY_VAULT_NAME }}
 
   close_pull_request:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
@@ -94,6 +62,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       id-token: write
+      contents: read
+    environment: Preview
     steps:
       - name: Azure CLI Login
         uses: azure/login@v2
@@ -113,4 +83,5 @@ jobs:
         uses: Azure/static-web-apps-deploy@v1
         with:
           azure_static_web_apps_api_token: ${{ steps.get-secrets.outputs.deployment_token }}
-          action: "close"
+          action: close
+          deployment_environment: pr-${{ github.event.pull_request.number }}
