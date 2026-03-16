@@ -52,7 +52,11 @@ export const mockDiploma: Diploma = {
     description: "A degree",
 };
 
-// Mutable stores read by vi.mock factories (captured by reference so updates are visible lazily)
+// Mutable stores read lazily by vi.mock factories.
+// vi.mock is hoisted before module code runs, so factories cannot close over function
+// parameters. These module-level variables are captured by reference instead: the
+// builder functions update them before the mocked module is first imported, and the
+// factory reads the current value at that point.
 let _certifications: Certification[] = [mockCertification];
 let _experiences: Experience[] = [mockExperience];
 let _skills: SkillCategory[] = [mockSkillCategory];
