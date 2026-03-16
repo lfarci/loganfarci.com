@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { mockContact, mockContactsData } from "../tools";
 
-mockContactsData();
+mockContactsData([mockContact]);
 
 import { getContacts } from "@/core/data";
 

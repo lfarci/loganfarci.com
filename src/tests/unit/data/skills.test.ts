@@ -1,9 +1,9 @@
 import { describe, it, expect } from "vitest";
-import { mockSkillCategory, mockIcon, mockSkillsData, mockIconsData } from "../tools";
+import { mockSkillCategory, mockAzureIcon, mockSkillsData, mockIconsData } from "../tools";
 import type { Skill } from "@/types";
 
-mockSkillsData();
-mockIconsData();
+mockSkillsData([mockSkillCategory]);
+mockIconsData([mockAzureIcon]);
 
 import { getSkillCategories, attemptToLoadIcons } from "@/core/data";
 
@@ -43,8 +43,8 @@ describe("attemptToLoadIcons", () => {
     });
 
     it("returns the matching icon when iconId is known", () => {
-        const skills: Skill[] = [{ name: "Cloud", iconId: mockIcon.id }];
-        expect(attemptToLoadIcons(skills)[0].icon?.id).toBe(mockIcon.id);
+        const skills: Skill[] = [{ name: "Cloud", iconId: mockAzureIcon.id }];
+        expect(attemptToLoadIcons(skills)[0].icon?.id).toBe(mockAzureIcon.id);
     });
 
     it("returns an empty array when no skills are provided", () => {

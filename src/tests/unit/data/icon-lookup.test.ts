@@ -1,8 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { mockIcon, mockIcon2 } from "../tools";
+import { mockAzureIcon, mockReactIcon } from "../tools";
 
 vi.mock("@/core/data", () => ({
-    getIcons: () => [mockIcon, mockIcon2],
+    getIcons: () => [mockAzureIcon, mockReactIcon],
 }));
 
 beforeEach(() => {

@@ -22,8 +22,8 @@ export const mockSkillCategory: SkillCategory = {
     skills: [{ name: "TypeScript" }, { name: "React" }],
 };
 
-export const mockIcon: Icon = { id: "azure", name: "Azure", icon: "/images/azure.svg" };
-export const mockIcon2: Icon = { id: "react", name: "React", icon: "/images/react.svg" };
+export const mockAzureIcon: Icon = { id: "azure", name: "Azure", icon: "/images/azure.svg" };
+export const mockReactIcon: Icon = { id: "react", name: "React", icon: "/images/react.svg" };
 
 export const mockInterest: Interest = {
     title: "Open Source",
@@ -52,34 +52,52 @@ export const mockDiploma: Diploma = {
     description: "A degree",
 };
 
-export function mockCertificationsData() {
-    vi.mock("@content/data/certifications.json", () => ({ default: [mockCertification] }));
+// Mutable stores read by vi.mock factories (captured by reference so updates are visible lazily)
+let _certifications: Certification[] = [mockCertification];
+let _experiences: Experience[] = [mockExperience];
+let _skills: SkillCategory[] = [mockSkillCategory];
+let _icons: Icon[] = [mockAzureIcon, mockReactIcon];
+let _interests: Interest[] = [mockInterest];
+let _contacts: Contact[] = [mockContact];
+let _profile: Profile = mockProfile;
+let _diploma: Diploma = mockDiploma;
+
+export function mockCertificationsData(items: Certification[] = [mockCertification]) {
+    _certifications = items;
+    vi.mock("@content/data/certifications.json", () => ({ default: _certifications }));
 }
 
-export function mockExperiencesData() {
-    vi.mock("@content/data/experiences.json", () => ({ default: [mockExperience] }));
+export function mockExperiencesData(items: Experience[] = [mockExperience]) {
+    _experiences = items;
+    vi.mock("@content/data/experiences.json", () => ({ default: _experiences }));
 }
 
-export function mockSkillsData() {
-    vi.mock("@content/data/skills.json", () => ({ default: [mockSkillCategory] }));
+export function mockSkillsData(items: SkillCategory[] = [mockSkillCategory]) {
+    _skills = items;
+    vi.mock("@content/data/skills.json", () => ({ default: _skills }));
 }
 
-export function mockIconsData() {
-    vi.mock("@content/data/icons.json", () => ({ default: [mockIcon, mockIcon2] }));
+export function mockIconsData(items: Icon[] = [mockAzureIcon, mockReactIcon]) {
+    _icons = items;
+    vi.mock("@content/data/icons.json", () => ({ default: _icons }));
 }
 
-export function mockInterestsData() {
-    vi.mock("@content/data/interests.json", () => ({ default: [mockInterest] }));
+export function mockInterestsData(items: Interest[] = [mockInterest]) {
+    _interests = items;
+    vi.mock("@content/data/interests.json", () => ({ default: _interests }));
 }
 
-export function mockContactsData() {
-    vi.mock("@content/data/contacts.json", () => ({ default: [mockContact] }));
+export function mockContactsData(items: Contact[] = [mockContact]) {
+    _contacts = items;
+    vi.mock("@content/data/contacts.json", () => ({ default: _contacts }));
 }
 
-export function mockProfileData() {
-    vi.mock("@content/data/profile.json", () => ({ default: mockProfile }));
+export function mockProfileData(value: Profile = mockProfile) {
+    _profile = value;
+    vi.mock("@content/data/profile.json", () => ({ default: _profile }));
 }
 
-export function mockDiplomaData() {
-    vi.mock("@content/data/education.json", () => ({ default: mockDiploma }));
+export function mockDiplomaData(value: Diploma = mockDiploma) {
+    _diploma = value;
+    vi.mock("@content/data/education.json", () => ({ default: _diploma }));
 }

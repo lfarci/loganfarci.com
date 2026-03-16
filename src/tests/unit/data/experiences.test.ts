@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { mockExperience, mockExperiencesData } from "../tools";
 
-mockExperiencesData();
+mockExperiencesData([mockExperience]);
 
 import { getExperiences } from "@/core/data";
 

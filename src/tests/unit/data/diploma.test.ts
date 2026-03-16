@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { mockDiploma, mockDiplomaData } from "../tools";
 
-mockDiplomaData();
+mockDiplomaData(mockDiploma);
 
 import { getDiploma } from "@/core/data";
 
