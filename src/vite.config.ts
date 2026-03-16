@@ -23,4 +23,12 @@ export default defineConfig({
             allow: [".."], // Allow reading content/ outside project root
         },
     },
+    test: {
+        globals: true,
+        environment: "jsdom",
+        include: ["tests/unit/**/*.test.{ts,tsx}"],
+        coverage: {
+            reporter: ["text", "json", "html"],
+        },
+    },
 });

@@ -1,0 +1,73 @@
+name: Unit Tests
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "src/src/**"
+      - "src/tests/unit/**"
+      - ".github/workflows/unit-tests.yml"
+  pull_request:
+    paths:
+      - "src/src/**"
+      - "src/tests/unit/**"
+      - ".github/workflows/unit-tests.yml"
+
+jobs:
+  test:
+    name: Run unit tests
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    defaults:
+      run:
+        working-directory: src
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          cache: "npm"
+          cache-dependency-path: src/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run unit tests
+        run: npm test -- --reporter=verbose --reporter=github-actions --reporter=json --outputFile=test-results.json
+
+      - name: Write test summary
+        if: always()
+        run: |
+          passed=$(jq '.numPassedTests' test-results.json)
+          failed=$(jq '.numFailedTests' test-results.json)
+          skipped=$(jq '.numPendingTests' test-results.json)
+          cwd=$(pwd)
+
+          {
+            echo "## Unit Test Results"
+            echo ""
+            echo "| | Count |"
+            echo "|---|---|"
+            echo "| ✅ Passed | $passed |"
+            echo "| ❌ Failed | $failed |"
+            echo "| ⏭️ Skipped | $skipped |"
+            echo ""
+            echo "### Files"
+            echo ""
+            jq -r --arg cwd "$cwd/" '
+              .testResults[]
+              | select(.assertionResults | length > 0)
+              | (if .status == "passed" then "✅" else "❌" end) as $icon
+              | (.assertionResults | map(select(.status == "passed")) | length) as $p
+              | (.assertionResults | map(select(.status == "failed")) | length) as $f
+              | "- \($icon) `\(.name | ltrimstr($cwd))` (\($p) passed, \($f) failed)"
+            ' test-results.json
+          } >> "$GITHUB_STEP_SUMMARY"
+
