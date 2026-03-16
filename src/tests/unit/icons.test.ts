@@ -17,28 +17,31 @@ beforeEach(() => {
 import { getIcon } from "@/core/icons";
 
 describe("getIcon", () => {
-    it("returns icon data for a known icon name", () => {
-        const icon = getIcon("azure");
-        expect(icon).not.toBeNull();
-        expect(icon?.src).toBeTruthy();
-        expect(icon?.alt).toContain("icon");
+    it("returns a non-null value for a known icon name", () => {
+        expect(getIcon("azure")).not.toBeNull();
     });
 
-    it("is case-insensitive", () => {
-        const lower = getIcon("azure");
-        const upper = getIcon("Azure");
-        const mixed = getIcon("AZURE");
-        expect(lower).toEqual(upper);
-        expect(lower).toEqual(mixed);
+    it("returns icon data with a truthy src for a known icon name", () => {
+        expect(getIcon("azure")?.src).toBeTruthy();
+    });
+
+    it("returns icon data whose alt contains 'icon' for a known icon name", () => {
+        expect(getIcon("azure")?.alt).toContain("icon");
+    });
+
+    it("returns the same result regardless of input casing (lowercase)", () => {
+        expect(getIcon("azure")).toEqual(getIcon("Azure"));
+    });
+
+    it("returns the same result regardless of input casing (uppercase)", () => {
+        expect(getIcon("azure")).toEqual(getIcon("AZURE"));
     });
 
     it("returns null for an unknown icon name", () => {
-        const icon = getIcon("this-icon-does-not-exist-xyz");
-        expect(icon).toBeNull();
+        expect(getIcon("this-icon-does-not-exist-xyz")).toBeNull();
     });
 
-    it("trims whitespace from the icon name", () => {
-        const icon = getIcon("  azure  ");
-        expect(icon).not.toBeNull();
+    it("trims leading and trailing whitespace from the icon name", () => {
+        expect(getIcon("  azure  ")).not.toBeNull();
     });
 });

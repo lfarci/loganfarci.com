@@ -21,4 +21,16 @@ describe("createId", () => {
     it("leaves already lowercase hyphenated text unchanged", () => {
         expect(createId("already-fine")).toBe("already-fine");
     });
+
+    it("produces leading hyphens for leading spaces", () => {
+        expect(createId("  hello")).toBe("-hello");
+    });
+
+    it("produces trailing hyphens for trailing spaces", () => {
+        expect(createId("hello  ")).toBe("hello-");
+    });
+
+    it("throws when given null", () => {
+        expect(() => createId(null as unknown as string)).toThrow();
+    });
 });

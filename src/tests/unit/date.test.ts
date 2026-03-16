@@ -19,6 +19,18 @@ describe("formatDate", () => {
         const result = formatDate("2024-03-15", "full");
         expect(result).toMatch(/March/);
     });
+
+    it("returns 'Invalid Date' for an empty string", () => {
+        expect(formatDate("")).toBe("Invalid Date");
+    });
+
+    it("returns 'Invalid Date' for a non-date string", () => {
+        expect(formatDate("not-a-date")).toBe("Invalid Date");
+    });
+
+    it("returns 'Invalid Date' for an out-of-range day such as March 32", () => {
+        expect(formatDate("2024-03-32")).toBe("Invalid Date");
+    });
 });
 
 describe("formatSimpleDate", () => {
@@ -26,5 +38,13 @@ describe("formatSimpleDate", () => {
         const result = formatSimpleDate("2024-06-01");
         expect(result).toBeTruthy();
         expect(typeof result).toBe("string");
+    });
+
+    it("returns 'Invalid Date' for an empty string", () => {
+        expect(formatSimpleDate("")).toBe("Invalid Date");
+    });
+
+    it("returns 'Invalid Date' for a non-date string", () => {
+        expect(formatSimpleDate("not-a-date")).toBe("Invalid Date");
     });
 });
