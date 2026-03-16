@@ -1,7 +1,12 @@
-import { describe, it, expect } from "vitest";
-import { mockContact, mockContactsData } from "../tools";
+import { describe, it, expect, vi } from "vitest";
 
-mockContactsData([mockContact]);
+vi.mock("@content/data/contacts.json", () => ({
+    default: [{
+        name: "GitHub",
+        icon: "/github.svg",
+        url: "https://github.com/test",
+    }]
+}));
 
 import { getContacts } from "@/core/data";
 
@@ -15,6 +20,6 @@ describe("getContacts", () => {
     });
 
     it("returns the correct contact name", () => {
-        expect(getContacts()[0].name).toBe(mockContact.name);
+        expect(getContacts()[0].name).toBe("GitHub");
     });
 });

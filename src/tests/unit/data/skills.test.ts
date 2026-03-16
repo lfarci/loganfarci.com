@@ -1,9 +1,16 @@
-import { describe, it, expect } from "vitest";
-import { mockSkillCategory, mockAzureIcon, mockSkillsData, mockIconsData } from "../tools";
+import { describe, it, expect, vi } from "vitest";
 import type { Skill } from "@/types";
 
-mockSkillsData([mockSkillCategory]);
-mockIconsData([mockAzureIcon]);
+vi.mock("@content/data/skills.json", () => ({
+    default: [{
+        name: "Frontend",
+        skills: [{ name: "TypeScript" }, { name: "React" }],
+    }]
+}));
+
+vi.mock("@content/data/icons.json", () => ({
+    default: [{ id: "azure", name: "Azure", icon: "/images/azure.svg" }]
+}));
 
 import { getSkillCategories, attemptToLoadIcons } from "@/core/data";
 
@@ -17,7 +24,7 @@ describe("getSkillCategories", () => {
     });
 
     it("returns the correct category name", () => {
-        expect(getSkillCategories()[0].name).toBe(mockSkillCategory.name);
+        expect(getSkillCategories()[0].name).toBe("Frontend");
     });
 });
 
@@ -43,8 +50,8 @@ describe("attemptToLoadIcons", () => {
     });
 
     it("returns the matching icon when iconId is known", () => {
-        const skills: Skill[] = [{ name: "Cloud", iconId: mockAzureIcon.id }];
-        expect(attemptToLoadIcons(skills)[0].icon?.id).toBe(mockAzureIcon.id);
+        const skills: Skill[] = [{ name: "Cloud", iconId: "azure" }];
+        expect(attemptToLoadIcons(skills)[0].icon?.id).toBe("azure");
     });
 
     it("returns an empty array when no skills are provided", () => {

@@ -1,7 +1,16 @@
-import { describe, it, expect } from "vitest";
-import { mockCertification, mockCertificationsData } from "../tools";
+import { describe, it, expect, vi } from "vitest";
 
-mockCertificationsData([mockCertification]);
+vi.mock("@content/data/certifications.json", () => ({
+    default: [{
+        title: "Test Cert",
+        image: { src: "/cert.png", alt: "cert" },
+        url: "https://example.com",
+        issuer: "Issuer",
+        date: "2024-01-01",
+        relevance: "High",
+        order: 1,
+    }]
+}));
 
 import { getCertifications } from "@/core/data";
 
@@ -15,6 +24,6 @@ describe("getCertifications", () => {
     });
 
     it("returns the correct certification title", () => {
-        expect(getCertifications()[0].title).toBe(mockCertification.title);
+        expect(getCertifications()[0].title).toBe("Test Cert");
     });
 });

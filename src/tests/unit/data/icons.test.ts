@@ -1,7 +1,11 @@
-import { describe, it, expect } from "vitest";
-import { mockAzureIcon, mockReactIcon, mockIconsData } from "../tools";
+import { describe, it, expect, vi } from "vitest";
 
-mockIconsData([mockAzureIcon, mockReactIcon]);
+vi.mock("@content/data/icons.json", () => ({
+    default: [
+        { id: "azure", name: "Azure", icon: "/images/azure.svg" },
+        { id: "react", name: "React", icon: "/images/react.svg" },
+    ]
+}));
 
 import { getIcons } from "@/core/data";
 
@@ -15,10 +19,10 @@ describe("getIcons", () => {
     });
 
     it("returns the correct first icon id", () => {
-        expect(getIcons()[0].id).toBe(mockAzureIcon.id);
+        expect(getIcons()[0].id).toBe("azure");
     });
 
     it("returns the correct second icon id", () => {
-        expect(getIcons()[1].id).toBe(mockReactIcon.id);
+        expect(getIcons()[1].id).toBe("react");
     });
 });

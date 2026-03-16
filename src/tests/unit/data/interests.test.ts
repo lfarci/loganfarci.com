@@ -1,7 +1,12 @@
-import { describe, it, expect } from "vitest";
-import { mockInterest, mockInterestsData } from "../tools";
+import { describe, it, expect, vi } from "vitest";
 
-mockInterestsData([mockInterest]);
+vi.mock("@content/data/interests.json", () => ({
+    default: [{
+        title: "Open Source",
+        image: { src: "/oss.png", alt: "oss" },
+        description: "Contributing to OSS",
+    }]
+}));
 
 import { getInterests } from "@/core/data";
 
@@ -15,6 +20,6 @@ describe("getInterests", () => {
     });
 
     it("returns the correct interest title", () => {
-        expect(getInterests()[0].title).toBe(mockInterest.title);
+        expect(getInterests()[0].title).toBe("Open Source");
     });
 });

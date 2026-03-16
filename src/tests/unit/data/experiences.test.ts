@@ -1,7 +1,12 @@
-import { describe, it, expect } from "vitest";
-import { mockExperience, mockExperiencesData } from "../tools";
+import { describe, it, expect, vi } from "vitest";
 
-mockExperiencesData([mockExperience]);
+vi.mock("@content/data/experiences.json", () => ({
+    default: [{
+        name: "Software Engineer",
+        company: { name: "Acme", url: "https://acme.com" },
+        start: "2022-01-01",
+    }]
+}));
 
 import { getExperiences } from "@/core/data";
 
@@ -15,6 +20,6 @@ describe("getExperiences", () => {
     });
 
     it("returns the correct experience name", () => {
-        expect(getExperiences()[0].name).toBe(mockExperience.name);
+        expect(getExperiences()[0].name).toBe("Software Engineer");
     });
 });

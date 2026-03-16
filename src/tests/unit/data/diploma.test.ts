@@ -1,7 +1,14 @@
-import { describe, it, expect } from "vitest";
-import { mockDiploma, mockDiplomaData } from "../tools";
+import { describe, it, expect, vi } from "vitest";
 
-mockDiplomaData(mockDiploma);
+vi.mock("@content/data/education.json", () => ({
+    default: {
+        name: "Master CS",
+        University: "Test University",
+        logo: { src: "/logo.png", alt: "logo" },
+        details: ["Detail 1"],
+        description: "A degree",
+    }
+}));
 
 import { getDiploma } from "@/core/data";
 
@@ -15,6 +22,6 @@ describe("getDiploma", () => {
     });
 
     it("returns the correct diploma name", () => {
-        expect(getDiploma().name).toBe(mockDiploma.name);
+        expect(getDiploma().name).toBe("Master CS");
     });
 });
