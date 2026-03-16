@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
-import { mockProfile, mockDataModule } from "./helpers";
+import { mockProfile, mockProfileData } from "../tools";
 
-mockDataModule();
+mockProfileData();
 
 import { getProfile } from "@/core/data";
 

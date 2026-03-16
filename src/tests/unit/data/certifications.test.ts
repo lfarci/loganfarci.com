@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
-import { mockCertification, mockDataModule } from "./helpers";
+import { mockCertification, mockCertificationsData } from "../tools";
 
-mockDataModule();
+mockCertificationsData();
 
 import { getCertifications } from "@/core/data";
 

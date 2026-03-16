@@ -1,8 +1,9 @@
 import { describe, it, expect } from "vitest";
-import { mockSkillCategory, mockIcon, mockDataModule } from "./helpers";
+import { mockSkillCategory, mockIcon, mockSkillsData, mockIconsData } from "../tools";
 import type { Skill } from "@/types";
 
-mockDataModule();
+mockSkillsData();
+mockIconsData();
 
 import { getSkillCategories, attemptToLoadIcons } from "@/core/data";
 

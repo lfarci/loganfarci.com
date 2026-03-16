@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
-import { mockIcon, mockIcon2, mockDataModule } from "./helpers";
+import { mockIcon, mockIcon2, mockIconsData } from "../tools";
 
-mockDataModule();
+mockIconsData();
 
 import { getIcons } from "@/core/data";
 

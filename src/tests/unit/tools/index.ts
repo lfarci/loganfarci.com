@@ -52,13 +52,34 @@ export const mockDiploma: Diploma = {
     description: "A degree",
 };
 
-export function mockDataModule() {
+export function mockCertificationsData() {
     vi.mock("@content/data/certifications.json", () => ({ default: [mockCertification] }));
+}
+
+export function mockExperiencesData() {
     vi.mock("@content/data/experiences.json", () => ({ default: [mockExperience] }));
+}
+
+export function mockSkillsData() {
     vi.mock("@content/data/skills.json", () => ({ default: [mockSkillCategory] }));
+}
+
+export function mockIconsData() {
     vi.mock("@content/data/icons.json", () => ({ default: [mockIcon, mockIcon2] }));
+}
+
+export function mockInterestsData() {
     vi.mock("@content/data/interests.json", () => ({ default: [mockInterest] }));
+}
+
+export function mockContactsData() {
     vi.mock("@content/data/contacts.json", () => ({ default: [mockContact] }));
+}
+
+export function mockProfileData() {
     vi.mock("@content/data/profile.json", () => ({ default: mockProfile }));
+}
+
+export function mockDiplomaData() {
     vi.mock("@content/data/education.json", () => ({ default: mockDiploma }));
 }

@@ -1,15 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
+import { mockIcon, mockIcon2 } from "../tools";
 
-// Mock the data module so the icon map is built from controlled data,
-// not from the real icons.json file on disk.
 vi.mock("@/core/data", () => ({
-    getIcons: () => [
-        { id: "azure", name: "Azure", icon: "/images/azure.svg" },
-        { id: "react", name: "React", icon: "/images/react.svg" },
-    ],
+    getIcons: () => [mockIcon, mockIcon2],
 }));
 
-// Re-import after mock so the icon cache is reset between tests
 beforeEach(() => {
     vi.resetModules();
 });

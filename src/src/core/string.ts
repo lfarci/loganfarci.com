@@ -4,5 +4,5 @@
  * @returns A URL-safe ID string
  */
 export const createId = (text: string): string => {
-    return text.toLowerCase().replace(/\s+/g, "-");
+    return text.trim().toLowerCase().replace(/\s+/g, "-");
 };

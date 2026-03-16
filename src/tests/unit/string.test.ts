@@ -22,12 +22,12 @@ describe("createId", () => {
         expect(createId("already-fine")).toBe("already-fine");
     });
 
-    it("produces leading hyphens for leading spaces", () => {
-        expect(createId("  hello")).toBe("-hello");
+    it("trims leading spaces", () => {
+        expect(createId("  hello")).toBe("hello");
     });
 
-    it("produces trailing hyphens for trailing spaces", () => {
-        expect(createId("hello  ")).toBe("hello-");
+    it("trims trailing spaces", () => {
+        expect(createId("hello  ")).toBe("hello");
     });
 
     it("throws when given null", () => {
