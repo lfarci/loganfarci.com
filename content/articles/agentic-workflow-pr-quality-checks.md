@@ -1,18 +1,18 @@
 ---
-title: "My First Agentic Workflow: PR Quality Checks for Interns"
+title: "Pull Request Quality Checks with GitHub Agentic Workflows"
 description: "I built an agentic workflow that validates PR quality for interns using GitHub Agentic Workflows. The full sample is on GitHub."
 publishedAt: "2026-03-25"
 featured: true
-tags: ["GitHub Copilot", "GitHub Actions", "GitHub", "Agentic Workflows", "Visual Studio Code"]
+tags: ["GitHub Actions", "GitHub"]
 author: "Logan Farci"
 coauthoredWithAgent: true
 ---
 
-I started experimenting with agentic workflows by picking a narrow, high-signal problem: helping interns submit better pull requests. PR quality checks are repetitive, benefit from consistency, and are exactly the kind of thing new contributors struggle with first. The full sample is available at [lfarci/pull-request-quality-checks](https://github.com/lfarci/pull-request-quality-checks).
+When working with interns, a good chunk of pull request review time ends up going to the same formalities: missing descriptions, vague titles, assignees left blank. These comments don't carry much technical weight, but they pile up and eat into the time I'd rather spend on actual guidance. So I built an agentic workflow to catch that stuff automatically. The full sample is available at [lfarci/pull-request-quality-checks](https://github.com/lfarci/pull-request-quality-checks).
 
 # The Experiment
 
-The workflow validates that pull requests follow the team contract for PR quality. It does not review code.
+The workflow validates that pull requests follow the team contract for pull request quality. It does not review code.
 
 I scoped it to title format, description structure, section coherence against actual changed files, assignee presence, and PR scope focus. Implementation review, correctness, test quality, and architecture are deliberately out of scope — that smaller contract is much easier to trust.
 
