@@ -31,7 +31,9 @@ export default function ErrorPage({
                     Try Again
                 </button>
                 <button
-                    onClick={() => navigate("/")}
+                    onClick={() => {
+                        void navigate("/");
+                    }}
                     className="px-6 py-3 bg-surface-hover text-text-primary font-medium rounded-lg border border-border hover:bg-surface-elevated transition-colors duration-200"
                 >
                     Back to Home
