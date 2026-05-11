@@ -15,6 +15,7 @@ interface ThumbnailItem {
 
 interface ThumbnailGridSectionProps {
     heading: string;
+    label?: string;
     items: ThumbnailItem[];
     columns?: number;
     size?: MediaTileSize;
@@ -24,13 +25,14 @@ interface ThumbnailGridSectionProps {
 
 const ThumbnailGridSection: React.FC<ThumbnailGridSectionProps> = ({
     heading,
+    label,
     items,
     columns = 3,
     size: thumbnailSize = "medium",
     redirectPath,
     redirectLabel,
 }) => (
-    <Section heading={heading} redirectPath={redirectPath} redirectLabel={redirectLabel}>
+    <Section heading={heading} label={label} redirectPath={redirectPath} redirectLabel={redirectLabel}>
         <CardGrid columns={columns} className="mt-8">
             {items.map((item, index) => {
                 const card = (

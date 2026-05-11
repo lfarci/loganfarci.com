@@ -65,6 +65,7 @@
 /* Dark mode styles when .dark class is applied */
 :root.dark,
 .dark {
+    color-scheme: dark;
     --color-background: oklch(10% 0.012 264.8); /* Very dark gray */
     --color-foreground: oklch(98% 0.003 264.542); /* Near white */
     
@@ -118,4 +119,11 @@
 .dark {
     --background: var(--color-background);
     --foreground: var(--color-foreground);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, ::before, ::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+    }
 }
