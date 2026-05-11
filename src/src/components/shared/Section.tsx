@@ -1,6 +1,7 @@
 import { Tooltip } from "@heroui/react";
+import { Link } from "react-router";
 import ChevronRightIcon from "./icons/ChevronRightIcon";
-import { Heading1, Text } from "@/components/shared/typography";
+import { Heading2, Text } from "@/components/shared/typography";
 import { createId } from "@/core/string";
 
 interface SectionProps {
@@ -12,34 +13,35 @@ interface SectionProps {
 }
 
 const Section: React.FC<SectionProps> = ({ heading, redirectPath, redirectLabel, children, id }) => {
-    const handleNavigation = () => {
-        if (!redirectPath) return;
-
-        const url = redirectPath.startsWith("/") ? `${window.location.origin}${redirectPath}` : redirectPath;
-
-        window.location.assign(url);
-    };
-
     const toolTip = <Text>{redirectLabel}</Text>;
+    const headingContent = (
+        <>
+            <Heading2 className="mb-0 text-balance">{heading}</Heading2>
+            {redirectPath && (
+                <ChevronRightIcon
+                    className="size-7 shrink-0 self-center text-text-tertiary transition-transform duration-200 group-hover:translate-x-1 group-hover:text-primary md:size-8"
+                    strokeWidth={2}
+                    aria-hidden="true"
+                />
+            )}
+        </>
+    );
 
     return (
-        <section id={id ?? createId(heading)} className="pt-8 scroll-mt-24">
-            <div
-                className={`flex items-center mb-4${redirectPath ? " cursor-pointer" : ""}`}
-                onClick={handleNavigation}
-            >
+        <section id={id ?? createId(heading)} className="py-8 scroll-mt-24 md:py-12">
+            <div className="mb-5 flex items-center">
                 {redirectPath ? (
                     <Tooltip content={toolTip} placement="right">
-                        <span className="flex items-center">
-                            <Heading1 className="mb-0">{heading}</Heading1>
-                            <ChevronRightIcon
-                                className="size-7 md:size-9 ml-2 shrink-0 self-center text-text-tertiary cursor-pointer"
-                                strokeWidth={2}
-                            />
-                        </span>
+                        <Link
+                            to={redirectPath}
+                            aria-label={redirectLabel ?? heading}
+                            className="group -ml-1 flex items-center gap-2 rounded-lg px-1 py-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
+                        >
+                            {headingContent}
+                        </Link>
                     </Tooltip>
                 ) : (
-                    <Heading1 className="mb-0">{heading}</Heading1>
+                    headingContent
                 )}
             </div>
             {children}

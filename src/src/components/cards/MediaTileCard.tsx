@@ -19,7 +19,7 @@ const sizeClasses: Record<MediaTileSize, string> = {
 };
 
 const MediaTileCard: React.FC<MediaTileCardProps> = ({ title, description, image, size = "medium" }) => (
-    <Card>
+    <Card variant="quiet">
         <div className="flex items-center flex-col h-full">
             {image && (
                 <CardMedia

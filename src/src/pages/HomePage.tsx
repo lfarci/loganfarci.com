@@ -1,10 +1,10 @@
 import ArticleListSection from "@/components/ArticleListSection";
 import ContactLinks from "@/components/ContactLinks";
-import GreetingHeading from "@/components/GreetingHeading";
 import HeroSection from "@/components/HeroSection";
 import ColumnContainer from "@/components/layout/ColumnContainer";
 import TextSection from "@/components/shared/TextSection";
 import ThumbnailGridSection from "@/components/shared/ThumbnailGridSection";
+import { Heading1 } from "@/components/shared/typography";
 import { getFeaturedArticles } from "@/core/articles";
 import { getCertifications, getContacts, getInterests, getProfile } from "@/core/data";
 
@@ -21,8 +21,13 @@ export default function HomePage() {
             <meta name="description" content="Logan Farci, Software Engineer" />
             <ColumnContainer>
                 <HeroSection
-                    heading={<GreetingHeading greeting="Hi" name="Logan" />}
-                    description={profile.role}
+                    eyebrow="Azure • GitHub • .NET • DevOps"
+                    heading={
+                        <Heading1 className="max-w-3xl text-balance">
+                            Building reliable cloud systems and developer workflows.
+                        </Heading1>
+                    }
+                    description={profile.introduction}
                     image={profile.avatar}
                     actions={<ContactLinks contacts={contacts} />}
                 />
@@ -52,6 +57,7 @@ export default function HomePage() {
                     heading="Featured Articles"
                     articles={featuredArticles}
                     limit={4}
+                    featureFirst
                     redirectPath="/articles"
                     redirectLabel="View all my articles"
                     emptyMessage="No featured articles found."

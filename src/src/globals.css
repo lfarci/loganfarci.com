@@ -22,6 +22,7 @@
   body {
     color: var(--color-foreground);
     background: var(--color-background);
+    -webkit-tap-highlight-color: transparent;
   }
 }
 
@@ -35,8 +36,8 @@
     --color-primary-light: oklch(97% 0.014 254.604); /* blue-50 */
     --color-secondary: oklch(55.1% 0.027 264.364); /* gray-500 */
     --color-secondary-hover: oklch(44.6% 0.03 256.802); /* gray-600 */
-    --color-accent: oklch(62.3% 0.214 259.815); /* Same as primary */
-    --color-accent-hover: oklch(54.6% 0.245 262.881); /* Same as primary-hover */
+    --color-accent: oklch(69.6% 0.17 162.48); /* emerald-500 */
+    --color-accent-hover: oklch(59.6% 0.145 163.225); /* emerald-600 */
     
     /* Text semantic colors */
     --color-text-primary: oklch(27.8% 0.033 256.848); /* gray-800 */
@@ -65,6 +66,7 @@
 /* Dark mode styles when .dark class is applied */
 :root.dark,
 .dark {
+    color-scheme: dark;
     --color-background: oklch(10% 0.012 264.8); /* Very dark gray */
     --color-foreground: oklch(98% 0.003 264.542); /* Near white */
     
@@ -76,8 +78,8 @@
     --color-secondary: oklch(70.7% 0.022 261.325); /* gray-400 */
     --color-secondary-hover: oklch(87.2% 0.01 258.338); /* gray-300 */
     
-    --color-accent: oklch(74.6% 0.16 232.661); /* sky-400 */
-    --color-accent-hover: oklch(62.3% 0.214 259.815); /* blue-500 */
+    --color-accent: oklch(84.5% 0.143 164.978); /* emerald-300 */
+    --color-accent-hover: oklch(76.5% 0.177 163.223); /* emerald-400 */
     
     /* Text colors for dark mode */
     --color-text-primary: oklch(98.5% 0.002 247.839); /* gray-50 */

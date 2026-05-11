@@ -8,6 +8,7 @@ interface ArticleListSectionProps {
     heading: string;
     articles: Article[];
     limit?: number;
+    featureFirst?: boolean;
     redirectPath?: string;
     redirectLabel?: string;
     emptyMessage?: string;
@@ -18,6 +19,7 @@ const ArticleListSection: React.FC<ArticleListSectionProps> = ({
     heading,
     articles,
     limit,
+    featureFirst = false,
     redirectPath,
     redirectLabel,
     emptyMessage = "No articles found.",
@@ -30,8 +32,13 @@ const ArticleListSection: React.FC<ArticleListSectionProps> = ({
                 <Text className="text-text-secondary">{emptyMessage}</Text>
             ) : (
                 <ColumnContainer className="mt-8">
-                    {visibleArticles.map((article) => (
-                        <ArticleListCard key={article.slug} article={article} />
+                    {visibleArticles.map((article, index) => (
+                        <ArticleListCard
+                            key={article.slug}
+                            article={article}
+                            featured={featureFirst && index === 0}
+                            showTags={featureFirst && index === 0}
+                        />
                     ))}
                 </ColumnContainer>
             )}

@@ -7,8 +7,9 @@ import GridContainer from "@/components/layout/GridContainer";
 type PolymorphicProps<E extends React.ElementType> = {
     as?: E;
     className?: string;
+    variant?: "default" | "quiet" | "feature" | "compact";
     children?: React.ReactNode;
-} & Omit<React.ComponentPropsWithoutRef<E>, "as" | "className" | "children">;
+} & Omit<React.ComponentPropsWithoutRef<E>, "as" | "className" | "variant" | "children">;
 
 type SimpleProps = {
     className?: string;
@@ -33,7 +34,18 @@ type CardLinkProps = {
 };
 
 const baseCardClass =
-    "p-6 bg-surface rounded-3xl border border-border-light shadow-md h-full transition-shadow duration-200 hover:shadow-xl active:shadow-xl";
+    "h-full border transition-[border-color,box-shadow,transform] duration-200 focus-within:border-primary";
+
+const cardVariants = {
+    default:
+        "rounded-2xl border-border-light bg-surface p-6 shadow-sm hover:-translate-y-0.5 hover:border-border hover:shadow-lg active:shadow-lg",
+    quiet:
+        "rounded-2xl border-border-light bg-surface/70 p-5 shadow-none hover:border-border hover:bg-surface-hover/60",
+    feature:
+        "rounded-3xl border-border-light bg-surface p-6 shadow-md hover:-translate-y-0.5 hover:border-primary/50 hover:shadow-xl md:p-8",
+    compact:
+        "rounded-xl border-border-light bg-surface/80 p-4 shadow-none hover:border-border hover:bg-surface-hover/70",
+} satisfies Record<NonNullable<PolymorphicProps<"div">["variant"]>, string>;
 
 const mediaSizes: Record<NonNullable<CardMediaProps["size"]>, string> = {
     small: "w-1/3",
@@ -47,12 +59,13 @@ const cn = (...classes: Array<string | undefined | null | false>) => classes.fil
 const Card = <E extends React.ElementType = "div">({
     as,
     className,
+    variant = "default",
     children,
     ...props
 }: PolymorphicProps<E>) => {
     const Component = as ?? "div";
     return (
-        <Component className={cn(baseCardClass, className)} {...(props as React.ComponentPropsWithoutRef<E>)}>
+        <Component className={cn(baseCardClass, cardVariants[variant], className)} {...(props as React.ComponentPropsWithoutRef<E>)}>
             {children}
         </Component>
     );

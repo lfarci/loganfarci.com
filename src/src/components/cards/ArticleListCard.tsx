@@ -8,15 +8,16 @@ import { Article } from "@/types/article";
 type ArticleListCardProps = {
     article: Article;
     showTags?: boolean;
+    featured?: boolean;
 };
 
-const ArticleListCard: React.FC<ArticleListCardProps> = ({ article, showTags = false }) => (
-    <Card as="article" className="flex flex-col gap-3">
+const ArticleListCard: React.FC<ArticleListCardProps> = ({ article, showTags = false, featured = false }) => (
+    <Card as="article" variant={featured ? "feature" : "default"} className="flex flex-col gap-3">
         <CardHeader className="gap-1.5">
             <CardTitle>
                 <Link
                     to={`/articles/${article.slug}`}
-                    className="hover:text-primary-hover transition-colors cursor-pointer"
+                    className="rounded-sm hover:text-primary-hover transition-colors cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
                 >
                     {article.title}
                 </Link>
