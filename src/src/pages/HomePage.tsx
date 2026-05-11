@@ -1,9 +1,10 @@
 import ArticleListSection from "@/components/ArticleListSection";
+import CertificationShowcase from "@/components/CertificationShowcase";
 import ContactLinks from "@/components/ContactLinks";
 import HeroSection from "@/components/HeroSection";
+import HomeCapabilitiesSection from "@/components/HomeCapabilitiesSection";
 import ColumnContainer from "@/components/layout/ColumnContainer";
 import TextSection from "@/components/shared/TextSection";
-import ThumbnailGridSection from "@/components/shared/ThumbnailGridSection";
 import { Heading1 } from "@/components/shared/typography";
 import { getFeaturedArticles } from "@/core/articles";
 import { getCertifications, getContacts, getInterests, getProfile } from "@/core/data";
@@ -37,19 +38,15 @@ export default function HomePage() {
                     redirectPath="/about#about-me"
                     redirectLabel="Read more about me"
                 />
-                <ThumbnailGridSection 
-                    heading="What I Do" 
-                    size="large" 
-                    columns={2} 
+                <HomeCapabilitiesSection
+                    heading="What I Do"
                     items={interests}
                     redirectPath="/about#skills"
                     redirectLabel="Explore my skills in detail"
                 />
-                <ThumbnailGridSection
+                <CertificationShowcase
                     heading="My Certifications"
-                    size="large"
-                    columns={3}
-                    items={featuredCertifications}
+                    certifications={featuredCertifications}
                     redirectPath="/about#certifications"
                     redirectLabel="Show all my certifications"
                 />

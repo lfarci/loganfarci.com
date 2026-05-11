@@ -9,10 +9,11 @@ type ArticleListCardProps = {
     article: Article;
     showTags?: boolean;
     featured?: boolean;
+    compact?: boolean;
 };
 
-const ArticleListCard: React.FC<ArticleListCardProps> = ({ article, showTags = false, featured = false }) => (
-    <Card as="article" variant={featured ? "feature" : "default"} className="flex flex-col gap-3">
+const ArticleListCard: React.FC<ArticleListCardProps> = ({ article, showTags = false, featured = false, compact = false }) => (
+    <Card as="article" variant={featured ? "feature" : compact ? "compact" : "default"} className="flex flex-col gap-3">
         <CardHeader className="gap-1.5">
             <CardTitle>
                 <Link
@@ -26,7 +27,7 @@ const ArticleListCard: React.FC<ArticleListCardProps> = ({ article, showTags = f
                 {formatDate(article.publishedAt)}
             </CardSubtitle>
         </CardHeader>
-        {article.description && (
+        {article.description && !compact && (
             <CardBody className="pt-1">
                 <Text>{article.description}</Text>
             </CardBody>

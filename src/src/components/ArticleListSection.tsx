@@ -30,15 +30,19 @@ const ArticleListSection: React.FC<ArticleListSectionProps> = ({
         <Section heading={heading} redirectPath={redirectPath} redirectLabel={redirectLabel}>
             {visibleArticles.length === 0 ? (
                 <Text className="text-text-secondary">{emptyMessage}</Text>
+            ) : featureFirst ? (
+                <div className="mt-8 grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
+                    <ArticleListCard article={visibleArticles[0]} featured showTags />
+                    <div className="grid gap-4">
+                        {visibleArticles.slice(1).map((article) => (
+                            <ArticleListCard key={article.slug} article={article} compact />
+                        ))}
+                    </div>
+                </div>
             ) : (
                 <ColumnContainer className="mt-8">
-                    {visibleArticles.map((article, index) => (
-                        <ArticleListCard
-                            key={article.slug}
-                            article={article}
-                            featured={featureFirst && index === 0}
-                            showTags={featureFirst && index === 0}
-                        />
+                    {visibleArticles.map((article) => (
+                        <ArticleListCard key={article.slug} article={article} />
                     ))}
                 </ColumnContainer>
             )}

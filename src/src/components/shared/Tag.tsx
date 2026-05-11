@@ -31,7 +31,13 @@ const Tag: React.FC<TagProps> = ({ children, imageSrc = "", imageAlt = "" }) => 
     }
 
     return (
-        <Chip variant="bordered" size="lg" radius="md" className="text-base" startContent={startContent}>
+        <Chip
+            variant="flat"
+            size="lg"
+            radius="md"
+            className="border border-border-light bg-surface-elevated text-base"
+            startContent={startContent}
+        >
             <Text>{children}</Text>
         </Chip>
     );

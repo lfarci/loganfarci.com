@@ -16,10 +16,18 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ title }) => {
     };
 
     return (
-        <Navbar isBordered isMenuOpen={isMenuOpen} onMenuOpenChange={setIsMenuOpen}>
+        <Navbar
+            isBordered
+            isMenuOpen={isMenuOpen}
+            onMenuOpenChange={setIsMenuOpen}
+            className="bg-background/80 backdrop-blur-md"
+        >
             <NavbarContent className="flex justify-between items-center md:justify-between md:items-center text-center">
                 <NavbarBrand className="w-full md:w-auto">
-                    <Link to="/" className="text-xl md:text-2xl font-thin heading-font cursor-pointer">
+                    <Link
+                        to="/"
+                        className="rounded-lg text-xl font-bold heading-font cursor-pointer text-text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary md:text-2xl"
+                    >
                         {title}
                     </Link>
                 </NavbarBrand>
@@ -27,14 +35,14 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ title }) => {
                     aria-label={isMenuOpen ? "Close menu" : "Open menu"}
                     className="md:hidden"
                 />
-                <div className="hidden md:flex items-center space-x-8">
-                    <NavBarEntry url="/" className="hover:text-primary-hover transition-colors">
+                <div className="hidden md:flex items-center gap-2">
+                    <NavBarEntry url="/" className="hover:text-primary-hover">
                         Home
                     </NavBarEntry>
-                    <NavBarEntry url="/about" className="hover:text-primary-hover transition-colors">
+                    <NavBarEntry url="/about" className="hover:text-primary-hover">
                         About
                     </NavBarEntry>
-                    <NavBarEntry url="/articles" className="hover:text-primary-hover transition-colors">
+                    <NavBarEntry url="/articles" className="hover:text-primary-hover">
                         Articles
                     </NavBarEntry>
                     <ThemeToggle />
@@ -42,17 +50,17 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ title }) => {
             </NavbarContent>
             <NavbarMenu className="md:hidden text-center">
                 <NavbarMenuItem onClick={handleMenuItemClick}>
-                    <NavBarEntry url="/" className="hover:text-primary-hover transition-colors text-base py-2">
+                    <NavBarEntry url="/" className="hover:text-primary-hover text-base py-2">
                         Home
                     </NavBarEntry>
                 </NavbarMenuItem>
                 <NavbarMenuItem onClick={handleMenuItemClick}>
-                    <NavBarEntry url="/about" className="hover:text-primary-hover transition-colors text-base py-2">
+                    <NavBarEntry url="/about" className="hover:text-primary-hover text-base py-2">
                         About
                     </NavBarEntry>
                 </NavbarMenuItem>
                 <NavbarMenuItem onClick={handleMenuItemClick}>
-                    <NavBarEntry url="/articles" className="hover:text-primary-hover transition-colors text-base py-2">
+                    <NavBarEntry url="/articles" className="hover:text-primary-hover text-base py-2">
                         Articles
                     </NavBarEntry>
                 </NavbarMenuItem>
