@@ -8,12 +8,12 @@ export type SvgIconProps = {
     children?: React.ReactNode 
 };
 
-const SvgIcon: React.FC<SvgIconProps> = ({ 
-    className, 
-    strokeWidth = 3, 
-    size = 24, 
+const SvgIcon: React.FC<SvgIconProps> = ({
+    className,
+    strokeWidth = 3,
+    size = 24,
     viewBox,
-    children 
+    children
 }) => (
     <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -24,6 +24,8 @@ const SvgIcon: React.FC<SvgIconProps> = ({
         strokeWidth={strokeWidth}
         className={className}
         style={{ aspectRatio: 'auto' }}
+        aria-hidden="true"
+        focusable="false"
     >
         {children}
     </svg>
