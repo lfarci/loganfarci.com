@@ -45,7 +45,7 @@ const ContactLinks: React.FC<ContactLinksProps> = ({ contacts, iconSize = 32, cl
 
                 return (
                     <ClientTooltip key={contact.name} content={contact.name} placement="bottom">
-                        <NewTabLink url={contact.url}>{content}</NewTabLink>
+                        <NewTabLink url={contact.url} aria-label={contact.name}>{content}</NewTabLink>
                     </ClientTooltip>
                 );
             })}

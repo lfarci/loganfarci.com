@@ -1,8 +1,8 @@
 export const typographyStyles = {
-    heading1: "text-3xl md:text-4xl font-bold heading-font text-text-primary",
-    heading2: "text-2xl md:text-3xl font-bold heading-font text-text-primary",
-    heading3: "text-xl md:text-2xl font-bold text-text-secondary heading-font",
-    heading4: "text-lg md:text-xl font-semibold heading-font text-text-tertiary",
+    heading1: "text-4xl md:text-6xl font-bold heading-font text-text-primary text-balance",
+    heading2: "text-2xl md:text-3xl font-bold heading-font text-text-primary text-balance",
+    heading3: "text-xl md:text-2xl font-bold text-text-secondary heading-font text-balance",
+    heading4: "text-lg md:text-xl font-semibold heading-font text-text-tertiary text-balance",
     text: "text-base md:text-lg text-text-tertiary leading-relaxed! text-font",
     secondary: "text-base md:text-lg text-text-muted leading-relaxed! text-font",
     strong: "font-semibold text-text-tertiary text-font",

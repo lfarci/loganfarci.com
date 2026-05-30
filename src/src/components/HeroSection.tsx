@@ -35,6 +35,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ heading, description, image, 
                     alt={image.alt}
                     width={image.width ?? 512}
                     height={image.height ?? 512}
+                    fetchPriority="high"
                     className={buildImageClassName()}
                 />
             )}

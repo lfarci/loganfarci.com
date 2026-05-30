@@ -33,7 +33,7 @@ type CardLinkProps = {
 };
 
 const baseCardClass =
-    "p-6 bg-surface rounded-3xl border border-border-light shadow-md h-full transition-shadow duration-200 hover:shadow-xl active:shadow-xl";
+    "p-6 bg-surface rounded-xl border border-border-light shadow-sm h-full transition-shadow duration-200 hover:shadow-md active:shadow-md";
 
 const mediaSizes: Record<NonNullable<CardMediaProps["size"]>, string> = {
     small: "w-1/3",

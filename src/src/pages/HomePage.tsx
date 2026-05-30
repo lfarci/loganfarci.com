@@ -26,22 +26,25 @@ export default function HomePage() {
                     image={profile.avatar}
                     actions={<ContactLinks contacts={contacts} />}
                 />
-                <TextSection 
-                    heading="About Me" 
-                    text={profile.introduction} 
+                <TextSection
+                    heading="About Me"
+                    label="Background"
+                    text={profile.introduction}
                     redirectPath="/about#about-me"
                     redirectLabel="Read more about me"
                 />
-                <ThumbnailGridSection 
-                    heading="What I Do" 
-                    size="large" 
-                    columns={2} 
+                <ThumbnailGridSection
+                    heading="What I Do"
+                    label="Expertise"
+                    size="large"
+                    columns={2}
                     items={interests}
                     redirectPath="/about#skills"
                     redirectLabel="Explore my skills in detail"
                 />
                 <ThumbnailGridSection
                     heading="My Certifications"
+                    label="Credentials"
                     size="large"
                     columns={3}
                     items={featuredCertifications}
@@ -50,6 +53,7 @@ export default function HomePage() {
                 />
                 <ArticleListSection
                     heading="Featured Articles"
+                    label="Writing"
                     articles={featuredArticles}
                     limit={4}
                     redirectPath="/articles"

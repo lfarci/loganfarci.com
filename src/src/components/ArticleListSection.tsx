@@ -6,6 +6,7 @@ import type { Article } from "@/types";
 
 interface ArticleListSectionProps {
     heading: string;
+    label?: string;
     articles: Article[];
     limit?: number;
     redirectPath?: string;
@@ -16,6 +17,7 @@ interface ArticleListSectionProps {
 // Generic article list section usable across pages.
 const ArticleListSection: React.FC<ArticleListSectionProps> = ({
     heading,
+    label,
     articles,
     limit,
     redirectPath,
@@ -25,7 +27,7 @@ const ArticleListSection: React.FC<ArticleListSectionProps> = ({
     const visibleArticles = typeof limit === "number" ? articles.slice(0, limit) : articles;
 
     return (
-        <Section heading={heading} redirectPath={redirectPath} redirectLabel={redirectLabel}>
+        <Section heading={heading} label={label} redirectPath={redirectPath} redirectLabel={redirectLabel}>
             {visibleArticles.length === 0 ? (
                 <Text className="text-text-secondary">{emptyMessage}</Text>
             ) : (
