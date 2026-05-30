@@ -2,26 +2,17 @@ import Section from "@/components/shared/Section";
 import React from "react";
 import MarkdownSection from "@/components/shared/MarkdownSection";
 import { Card, CardBody, CardHeader, CardSubtitle, CardTitle } from "@/components/cards";
-import InfoCard from "@/components/cards/InfoCard";
 import { Certification, SkillCategory } from "@/types";
-import { MarkdownPreview } from "@/components/shared/preview";
 import { getCertifications, getDiploma, getExperiences, getProfile, getSkillCategories } from "@/core/data";
 import IconTag from "@/components/shared/IconTag";
 import { Text } from "@/components/shared/typography";
 import { createId } from "@/core/string";
 import ColumnContainer from "@/components/layout/ColumnContainer";
 import ThumbnailGridSection from "@/components/shared/ThumbnailGridSection";
-
-const formatMonthYear = (date: Date | string) => {
-    const d = typeof date === "string" ? new Date(date) : date;
-    return d.toLocaleDateString(undefined, { year: "numeric", month: "long" });
-};
-
-const formatExperiencePeriod = (start: Date, end?: Date) => {
-    const startDate = formatMonthYear(start);
-    const endDate = end ? formatMonthYear(end) : "Present";
-    return `${startDate} - ${endDate}`;
-};
+import ExperienceCard from "@/components/cards/ExperienceCard";
+import { groupExperiences } from "@/core/experiences";
+import InfoCard from "@/components/cards/InfoCard";
+import { MarkdownPreview } from "@/components/shared/preview";
 
 const certifications = getCertifications()
     .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
@@ -32,7 +23,7 @@ const certifications = getCertifications()
         url: certification.url,
     }));
 
-const experiences = getExperiences();
+const experiences = groupExperiences(getExperiences());
 const skillCategories = getSkillCategories();
 const diploma = getDiploma();
 const profile = getProfile();
@@ -51,24 +42,12 @@ export default function AboutPage() {
                 />
                 <Section heading="Experience">
                     <ColumnContainer>
-                        {experiences.map((experience) => (
-                            <InfoCard
-                                key={`${experience.name}-${experience.company.name}`}
-                                title={experience.name}
-                                subtitle={`${experience.company.name} (${experience.type})`}
-                                details={[
-                                    experience.company.location,
-                                    formatExperiencePeriod(experience.start, experience.end),
-                                ]}
-                                media={experience.company.logo}
-                                mediaSize="small"
-                                mediaAlign="start"
-                                align="start"
-                                showTitleTooltip
-                            >
-                                <MarkdownPreview>{experience.description}</MarkdownPreview>
-                            </InfoCard>
-                        ))}
+                        {experiences.map((entry) => {
+                            const key = entry.kind === "grouped"
+                                ? `group-${entry.company.name}`
+                                : `${entry.role.name}-${entry.company.name}`;
+                            return <ExperienceCard key={key} entry={entry} />;
+                        })}
                     </ColumnContainer>
                 </Section>
                 <Section heading="Education">

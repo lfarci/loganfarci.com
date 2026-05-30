@@ -6,5 +6,8 @@ export interface Experience {
   start: Date;
   end?: Date;
   type?: "Full-Time" | "Part-Time" | "Internship" | "Freelance";
+  companyDescription?: string;
   description?: string;
+  skills?: string[];
+  group?: string;
 }
