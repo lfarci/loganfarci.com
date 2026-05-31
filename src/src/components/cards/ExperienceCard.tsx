@@ -1,5 +1,5 @@
 import React from "react";
-import Card, { CardBody, CardHeader, CardMedia, CardSubtitle } from "./Card";
+import Card, { CardHeader, CardMedia, CardSubtitle } from "./Card";
 import InfoCard from "./InfoCard";
 import { Secondary } from "@/components/shared/typography";
 import IconTag from "@/components/shared/IconTag";
@@ -34,15 +34,9 @@ const RoleSection: React.FC<{ role: ExperienceRole; isLast?: boolean }> = ({ rol
             {!isLast && <div className="w-0.5 flex-1 bg-border-light mt-1" />}
         </div>
 
-        <div className="pb-6">
+        <div className={isLast ? "" : "pb-4"}>
             <CardTitleWithTooltip>{role.name}</CardTitleWithTooltip>
             <Secondary>{role.type} · {formatPeriod(role.start, role.end)}</Secondary>
-            {role.description && (
-                <div className="mt-2">
-                    <MarkdownPreview>{role.description}</MarkdownPreview>
-                </div>
-            )}
-            <RoleSkills skills={role.skills} />
         </div>
     </div>
 );
@@ -72,9 +66,10 @@ const SingleExperienceCard: React.FC<{ entry: Extract<ExperienceEntry, { kind: "
 };
 
 const GroupedExperienceCard: React.FC<{ entry: Extract<ExperienceEntry, { kind: "grouped" }> }> = ({ entry }) => {
-    const { company, companyDescription, roles } = entry;
+    const { company, roles } = entry;
     const earliestStart = roles[roles.length - 1]?.start;
     const latestEnd = roles[0]?.end;
+    const allSkills = [...new Set(roles.flatMap((r) => r.skills ?? []))];
 
     return (
         <Card className="scroll-mt-24">
@@ -91,17 +86,15 @@ const GroupedExperienceCard: React.FC<{ entry: Extract<ExperienceEntry, { kind: 
                 <div className="flex flex-col flex-1 min-w-0 items-start">
                     <CardHeader className="gap-1.5 w-full items-start">
                         <CardSubtitle className="w-full whitespace-nowrap overflow-hidden text-ellipsis">
-                            {company.name} · {company.location}
+                            {company.name} ({roles[0]?.type})
                         </CardSubtitle>
+                        <Secondary className="w-full whitespace-nowrap overflow-hidden text-ellipsis">
+                            {company.location}
+                        </Secondary>
                         <Secondary className="w-full whitespace-nowrap overflow-hidden text-ellipsis">
                             {formatPeriod(earliestStart, latestEnd)}
                         </Secondary>
                     </CardHeader>
-                    {companyDescription && (
-                        <CardBody className="pt-1 gap-2 w-full items-start">
-                            <MarkdownPreview>{companyDescription}</MarkdownPreview>
-                        </CardBody>
-                    )}
                 </div>
             </div>
 
@@ -114,6 +107,8 @@ const GroupedExperienceCard: React.FC<{ entry: Extract<ExperienceEntry, { kind: 
                     />
                 ))}
             </div>
+
+            <RoleSkills skills={allSkills} />
         </Card>
     );
 };
