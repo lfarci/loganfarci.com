@@ -47,6 +47,7 @@ const RoleSection: React.FC<{ role: ExperienceRole; isLast?: boolean }> = ({ rol
 
 const SingleExperienceCard: React.FC<{ entry: Extract<ExperienceEntry, { kind: "single" }> }> = ({ entry }) => {
     const { company, companyDescription, role } = entry;
+    const combinedMarkdown = [companyDescription, role.description].filter(Boolean).join("\n\n");
 
     return (
         <InfoCard
@@ -62,8 +63,7 @@ const SingleExperienceCard: React.FC<{ entry: Extract<ExperienceEntry, { kind: "
             align="start"
             showTitleTooltip
         >
-            {companyDescription && <MarkdownPreview>{companyDescription}</MarkdownPreview>}
-            {role.description && <MarkdownPreview>{role.description}</MarkdownPreview>}
+            {combinedMarkdown && <MarkdownPreview>{combinedMarkdown}</MarkdownPreview>}
             <RoleSkills skills={role.skills} />
         </InfoCard>
     );
