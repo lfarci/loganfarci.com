@@ -17,7 +17,7 @@ const formatPeriod = (start: Date, end?: Date) => {
 const RoleSkills: React.FC<{ skills?: string[] }> = ({ skills }) => {
     if (!skills?.length) return null;
     return (
-        <div className="flex flex-wrap gap-1.5 mt-2">
+        <div className="flex flex-wrap gap-2 mt-4">
             {skills.map((skill) => (
                 <IconTag key={skill}>{skill}</IconTag>
             ))}
@@ -28,12 +28,12 @@ const RoleSkills: React.FC<{ skills?: string[] }> = ({ skills }) => {
 const RoleSection: React.FC<{ role: ExperienceRole; isLast?: boolean }> = ({ role, isLast = false }) => (
     <div className="relative pl-6">
         <div className="absolute left-0 top-0 bottom-0 flex flex-col items-center">
-            <div className="w-2.5 h-2.5 rounded-full bg-accent border-2 border-accent shrink-0 mt-1.5" />
+            <div className="w-2.5 h-2.5 rounded-full bg-surface border-2 border-accent shrink-0 mt-1.5" />
             {!isLast && <div className="w-0.5 flex-1 bg-border-light mt-1" />}
         </div>
 
         <div className="pb-6">
-            <Heading4>{role.name}</Heading4>
+            <Heading4 className="text-text-secondary!">{role.name}</Heading4>
             <Secondary>{role.type} · {formatPeriod(role.start, role.end)}</Secondary>
             {role.description && (
                 <div className="mt-2">
@@ -86,7 +86,7 @@ const GroupedExperienceCard: React.FC<{ entry: Extract<ExperienceEntry, { kind: 
             mediaAlign="start"
             align="start"
             footer={
-                <div className="w-full">
+                <div className="w-full border-t border-border-light pt-4">
                     {roles.map((role, index) => (
                         <RoleSection
                             key={`${role.name}-${String(role.start)}`}
