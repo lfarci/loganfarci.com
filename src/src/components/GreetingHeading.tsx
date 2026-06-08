@@ -15,7 +15,7 @@ const GreetingHeading: React.FC<GreetingHeadingProps> = ({
     name,
     iconSrc = "/images/icons/waving_hand.avif",
     iconAlt = "Waving hand",
-    iconSize = 40,
+    iconSize = 64,
 }) => (
     <Heading1 className="flex items-center">
         <span className="pr-1">{greeting}</span>
@@ -24,7 +24,7 @@ const GreetingHeading: React.FC<GreetingHeadingProps> = ({
             alt={iconAlt}
             width={iconSize}
             height={iconSize}
-            className="inline-block w-10 h-10"
+            className="inline-block size-[1em] shrink-0"
         />
         <span>, I&apos;m {name}</span>
     </Heading1>
