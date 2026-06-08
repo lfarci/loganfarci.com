@@ -28,14 +28,12 @@ export default function HomePage() {
                 />
                 <TextSection
                     heading="About Me"
-                    label="Background"
                     text={profile.introduction}
                     redirectPath="/about#about-me"
                     redirectLabel="Read more about me"
                 />
                 <ThumbnailGridSection
                     heading="What I Do"
-                    label="Expertise"
                     size="large"
                     columns={2}
                     items={interests}
@@ -44,7 +42,6 @@ export default function HomePage() {
                 />
                 <ThumbnailGridSection
                     heading="My Certifications"
-                    label="Credentials"
                     size="large"
                     columns={3}
                     items={featuredCertifications}
@@ -53,7 +50,6 @@ export default function HomePage() {
                 />
                 <ArticleListSection
                     heading="Featured Articles"
-                    label="Writing"
                     articles={featuredArticles}
                     limit={4}
                     redirectPath="/articles"

@@ -23,6 +23,15 @@
     color: var(--color-foreground);
     background: var(--color-background);
   }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-manrope);
+  }
 }
 
 /* Base theme configuration using Tailwind v4 @theme directive */
