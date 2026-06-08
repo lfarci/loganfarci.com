@@ -16,9 +16,6 @@ on:
           - Deploy
           - Destroy
 
-permissions:
-  contents: read
-
 env:
   IS_DEPLOY: ${{ github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'Deploy') }}
   IS_DESTROY: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'Destroy' }}
@@ -29,9 +26,9 @@ jobs:
   secrets:
     name: Read secrets from Azure Key Vault
     runs-on: ubuntu-latest
-    environment: Production
     permissions:
       id-token: write
+    environment: Production
     outputs:
       storage_account_name: ${{ steps.get-secrets.outputs.terraform_backend_storage_account }}
       container_name: ${{ steps.get-secrets.outputs.terraform_backend_container_name }}
@@ -148,10 +145,10 @@ jobs:
     name: "Set secrets in the Key Vaultr"
     if: ${{ github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'Deploy') }}
     runs-on: ubuntu-latest
-    environment: Production
-    needs: terraform
     permissions:
       id-token: write
+    environment: Production
+    needs: terraform
     steps:
       - name: Azure CLI Login
         uses: azure/login@v3
@@ -178,11 +175,11 @@ jobs:
     name: "Configure custom domain"
     if: ${{ github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'Deploy') }}
     runs-on: ubuntu-latest
-    environment: Production
-    needs: terraform
     permissions:
       id-token: write
       contents: read
+    environment: Production
+    needs: terraform
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
