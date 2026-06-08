@@ -2,6 +2,8 @@ import { describe, expect, it } from "vitest";
 
 import { getAllArticles, getArticleBySlug, getArticleSlugs, getFeaturedArticles } from "./articles";
 
+const stripFencedCodeBlocks = (content: string) => content.replace(/```[\s\S]*?```/g, "");
+
 describe("articles", () => {
     it("loads the available article slugs from content", () => {
         const articles = getAllArticles();
@@ -32,5 +34,16 @@ describe("articles", () => {
 
         expect(featuredArticles.length).toBeGreaterThan(0);
         expect(featuredArticles.every((article) => article.featured)).toBe(true);
+    });
+
+    it("does not allow duplicate top-level headings in the affected article bodies", () => {
+        const affectedSlugs = ["github-copilot-customizations", "agentic-workflow-pr-quality-checks"];
+
+        for (const slug of affectedSlugs) {
+            const article = getArticleBySlug(slug);
+
+            expect(article).not.toBeNull();
+            expect(stripFencedCodeBlocks(article!.content)).not.toMatch(/^#\s/m);
+        }
     });
 });
