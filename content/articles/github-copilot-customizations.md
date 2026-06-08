@@ -102,7 +102,7 @@ This prompt generates a Markdown file in `content/articles/` with the correct fr
 | **title** | No           | Optionally specify the article title. If omitted, Copilot generates a title based on the topic. |
 | **tags**  | No           | Optionally specify tags. If omitted, Copilot suggests tags based on the topic.                  |
 
-This prompt streamlines setup for me—I just provide a few details, and Copilot handles the rest. In the future, it could suggest outlines, generate draft sections, or pull in relevant references automatically. For now, it keeps things simple and leaves the content empty, but the foundation is ready for more advanced automation.
+This prompt streamlines setup for me. I just provide a few details, and Copilot handles the rest. In the future, it could suggest outlines, generate draft sections, or pull in relevant references automatically. For now, it keeps things simple and leaves the content empty, but the foundation is ready for more advanced automation.
 
 #### Enhance Article Prompt
 
@@ -126,7 +126,7 @@ Most often, I run this prompt to apply generic enhancements based on the Article
 
 `/article.enhance`
 
-This is the prompt I use most often. I jot down ideas quickly, then run this prompt to polish and refine the content. It helps me improve clarity, style, and structure—without getting bogged down in repetitive instructions.
+This is the prompt I use most often. I jot down ideas quickly, then run this prompt to polish and refine the content. It helps me improve clarity, style, and structure without getting bogged down in repetitive instructions.
 
 #### Review Article Prompt
 

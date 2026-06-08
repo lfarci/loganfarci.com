@@ -87,7 +87,7 @@ git worktree remove ../features
 
 ## Conclusion
 
-Git worktrees dramatically improve productivity by letting you work on multiple features, bug fixes, or experiments in parallel—without the friction of constant branch switching. Instead of stashing changes or losing your place, you simply open a new VS Code window for each worktree and get straight to work. This approach keeps you focused and minimizes interruptions, especially when juggling urgent fixes or code reviews alongside ongoing development.
+Git worktrees dramatically improve productivity by letting you work on multiple features, bug fixes, or experiments in parallel, without the friction of constant branch switching. Instead of stashing changes or losing your place, you simply open a new VS Code window for each worktree and get straight to work. This approach keeps you focused and minimizes interruptions, especially when juggling urgent fixes or code reviews alongside ongoing development.
 
 ## References
 

@@ -14,7 +14,7 @@ When working with interns, a good chunk of pull request review time ends up goin
 
 The workflow validates that pull requests follow the team contract for pull request quality. It does not review code.
 
-I scoped it to title format, description structure, section coherence against actual changed files, assignee presence, and PR scope focus. Implementation review, correctness, test quality, and architecture are deliberately out of scope — that smaller contract is much easier to trust.
+I scoped it to title format, description structure, section coherence against actual changed files, assignee presence, and PR scope focus. Implementation review, correctness, test quality, and architecture are deliberately out of scope. That smaller contract is much easier to trust.
 
 ## How It Works
 
@@ -125,7 +125,7 @@ tools: [read/terminalSelection, read/terminalLastCommand, read/readFile, read/vi
 ---
 ```
 
-The validation rules themselves live in `.github/workflows/pull-request-quality-checks.md` (the workflow source). Both the agentic workflow and the VS Code agent point to the same contract — the workflow enforces it on every PR, the editor agent helps authors comply before pushing.
+The validation rules themselves live in `.github/workflows/pull-request-quality-checks.md` (the workflow source). Both the agentic workflow and the VS Code agent point to the same contract. The workflow enforces it on every PR, and the editor agent helps authors comply before pushing.
 
 ## Repository Structure
 
@@ -155,7 +155,7 @@ The validation rules themselves live in `.github/workflows/pull-request-quality-
 
 1. Copy the `.github/` folder from [lfarci/pull-request-quality-checks](https://github.com/lfarci/pull-request-quality-checks) into your repository.
 2. Add a `COPILOT_GITHUB_TOKEN` secret in **Settings → Secrets and variables → Actions**.
-3. The workflow triggers automatically on pull request events — no further configuration required.
+3. The workflow triggers automatically on pull request events. No further configuration is required.
 
 To modify the validation rules, edit the workflow source (`.github/workflows/pull-request-quality-checks.md`) and recompile:
 
@@ -173,8 +173,8 @@ gh aw compile
 
 ## References
 
-- [lfarci/pull-request-quality-checks](https://github.com/lfarci/pull-request-quality-checks) — full sample repository
+- [lfarci/pull-request-quality-checks](https://github.com/lfarci/pull-request-quality-checks) - full sample repository
 - [GitHub Agentic Workflows documentation](https://docs.github.com/en/copilot/using-github-copilot/using-copilot-agentic-workflows)
-- [gh-aw CLI](https://github.com/github/gh-aw) — compile workflow sources to GitHub Actions YAML
+- [gh-aw CLI](https://github.com/github/gh-aw) - compile workflow sources to GitHub Actions YAML
 - [Customizing Copilot in VS Code](https://code.visualstudio.com/docs/copilot/copilot-customization)
 - [Conventional Commits specification](https://www.conventionalcommits.org/)
