@@ -1,14 +1,28 @@
 import React from "react";
 import MermaidDiagram from "./MermaidDiagram";
-import { Code, Snippet } from "@heroui/react";
+import { Code } from "@heroui/react";
 
-interface CodeSnippetProps {
+export interface CodeSnippetProps {
     children: React.ReactNode;
     className?: string;
+    forceBlock?: boolean;
 }
 
-export default function CodeSnippet({ children, className }: CodeSnippetProps) {
-    const isInline = !className;
+function getTextContent(value: React.ReactNode): string {
+    if (typeof value === "string" || typeof value === "number") {
+        return String(value);
+    }
+
+    if (Array.isArray(value)) {
+        return value.map(getTextContent).join("");
+    }
+
+    return "";
+}
+
+export default function CodeSnippet({ children, className, forceBlock = false }: CodeSnippetProps) {
+    const code = getTextContent(children);
+    const isInline = !forceBlock && !className && !code.includes("\n");
     const isMermaid = className?.includes("language-mermaid");
 
     if (isMermaid) {
@@ -20,14 +34,10 @@ export default function CodeSnippet({ children, className }: CodeSnippetProps) {
             {children}
         </Code>
     ) : (
-        <Snippet
-            size="md"
-            radius="md"
-            hideSymbol={true}
-            hideCopyButton={false}
-            className="w-full my-4 *:whitespace-pre-wrap"
+        <pre
+            className="my-4 w-full overflow-x-auto rounded-lg border border-border bg-surface-elevated p-4 text-sm leading-relaxed text-text-primary"
         >
-            {children}
-        </Snippet>
+            <code className={className}>{children}</code>
+        </pre>
     );
 }
