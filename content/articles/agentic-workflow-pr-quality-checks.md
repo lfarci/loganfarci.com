@@ -36,6 +36,8 @@ When everything passes, the workflow resolves cleanly without leaving extra nois
 
 GitHub Agentic Workflows are defined as Markdown files with a YAML front matter block. The workflow source lives at `.github/workflows/pull-request-quality-checks.md` and looks like this:
 
+This front matter is workflow source syntax, not plain GitHub Actions YAML. Keys like `engine`, `tools`, and `safe-outputs` are GitHub Agentic Workflows extensions that `gh aw` understands before compilation.
+
 ```yaml
 ---
 name: PR Quality Check
@@ -91,15 +93,15 @@ safe-outputs:
 ---
 ```
 
-The `safe-outputs` block defines a callable action the Copilot agent can invoke to post or update the managed PR comment. The agent instructions (the Markdown body below the front matter) tell it exactly when to call this output and with what content.
+The `safe-outputs` block defines a callable action the Copilot agent can invoke to post or update the managed PR comment. The agent instructions, in the Markdown body below the front matter, tell it exactly when to call this output and with what content.
 
-You compile this source into a standard GitHub Actions YAML using the [`gh aw`](https://github.com/github/gh-aw) CLI:
+You compile this Markdown source into a generated GitHub Actions lock file with the [`gh aw`](https://github.com/github/gh-aw) CLI:
 
 ```bash
 gh aw compile
 ```
 
-This regenerates `.github/workflows/pull-request-quality-checks.lock.yml`. Never edit the `.lock.yml` directly — it is auto-generated and will be overwritten on the next compile.
+This turns `.github/workflows/pull-request-quality-checks.md` into `.github/workflows/pull-request-quality-checks.lock.yml`. Never edit the `.lock.yml` directly, it is auto-generated and will be overwritten on the next compile.
 
 # The Core Pattern: Shared Skill
 
