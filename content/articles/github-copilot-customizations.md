@@ -19,7 +19,7 @@ While writing my first two articles ([MCP fundamentals](https://www.loganfarci.c
 
 However, I quickly noticed a recurring problem: I was repeating the same instructions to Copilot in every session. My most common prompts were things like `Enhance this specific section and make it smoother`, `Update the article description and title`, or `Remove duplication across the article`. These requests were short and lacked context, making it impractical to provide full background each time. Copilot works best when it has the complete picture.
 
-# Customizing GitHub Copilot
+## Customizing GitHub Copilot
 
 GitHub Copilot now supports powerful customization features in Visual Studio Code. I decided to leverage these capabilities to streamline my writing workflow and eliminate repetitive instructions. By customizing Copilot, I can automate common tasks like article reviews, edits, and scaffolding, ensuring every article remains consistent and follows established guidelines.
 
@@ -33,7 +33,7 @@ Key customization features in VS Code include:
 
 These features standardize Copilot’s behavior and ensure consistency across writing and development workflows. This article shows how I use them to set up an effective technical writing assistant.
 
-# Create a technical writing assistant
+## Create a technical writing assistant
 
 This section explains how to use Copilot customization to build an efficient technical writing assistant. By integrating these features into my workflow, I’ve streamlined article creation and editing for this website. The goal is to improve quality and consistency without repeating instructions in every session.
 
@@ -102,7 +102,7 @@ This prompt generates a Markdown file in `content/articles/` with the correct fr
 | **title** | No           | Optionally specify the article title. If omitted, Copilot generates a title based on the topic. |
 | **tags**  | No           | Optionally specify tags. If omitted, Copilot suggests tags based on the topic.                  |
 
-This prompt streamlines setup for me—I just provide a few details, and Copilot handles the rest. In the future, it could suggest outlines, generate draft sections, or pull in relevant references automatically. For now, it keeps things simple and leaves the content empty, but the foundation is ready for more advanced automation.
+This prompt streamlines setup for me. I just provide a few details, and Copilot handles the rest. In the future, it could suggest outlines, generate draft sections, or pull in relevant references automatically. For now, it keeps things simple and leaves the content empty, but the foundation is ready for more advanced automation.
 
 #### Enhance Article Prompt
 
@@ -126,7 +126,7 @@ Most often, I run this prompt to apply generic enhancements based on the Article
 
 `/article.enhance`
 
-This is the prompt I use most often. I jot down ideas quickly, then run this prompt to polish and refine the content. It helps me improve clarity, style, and structure—without getting bogged down in repetitive instructions.
+This is the prompt I use most often. I jot down ideas quickly, then run this prompt to polish and refine the content. It helps me improve clarity, style, and structure without getting bogged down in repetitive instructions.
 
 #### Review Article Prompt
 
@@ -138,7 +138,7 @@ I use the Review Article Prompt as the final gatekeeper before publication, ensu
 
 to trigger a comprehensive review of my draft. This process helps me catch overlooked issues and enforces consistency across my content, so every article published is polished and reliable.
 
-# Workflow
+## Workflow
 
 ```mermaid
 flowchart TB
@@ -161,7 +161,7 @@ flowchart TB
     review -- "Needs Revisions" --> write
 ```
 
-# References
+## References
 
 You can also enforce technology-specific best practices for your stack. The open-source community maintains lists of reusable instructions, such as [Awesome Copilot Instructions](https://github.com/Code-and-Sorts/awesome-copilot-instructions), which you can adapt for your projects.
 

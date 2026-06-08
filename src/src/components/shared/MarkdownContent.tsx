@@ -15,10 +15,27 @@ import {
     Emphasis,
 } from "@/components/shared/typography";
 import NewTabLink from "./NewTabLink";
-import CodeSnippet from "./CodeSnippet";
+import CodeSnippet, { CodeSnippetProps } from "./CodeSnippet";
 
 interface MarkdownContentProps {
     content: string;
+}
+
+function MarkdownCodeBlock({ children }: { children: React.ReactNode }) {
+    const codeSnippet = React.Children.toArray(children).find(
+        (child): child is React.ReactElement<CodeSnippetProps> =>
+            React.isValidElement<CodeSnippetProps>(child) && child.type === CodeSnippet,
+    );
+
+    if (codeSnippet) {
+        return (
+            <CodeSnippet className={codeSnippet.props.className} forceBlock>
+                {codeSnippet.props.children}
+            </CodeSnippet>
+        );
+    }
+
+    return <>{children}</>;
 }
 
 const markdownComponents: Components = {
@@ -36,6 +53,7 @@ const markdownComponents: Components = {
         </blockquote>
     ),
     code: ({ children, className }) => <CodeSnippet className={className}>{children}</CodeSnippet>,
+    pre: ({ children }) => <MarkdownCodeBlock>{children}</MarkdownCodeBlock>,
     a: ({ href, children }) => <NewTabLink url={href ?? ""}>{children}</NewTabLink>,
     strong: ({ children }) => <Strong>{children}</Strong>,
     em: ({ children }) => <Emphasis>{children}</Emphasis>,
