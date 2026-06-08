@@ -39,7 +39,7 @@ jobs:
       AZURE_KEY_VAULT_NAME: ${{ secrets.AZURE_KEY_VAULT_NAME }}
 
   deploy_preview:
-    if: github.event_name == 'pull_request' && github.event.action != 'closed'
+    if: github.event_name == 'pull_request' && github.event.action != 'closed' && github.event.pull_request.user.login != 'dependabot[bot]'
     name: "Deploy App to Preview"
     uses: ./.github/workflows/reusable-deploy-static-web-app.yml
     permissions:
@@ -57,7 +57,7 @@ jobs:
       AZURE_KEY_VAULT_NAME: ${{ secrets.AZURE_KEY_VAULT_NAME }}
 
   close_pull_request:
-    if: github.event_name == 'pull_request' && github.event.action == 'closed'
+    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.user.login != 'dependabot[bot]'
     name: "Close Pull Request"
     runs-on: ubuntu-latest
     permissions:
