@@ -18,7 +18,7 @@
     "dependencies": {
         "@heroui/react": "^2.8.2",
         "framer-motion": "^12.23.11",
-        "mermaid": "^11.9.0",
+        "mermaid": "^11.15.0",
         "react": "^19.1.1",
         "react-dom": "^19.1.1",
         "react-markdown": "^10.1.0",
