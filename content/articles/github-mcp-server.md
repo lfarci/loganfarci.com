@@ -10,7 +10,7 @@ coauthoredWithAgent: true
 
 The GitHub MCP server is a powerful tool that transforms your AI agent into a GitHub powerhouse. This server provides comprehensive integration with GitHub, allowing you to manage repositories, issues, pull requests, and GitHub Actions through natural language conversations.
 
-If you want a refresher on MCP itself, start with my [Model Context Protocol](/articles/mcp) article or the [official introduction](https://modelcontextprotocol.io/introduction). This article stays focused on what the GitHub MCP Server exposes and how to use it effectively.
+If you want a refresher on how MCP tool calls work, start with my [How MCP Tool Calls Work](/articles/mcp) article or the [official introduction](https://modelcontextprotocol.io/introduction). This article stays focused on what the GitHub MCP Server exposes and how to use it effectively.
 
 ## The GitHub MCP Server
 
