@@ -38,9 +38,53 @@ jobs:
       AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       AZURE_KEY_VAULT_NAME: ${{ secrets.AZURE_KEY_VAULT_NAME }}
 
+  cleanup_preview_environments:
+    if: github.event_name == 'pull_request' && github.event.action != 'closed'
+    name: "Clean up legacy preview environments"
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    environment: Preview
+    steps:
+      - name: Azure CLI Login
+        uses: azure/login@v3
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Get Static Web App details from Key Vault
+        id: get-secrets
+        env:
+          AZURE_KEY_VAULT_NAME: ${{ secrets.AZURE_KEY_VAULT_NAME }}
+        run: |
+          echo "resource_group=$(az keyvault secret show --name ResourceGroupName --vault-name "$AZURE_KEY_VAULT_NAME" --query value -o tsv)" >> $GITHUB_OUTPUT
+          echo "static_web_app_name=$(az keyvault secret show --name StaticWebAppName --vault-name "$AZURE_KEY_VAULT_NAME" --query value -o tsv)" >> $GITHUB_OUTPUT
+
+      - name: Delete legacy PR preview environments
+        env:
+          RESOURCE_GROUP: ${{ steps.get-secrets.outputs.resource_group }}
+          STATIC_WEB_APP_NAME: ${{ steps.get-secrets.outputs.static_web_app_name }}
+        run: |
+          environments=$(az staticwebapp environment list \
+            --name "$STATIC_WEB_APP_NAME" \
+            --resource-group "$RESOURCE_GROUP" \
+            --query "[?starts_with(name, 'pr-')].name" \
+            -o tsv)
+
+          for environment in $environments; do
+            az staticwebapp environment delete \
+              --name "$STATIC_WEB_APP_NAME" \
+              --resource-group "$RESOURCE_GROUP" \
+              --environment-name "$environment" \
+              --yes
+          done
+
   deploy_preview:
     if: github.event_name == 'pull_request' && github.event.action != 'closed'
     name: "Deploy App to Preview"
+    needs: cleanup_preview_environments
     uses: ./.github/workflows/reusable-deploy-static-web-app.yml
     permissions:
       id-token: write
