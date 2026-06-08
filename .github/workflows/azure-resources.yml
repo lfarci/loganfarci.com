@@ -17,7 +17,6 @@ on:
           - Destroy
 
 permissions:
-  id-token: write
   contents: read
 
 env:
@@ -31,6 +30,8 @@ jobs:
     name: Read secrets from Azure Key Vault
     runs-on: ubuntu-latest
     environment: Production
+    permissions:
+      id-token: write
     outputs:
       storage_account_name: ${{ steps.get-secrets.outputs.terraform_backend_storage_account }}
       container_name: ${{ steps.get-secrets.outputs.terraform_backend_container_name }}
@@ -54,6 +55,9 @@ jobs:
   terraform:
     name: "Deploy Terraform module"
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
     environment:
       name: Production
       url: "https://${{ env.SUBDOMAIN }}.${{ env.CUSTOM_DOMAIN }}"
@@ -146,6 +150,8 @@ jobs:
     runs-on: ubuntu-latest
     environment: Production
     needs: terraform
+    permissions:
+      id-token: write
     steps:
       - name: Azure CLI Login
         uses: azure/login@v3
@@ -174,6 +180,9 @@ jobs:
     runs-on: ubuntu-latest
     environment: Production
     needs: terraform
+    permissions:
+      id-token: write
+      contents: read
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
