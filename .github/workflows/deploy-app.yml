@@ -8,6 +8,9 @@ on:
       - "src/**"
       - "content/articles/**"
       - "content/data/**"
+      - ".github/actions/**"
+      - ".github/workflows/deploy-app.yml"
+      - ".github/workflows/reusable-deploy-static-web-app.yml"
   pull_request:
     types: [opened, synchronize, reopened, closed]
     branches:
@@ -16,6 +19,9 @@ on:
       - "src/**"
       - "content/articles/**"
       - "content/data/**"
+      - ".github/actions/**"
+      - ".github/workflows/deploy-app.yml"
+      - ".github/workflows/reusable-deploy-static-web-app.yml"
   workflow_dispatch:
 
 jobs:
@@ -61,64 +67,19 @@ jobs:
     needs: deploy_preview
     permissions:
       issues: write
+      contents: read
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
       - name: Comment preview URL
-        uses: actions/github-script@v7
-        env:
-          PREVIEW_URL: ${{ needs.deploy_preview.outputs.static_web_app_url }}
-          PREVIEW_SHA: ${{ github.event.pull_request.head.sha }}
+        uses: ./.github/actions/comment-preview-url
         with:
-          script: |
-            const marker = '<!-- swa-preview-url -->';
-            const previewUrl = process.env.PREVIEW_URL;
-            const previewSha = process.env.PREVIEW_SHA;
-
-            if (!previewUrl) {
-              core.setFailed('Azure Static Web Apps did not return a preview URL.');
-              return;
-            }
-
-            const normalizedPreviewUrl = /^https?:\/\//.test(previewUrl)
-              ? previewUrl
-              : `https://${previewUrl}`;
-
-            const body = [
-              marker,
-              '### Azure Static Web Apps preview',
-              '',
-              `Preview URL: ${normalizedPreviewUrl}`,
-              '',
-              `Updated for commit ${previewSha}.`,
-            ].join('\n');
-
-            const { owner, repo } = context.repo;
-            const issue_number = context.issue.number;
-            const comments = await github.paginate(github.rest.issues.listComments, {
-              owner,
-              repo,
-              issue_number,
-              per_page: 100,
-            });
-
-            const existingComment = comments.find((comment) =>
-              comment.user?.type === 'Bot' && comment.body?.includes(marker)
-            );
-
-            if (existingComment) {
-              await github.rest.issues.updateComment({
-                owner,
-                repo,
-                comment_id: existingComment.id,
-                body,
-              });
-            } else {
-              await github.rest.issues.createComment({
-                owner,
-                repo,
-                issue_number,
-                body,
-              });
-            }
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          issue-number: ${{ github.event.pull_request.number }}
+          preview-url: ${{ needs.deploy_preview.outputs.static_web_app_url }}
+          commit-sha: ${{ github.event.pull_request.head.sha }}
 
   close_pull_request:
     if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.user.login != 'dependabot[bot]'

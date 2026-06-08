@@ -1,0 +1,38 @@
+name: "Comment preview URL"
+description: "Create or update a sticky pull request comment with a preview deployment URL."
+
+inputs:
+  github-token:
+    description: "GitHub token used to create or update the pull request comment."
+    required: true
+  repository:
+    description: "Repository in owner/name format."
+    required: true
+  issue-number:
+    description: "Pull request number to comment on."
+    required: true
+  preview-url:
+    description: "Preview deployment URL or hostname."
+    required: true
+  commit-sha:
+    description: "Commit SHA included in the comment body."
+    required: true
+  comment-marker:
+    description: "Hidden marker used to find and update the existing preview comment."
+    required: false
+    default: "<!-- swa-preview-url -->"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Create or update preview comment
+      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.github-token }}
+        GITHUB_TOKEN: ${{ inputs.github-token }}
+        REPOSITORY: ${{ inputs.repository }}
+        ISSUE_NUMBER: ${{ inputs.issue-number }}
+        PREVIEW_URL: ${{ inputs.preview-url }}
+        COMMIT_SHA: ${{ inputs.commit-sha }}
+        COMMENT_MARKER: ${{ inputs.comment-marker }}
+      run: bash "$GITHUB_ACTION_PATH/comment-preview-url.sh"
