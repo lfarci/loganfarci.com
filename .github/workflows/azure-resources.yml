@@ -149,8 +149,6 @@ jobs:
       id-token: write
     environment: Production
     needs: terraform
-    permissions:
-      id-token: write
     steps:
       - name: Azure CLI Login
         uses: azure/login@v3
@@ -182,9 +180,6 @@ jobs:
       contents: read
     environment: Production
     needs: terraform
-    permissions:
-      id-token: write
-      contents: read
     steps:
       - name: Checkout code
         uses: actions/checkout@v6

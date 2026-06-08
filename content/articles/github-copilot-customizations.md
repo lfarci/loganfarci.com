@@ -1,5 +1,5 @@
 ---
-title: "I made GitHub Copilot my writing assistant"
+title: "Customizing GitHub Copilot for Technical Writing"
 description: "In this article, I share how I customized GitHub Copilot to enhance my writing workflow for technical articles on my personal website."
 publishedAt: "2025-07-25"
 featured: true
@@ -8,9 +8,9 @@ author: "Logan Farci"
 coauthoredWithAgent: true
 ---
 
-This website is my technical workspace, a place to document findings, experiments, and lessons learned for myself and other developers. I use it to publish focused articles about current projects or topics I’m exploring, knowing the content will evolve over time. My goal is to keep these notes clear and actionable, whether for my own reference or for anyone else who finds them.
+This website is my technical workspace, a place to document findings, experiments, and lessons learned for myself and other developers. I use it to publish focused articles about current projects or topics I'm exploring, knowing the content will evolve over time. My goal is to keep these notes clear and actionable, whether for my own reference or for anyone else who finds them.
 
-While writing my first two articles ([MCP fundamentals](https://www.loganfarci.com/articles/mcp) and [GitHub MCP Server](https://www.loganfarci.com/articles/github-mcp-server)), I found GitHub Copilot surprisingly effective as a collaborator. It helped me:
+While writing my first two articles ([How MCP Tool Calls Work](https://www.loganfarci.com/articles/mcp) and [GitHub MCP Server](https://www.loganfarci.com/articles/github-mcp-server)), I found GitHub Copilot surprisingly effective as a collaborator. It helped me:
 
 -   Scaffold new articles and enforce the required front matter format
 -   Catch spelling and grammar issues
@@ -23,7 +23,7 @@ However, I quickly noticed a recurring problem: I was repeating the same instruc
 
 GitHub Copilot now supports powerful customization features in Visual Studio Code. I decided to leverage these capabilities to streamline my writing workflow and eliminate repetitive instructions. By customizing Copilot, I can automate common tasks like article reviews, edits, and scaffolding, ensuring every article remains consistent and follows established guidelines.
 
-What does customization actually offer? You can now tailor Copilot’s responses by adding version-controlled instructions and reusable prompts directly to your repository. Simply create Markdown files that define exactly how Copilot should behave for your workflows. This lets you set global instructions, task-specific rules, reusable prompts, and custom chat modes. For more details, refer to the official [Customize AI responses](https://code.visualstudio.com/docs/copilot/copilot-customization) documentation.
+What does customization actually offer? You can now tailor Copilot's responses by adding version-controlled instructions and reusable prompts directly to your repository. Simply create Markdown files that define exactly how Copilot should behave for your workflows. This lets you set global instructions, task-specific rules, reusable prompts, and custom chat modes. For more details, refer to the official [Customize AI responses](https://code.visualstudio.com/docs/copilot/copilot-customization) documentation.
 
 Key customization features in VS Code include:
 
@@ -31,11 +31,11 @@ Key customization features in VS Code include:
 -   [Prompt files](https://code.visualstudio.com/docs/copilot/copilot-customization#_prompt-files-experimental)**:** Reusable, parameterized prompts for common tasks.
 -   [Custom chat modes](https://code.visualstudio.com/docs/copilot/chat/chat-modes#_custom-chat-modes)**:** Control how Copilot interacts with your codebase and tools for different workflows. I recommend this [video](https://www.youtube.com/watch?v=rE6svXzyhg0&t=278s) to have a walkthrough.
 
-These features standardize Copilot’s behavior and ensure consistency across writing and development workflows. This article shows how I use them to set up an effective technical writing assistant.
+These features standardize Copilot's behavior and ensure consistency across writing and development workflows. This article shows how I use them to set up an effective technical writing assistant.
 
 ## Create a technical writing assistant
 
-This section explains how to use Copilot customization to build an efficient technical writing assistant. By integrating these features into my workflow, I’ve streamlined article creation and editing for this website. The goal is to improve quality and consistency without repeating instructions in every session.
+This section explains how to use Copilot customization to build an efficient technical writing assistant. By integrating these features into my workflow, I've streamlined article creation and editing for this website. The goal is to improve quality and consistency without repeating instructions in every session.
 
 The diagram below illustrates the main elements involved in customizing Copilot for technical writing:
 
@@ -55,14 +55,13 @@ graph TD
 
 ### Articles Chat Mode
 
-Imagine Articles Chat Mode as Copilot stepping into the role of a technical writing professional. Instead of juggling code reviews and bug fixes, Copilot now orchestrates your writing workflow, setting the stage, choosing the right tools, and focusing feedback on clarity and structure. This mode doesn’t rewrite your content rules or style guide; it simply ensures Copilot’s actions and suggestions are tailored for technical writing, not coding.
+Imagine Articles Chat Mode as Copilot stepping into the role of a technical writing professional. Instead of juggling code reviews and bug fixes, Copilot now orchestrates your writing workflow, setting the stage, choosing the right tools, and focusing feedback on clarity and structure. This mode doesn't rewrite your content rules or style guide; it simply ensures Copilot's actions and suggestions are tailored for technical writing, not coding.
 
-For example, when you switch to Articles Chat Mode, Copilot stops offering code completions or debugging tips. Instead, it reviews your Markdown, polishes your prose, and highlights areas for improvement, just like a dedicated editor. If you ask for a section rewrite, Copilot draws on your repository’s writing guidelines and prompt files, not generic programming advice.
+For example, when you switch to Articles Chat Mode, Copilot stops offering code completions or debugging tips. Instead, it reviews your Markdown, polishes your prose, and highlights areas for improvement, just like a dedicated editor. If you ask for a section rewrite, Copilot draws on your repository's writing guidelines and prompt files, not generic programming advice.
 
-To activate Articles Chat Mode, define it in `.github/copilot/chatmodes/articles.chatmode.md`. Once set up, select it from the Copilot chat mode picker in Visual Studio Code. This instantly shifts Copilot’s persona to match your technical writing workflow, making every edit session more focused and productive.
+To activate Articles Chat Mode, define it in `.github/copilot/chatmodes/articles.chatmode.md`. Once set up, select it from the Copilot chat mode picker in Visual Studio Code. This instantly shifts Copilot's persona to match your technical writing workflow, making every edit session more focused and productive.
 
-> ![NOTE]  
-> I'm sure this mode can be improved further, but it already helps me focus on writing without getting distracted by coding tasks. It’s like having a personal writing assistant that understands my style and needs.
+> **Note:** I'm sure this mode can be improved further, but it already helps me focus on writing without getting distracted by coding tasks. It's like having a personal writing assistant that understands my style and needs.
 
 ### Articles Instructions
 

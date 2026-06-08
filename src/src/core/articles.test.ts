@@ -24,7 +24,7 @@ describe("articles", () => {
 
     it("returns a single article by slug and null for an unknown slug", () => {
         expect(getArticleBySlug("github-copilot-customizations")?.title).toBe(
-            "I made GitHub Copilot my writing assistant"
+            "Customizing GitHub Copilot for Technical Writing"
         );
         expect(getArticleBySlug("missing-article")).toBeNull();
     });
