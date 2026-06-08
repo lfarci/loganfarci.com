@@ -8,11 +8,11 @@ author: "Logan Farci"
 coauthoredWithAgent: true
 ---
 
-I've been working on a small side project called [flouz](https://github.com/lfarci/flouz) — an AI-powered CLI tool for managing personal bank transactions. It's mostly an excuse to experiment with a few things I've been wanting to try.
+I've been working on a small side project called [flouz](https://github.com/lfarci/flouz), an AI-powered CLI tool for managing personal bank transactions. It's mostly an excuse to experiment with a few things I've been wanting to try.
 
 ## What It Does
 
-Flouz stores your transactions and bank account information in a local SQLite database. There's no server, no cloud sync, no account required — everything stays on your machine. The data is yours and only yours.
+Flouz stores your transactions and bank account information in a local SQLite database. There's no server, no cloud sync, no account required. Everything stays on your machine. The data is yours and only yours.
 
 The current focus is on using AI to automatically categorize transactions, which is the tedious part of any personal finance workflow. The goal is to make that process hands-off.
 
