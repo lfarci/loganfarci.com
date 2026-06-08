@@ -58,23 +58,40 @@ When you save this file, Visual Studio Code will automatically launch the OAuth 
 
 ### Local Setup
 
-For more control, you can run the GitHub MCP server locally using Docker.
+For more control, you can run the GitHub MCP server locally with Docker. In VS Code, the working local setup is process-based, so VS Code launches the container and communicates with it over stdio.
 
-1.  **Run the Docker container:**
-    ```bash
-    docker run -d -p 8080:8080 -e GITHUB_TOKEN=<your-github-token> ghcr.io/github/github-mcp-server:latest
-    ```
-2.  **Update your `mcp.json`:**
+1.  **Create a GitHub personal access token.**
+2.  **Add this to `.vscode/mcp.json`:**
     ```json
     {
+      "inputs": [
+        {
+          "type": "promptString",
+          "id": "github_token",
+          "description": "GitHub Personal Access Token",
+          "password": true
+        }
+      ],
       "servers": {
         "github": {
-          "type": "http",
-          "url": "http://localhost:8080"
+          "command": "docker",
+          "args": [
+            "run",
+            "-i",
+            "--rm",
+            "-e",
+            "GITHUB_PERSONAL_ACCESS_TOKEN",
+            "ghcr.io/github/github-mcp-server"
+          ],
+          "env": {
+            "GITHUB_PERSONAL_ACCESS_TOKEN": "${input:github_token}"
+          }
         }
       }
     }
     ```
+
+This local configuration does not use `http://localhost:8080`. If you want an HTTP transport instead, make sure you follow the official GitHub MCP Server transport documentation and configure the server for that transport explicitly.
 
 ### Security
 
