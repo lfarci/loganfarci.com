@@ -6,18 +6,16 @@ on:
       - main
     paths:
       - "src/**"
-      - "content/**"
-      - ".github/workflows/deploy-app.yml"
-      - ".github/workflows/reusable-deploy-static-web-app.yml"
+      - "content/articles/**"
+      - "content/data/**"
   pull_request:
     types: [opened, synchronize, reopened, closed]
     branches:
       - main
     paths:
       - "src/**"
-      - "content/**"
-      - ".github/workflows/deploy-app.yml"
-      - ".github/workflows/reusable-deploy-static-web-app.yml"
+      - "content/articles/**"
+      - "content/data/**"
   workflow_dispatch:
 
 jobs:
@@ -39,7 +37,7 @@ jobs:
       AZURE_KEY_VAULT_NAME: ${{ secrets.AZURE_KEY_VAULT_NAME }}
 
   deploy_preview:
-    if: github.event_name == 'pull_request' && github.event.action != 'closed'
+    if: github.event_name == 'pull_request' && github.event.action != 'closed' && github.event.pull_request.user.login != 'dependabot[bot]'
     name: "Deploy App to Preview"
     uses: ./.github/workflows/reusable-deploy-static-web-app.yml
     permissions:
@@ -57,7 +55,7 @@ jobs:
       AZURE_KEY_VAULT_NAME: ${{ secrets.AZURE_KEY_VAULT_NAME }}
 
   close_pull_request:
-    if: github.event_name == 'pull_request' && github.event.action == 'closed'
+    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.user.login != 'dependabot[bot]'
     name: "Close Pull Request"
     runs-on: ubuntu-latest
     permissions:
