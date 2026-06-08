@@ -10,13 +10,13 @@ coauthoredWithAgent: true
 
 When working with interns, a good chunk of pull request review time ends up going to the same formalities: missing descriptions, vague titles, assignees left blank. These comments don't carry much technical weight, but they pile up and eat into the time I'd rather spend on actual guidance. So I built an agentic workflow to catch that stuff automatically. The full sample is available at [lfarci/pull-request-quality-checks](https://github.com/lfarci/pull-request-quality-checks).
 
-# The Experiment
+## The Experiment
 
 The workflow validates that pull requests follow the team contract for pull request quality. It does not review code.
 
 I scoped it to title format, description structure, section coherence against actual changed files, assignee presence, and PR scope focus. Implementation review, correctness, test quality, and architecture are deliberately out of scope — that smaller contract is much easier to trust.
 
-# How It Works
+## How It Works
 
 The workflow runs on every PR event (opened, edited, synchronize, reopened). It reads PR metadata and changed files, runs six quality checks, and updates a single managed comment on the PR with only the failing items.
 
@@ -32,7 +32,7 @@ flowchart LR
 
 When everything passes, the workflow resolves cleanly without leaving extra noise. When something fails, the comment tells the author exactly what to fix. That precision matters for interns: "Improve your PR description" is not actionable. "The `Why` section restates what changed without explaining the motivation" is.
 
-# The Workflow Source
+## The Workflow Source
 
 GitHub Agentic Workflows are defined as Markdown files with a YAML front matter block. The workflow source lives at `.github/workflows/pull-request-quality-checks.md` and looks like this:
 
@@ -103,7 +103,7 @@ gh aw compile
 
 This turns `.github/workflows/pull-request-quality-checks.md` into `.github/workflows/pull-request-quality-checks.lock.yml`. Never edit the `.lock.yml` directly, it is auto-generated and will be overwritten on the next compile.
 
-# The Core Pattern: Shared Skill
+## The Core Pattern: Shared Skill
 
 The most interesting part of this experiment is how the PR quality rules are defined once and consumed in two places.
 
@@ -127,7 +127,7 @@ tools: [read/terminalSelection, read/terminalLastCommand, read/readFile, read/vi
 
 The validation rules themselves live in `.github/workflows/pull-request-quality-checks.md` (the workflow source). Both the agentic workflow and the VS Code agent point to the same contract — the workflow enforces it on every PR, the editor agent helps authors comply before pushing.
 
-# Repository Structure
+## Repository Structure
 
 ```
 .github/
@@ -140,7 +140,7 @@ The validation rules themselves live in `.github/workflows/pull-request-quality-
     └── pull-request-quality-checks.lock.yml # Compiled output (auto-generated)
 ```
 
-# What The Workflow Checks
+## What The Workflow Checks
 
 | Check | What It Validates |
 |-------|-------------------|
@@ -151,7 +151,7 @@ The validation rules themselves live in `.github/workflows/pull-request-quality-
 | E | At least one assignee is set |
 | F | PR is focused on a single concern |
 
-# Setup
+## Setup
 
 1. Copy the `.github/` folder from [lfarci/pull-request-quality-checks](https://github.com/lfarci/pull-request-quality-checks) into your repository.
 2. Add a `COPILOT_GITHUB_TOKEN` secret in **Settings → Secrets and variables → Actions**.
@@ -163,7 +163,7 @@ To modify the validation rules, edit the workflow source (`.github/workflows/pul
 gh aw compile
 ```
 
-# What I Learned
+## What I Learned
 
 **Start with a narrow contract.** A small contract with clear pass/fail boundaries is much easier to evaluate than "build an AI PR reviewer."
 
@@ -171,7 +171,7 @@ gh aw compile
 
 **Scope control builds trust.** The workflow does not pretend to do everything. It validates one thing clearly and that makes it easier to trust and extend.
 
-# References
+## References
 
 - [lfarci/pull-request-quality-checks](https://github.com/lfarci/pull-request-quality-checks) — full sample repository
 - [GitHub Agentic Workflows documentation](https://docs.github.com/en/copilot/using-github-copilot/using-copilot-agentic-workflows)
