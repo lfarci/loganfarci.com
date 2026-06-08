@@ -47,7 +47,7 @@ jobs:
       contents: read
     with:
       github_environment_name: Preview
-      static_web_app_environment_name: pr-${{ github.event.pull_request.number }}
+      static_web_app_environment_name: preview
       commit_hash: ${{ github.sha }}
       repository_url: "${{ github.server_url }}/${{ github.repository }}"
     secrets:
@@ -84,4 +84,4 @@ jobs:
         with:
           azure_static_web_apps_api_token: ${{ steps.get-secrets.outputs.deployment_token }}
           action: close
-          deployment_environment: pr-${{ github.event.pull_request.number }}
+          deployment_environment: preview
