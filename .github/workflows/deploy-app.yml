@@ -72,14 +72,37 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v6
 
+      - name: Normalize preview URL
+        id: preview-url
+        env:
+          PREVIEW_URL: ${{ needs.deploy_preview.outputs.static_web_app_url }}
+        run: |
+          if [[ -z "$PREVIEW_URL" ]]; then
+            echo "::error::Azure Static Web Apps did not return a preview URL."
+            exit 1
+          fi
+
+          if [[ "$PREVIEW_URL" == http://* || "$PREVIEW_URL" == https://* ]]; then
+            normalized_preview_url="$PREVIEW_URL"
+          else
+            normalized_preview_url="https://$PREVIEW_URL"
+          fi
+
+          echo "url=$normalized_preview_url" >> "$GITHUB_OUTPUT"
+
       - name: Comment preview URL
-        uses: ./.github/actions/comment-preview-url
+        uses: ./.github/actions/upsert-issue-comment
         with:
           github-token: ${{ github.token }}
           repository: ${{ github.repository }}
           issue-number: ${{ github.event.pull_request.number }}
-          preview-url: ${{ needs.deploy_preview.outputs.static_web_app_url }}
-          commit-sha: ${{ github.event.pull_request.head.sha }}
+          comment-marker: "<!-- swa-preview-url -->"
+          body: |
+            ### Azure Static Web Apps preview
+
+            Preview URL: ${{ steps.preview-url.outputs.url }}
+
+            Updated for commit ${{ github.event.pull_request.head.sha }}.
 
   close_pull_request:
     if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.user.login != 'dependabot[bot]'

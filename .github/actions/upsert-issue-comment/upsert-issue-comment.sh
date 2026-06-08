@@ -14,41 +14,31 @@ require_value() {
 require_value "github-token" "${GH_TOKEN:-}"
 require_value "repository" "${REPOSITORY:-}"
 require_value "issue-number" "${ISSUE_NUMBER:-}"
-require_value "commit-sha" "${COMMIT_SHA:-}"
+require_value "body" "${COMMENT_BODY:-}"
 require_value "comment-marker" "${COMMENT_MARKER:-}"
 
-if [[ -z "${PREVIEW_URL:-}" ]]; then
-  echo "::error::Azure Static Web Apps did not return a preview URL."
-  exit 1
-fi
-
-if [[ "$PREVIEW_URL" == http://* || "$PREVIEW_URL" == https://* ]]; then
-  normalized_preview_url="$PREVIEW_URL"
+if [[ "$COMMENT_BODY" == *"$COMMENT_MARKER"* ]]; then
+  rendered_comment_body="$COMMENT_BODY"
 else
-  normalized_preview_url="https://$PREVIEW_URL"
+  rendered_comment_body="$(printf '%s\n%s' "$COMMENT_MARKER" "$COMMENT_BODY")"
 fi
-
-body="$(printf '%s\n### Azure Static Web Apps preview\n\nPreview URL: %s\n\nUpdated for commit %s.' \
-  "$COMMENT_MARKER" \
-  "$normalized_preview_url" \
-  "$COMMIT_SHA")"
 
 existing_comment_id="$(
   gh api --paginate --slurp "repos/$REPOSITORY/issues/$ISSUE_NUMBER/comments" |
     jq -r --arg marker "$COMMENT_MARKER" \
-      '[.[][] | select(.user.type == "Bot" and (.body | contains($marker))) | .id][0] // empty'
+      '[.[][] | select(.body | contains($marker)) | .id][0] // empty'
 )"
 
 if [[ -n "$existing_comment_id" ]]; then
   gh api \
     --method PATCH \
     "repos/$REPOSITORY/issues/comments/$existing_comment_id" \
-    -f body="$body" \
+    -f body="$rendered_comment_body" \
     >/dev/null
 else
   gh api \
     --method POST \
     "repos/$REPOSITORY/issues/$ISSUE_NUMBER/comments" \
-    -f body="$body" \
+    -f body="$rendered_comment_body" \
     >/dev/null
 fi
