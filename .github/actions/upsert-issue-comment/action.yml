@@ -1,0 +1,77 @@
+name: "Upsert issue comment"
+description: "Create or update a marked issue or pull request comment."
+
+inputs:
+  github-token:
+    description: "GitHub token used to create or update the comment."
+    required: true
+  repository:
+    description: "Repository in owner/name format."
+    required: true
+  issue-number:
+    description: "Issue or pull request number to comment on."
+    required: true
+  body:
+    description: "Markdown body to create or update."
+    required: true
+  comment-marker:
+    description: "Hidden marker used to find and update the existing comment."
+    required: false
+    default: "<!-- upsert-issue-comment -->"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Create or update comment
+      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.github-token }}
+        GITHUB_TOKEN: ${{ inputs.github-token }}
+        REPOSITORY: ${{ inputs.repository }}
+        ISSUE_NUMBER: ${{ inputs.issue-number }}
+        COMMENT_BODY: ${{ inputs.body }}
+        COMMENT_MARKER: ${{ inputs.comment-marker }}
+      run: |
+        set -euo pipefail
+
+        require_value() {
+          local name="$1"
+          local value="$2"
+
+          if [[ -z "$value" ]]; then
+            echo "::error::$name input is required."
+            exit 1
+          fi
+        }
+
+        require_value "github-token" "${GH_TOKEN:-}"
+        require_value "repository" "${REPOSITORY:-}"
+        require_value "issue-number" "${ISSUE_NUMBER:-}"
+        require_value "body" "${COMMENT_BODY:-}"
+        require_value "comment-marker" "${COMMENT_MARKER:-}"
+
+        if [[ "$COMMENT_BODY" == *"$COMMENT_MARKER"* ]]; then
+          rendered_comment_body="$COMMENT_BODY"
+        else
+          rendered_comment_body="$(printf '%s\n%s' "$COMMENT_MARKER" "$COMMENT_BODY")"
+        fi
+
+        existing_comment_id="$(
+          gh api --paginate --slurp "repos/$REPOSITORY/issues/$ISSUE_NUMBER/comments" |
+            jq -r --arg marker "$COMMENT_MARKER" \
+              '[.[][] | select(.body | contains($marker)) | .id][0] // empty'
+        )"
+
+        if [[ -n "$existing_comment_id" ]]; then
+          gh api \
+            --method PATCH \
+            "repos/$REPOSITORY/issues/comments/$existing_comment_id" \
+            -f body="$rendered_comment_body" \
+            >/dev/null
+        else
+          gh api \
+            --method POST \
+            "repos/$REPOSITORY/issues/$ISSUE_NUMBER/comments" \
+            -f body="$rendered_comment_body" \
+            >/dev/null
+        fi

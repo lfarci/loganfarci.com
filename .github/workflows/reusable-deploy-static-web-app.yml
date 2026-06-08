@@ -20,6 +20,10 @@ on:
         required: true
         type: string
         description: "GitHub repository URL for VITE_GITHUB_REPOSITORY_URL"
+    outputs:
+      static_web_app_url:
+        description: "URL of the deployed Azure Static Web Apps environment"
+        value: ${{ jobs.deploy.outputs.static_web_app_url }}
     secrets:
       AZURE_CLIENT_ID:
         required: true
@@ -38,6 +42,8 @@ jobs:
       id-token: write
       contents: read
     environment: ${{ inputs.github_environment_name }}
+    outputs:
+      static_web_app_url: ${{ steps.deploy.outputs.static_web_app_url }}
     defaults:
       run:
         working-directory: ${{ github.workspace }}/src
@@ -82,6 +88,7 @@ jobs:
           echo "deployment_token=$(az keyvault secret show --name StaticWebAppDeploymentKey --vault-name "$AZURE_KEY_VAULT_NAME" --query value -o tsv)" >> $GITHUB_OUTPUT
 
       - name: Deploy to Azure Static Web Apps
+        id: deploy
         uses: Azure/static-web-apps-deploy@v1
         with:
           azure_static_web_apps_api_token: ${{ steps.get-secrets.outputs.deployment_token }}
