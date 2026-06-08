@@ -67,6 +67,7 @@ jobs:
     needs: deploy_preview
     permissions:
       issues: write
+      pull-requests: write
       contents: read
     steps:
       - name: Checkout code
