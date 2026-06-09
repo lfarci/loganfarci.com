@@ -18,7 +18,12 @@ export function render(url: string) {
     const headTagPattern = /<title\b[^>]*>[\s\S]*?<\/title>|<meta\b[^>]*>/g;
     const headTags = (html.match(headTagPattern) ?? []).join("\n");
 
-    return { html, headTags };
+    // Strip extracted tags from the root markup so the prerender script does
+    // not insert them a second time inside #root (they are injected into <head>
+    // via headTags instead).
+    const cleanedHtml = html.replace(headTagPattern, "");
+
+    return { html: cleanedHtml, headTags };
 }
 
 export { getStaticRoutes } from "./routes";
