@@ -86,7 +86,7 @@ Two guardrails protect against unexpected Azure spend:
   the 5 GB/month free tier.
 - **Resource group budget alert** (`azurerm_consumption_budget_resource_group`)
   emails the addresses in `budget_alert_emails` when actual spend crosses 80%
-  or when forecasted spend crosses 100% of `budget_amount_eur` (default 5 EUR).
+  or when forecasted spend crosses 100% of `monthly_budget_amount_eur` (default 5 EUR).
   The resource is created only when `budget_alert_emails` is non-empty, so it
   defaults to disabled. To enable it, set `TF_VAR_budget_alert_emails` in the
   `Manage Azure Resources` workflow (e.g. `["you@example.com"]`).

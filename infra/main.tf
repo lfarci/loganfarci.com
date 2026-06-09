@@ -37,7 +37,7 @@ resource "azurerm_consumption_budget_resource_group" "this" {
   name              = "${var.workload_name}-budget"
   resource_group_id = azurerm_resource_group.this.id
 
-  amount     = var.budget_amount_eur
+  amount     = var.monthly_budget_amount_eur
   time_grain = "Monthly"
 
   time_period {

@@ -33,7 +33,7 @@ variable "application_insights_daily_cap_gb" {
   default     = 0.1
 }
 
-variable "budget_amount_eur" {
+variable "monthly_budget_amount_eur" {
   description = "Monthly cost budget (EUR) for the resource group. Used by the consumption budget alert."
   type        = number
   default     = 5
