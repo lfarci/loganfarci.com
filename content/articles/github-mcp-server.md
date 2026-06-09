@@ -1,6 +1,6 @@
 ---
 title: "GitHub MCP Server"
-description: "Short note about the GitHub MCP server and how it can be used to enhance your development workflow."
+description: "Learn which GitHub workflows the GitHub MCP Server can automate, which toolsets it exposes, and how to use it effectively with agents."
 publishedAt: "2025-07-18"
 featured: true
 tags: ["GitHub Copilot", "MCP"]

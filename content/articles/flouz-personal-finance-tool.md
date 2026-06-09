@@ -1,6 +1,6 @@
 ---
 title: "Flouz: A Small Personal Finance Tool"
-description: "A quick note on flouz, a local CLI tool I'm building to track bank transactions with SQLite and AI-powered categorization."
+description: "Learn how flouz tracks bank transactions in a local SQLite database and applies AI categorization without sending your financial data to the cloud."
 publishedAt: "2026-04-16"
 featured: false
 tags: ["Personal Finance", "TypeScript", "SQLite", "AI"]
