@@ -8,6 +8,18 @@ resource "azurerm_static_web_app" "this" {
   resource_group_name = azurerm_resource_group.this.name
   location            = azurerm_resource_group.this.location
   sku_tier            = var.static_web_app_sku_tier
+
+  # The SWA was originally linked to a GitHub repo through Azure's built-in
+  # source-control integration, which sets repository_url and repository_branch
+  # on the resource. We deploy via our own workflow using the deployment token
+  # from Key Vault, so we neither manage nor rely on those attributes here.
+  # Ignore them to avoid spurious drift on every plan.
+  lifecycle {
+    ignore_changes = [
+      repository_url,
+      repository_branch,
+    ]
+  }
 }
 
 resource "azurerm_dns_zone" "this" {
