@@ -148,7 +148,7 @@ async function prerender() {
     const articles = getAllArticles();
 
     for (const route of routes) {
-        const { html, headTags } = render(route);
+        const { html, headTags } = await render(route);
 
         // Inject rendered HTML and head metadata into the template
         let page = template.replace(
@@ -167,7 +167,7 @@ async function prerender() {
     }
 
     // Generate 404.html from the /404 route (for Azure SWA fallback)
-    const { html: notFoundHtml, headTags: notFoundHeadTags } = render("/404");
+    const { html: notFoundHtml, headTags: notFoundHeadTags } = await render("/404");
     let notFoundPage = template.replace(
         '<div id="root"></div>',
         `<div id="root">${notFoundHtml}</div>`
