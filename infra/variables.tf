@@ -26,3 +26,21 @@ variable "static_web_app_custom_domain" {
   type        = string
   default     = "loganfarci.com"
 }
+
+variable "application_insights_daily_cap_gb" {
+  description = "Daily ingestion cap in GB for Application Insights. Keeps usage well under the 5 GB/month free tier."
+  type        = number
+  default     = 0.1
+}
+
+variable "monthly_budget_amount_eur" {
+  description = "Monthly cost budget (EUR) for the resource group. Used by the consumption budget alert."
+  type        = number
+  default     = 5
+}
+
+variable "budget_alert_emails" {
+  description = "Emails notified when the monthly budget crosses its thresholds. Leave empty to disable the budget alert."
+  type        = list(string)
+  default     = []
+}

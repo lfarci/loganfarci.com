@@ -55,6 +55,10 @@ Before you begin, ensure you have the following tools installed on your workstat
    npm run lint
    ```
 
+## Further reading
+
+- [Analytics](docs/analytics.md) — Azure Application Insights setup, cost guardrails, and how to disable telemetry.
+
 ## Technology stack
 
 | Name                  | Description                                                  | Type  | Link                                                                                   |
