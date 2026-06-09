@@ -7,6 +7,7 @@ import TextSection from "@/components/shared/TextSection";
 import ThumbnailGridSection from "@/components/shared/ThumbnailGridSection";
 import { getFeaturedArticles } from "@/core/articles";
 import { getCertifications, getContacts, getInterests, getProfile } from "@/core/data";
+import { siteUrl } from "@/core/site";
 
 const featuredCertifications = getCertifications().filter((c) => c.relevance == "High");
 const interests = getInterests();
@@ -14,11 +15,21 @@ const contacts = getContacts();
 const profile = getProfile();
 const featuredArticles = getFeaturedArticles();
 
+const pageTitle = "Logan Farci - Software Engineer";
+const pageDescription = "Software Engineer specializing in Azure, C#, .NET, and cloud-native solutions. Explore my work, articles, and certifications.";
+const pageUrl = siteUrl;
+
 export default function HomePage() {
     return (
         <>
-            <title>Logan Farci - Software Engineer</title>
-            <meta name="description" content="Logan Farci, Software Engineer" />
+            <title>{pageTitle}</title>
+            <meta name="description" content={pageDescription} />
+            <meta property="og:type" content="website" />
+            <meta property="og:title" content={pageTitle} />
+            <meta property="og:description" content={pageDescription} />
+            <meta property="og:url" content={pageUrl} />
+            <meta name="twitter:title" content={pageTitle} />
+            <meta name="twitter:description" content={pageDescription} />
             <ColumnContainer>
                 <HeroSection
                     heading={<GreetingHeading greeting="Hi" name="Logan" />}

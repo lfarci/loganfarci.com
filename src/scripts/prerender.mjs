@@ -4,12 +4,9 @@ import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-function injectHelmet(page, helmet) {
-    if (!helmet) return page;
-    return page.replace(
-        "</head>",
-        `${helmet.title.toString()}${helmet.meta.toString()}${helmet.link.toString()}</head>`
-    );
+function injectHeadTags(page, headTags) {
+    if (!headTags) return page;
+    return page.replace("</head>", `${headTags}\n</head>`);
 }
 
 async function prerender() {
@@ -24,14 +21,14 @@ async function prerender() {
     const routes = getStaticRoutes();
 
     for (const route of routes) {
-        const { html, helmet } = render(route);
+        const { html, headTags } = render(route);
 
-        // Inject rendered HTML and helmet metadata into the template
+        // Inject rendered HTML and head metadata into the template
         let page = template.replace(
             '<div id="root"></div>',
             `<div id="root">${html}</div>`
         );
-        page = injectHelmet(page, helmet);
+        page = injectHeadTags(page, headTags);
 
         // Write to dist/{route}/index.html
         const routePath = route === "/" ? "" : route;
@@ -43,12 +40,12 @@ async function prerender() {
     }
 
     // Generate 404.html from the /404 route (for Azure SWA fallback)
-    const { html: notFoundHtml, helmet: notFoundHelmet } = render("/404");
+    const { html: notFoundHtml, headTags: notFoundHeadTags } = render("/404");
     let notFoundPage = template.replace(
         '<div id="root"></div>',
         `<div id="root">${notFoundHtml}</div>`
     );
-    notFoundPage = injectHelmet(notFoundPage, notFoundHelmet);
+    notFoundPage = injectHeadTags(notFoundPage, notFoundHeadTags);
     fs.writeFileSync(path.join(distDir, "404.html"), notFoundPage);
     console.log("  Prerendered: /404 → 404.html");
 }

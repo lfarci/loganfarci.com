@@ -11,6 +11,7 @@ import { Text } from "@/components/shared/typography";
 import { createId } from "@/core/string";
 import ColumnContainer from "@/components/layout/ColumnContainer";
 import ThumbnailGridSection from "@/components/shared/ThumbnailGridSection";
+import { siteUrl } from "@/core/site";
 
 const formatMonthYear = (date: Date | string) => {
     const d = typeof date === "string" ? new Date(date) : date;
@@ -37,11 +38,21 @@ const skillCategories = getSkillCategories();
 const diploma = getDiploma();
 const profile = getProfile();
 
+const pageTitle = "About - Logan Farci";
+const pageDescription = "Learn more about Logan Farci, a Software Engineer specializing in Azure, C#, .NET, and cloud-native solutions.";
+const pageUrl = `${siteUrl}/about`;
+
 export default function AboutPage() {
     return (
         <>
-            <title>About - Logan Farci</title>
-            <meta name="description" content="Learn more about Logan Farci, Software Engineer." />
+            <title>{pageTitle}</title>
+            <meta name="description" content={pageDescription} />
+            <meta property="og:type" content="website" />
+            <meta property="og:title" content={pageTitle} />
+            <meta property="og:description" content={pageDescription} />
+            <meta property="og:url" content={pageUrl} />
+            <meta name="twitter:title" content={pageTitle} />
+            <meta name="twitter:description" content={pageDescription} />
             <div>
                 <MarkdownSection 
                     heading="About Me" 

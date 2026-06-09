@@ -4,6 +4,7 @@ import { HeroUIProvider } from "@heroui/react";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import LayoutWrapper from "@/components/layout/LayoutWrapper";
 import Analytics from "@/components/Analytics";
+import { siteOgImage } from "@/core/site";
 import { routes } from "./routes";
 
 const githubRepositoryUrl = import.meta.env.VITE_GITHUB_REPOSITORY_URL;
@@ -26,9 +27,12 @@ export default function App() {
         <HeroUIProvider>
             <ThemeProvider>
                 <Analytics />
-                <title>Logan Farci - Software Engineer</title>
-                <meta name="description" content="Logan Farci, Software Engineer" />
-                <meta name="keywords" content="Software Engineer, Logan Farci, Developer, Brussels, Belgium" />
+                {/* Site-wide OG/Twitter defaults — overridden per page */}
+                <meta property="og:site_name" content="Logan Farci" />
+                <meta property="og:locale" content="en_US" />
+                <meta property="og:image" content={siteOgImage} />
+                <meta name="twitter:card" content="summary" />
+                <meta name="twitter:image" content={siteOgImage} />
                 <LayoutWrapper
                     githubRepositoryUrl={githubRepositoryUrl}
                     commitHash={isPreviewEnvironment ? latestCommitHash : undefined}
