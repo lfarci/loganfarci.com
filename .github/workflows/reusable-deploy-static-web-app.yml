@@ -79,15 +79,8 @@ jobs:
         env:
           AZURE_KEY_VAULT_NAME: ${{ secrets.AZURE_KEY_VAULT_NAME }}
         run: |
-          deployment_token=$(az keyvault secret show --name StaticWebAppDeploymentKey --vault-name "$AZURE_KEY_VAULT_NAME" --query value -o tsv)
-          echo "::add-mask::$deployment_token"
-          echo "deployment_token=$deployment_token" >> $GITHUB_OUTPUT
-
-          application_insights_connection_string=$(az keyvault secret show --name ApplicationInsightsConnectionString --vault-name "$AZURE_KEY_VAULT_NAME" --query value -o tsv 2>/dev/null || echo "")
-          if [ -n "$application_insights_connection_string" ]; then
-            echo "::add-mask::$application_insights_connection_string"
-          fi
-          echo "application_insights_connection_string=$application_insights_connection_string" >> $GITHUB_OUTPUT
+          echo "deployment_token=$(az keyvault secret show --name StaticWebAppDeploymentKey --vault-name "$AZURE_KEY_VAULT_NAME" --query value -o tsv)" >> $GITHUB_OUTPUT
+          echo "application_insights_connection_string=$(az keyvault secret show --name ApplicationInsightsConnectionString --vault-name "$AZURE_KEY_VAULT_NAME" --query value -o tsv 2>/dev/null || echo "")" >> $GITHUB_OUTPUT
 
       - name: Build application
         run: npm run build
