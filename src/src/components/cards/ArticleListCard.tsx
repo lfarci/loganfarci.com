@@ -16,7 +16,7 @@ const ArticleListCard: React.FC<ArticleListCardProps> = ({ article, showTags = f
             <CardTitle>
                 <Link
                     to={`/articles/${article.slug}`}
-                    className="hover:text-primary-hover transition-colors cursor-pointer"
+                    className="cursor-pointer bg-linear-to-r from-primary via-gradient-mid to-accent-warm bg-[length:0%_2px] bg-left-bottom bg-no-repeat transition-[color,background-size] duration-300 ease-brand hover:bg-[length:100%_2px] hover:text-primary-hover group-hover/card:text-primary"
                 >
                     {article.title}
                 </Link>

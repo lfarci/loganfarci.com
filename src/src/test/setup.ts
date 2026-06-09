@@ -7,6 +7,19 @@ class ResizeObserverMock {
     disconnect() {}
 }
 
+class IntersectionObserverMock {
+    readonly root = null;
+    readonly rootMargin = "";
+    readonly thresholds = [];
+
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+    takeRecords() {
+        return [];
+    }
+}
+
 beforeAll(() => {
     Object.defineProperty(window, "matchMedia", {
         configurable: true,
@@ -27,6 +40,12 @@ beforeAll(() => {
         configurable: true,
         writable: true,
         value: ResizeObserverMock,
+    });
+
+    Object.defineProperty(window, "IntersectionObserver", {
+        configurable: true,
+        writable: true,
+        value: IntersectionObserverMock,
     });
 });
 

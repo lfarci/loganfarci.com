@@ -35,6 +35,9 @@ type CardLinkProps = {
     children: React.ReactNode;
 };
 
+const visualCardClassName =
+    "group/card relative isolate overflow-hidden rounded-2xl border-border-light bg-surface/88 p-6 shadow-soft backdrop-blur transition-all duration-300 ease-brand hover:-translate-y-1 hover:border-accent-cool/60 hover:shadow-card focus-within:border-primary focus-within:shadow-glow";
+
 const mediaSizes: Record<NonNullable<CardMediaProps["size"]>, string> = {
     small: "w-1/3",
     medium: "w-1/2",
@@ -50,7 +53,14 @@ const Card = <E extends React.ElementType = "div">({
 }: PolymorphicProps<E>) => {
     const Component = as ?? "div";
     return (
-        <Component className={mergeClassNames(cardRootClassName, className)} {...(props as React.ComponentPropsWithoutRef<E>)}>
+        <Component
+            className={mergeClassNames(cardRootClassName, visualCardClassName, className)}
+            {...(props as React.ComponentPropsWithoutRef<E>)}
+        >
+            <span
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-gradient-mid/70 to-transparent opacity-0 transition-opacity duration-300 group-hover/card:opacity-100"
+            />
             {children}
         </Component>
     );
@@ -113,7 +123,7 @@ export const CardGrid: React.FC<CardGridProps> = ({ columns = 3, className, chil
 
 export const CardLink: React.FC<CardLinkProps> = ({ href, external = false, className, children }) => {
     const linkClass = mergeClassNames(
-        "block h-full transition-opacity hover:opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary",
+        "block h-full rounded-2xl transition-transform duration-300 ease-brand hover:-translate-y-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary",
         className,
     );
 

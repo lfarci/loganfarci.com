@@ -46,14 +46,18 @@ const ThumbnailGridSection: React.FC<ThumbnailGridSectionProps> = ({
 
                 if (item.redirectPath) {
                     return (
-                        <Link key={index} to={item.redirectPath} className="transition-opacity hover:opacity-80">
+                        <Link
+                            key={index}
+                            to={item.redirectPath}
+                            className="block h-full rounded-2xl transition-transform duration-300 ease-brand hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                        >
                             {card}
                         </Link>
                     );
                 }
 
                 return item.url ? (
-                    <NewTabLink key={index} url={item.url}>
+                    <NewTabLink key={index} url={item.url} display="block" className="h-full rounded-2xl">
                         {card}
                     </NewTabLink>
                 ) : (

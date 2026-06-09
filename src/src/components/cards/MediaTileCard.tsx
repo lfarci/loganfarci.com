@@ -25,7 +25,7 @@ const MediaTileCard: React.FC<MediaTileCardProps> = ({ title, description, image
                 <CardMedia
                     media={image}
                     size="full"
-                    containerClassName="shrink-0 flex items-center justify-center mb-4"
+                    containerClassName="shrink-0 flex items-center justify-center mb-4 transition-transform duration-300 ease-brand group-hover/card:scale-105"
                     className={sizeClasses[size]}
                 />
             )}

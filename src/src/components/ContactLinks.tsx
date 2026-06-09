@@ -13,7 +13,7 @@ interface ContactLinksProps {
 }
 
 const renderContactIcon = (icon: Contact["icon"], size: number) => {
-    const iconProps = { className: "text-text-tertiary", size };
+    const iconProps = { className: "text-current", size };
 
     switch (icon as SupportedContactIcon) {
         case "bluesky":
@@ -45,7 +45,13 @@ const ContactLinks: React.FC<ContactLinksProps> = ({ contacts, iconSize = 32, cl
 
                 return (
                     <Tooltip key={contact.name} content={contact.name} placement="bottom">
-                        <NewTabLink url={contact.url} aria-label={contact.name}>{content}</NewTabLink>
+                        <NewTabLink
+                            url={contact.url}
+                            aria-label={contact.name}
+                            className="inline-flex size-12 items-center justify-center rounded-full border border-border-light bg-surface/80 text-text-secondary shadow-soft backdrop-blur transition-all duration-300 ease-brand hover:border-accent-cool hover:text-primary hover:shadow-glow"
+                        >
+                            {content}
+                        </NewTabLink>
                     </Tooltip>
                 );
             })}
