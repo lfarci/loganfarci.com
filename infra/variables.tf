@@ -32,3 +32,15 @@ variable "application_insights_daily_cap_gb" {
   type        = number
   default     = 0.1
 }
+
+variable "budget_amount_eur" {
+  description = "Monthly cost budget (EUR) for the resource group. Used by the consumption budget alert."
+  type        = number
+  default     = 5
+}
+
+variable "budget_alert_emails" {
+  description = "Emails notified when the monthly budget crosses its thresholds. Leave empty to disable the budget alert."
+  type        = list(string)
+  default     = []
+}
