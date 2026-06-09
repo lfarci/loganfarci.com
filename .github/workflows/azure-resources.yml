@@ -54,19 +54,94 @@ jobs:
           echo "terraform_backend_storage_account=$(az keyvault secret show --name TerraformBackendStorageAccountName --vault-name ${{ secrets.AZURE_KEY_VAULT_NAME }} --query value -o tsv)" >> $GITHUB_OUTPUT
           echo "terraform_backend_container_name=$(az keyvault secret show --name TerraformBackendContainerName --vault-name ${{ secrets.AZURE_KEY_VAULT_NAME }} --query value -o tsv)" >> $GITHUB_OUTPUT
 
+  terraform_plan:
+    name: "Terraform plan"
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    environment: Production
+    defaults:
+      run:
+        working-directory: infra
+    needs: secrets
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - uses: hashicorp/setup-terraform@v4
+
+      - name: Azure CLI Login
+        uses: azure/login@v3
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Terraform Init
+        run: |
+          terraform init \
+            -backend-config="storage_account_name=${{ needs.secrets.outputs.storage_account_name }}" \
+            -backend-config="container_name=${{ needs.secrets.outputs.container_name }}" \
+            -backend-config="key=state" \
+            -backend-config="resource_group_name=${{ needs.secrets.outputs.resource_group }}" \
+
+      - name: Terraform Plan
+        if: ${{ env.IS_DEPLOY == 'true' }}
+        env:
+          BUDGET_ALERT_EMAILS_INPUT: ${{ github.event.inputs.budget_alert_emails }}
+        run: |
+          if [ -n "$BUDGET_ALERT_EMAILS_INPUT" ]; then
+            export TF_VAR_budget_alert_emails=$(echo "$BUDGET_ALERT_EMAILS_INPUT" | jq -Rc 'split(",") | map(gsub("^\\s+|\\s+$"; ""))')
+          fi
+          terraform plan \
+            -var="subscription_id=${{ secrets.AZURE_SUBSCRIPTION_ID }}" \
+            -var="workload_name=lfarci" \
+            -out=tfplan
+
+      - name: Terraform Destroy Plan
+        if: ${{ env.IS_DESTROY == 'true' }}
+        env:
+          BUDGET_ALERT_EMAILS_INPUT: ${{ github.event.inputs.budget_alert_emails }}
+        run: |
+          if [ -n "$BUDGET_ALERT_EMAILS_INPUT" ]; then
+            export TF_VAR_budget_alert_emails=$(echo "$BUDGET_ALERT_EMAILS_INPUT" | jq -Rc 'split(",") | map(gsub("^\\s+|\\s+$"; ""))')
+          fi
+          terraform plan \
+            -var="subscription_id=${{ secrets.AZURE_SUBSCRIPTION_ID }}" \
+            -var="workload_name=lfarci" \
+            -out=tfplan \
+            -destroy
+
+      - name: Render plan to job summary
+        run: |
+          {
+            echo "## 📋 Terraform plan (${{ env.IS_DESTROY == 'true' && 'DESTROY' || 'DEPLOY' }})"
+            echo '```'
+            terraform show -no-color tfplan
+            echo '```'
+          } >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload tfplan artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: tfplan
+          path: infra/tfplan
+          retention-days: 1
+
   terraform:
-    name: "Deploy Terraform module"
+    name: "Terraform apply"
     runs-on: ubuntu-latest
     permissions:
       id-token: write
       contents: read
     environment:
-      name: Production
+      name: Production-Apply
       url: "https://${{ env.SUBDOMAIN }}.${{ env.CUSTOM_DOMAIN }}"
     defaults:
       run:
         working-directory: infra
-    needs: secrets
+    needs: [secrets, terraform_plan]
     outputs:
       resource_group_name: ${{ steps.output.outputs.resource_group_name }}
       static_web_app_name: ${{ steps.output.outputs.static_web_app_name }}
@@ -95,34 +170,11 @@ jobs:
             -backend-config="key=state" \
             -backend-config="resource_group_name=${{ needs.secrets.outputs.resource_group }}" \
 
-      - name: Terraform Plan
-        if: ${{ env.IS_DEPLOY == 'true' }}
-        id: plan
-        env:
-          BUDGET_ALERT_EMAILS_INPUT: ${{ github.event.inputs.budget_alert_emails }}
-        run: |
-          if [ -n "$BUDGET_ALERT_EMAILS_INPUT" ]; then
-            export TF_VAR_budget_alert_emails=$(echo "$BUDGET_ALERT_EMAILS_INPUT" | jq -Rc 'split(",") | map(gsub("^\\s+|\\s+$"; ""))')
-          fi
-          terraform plan \
-            -var="subscription_id=${{ secrets.AZURE_SUBSCRIPTION_ID }}" \
-            -var="workload_name=lfarci" \
-            -out=tfplan
-
-      - name: Terraform Destroy
-        if: ${{ env.IS_DESTROY == 'true' }}
-        id: destroy
-        env:
-          BUDGET_ALERT_EMAILS_INPUT: ${{ github.event.inputs.budget_alert_emails }}
-        run: |
-          if [ -n "$BUDGET_ALERT_EMAILS_INPUT" ]; then
-            export TF_VAR_budget_alert_emails=$(echo "$BUDGET_ALERT_EMAILS_INPUT" | jq -Rc 'split(",") | map(gsub("^\\s+|\\s+$"; ""))')
-          fi
-          terraform plan \
-            -var="subscription_id=${{ secrets.AZURE_SUBSCRIPTION_ID }}" \
-            -var="workload_name=lfarci" \
-            -out=tfplan \
-            -destroy
+      - name: Download tfplan artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: tfplan
+          path: infra
 
       - name: Terraform Apply
         run: |
