@@ -1,6 +1,6 @@
 import Section from "@/components/shared/Section";
 import React from "react";
-import MarkdownSection from "@/components/shared/MarkdownSection";
+import MarkdownContent from "@/components/shared/MarkdownContent";
 import { Card, CardBody, CardHeader, CardSubtitle, CardTitle } from "@/components/cards";
 import InfoCard from "@/components/cards/InfoCard";
 import { Certification, SkillCategory } from "@/types";
@@ -62,13 +62,17 @@ export default function AboutPage() {
             <meta name="twitter:description" content={pageDescription} />
             <JsonLd data={breadcrumbJsonLd} />
             <article className="py-8">
-                <Heading1 className="mb-8">About Logan Farci</Heading1>
-                <MarkdownSection 
-                    heading="About Me" 
-                    content={profile.description}
-                    imageSrc={profile.avatar.src}
-                    imageAlt={profile.avatar.alt}
-                />
+                <Heading1 id="about-me" className="mb-8 scroll-mt-24">About Me</Heading1>
+                <div className="text-justify">
+                    <img
+                        src={profile.avatar.src}
+                        alt={profile.avatar.alt}
+                        width={300}
+                        height={300}
+                        className="block mx-auto mb-6 rounded-lg md:float-right md:ml-8 md:mb-6 md:mt-0"
+                    />
+                    <MarkdownContent content={profile.description} />
+                </div>
                 <Section heading="Experience">
                     <ColumnContainer>
                         {experiences.map((experience) => (
