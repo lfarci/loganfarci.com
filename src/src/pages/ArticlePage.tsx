@@ -6,6 +6,7 @@ import { formatDate } from "@/core/date";
 import { Divider } from "@heroui/react";
 import ClientTooltip from "@/components/shared/ClientTooltip";
 import IconTag from "@/components/shared/IconTag";
+import { siteOgImage, siteUrl } from "@/core/site";
 
 interface ArticleMetaProps {
     publishedAt: string;
@@ -52,10 +53,20 @@ export default function ArticlePage() {
         return <Navigate to="/404" replace />;
     }
 
+    const articleTitle = `${article.title} - Logan Farci`;
+    const articleUrl = `${siteUrl}/articles/${slug}`;
+
     return (
         <>
-            <title>{article.title} - Logan Farci</title>
+            <title>{articleTitle}</title>
             <meta name="description" content={article.description} />
+            <meta property="og:type" content="article" />
+            <meta property="og:title" content={articleTitle} />
+            <meta property="og:description" content={article.description} />
+            <meta property="og:url" content={articleUrl} />
+            <meta name="twitter:title" content={articleTitle} />
+            <meta name="twitter:description" content={article.description} />
+            <meta name="twitter:image" content={siteOgImage} />
             <article className="max-w-none">
                 <Heading1 className="mb-6 mt-8">{article.title}</Heading1>
                 <ArticleMeta
