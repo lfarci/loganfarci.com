@@ -3,9 +3,9 @@ import { getArticleBySlug } from "@/core/articles";
 import MarkdownContent from "@/components/shared/MarkdownContent";
 import { Heading1, Secondary } from "@/components/shared/typography";
 import { formatDate } from "@/core/date";
-import { Divider } from "@heroui/react";
 import ClientTooltip from "@/components/shared/ClientTooltip";
 import IconTag from "@/components/shared/IconTag";
+import { Separator } from "@/components/ui/separator";
 import { siteOgImage, siteUrl } from "@/core/site";
 
 interface ArticleMetaProps {
@@ -20,11 +20,11 @@ function ArticleMeta({ publishedAt, author, coauthoredWithAgent, tags }: Readonl
         <Secondary className="mb-4">
             <span className="flex flex-row flex-wrap items-center gap-2">
                 <Secondary>{formatDate(publishedAt)}</Secondary>
-                <Divider orientation="vertical" className="h-6 mx-2" />
+                <Separator orientation="vertical" className="h-6 mx-2" />
                 <Secondary>{author}</Secondary>
                 {coauthoredWithAgent && (
                     <>
-                        <Divider orientation="vertical" className="h-6 mx-2" />
+                        <Separator orientation="vertical" className="h-6 mx-2" />
                         <ClientTooltip content="This article was co-authored with help from an AI assistant.">
                             <Secondary>Co-authored with AI</Secondary>
                         </ClientTooltip>
@@ -32,7 +32,7 @@ function ArticleMeta({ publishedAt, author, coauthoredWithAgent, tags }: Readonl
                 )}
                 {tags && tags.length > 0 && (
                     <>
-                        <Divider orientation="vertical" className="h-6 mx-2" />
+                        <Separator orientation="vertical" className="h-6 mx-2" />
                         <span className="flex flex-wrap gap-2 align-middle">
                             {tags.map((tag: string) => (
                                 <IconTag key={tag}>{tag}</IconTag>
@@ -76,7 +76,7 @@ export default function ArticlePage() {
                     tags={article.tags}
                 />
                 <Secondary className="italic">{article.description}</Secondary>
-                <Divider className="mt-4 mb-8" />
+                <Separator className="mt-4 mb-8" />
                 <MarkdownContent content={article.content} />
             </article>
         </>

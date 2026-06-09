@@ -3,6 +3,13 @@ import { Link } from "react-router";
 import { Heading3 } from "@/components/shared/typography";
 import { ImageProps } from "@/types";
 import GridContainer from "@/components/layout/GridContainer";
+import {
+    CardContent as UICardContent,
+    CardDescription as UICardDescription,
+    CardFooter as UICardFooter,
+    CardHeader as UICardHeader,
+    cardRootClassName,
+} from "@/components/ui/card";
 
 type PolymorphicProps<E extends React.ElementType> = {
     as?: E;
@@ -32,9 +39,6 @@ type CardLinkProps = {
     children: React.ReactNode;
 };
 
-const baseCardClass =
-    "p-6 bg-surface rounded-xl border border-border-light shadow-sm h-full transition-shadow duration-200 hover:shadow-md active:shadow-md";
-
 const mediaSizes: Record<NonNullable<CardMediaProps["size"]>, string> = {
     small: "w-1/3",
     medium: "w-1/2",
@@ -52,14 +56,14 @@ const Card = <E extends React.ElementType = "div">({
 }: PolymorphicProps<E>) => {
     const Component = as ?? "div";
     return (
-        <Component className={cn(baseCardClass, className)} {...(props as React.ComponentPropsWithoutRef<E>)}>
+        <Component className={cn(cardRootClassName, className)} {...(props as React.ComponentPropsWithoutRef<E>)}>
             {children}
         </Component>
     );
 };
 
 export const CardHeader: React.FC<SimpleProps> = ({ children, className }) => (
-    <div className={cn("flex flex-col gap-2 min-w-0", className)}>{children}</div>
+    <UICardHeader className={className}>{children}</UICardHeader>
 );
 
 export const CardTitle: React.FC<SimpleProps> = ({ children, className }) => (
@@ -69,18 +73,18 @@ export const CardTitle: React.FC<SimpleProps> = ({ children, className }) => (
 export const CardSubtitle: React.FC<PolymorphicProps<React.ElementType>> = ({ as, children, className, ...props }) => {
     const Component = (as as React.ElementType) ?? "p";
     return (
-        <Component className={cn("text-base text-text-muted", className)} {...props}>
+        <UICardDescription as={Component} className={className} {...props}>
             {children}
-        </Component>
+        </UICardDescription>
     );
 };
 
 export const CardBody: React.FC<SimpleProps> = ({ children, className }) => (
-    <div className={cn("flex flex-col gap-2", className)}>{children}</div>
+    <UICardContent className={className}>{children}</UICardContent>
 );
 
 export const CardFooter: React.FC<SimpleProps> = ({ children, className }) => (
-    <div className={cn("mt-4 flex flex-wrap gap-2 justify-start items-start", className)}>{children}</div>
+    <UICardFooter className={className}>{children}</UICardFooter>
 );
 
 export const CardMedia: React.FC<CardMediaProps> = ({

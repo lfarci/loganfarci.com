@@ -1,6 +1,5 @@
 import React from "react";
 import MermaidDiagram from "./MermaidDiagram";
-import { Code } from "@heroui/react";
 
 export interface CodeSnippetProps {
     children: React.ReactNode;
@@ -30,9 +29,9 @@ export default function CodeSnippet({ children, className, forceBlock = false }:
     }
 
     return isInline ? (
-        <Code size="sm" color="default" radius="sm">
+        <code className="rounded-sm bg-surface-elevated px-1.5 py-0.5 font-mono text-[0.9em] text-text-primary">
             {children}
-        </Code>
+        </code>
     ) : (
         <pre
             className="my-4 w-full overflow-x-auto rounded-lg border border-border bg-surface-elevated p-4 text-sm leading-relaxed text-text-primary"

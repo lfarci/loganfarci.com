@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useTheme } from '@/contexts/ThemeContext';
 import { MoonIcon, SunIcon } from '@/components/shared/icons';
+import { Button } from '@/components/ui/button';
 
 const ThemeToggle: React.FC = () => {
   const [mounted, setMounted] = useState(false);
@@ -24,9 +25,11 @@ const ThemeToggleInner: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
 
   return (
-    <button
+    <Button
       onClick={toggleTheme}
-      className="p-2 rounded-lg bg-surface-hover border border-border hover:bg-surface-elevated transition-colors duration-200 cursor-pointer"
+      variant="icon"
+      size="icon"
+      className="cursor-pointer"
       aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
       type="button"
     >
@@ -35,7 +38,7 @@ const ThemeToggleInner: React.FC = () => {
       ) : (
         <SunIcon className="w-5 h-5 text-text-primary" strokeWidth={2} size={24} />
       )}
-    </button>
+    </Button>
   );
 };
 

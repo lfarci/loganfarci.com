@@ -1,6 +1,6 @@
 import React from "react";
 import { ChevronDownIcon } from "./icons";
-import { Tooltip } from "@heroui/react";
+import ClientTooltip from "./ClientTooltip";
 
 interface ChevronToggleButtonProps {
     isExpanded: boolean;
@@ -12,7 +12,7 @@ function ChevronToggleButton({ isExpanded, onToggle }: ChevronToggleButtonProps)
 
     return (
         <div className="flex justify-center mt-2">
-            <Tooltip content={toggleText} placement="bottom">
+            <ClientTooltip content={toggleText} placement="bottom">
                 <button
                     onClick={onToggle}
                     type="button"
@@ -26,7 +26,7 @@ function ChevronToggleButton({ isExpanded, onToggle }: ChevronToggleButtonProps)
                         }`}
                     />
                 </button>
-            </Tooltip>
+            </ClientTooltip>
         </div>
     );
 }

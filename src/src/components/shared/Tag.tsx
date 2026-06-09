@@ -1,6 +1,6 @@
-import { Chip } from "@heroui/react";
 import React from "react";
 import { Text } from "@/components/shared/typography";
+import { Badge } from "@/components/ui/badge";
 
 interface TagIconProps {
     src: string;
@@ -31,9 +31,10 @@ const Tag: React.FC<TagProps> = ({ children, imageSrc = "", imageAlt = "" }) => 
     }
 
     return (
-        <Chip variant="bordered" size="lg" radius="md" className="text-base" startContent={startContent}>
+        <Badge>
+            {startContent}
             <Text>{children}</Text>
-        </Chip>
+        </Badge>
     );
 };
 
