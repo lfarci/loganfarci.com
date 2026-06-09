@@ -40,5 +40,6 @@ Two guardrails protect against unexpected Azure spend:
   emails the addresses in `budget_alert_emails` when actual spend crosses 80%
   or when forecasted spend crosses 100% of `monthly_budget_amount_eur` (default
   5 EUR). The resource is created only when `budget_alert_emails` is non-empty,
-  so it defaults to disabled. To enable it, set `TF_VAR_budget_alert_emails`
-  in the `Manage Azure Resources` workflow (e.g. `["you@example.com"]`).
+  so it defaults to disabled. To enable it, provide a comma-separated list in
+  the `budget_alert_emails` input when running the `Manage Azure Resources`
+  workflow manually (e.g. `you@example.com,ops@example.com`).

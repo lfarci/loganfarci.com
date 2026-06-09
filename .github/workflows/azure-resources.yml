@@ -15,6 +15,11 @@ on:
         options:
           - Deploy
           - Destroy
+      budget_alert_emails:
+        description: "Comma-separated emails to notify on budget alerts (leave empty to disable the alert)"
+        required: false
+        type: string
+        default: ""
 
 env:
   IS_DEPLOY: ${{ github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'Deploy') }}
@@ -93,7 +98,12 @@ jobs:
       - name: Terraform Plan
         if: ${{ env.IS_DEPLOY == 'true' }}
         id: plan
+        env:
+          BUDGET_ALERT_EMAILS_INPUT: ${{ github.event.inputs.budget_alert_emails }}
         run: |
+          if [ -n "$BUDGET_ALERT_EMAILS_INPUT" ]; then
+            export TF_VAR_budget_alert_emails=$(echo "$BUDGET_ALERT_EMAILS_INPUT" | jq -Rc 'split(",") | map(gsub("^\\s+|\\s+$"; ""))')
+          fi
           terraform plan \
             -var="subscription_id=${{ secrets.AZURE_SUBSCRIPTION_ID }}" \
             -var="workload_name=lfarci" \
@@ -102,7 +112,12 @@ jobs:
       - name: Terraform Destroy
         if: ${{ env.IS_DESTROY == 'true' }}
         id: destroy
+        env:
+          BUDGET_ALERT_EMAILS_INPUT: ${{ github.event.inputs.budget_alert_emails }}
         run: |
+          if [ -n "$BUDGET_ALERT_EMAILS_INPUT" ]; then
+            export TF_VAR_budget_alert_emails=$(echo "$BUDGET_ALERT_EMAILS_INPUT" | jq -Rc 'split(",") | map(gsub("^\\s+|\\s+$"; ""))')
+          fi
           terraform plan \
             -var="subscription_id=${{ secrets.AZURE_SUBSCRIPTION_ID }}" \
             -var="workload_name=lfarci" \
