@@ -21,8 +21,6 @@ on:
         type: string
         default: ""
 
-permissions: {}
-
 env:
   IS_DEPLOY: ${{ github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'Deploy') }}
   IS_DESTROY: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'Destroy' }}
