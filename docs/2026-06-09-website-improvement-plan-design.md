@@ -156,7 +156,7 @@ LLMs are increasingly how people consume web content. The site should be optimiz
 ### Approach
 
 - **llms.txt standard:** Add `/llms.txt` and `/llms-full.txt` files (machine-readable site map for LLMs)
-- **Structured data:** Implement Schema.org JSON-LD for articles (Article), person (Person), experience (Resume/JobPosting) — builds on existing issue #38
+- **Structured data:** Implement Schema.org JSON-LD for articles (Article), person (Person with worksFor/hasOccupation), website (WebSite, BreadcrumbList) — builds on existing issue #38
 - **Semantic HTML:** Ensure all pages use proper `<article>`, `<nav>`, `<main>`, `<section>`, `<aside>` elements
 - **Meta descriptions:** Every page gets a meaningful description
 - **Clean content hierarchy:** Use heading levels correctly (h1 → h2 → h3, no skipping)
