@@ -23,7 +23,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ heading, description, image, 
     };
 
     return (
-        <div className="flex flex-col md:flex-row items-center pt-8">
+        <section className="flex flex-col md:flex-row items-center pt-8">
             <div className="md:mr-6 space-y-6 flex-1 flex flex-col justify-center">
                 {renderHeading()}
                 {renderDescription()}
@@ -39,7 +39,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ heading, description, image, 
                     className={buildImageClassName()}
                 />
             )}
-        </div>
+        </section>
     );
 };
 

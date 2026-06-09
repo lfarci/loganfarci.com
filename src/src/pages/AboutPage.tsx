@@ -1,6 +1,6 @@
 import Section from "@/components/shared/Section";
 import React from "react";
-import MarkdownSection from "@/components/shared/MarkdownSection";
+import MarkdownContent from "@/components/shared/MarkdownContent";
 import { Card, CardBody, CardHeader, CardSubtitle, CardTitle } from "@/components/cards";
 import InfoCard from "@/components/cards/InfoCard";
 import { Certification, SkillCategory } from "@/types";
@@ -11,7 +11,9 @@ import { Text } from "@/components/shared/typography";
 import { createId } from "@/core/string";
 import ColumnContainer from "@/components/layout/ColumnContainer";
 import ThumbnailGridSection from "@/components/shared/ThumbnailGridSection";
-import { siteUrl } from "@/core/site";
+import JsonLd from "@/components/shared/JsonLd";
+import { Heading1 } from "@/components/shared/typography";
+import { createBreadcrumbJsonLd, createCanonicalUrl } from "@/core/seo";
 
 const formatMonthYear = (date: Date | string) => {
     const d = typeof date === "string" ? new Date(date) : date;
@@ -40,12 +42,17 @@ const profile = getProfile();
 
 const pageTitle = "About - Logan Farci";
 const pageDescription = "Learn more about Logan Farci, a Software Engineer specializing in Azure, C#, .NET, and cloud-native solutions.";
-const pageUrl = `${siteUrl}/about`;
+const pageUrl = createCanonicalUrl("/about");
+const breadcrumbJsonLd = createBreadcrumbJsonLd([
+    { name: "Home", path: "/" },
+    { name: "About", path: "/about" },
+]);
 
 export default function AboutPage() {
     return (
         <>
             <title>{pageTitle}</title>
+            <link rel="canonical" href={pageUrl} />
             <meta name="description" content={pageDescription} />
             <meta property="og:type" content="website" />
             <meta property="og:title" content={pageTitle} />
@@ -53,13 +60,19 @@ export default function AboutPage() {
             <meta property="og:url" content={pageUrl} />
             <meta name="twitter:title" content={pageTitle} />
             <meta name="twitter:description" content={pageDescription} />
-            <div>
-                <MarkdownSection 
-                    heading="About Me" 
-                    content={profile.description}
-                    imageSrc={profile.avatar.src}
-                    imageAlt={profile.avatar.alt}
-                />
+            <JsonLd data={breadcrumbJsonLd} />
+            <article className="py-8">
+                <Heading1 id="about-me" className="mb-8 scroll-mt-24">About Me</Heading1>
+                <div className="text-justify">
+                    <img
+                        src={profile.avatar.src}
+                        alt={profile.avatar.alt}
+                        width={300}
+                        height={300}
+                        className="block mx-auto mb-6 rounded-lg md:float-right md:ml-8 md:mb-6 md:mt-0"
+                    />
+                    <MarkdownContent content={profile.description} />
+                </div>
                 <Section heading="Experience">
                     <ColumnContainer>
                         {experiences.map((experience) => (
@@ -120,7 +133,7 @@ export default function AboutPage() {
                         ))}
                     </ColumnContainer>
                 </Section>
-            </div>
+            </article>
         </>
     );
 }
