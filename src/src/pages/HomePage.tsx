@@ -7,7 +7,7 @@ import TextSection from "@/components/shared/TextSection";
 import ThumbnailGridSection from "@/components/shared/ThumbnailGridSection";
 import { getFeaturedArticles } from "@/core/articles";
 import { getCertifications, getContacts, getInterests, getProfile } from "@/core/data";
-import { siteUrl } from "@/core/site";
+import { createCanonicalUrl } from "@/core/seo";
 
 const featuredCertifications = getCertifications().filter((c) => c.relevance == "High");
 const interests = getInterests();
@@ -17,12 +17,13 @@ const featuredArticles = getFeaturedArticles();
 
 const pageTitle = "Logan Farci - Software Engineer";
 const pageDescription = "Software Engineer specializing in Azure, C#, .NET, and cloud-native solutions. Explore my work, articles, and certifications.";
-const pageUrl = siteUrl;
+const pageUrl = createCanonicalUrl("/");
 
 export default function HomePage() {
     return (
         <>
             <title>{pageTitle}</title>
+            <link rel="canonical" href={pageUrl} />
             <meta name="description" content={pageDescription} />
             <meta property="og:type" content="website" />
             <meta property="og:title" content={pageTitle} />

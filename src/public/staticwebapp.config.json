@@ -4,7 +4,11 @@
     "exclude": [
       "/images/*.{png,jpg,gif,svg,ico,webp,avif}",
       "/assets/*",
-      "/favicon.ico"
+      "/favicon.ico",
+      "/llms.txt",
+      "/llms-full.txt",
+      "/sitemap.xml",
+      "/robots.txt"
     ]
   },
   "responseOverrides": {

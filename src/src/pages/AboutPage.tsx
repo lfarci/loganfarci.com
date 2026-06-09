@@ -11,7 +11,9 @@ import { Text } from "@/components/shared/typography";
 import { createId } from "@/core/string";
 import ColumnContainer from "@/components/layout/ColumnContainer";
 import ThumbnailGridSection from "@/components/shared/ThumbnailGridSection";
-import { siteUrl } from "@/core/site";
+import JsonLd from "@/components/shared/JsonLd";
+import { Heading1 } from "@/components/shared/typography";
+import { createBreadcrumbJsonLd, createCanonicalUrl } from "@/core/seo";
 
 const formatMonthYear = (date: Date | string) => {
     const d = typeof date === "string" ? new Date(date) : date;
@@ -40,12 +42,17 @@ const profile = getProfile();
 
 const pageTitle = "About - Logan Farci";
 const pageDescription = "Learn more about Logan Farci, a Software Engineer specializing in Azure, C#, .NET, and cloud-native solutions.";
-const pageUrl = `${siteUrl}/about`;
+const pageUrl = createCanonicalUrl("/about");
+const breadcrumbJsonLd = createBreadcrumbJsonLd([
+    { name: "Home", path: "/" },
+    { name: "About", path: "/about" },
+]);
 
 export default function AboutPage() {
     return (
         <>
             <title>{pageTitle}</title>
+            <link rel="canonical" href={pageUrl} />
             <meta name="description" content={pageDescription} />
             <meta property="og:type" content="website" />
             <meta property="og:title" content={pageTitle} />
@@ -53,7 +60,9 @@ export default function AboutPage() {
             <meta property="og:url" content={pageUrl} />
             <meta name="twitter:title" content={pageTitle} />
             <meta name="twitter:description" content={pageDescription} />
-            <div>
+            <JsonLd data={breadcrumbJsonLd} />
+            <article className="py-8">
+                <Heading1 className="mb-8">About Logan Farci</Heading1>
                 <MarkdownSection 
                     heading="About Me" 
                     content={profile.description}
@@ -120,7 +129,7 @@ export default function AboutPage() {
                         ))}
                     </ColumnContainer>
                 </Section>
-            </div>
+            </article>
         </>
     );
 }

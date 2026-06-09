@@ -15,7 +15,7 @@ export function render(url: string) {
     // prerender script can inject them into <head> of each static HTML file.
     // React 19 hoists these on the client, but SSR renderToString puts them
     // inline — crawlers need them in <head> to read metadata correctly.
-    const headTagPattern = /<title\b[^>]*>[\s\S]*?<\/title>|<meta\b[^>]*>/g;
+    const headTagPattern = /<title\b[^>]*>[\s\S]*?<\/title>|<meta\b[^>]*>|<link\b[^>]*>|<script\b(?=[^>]*type="application\/ld\+json")[^>]*>[\s\S]*?<\/script>/g;
     const headTags = (html.match(headTagPattern) ?? []).join("\n");
 
     // Strip extracted tags from the root markup so the prerender script does
@@ -27,3 +27,4 @@ export function render(url: string) {
 }
 
 export { getStaticRoutes } from "./routes";
+export { getAllArticles } from "@/core/articles";
