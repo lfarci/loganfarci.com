@@ -67,12 +67,6 @@ jobs:
       - name: Install dependencies
         run: npm clean-install
 
-      - name: Build application
-        run: npm run build
-        env:
-          VITE_GITHUB_REPOSITORY_URL: "${{ inputs.repository_url }}"
-          VITE_COMMIT_HASH: "${{ inputs.commit_hash }}"
-
       - name: Azure CLI Login
         uses: azure/login@v3
         with:
@@ -85,7 +79,22 @@ jobs:
         env:
           AZURE_KEY_VAULT_NAME: ${{ secrets.AZURE_KEY_VAULT_NAME }}
         run: |
-          echo "deployment_token=$(az keyvault secret show --name StaticWebAppDeploymentKey --vault-name "$AZURE_KEY_VAULT_NAME" --query value -o tsv)" >> $GITHUB_OUTPUT
+          deployment_token=$(az keyvault secret show --name StaticWebAppDeploymentKey --vault-name "$AZURE_KEY_VAULT_NAME" --query value -o tsv)
+          echo "::add-mask::$deployment_token"
+          echo "deployment_token=$deployment_token" >> $GITHUB_OUTPUT
+
+          application_insights_connection_string=$(az keyvault secret show --name ApplicationInsightsConnectionString --vault-name "$AZURE_KEY_VAULT_NAME" --query value -o tsv 2>/dev/null || echo "")
+          if [ -n "$application_insights_connection_string" ]; then
+            echo "::add-mask::$application_insights_connection_string"
+          fi
+          echo "application_insights_connection_string=$application_insights_connection_string" >> $GITHUB_OUTPUT
+
+      - name: Build application
+        run: npm run build
+        env:
+          VITE_GITHUB_REPOSITORY_URL: "${{ inputs.repository_url }}"
+          VITE_COMMIT_HASH: "${{ inputs.commit_hash }}"
+          VITE_APPINSIGHTS_CONNECTION_STRING: "${{ steps.get-secrets.outputs.application_insights_connection_string }}"
 
       - name: Deploy to Azure Static Web Apps
         id: deploy

@@ -68,6 +68,7 @@ jobs:
       static_web_app_host_name: ${{ steps.output.outputs.static_web_app_host_name }}
       dns_zone_name: ${{ steps.output.outputs.dns_zone_name }}
       dns_name_servers: ${{ steps.output.outputs.dns_name_servers }}
+      application_insights_connection_string: ${{ steps.output.outputs.application_insights_connection_string }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -122,12 +123,15 @@ jobs:
           dns_zone_name=$(terraform output -raw dns_zone_name)
           name_servers=$(terraform output -json dns_zone_name_servers)
           cleaned_name_servers=${name_servers:1:-1}
+          application_insights_connection_string="$(terraform output -raw application_insights_connection_string)"
+          echo "::add-mask::$application_insights_connection_string"
 
           echo "resource_group_name=$resource_group_name" >> $GITHUB_OUTPUT
           echo "static_web_app_name=$static_web_app_name" >> $GITHUB_OUTPUT
           echo "static_web_app_host_name=$static_web_app_host_name" >> $GITHUB_OUTPUT
           echo "dns_zone_name=$dns_zone_name" >> $GITHUB_OUTPUT
           echo "dns_name_servers=$cleaned_name_servers" >> $GITHUB_OUTPUT
+          echo "application_insights_connection_string=$application_insights_connection_string" >> $GITHUB_OUTPUT
 
       - name: Write summary
         if: ${{ env.IS_DEPLOY == 'true' }}
@@ -170,6 +174,7 @@ jobs:
           az keyvault secret set --vault-name ${{ secrets.AZURE_KEY_VAULT_NAME }} --name "StaticWebAppDefaultHostName" --value "${{ needs.terraform.outputs.static_web_app_host_name }}"
           az keyvault secret set --vault-name ${{ secrets.AZURE_KEY_VAULT_NAME }} --name "StaticWebAppCustomHostName" --value "${{ env.SUBDOMAIN }}.${{ env.CUSTOM_DOMAIN }}"
           az keyvault secret set --vault-name ${{ secrets.AZURE_KEY_VAULT_NAME }} --name "StaticWebAppDeploymentKey" --value "${{ steps.get-token.outputs.deployment_token }}"
+          az keyvault secret set --vault-name ${{ secrets.AZURE_KEY_VAULT_NAME }} --name "ApplicationInsightsConnectionString" --value "${{ needs.terraform.outputs.application_insights_connection_string }}"
 
   custom_domain:
     name: "Configure custom domain"

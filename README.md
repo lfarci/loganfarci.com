@@ -55,6 +55,28 @@ Before you begin, ensure you have the following tools installed on your workstat
    npm run lint
    ```
 
+## Analytics
+
+The site uses **Azure Application Insights** in cookieless mode to track basic
+activity (page views, sessions, referrers, geography, devices). No cookies are
+set, so no consent banner is required under GDPR.
+
+- The instrumentation resource is provisioned by Terraform in `infra/`
+  (`azurerm_application_insights`, workspace-based, with a daily ingestion cap
+  via `application_insights_daily_cap_gb` to stay safely within the free tier).
+- Its connection string is exposed as a Terraform output and written to Azure
+  Key Vault by `.github/workflows/azure-resources.yml` as
+  `ApplicationInsightsConnectionString`.
+- The SWA deploy workflow reads the secret from Key Vault and injects it at
+  build time as `VITE_APPINSIGHTS_CONNECTION_STRING`.
+- The client SDK is initialized in `src/src/core/appInsights.ts` via the
+  `<Analytics />` component mounted in `App.tsx`. Initialization is gated on
+  `import.meta.env.PROD` and the presence of the connection string, so dev
+  builds never send telemetry.
+- **To disable analytics**, leave `VITE_APPINSIGHTS_CONNECTION_STRING` unset
+  (the default in local dev).
+- View the dashboard at *Azure Portal → Application Insights → Usage*.
+
 ## Technology stack
 
 | Name                  | Description                                                  | Type  | Link                                                                                   |

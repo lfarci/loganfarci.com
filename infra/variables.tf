@@ -26,3 +26,9 @@ variable "static_web_app_custom_domain" {
   type        = string
   default     = "loganfarci.com"
 }
+
+variable "application_insights_daily_cap_gb" {
+  description = "Daily ingestion cap in GB for Application Insights. Keeps usage well under the 5 GB/month free tier."
+  type        = number
+  default     = 0.1
+}

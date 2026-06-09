@@ -22,3 +22,9 @@ output "dns_zone_name_servers" {
   description = "The name servers for the DNS zone."
   value       = azurerm_dns_zone.this.name_servers
 }
+
+output "application_insights_connection_string" {
+  description = "Connection string for the frontend Application Insights SDK."
+  value       = azurerm_application_insights.this.connection_string
+  sensitive   = true
+}
