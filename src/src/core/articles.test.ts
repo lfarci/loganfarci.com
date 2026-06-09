@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import { getAllArticles, getArticleBySlug, getArticleSlugs, getFeaturedArticles } from "./articles";
 
 const stripFencedCodeBlocks = (content: string) => content.replace(/```[\s\S]*?```/g, "");
+const vagueDescriptionStarter = /^(short note about|a quick note on|a focused guide on)\b/i;
 
 describe("articles", () => {
     it("loads the available article slugs from content", () => {
@@ -34,6 +35,19 @@ describe("articles", () => {
 
         expect(featuredArticles.length).toBeGreaterThan(0);
         expect(featuredArticles.every((article) => article.featured)).toBe(true);
+    });
+
+    it("keeps SEO-focused descriptions for the affected articles", () => {
+        const affectedSlugs = ["mcp", "github-mcp-server", "git-worktree-vscode", "flouz-personal-finance-tool"];
+
+        for (const slug of affectedSlugs) {
+            const article = getArticleBySlug(slug);
+
+            expect(article).not.toBeNull();
+            expect(article!.description.length).toBeGreaterThanOrEqual(120);
+            expect(article!.description.length).toBeLessThanOrEqual(160);
+            expect(article!.description).not.toMatch(vagueDescriptionStarter);
+        }
     });
 
     it("does not allow duplicate top-level headings in the affected article bodies", () => {

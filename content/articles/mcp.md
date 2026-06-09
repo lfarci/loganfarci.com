@@ -1,6 +1,6 @@
 ---
 title: "How MCP Tool Calls Work"
-description: "Learn how MCP turns a user request into a tool call through hosts, clients, servers, tool discovery, and JSON-RPC messages."
+description: "Understand how an MCP request becomes a tool call by tracing host, client, server, discovery, and JSON-RPC steps from prompt to result."
 publishedAt: "2025-07-02"
 featured: true
 tags: ["MCP", "AI"]
