@@ -1,6 +1,6 @@
 name: "Setup Repository Labels"
 
-# Creates all labels required by agentic workflows (e.g., issue-triage).
+# Creates the issue labels used in this repository.
 # Run this workflow once after the repository is set up, or whenever labels
 # are deleted and need to be recreated.
 on:
