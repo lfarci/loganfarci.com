@@ -24,6 +24,11 @@ export default {
                     subtle: "var(--color-accent-subtle)",
                     foreground: "var(--color-accent-foreground)",
                 },
+                highlight: {
+                    DEFAULT: "var(--color-highlight)",
+                    subtle: "var(--color-highlight-subtle)",
+                    foreground: "var(--color-highlight-foreground)",
+                },
 
                 // Compatibility aliases for existing semantic classes.
                 primary: {
@@ -78,6 +83,7 @@ export default {
             backgroundImage: {
                 "gradient-brand": "var(--gradient-brand)",
                 "gradient-accent": "var(--gradient-accent)",
+                "gradient-highlight": "var(--gradient-highlight)",
                 "gradient-surface": "var(--gradient-surface)",
                 "fade-surface": "var(--gradient-fade-surface)",
             },
