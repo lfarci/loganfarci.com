@@ -1,10 +1,10 @@
 import type React from "react";
 import { Link } from "react-router";
-import { cn } from "@/core/cn";
+import { mergeClassNames } from "@/core/mergeClassNames";
 import { Heading3 } from "@/components/shared/typography";
 import { ImageProps } from "@/types";
 import GridContainer from "@/components/layout/GridContainer";
-import { cardRootClassName } from "@/components/ui/card";
+import { cardRootClassName } from "@/components/shared/primitives/CardPrimitives";
 
 type PolymorphicProps<E extends React.ElementType> = {
     as?: E;
@@ -49,35 +49,35 @@ const Card = <E extends React.ElementType = "div">({
 }: PolymorphicProps<E>) => {
     const Component = as ?? "div";
     return (
-        <Component className={cn(cardRootClassName, className)} {...(props as React.ComponentPropsWithoutRef<E>)}>
+        <Component className={mergeClassNames(cardRootClassName, className)} {...(props as React.ComponentPropsWithoutRef<E>)}>
             {children}
         </Component>
     );
 };
 
 export const CardHeader: React.FC<SimpleProps> = ({ children, className }) => (
-    <div className={cn("flex flex-col gap-2 min-w-0", className)}>{children}</div>
+    <div className={mergeClassNames("flex flex-col gap-2 min-w-0", className)}>{children}</div>
 );
 
 export const CardTitle: React.FC<SimpleProps> = ({ children, className }) => (
-    <Heading3 className={cn("leading-tight", className)}>{children}</Heading3>
+    <Heading3 className={mergeClassNames("leading-tight", className)}>{children}</Heading3>
 );
 
 export const CardSubtitle: React.FC<PolymorphicProps<React.ElementType>> = ({ as, children, className, ...props }) => {
     const Component = (as as React.ElementType) ?? "p";
     return (
-        <Component className={cn("text-base text-text-muted", className)} {...props}>
+        <Component className={mergeClassNames("text-base text-text-muted", className)} {...props}>
             {children}
         </Component>
     );
 };
 
 export const CardBody: React.FC<SimpleProps> = ({ children, className }) => (
-    <div className={cn("flex flex-col gap-2", className)}>{children}</div>
+    <div className={mergeClassNames("flex flex-col gap-2", className)}>{children}</div>
 );
 
 export const CardFooter: React.FC<SimpleProps> = ({ children, className }) => (
-    <div className={cn("mt-4 flex flex-wrap gap-2 justify-start items-start", className)}>{children}</div>
+    <div className={mergeClassNames("mt-4 flex flex-wrap gap-2 justify-start items-start", className)}>{children}</div>
 );
 
 export const CardMedia: React.FC<CardMediaProps> = ({
@@ -88,7 +88,7 @@ export const CardMedia: React.FC<CardMediaProps> = ({
     containerClassName,
 }) => (
     <div
-        className={cn(
+        className={mergeClassNames(
             "flex justify-center",
             align === "start" ? "items-start" : "items-center",
             containerClassName,
@@ -99,7 +99,7 @@ export const CardMedia: React.FC<CardMediaProps> = ({
             alt={media.alt}
             width={media.width}
             height={media.height}
-            className={cn("object-contain", mediaSizes[size], className)}
+            className={mergeClassNames("object-contain", mediaSizes[size], className)}
         />
     </div>
 );
@@ -111,7 +111,7 @@ export const CardGrid: React.FC<CardGridProps> = ({ columns = 3, className, chil
 );
 
 export const CardLink: React.FC<CardLinkProps> = ({ href, external = false, className, children }) => {
-    const linkClass = cn(
+    const linkClass = mergeClassNames(
         "block h-full transition-opacity hover:opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary",
         className,
     );

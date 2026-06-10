@@ -1,11 +1,11 @@
 import { useParams, Navigate } from "react-router";
 import { getArticleBySlug } from "@/core/articles";
 import MarkdownContent from "@/components/shared/MarkdownContent";
+import { Separator } from "@/components/shared/primitives/Separator";
 import { Heading1, Secondary } from "@/components/shared/typography";
 import { formatDate } from "@/core/date";
 import Tooltip from "@/components/shared/Tooltip";
 import IconTag from "@/components/shared/IconTag";
-import { Separator } from "@/components/ui/separator";
 import { siteOgImage, siteUrl } from "@/core/site";
 
 interface ArticleMetaProps {

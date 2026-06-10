@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router";
 import ErrorMessage from "@/components/shared/ErrorMessage";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/shared/primitives/Button";
 
 export default function ErrorPage({
     error,

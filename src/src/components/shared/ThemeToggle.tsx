@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useTheme } from '@/contexts/ThemeContext';
 import { MoonIcon, SunIcon } from '@/components/shared/icons';
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/shared/primitives/Button";
 
 const ThemeToggle: React.FC = () => {
   const [mounted, setMounted] = useState(false);

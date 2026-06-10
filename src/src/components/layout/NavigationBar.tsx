@@ -1,8 +1,8 @@
 import React, { useEffect, useId, useState } from "react";
 import { Link, useLocation } from "react-router";
 import NavBarEntry from "@/components/shared/NavBarEntry";
+import { Button } from "@/components/shared/primitives/Button";
 import ThemeToggle from "@/components/shared/ThemeToggle";
-import { Button } from "@/components/ui/button";
 
 interface NavigationBarProps {
     title: string;

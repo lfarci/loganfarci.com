@@ -1,5 +1,5 @@
 import type { ComponentProps, ElementType, ReactNode } from "react";
-import { cn } from "@/core/cn";
+import { mergeClassNames } from "@/core/mergeClassNames";
 
 type PolymorphicProps<E extends ElementType> = {
     as?: E;
@@ -15,7 +15,7 @@ export function Card<E extends ElementType = "div">({ as, className, children, .
 
     return (
         <Component
-            className={cn(cardRootClassName, className)}
+            className={mergeClassNames(cardRootClassName, className)}
             {...(props as ComponentProps<E>)}
         >
             {children}
@@ -24,11 +24,11 @@ export function Card<E extends ElementType = "div">({ as, className, children, .
 }
 
 export function CardHeader({ className, ...props }: ComponentProps<"div">) {
-    return <div className={cn("flex flex-col gap-2 min-w-0", className)} {...props} />;
+    return <div className={mergeClassNames("flex flex-col gap-2 min-w-0", className)} {...props} />;
 }
 
 export function CardTitle({ className, ...props }: ComponentProps<"div">) {
-    return <div className={cn("leading-tight", className)} {...props} />;
+    return <div className={mergeClassNames("leading-tight", className)} {...props} />;
 }
 
 export function CardDescription<E extends ElementType = "p">({
@@ -40,16 +40,16 @@ export function CardDescription<E extends ElementType = "p">({
     const Component = as ?? "p";
 
     return (
-        <Component className={cn("text-base text-text-muted", className)} {...(props as ComponentProps<E>)}>
+        <Component className={mergeClassNames("text-base text-text-muted", className)} {...(props as ComponentProps<E>)}>
             {children}
         </Component>
     );
 }
 
 export function CardContent({ className, ...props }: ComponentProps<"div">) {
-    return <div className={cn("flex flex-col gap-2", className)} {...props} />;
+    return <div className={mergeClassNames("flex flex-col gap-2", className)} {...props} />;
 }
 
 export function CardFooter({ className, ...props }: ComponentProps<"div">) {
-    return <div className={cn("mt-4 flex flex-wrap gap-2 justify-start items-start", className)} {...props} />;
+    return <div className={mergeClassNames("mt-4 flex flex-wrap gap-2 justify-start items-start", className)} {...props} />;
 }

@@ -3,7 +3,7 @@ import { useRoutes } from "react-router";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import LayoutWrapper from "@/components/layout/LayoutWrapper";
 import Analytics from "@/components/Analytics";
-import { TooltipProvider } from "@/components/ui/tooltip";
+import { TooltipProvider } from "@/components/shared/primitives/TooltipPrimitives";
 import { siteOgImage } from "@/core/site";
 import { routes } from "./routes";
 

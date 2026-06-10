@@ -1,6 +1,6 @@
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 import type { ComponentProps } from "react";
-import { cn } from "@/core/cn";
+import { mergeClassNames } from "@/core/mergeClassNames";
 
 export const TooltipProvider = TooltipPrimitive.Provider;
 export const Tooltip = TooltipPrimitive.Root;
@@ -15,7 +15,7 @@ export function TooltipContent({
         <TooltipPrimitive.Portal>
             <TooltipPrimitive.Content
                 sideOffset={sideOffset}
-                className={cn(
+                className={mergeClassNames(
                     "z-50 max-w-xs overflow-hidden rounded-md border border-border bg-surface-elevated px-3 py-1.5 text-sm text-text-primary shadow-md",
                     className,
                 )}
