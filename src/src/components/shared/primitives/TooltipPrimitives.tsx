@@ -16,7 +16,7 @@ export function TooltipContent({
             <TooltipPrimitive.Content
                 sideOffset={sideOffset}
                 className={mergeClassNames(
-                    "z-50 max-w-xs overflow-hidden rounded-md border border-border bg-surface-elevated px-3 py-1.5 text-sm text-text-primary shadow-md",
+                    "z-50 max-w-xs overflow-hidden rounded-control border border-border bg-surface-elevated px-3 py-1.5 text-sm text-text-primary shadow-popover",
                     className,
                 )}
                 {...props}

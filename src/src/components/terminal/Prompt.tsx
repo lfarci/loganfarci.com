@@ -24,7 +24,7 @@ export default function Prompt({
                 value={command}
                 onChange={(e) => setCommand(e.target.value)}
                 onKeyDown={onCommandSubmission}
-                style={{ backgroundColor: "black", color: "white", border: "none", outline: "none" }}
+                className="border-0 bg-surface text-text-primary outline-none"
                 autoFocus
             />
         </div>

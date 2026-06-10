@@ -36,17 +36,27 @@
 
 /* Base theme configuration using Tailwind v4 @theme directive */
 @theme {
-    /* Core colors */
+    /* Document colors */
     --color-background: oklch(100% 0 0); /* white */
     --color-foreground: oklch(13% 0.028 261.692); /* gray-950 */
-    --color-primary: oklch(62.3% 0.214 259.815); /* blue-500 */
-    --color-primary-hover: oklch(54.6% 0.245 262.881); /* blue-600 */
-    --color-primary-light: oklch(97% 0.014 254.604); /* blue-50 */
+
+    /* Brand and accent colors */
+    --color-brand: oklch(62.3% 0.214 259.815); /* blue-500 */
+    --color-brand-hover: oklch(54.6% 0.245 262.881); /* blue-600 */
+    --color-brand-subtle: oklch(97% 0.014 254.604); /* blue-50 */
+    --color-brand-foreground: oklch(100% 0 0); /* white */
+    --color-accent: oklch(70.4% 0.14 182.503); /* cyan-400 */
+    --color-accent-hover: oklch(60.9% 0.126 221.723); /* cyan-600 */
+    --color-accent-subtle: oklch(98.4% 0.019 200.873); /* cyan-50 */
+    --color-accent-foreground: oklch(13% 0.028 261.692); /* gray-950 */
+
+    /* Compatibility aliases */
+    --color-primary: var(--color-brand);
+    --color-primary-hover: var(--color-brand-hover);
+    --color-primary-light: var(--color-brand-subtle);
     --color-secondary: oklch(55.1% 0.027 264.364); /* gray-500 */
     --color-secondary-hover: oklch(44.6% 0.03 256.802); /* gray-600 */
-    --color-accent: oklch(62.3% 0.214 259.815); /* Same as primary */
-    --color-accent-hover: oklch(54.6% 0.245 262.881); /* Same as primary-hover */
-    
+
     /* Text semantic colors */
     --color-text-primary: oklch(27.8% 0.033 256.848); /* gray-800 */
     --color-text-secondary: oklch(44.6% 0.03 256.802); /* gray-600 */
@@ -58,17 +68,43 @@
     --color-border: oklch(87.2% 0.01 258.338); /* gray-300 */
     --color-border-light: oklch(92.8% 0.006 264.531); /* gray-200 */
     --color-border-strong: oklch(70.7% 0.022 261.325); /* gray-400 */
-    
+
     /* Surface/background colors */
     --color-surface: oklch(100% 0 0); /* white */
     --color-surface-elevated: oklch(98.5% 0.002 247.839); /* gray-50 */
     --color-surface-hover: oklch(96.7% 0.003 264.542); /* gray-100 */
-    
+    --color-surface-muted: oklch(92.8% 0.006 264.531); /* gray-200 */
+    --color-muted: oklch(96.7% 0.003 264.542); /* gray-100 */
+    --color-muted-foreground: oklch(44.6% 0.03 256.802); /* gray-600 */
+
+    /* Focus ring colors */
+    --color-ring: var(--color-brand);
+    --color-ring-muted: var(--color-border-strong);
+
     /* Status colors */
     --color-success: oklch(69.6% 0.17 162.48); /* emerald-500 */
     --color-warning: oklch(76.9% 0.188 70.08); /* amber-500 */
     --color-error: oklch(63.7% 0.237 25.331); /* red-500 */
     --color-info: oklch(62.3% 0.214 259.815); /* blue-500 */
+
+    /* Gradients */
+    --gradient-brand: linear-gradient(135deg, var(--color-brand) 0%, var(--color-accent) 100%);
+    --gradient-accent: linear-gradient(135deg, var(--color-accent-subtle) 0%, var(--color-brand-subtle) 100%);
+    --gradient-surface: linear-gradient(180deg, var(--color-surface-elevated) 0%, var(--color-surface) 100%);
+    --gradient-fade-surface: linear-gradient(90deg, transparent 0%, var(--color-surface) 100%);
+    --background-image-gradient-brand: var(--gradient-brand);
+    --background-image-gradient-accent: var(--gradient-accent);
+    --background-image-gradient-surface: var(--gradient-surface);
+    --background-image-fade-surface: var(--gradient-fade-surface);
+
+    /* Elevation and shape */
+    --shadow-card: 0 1px 2px 0 oklch(13% 0.028 261.692 / 0.08);
+    --shadow-card-hover: 0 10px 20px -12px oklch(13% 0.028 261.692 / 0.22);
+    --shadow-popover: 0 12px 30px -16px oklch(13% 0.028 261.692 / 0.28);
+    --shadow-focus: 0 0 0 3px oklch(62.3% 0.214 259.815 / 0.22);
+    --radius-control: 0.5rem;
+    --radius-card: 0.75rem;
+    --radius-surface: 1rem;
 }
 
 /* Dark mode styles when .dark class is applied */
@@ -78,16 +114,18 @@
     --color-background: oklch(10% 0.012 264.8); /* Very dark gray */
     --color-foreground: oklch(98% 0.003 264.542); /* Near white */
     
-    /* Primary colors for dark mode */
-    --color-primary: oklch(74.6% 0.16 232.661); /* sky-400 */
-    --color-primary-hover: oklch(62.3% 0.214 259.815); /* blue-500 */
-    --color-primary-light: oklch(28.2% 0.091 267.935); /* blue-950 */
+    /* Brand and accent colors for dark mode */
+    --color-brand: oklch(74.6% 0.16 232.661); /* sky-400 */
+    --color-brand-hover: oklch(62.3% 0.214 259.815); /* blue-500 */
+    --color-brand-subtle: oklch(28.2% 0.091 267.935); /* blue-950 */
+    --color-brand-foreground: oklch(13% 0.028 261.692); /* gray-950 */
+    --color-accent: oklch(77.7% 0.152 181.912); /* cyan-300 */
+    --color-accent-hover: oklch(70.4% 0.14 182.503); /* cyan-400 */
+    --color-accent-subtle: oklch(30.2% 0.056 229.695); /* cyan-950 */
+    --color-accent-foreground: oklch(13% 0.028 261.692); /* gray-950 */
     
     --color-secondary: oklch(70.7% 0.022 261.325); /* gray-400 */
     --color-secondary-hover: oklch(87.2% 0.01 258.338); /* gray-300 */
-    
-    --color-accent: oklch(74.6% 0.16 232.661); /* sky-400 */
-    --color-accent-hover: oklch(62.3% 0.214 259.815); /* blue-500 */
     
     /* Text colors for dark mode */
     --color-text-primary: oklch(98.5% 0.002 247.839); /* gray-50 */
@@ -105,6 +143,16 @@
     --color-surface: oklch(21% 0.034 264.665); /* gray-900 */
     --color-surface-elevated: oklch(27.8% 0.033 256.848); /* gray-800 */
     --color-surface-hover: oklch(37.3% 0.034 259.733); /* gray-700 */
+    --color-surface-muted: oklch(37.3% 0.034 259.733); /* gray-700 */
+    --color-muted: oklch(27.8% 0.033 256.848); /* gray-800 */
+    --color-muted-foreground: oklch(70.7% 0.022 261.325); /* gray-400 */
+    --color-ring: var(--color-brand);
+    --color-ring-muted: var(--color-border-strong);
+
+    --shadow-card: 0 1px 2px 0 oklch(0% 0 0 / 0.28);
+    --shadow-card-hover: 0 12px 24px -14px oklch(0% 0 0 / 0.5);
+    --shadow-popover: 0 16px 36px -18px oklch(0% 0 0 / 0.58);
+    --shadow-focus: 0 0 0 3px oklch(74.6% 0.16 232.661 / 0.24);
 }
 
 /* Font utilities */
