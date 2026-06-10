@@ -71,10 +71,7 @@ All commands must be run from the `src/` directory (the Vite project root).
 
 - Use **TypeScript** for all new code.
 - Use **Tailwind CSS** for styling; extend theme in `src/tailwind.config.ts`.
-- Prefer **functional React components** and hooks.
-- Use the local **shadcn-style Radix primitives** and semantic Tailwind tokens for UI consistency.
 - Use the alias `@/` for imports from `src/src/` and `@content/` for imports from `content/` (see `src/tsconfig.json`).
-- Keep components small and focused; extract smaller reusable components when it improves clarity.
 - Write clear, maintainable code with descriptive comments where needed.
 
 ## Patterns and Integration
