@@ -26,6 +26,8 @@ const allArticles: Article[] = Object.entries(articleModules)
     .map(([modulePath, mod]) => parseArticle(modulePath, mod))
     .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
 
+const featuredArticleLimit = 3;
+
 export const getArticleSlugs = (): string[] => allArticles.map((a) => a.slug);
 
 export const getArticleBySlug = (slug: string): Article | null =>
@@ -33,5 +35,4 @@ export const getArticleBySlug = (slug: string): Article | null =>
 
 export const getAllArticles = (): Article[] => allArticles;
 
-export const getFeaturedArticles = (): Article[] => allArticles.filter((a) => a.featured);
-
+export const getFeaturedArticles = (): Article[] => allArticles.filter((a) => a.featured).slice(0, featuredArticleLimit);
