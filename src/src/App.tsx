@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useRoutes } from "react-router";
-import { HeroUIProvider } from "@heroui/react";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import LayoutWrapper from "@/components/layout/LayoutWrapper";
 import Analytics from "@/components/Analytics";
 import JsonLd from "@/components/shared/JsonLd";
+import { TooltipProvider } from "@/components/shared/primitives/TooltipPrimitives";
 import { getContacts, getExperiences, getProfile } from "@/core/data";
 import { createPersonJsonLd, createWebSiteJsonLd } from "@/core/seo";
 import { siteOgImage } from "@/core/site";
@@ -34,8 +34,8 @@ export default function App() {
     }, []);
 
     return (
-        <HeroUIProvider>
-            <ThemeProvider>
+        <ThemeProvider>
+            <TooltipProvider delayDuration={150}>
                 <Analytics />
                 {/* Site-wide OG/Twitter defaults — overridden per page */}
                 <meta property="og:site_name" content="Logan Farci" />
@@ -50,7 +50,7 @@ export default function App() {
                 >
                     {element}
                 </LayoutWrapper>
-            </ThemeProvider>
-        </HeroUIProvider>
+            </TooltipProvider>
+        </ThemeProvider>
     );
 }

@@ -1,20 +1,21 @@
-import React from "react";
+import type { FC, ReactNode } from "react";
+import { mergeClassNames } from "@/core/mergeClassNames";
 import Card, { CardBody, CardFooter, CardHeader, CardMedia, CardSubtitle, CardTitle } from "./Card";
 import CardTitleWithTooltip from "./CardTitleWithTooltip";
 import { Secondary } from "@/components/shared/typography";
-import { ImageProps } from "@/types";
+import type { ImageProps } from "@/types";
 
 type InfoCardMediaSize = "small" | "medium" | "large";
 
 type InfoCardProps = {
     title: string;
-    subtitle?: React.ReactNode;
-    details?: Array<string | React.ReactNode>;
+    subtitle?: ReactNode;
+    details?: Array<string | ReactNode>;
     media?: ImageProps;
     mediaSize?: InfoCardMediaSize;
     mediaAlign?: "start" | "center";
-    children?: React.ReactNode;
-    footer?: React.ReactNode;
+    children?: ReactNode;
+    footer?: ReactNode;
     align?: "start" | "center";
     showTitleTooltip?: boolean;
     className?: string;
@@ -26,9 +27,7 @@ const mediaSizeClasses: Record<InfoCardMediaSize, string> = {
     large: "w-20 h-20 md:w-24 md:h-24",
 };
 
-const cn = (...classes: Array<string | undefined | null | false>) => classes.filter(Boolean).join(" ");
-
-const InfoCard: React.FC<InfoCardProps> = ({
+const InfoCard: FC<InfoCardProps> = ({
     title,
     subtitle,
     details,
@@ -53,19 +52,19 @@ const InfoCard: React.FC<InfoCardProps> = ({
     const hasBody = Boolean(children);
 
     return (
-        <Card className={cn("scroll-mt-24", className)}>
+        <Card className={mergeClassNames("scroll-mt-24", className)}>
             <div className="flex w-full items-start gap-4">
                 {media && (
                     <CardMedia
                         media={media}
                         size="medium"
                         align={mediaAlign}
-                        containerClassName={cn("flex shrink-0 justify-center", mediaAlign === "start" ? "items-start mt-1" : "items-center")}
+                        containerClassName={mergeClassNames("flex shrink-0 justify-center", mediaAlign === "start" ? "items-start mt-1" : "items-center")}
                         className={mediaSizeClasses[mediaSize]}
                     />
                 )}
-                <div className={cn("flex flex-col flex-1 min-w-0", align === "center" ? "items-center text-center" : "items-start")}>
-                    <CardHeader className={cn("gap-1.5 w-full", align === "center" ? "items-center text-center" : "items-start")}>
+                <div className={mergeClassNames("flex flex-col flex-1 min-w-0", align === "center" ? "items-center text-center" : "items-start")}>
+                    <CardHeader className={mergeClassNames("gap-1.5 w-full", align === "center" ? "items-center text-center" : "items-start")}>
                         {titleNode}
                         {subtitleNode}
                         {details?.map((detail, idx) => (
@@ -76,13 +75,13 @@ const InfoCard: React.FC<InfoCardProps> = ({
                     </CardHeader>
 
                     {hasBody && (
-                        <CardBody className={cn("pt-1 gap-2 w-full", align === "center" ? "items-center text-center" : "items-start")}>
+                        <CardBody className={mergeClassNames("pt-1 gap-2 w-full", align === "center" ? "items-center text-center" : "items-start")}>
                             {children}
                         </CardBody>
                     )}
 
                     {footer && (
-                        <CardFooter className={cn("mt-4 w-full", align === "center" ? "justify-center" : "justify-start")}>{footer}</CardFooter>
+                        <CardFooter className={mergeClassNames("mt-4 w-full", align === "center" ? "justify-center" : "justify-start")}>{footer}</CardFooter>
                     )}
                 </div>
             </div>

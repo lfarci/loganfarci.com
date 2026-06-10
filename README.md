@@ -67,7 +67,7 @@ Before you begin, ensure you have the following tools installed on your workstat
 | React                 | JavaScript library for building user interfaces              | Web   | [React](https://react.dev/)                                                            |
 | TypeScript            | Typed superset of JavaScript                                 | Web   | [TypeScript](https://www.typescriptlang.org/)                                          |
 | Tailwind CSS          | Utility-first CSS framework for rapid UI development         | Web   | [Tailwind CSS](https://tailwindcss.com/)                                               |
-| HeroUI                | Component library for Tailwind CSS                           | Web   | [HeroUI](https://heroui.com/)                                                          |
+| shadcn/ui + Radix UI  | Local component primitives with accessible Radix behavior     | Web   | [shadcn/ui](https://ui.shadcn.com/)                                                    |
 | Azure Static Web Apps | Azure service for hosting static web applications            | Cloud | [Azure Static Web Apps](https://azure.microsoft.com/en-us/products/app-service/static) |
 | Terraform             | Infrastructure as Code tool for provisioning cloud resources | IaC   | [Terraform](https://www.terraform.io/)                                                 |
 | Azure CLI             | Command-line tool for managing Azure resources               | Cloud | [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/)                              |

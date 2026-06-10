@@ -1,6 +1,6 @@
-import { Tooltip } from "@heroui/react";
 import { Link } from "react-router";
-import ChevronRightIcon from "./icons/ChevronRightIcon";
+import Tooltip from "@/components/shared/Tooltip";
+import ChevronRightIcon from "@/components/shared/icons/ChevronRightIcon";
 import { Heading2, Text } from "@/components/shared/typography";
 import { createId } from "@/core/string";
 

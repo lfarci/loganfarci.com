@@ -1,68 +1,112 @@
-import React, { useState } from "react";
-import { Link } from "react-router";
-import { Navbar, NavbarBrand, NavbarContent, NavbarMenu, NavbarMenuItem, NavbarMenuToggle } from "@heroui/react";
+import React, { useEffect, useId, useState } from "react";
+import { Link, useLocation } from "react-router";
 import NavBarEntry from "@/components/shared/NavBarEntry";
+import { Button } from "@/components/shared/primitives/Button";
 import ThemeToggle from "@/components/shared/ThemeToggle";
 
 interface NavigationBarProps {
     title: string;
 }
 
+const navigationItems = [
+    { url: "/", label: "Home" },
+    { url: "/about", label: "About" },
+    { url: "/articles", label: "Articles" },
+] as const;
+
 const NavigationBar: React.FC<NavigationBarProps> = ({ title }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const menuId = useId();
+    const location = useLocation();
 
     const handleMenuItemClick = () => {
         setIsMenuOpen(false);
     };
 
+    useEffect(() => {
+        setIsMenuOpen(false);
+    }, [location.pathname]);
+
+    useEffect(() => {
+        if (!isMenuOpen) {
+            return;
+        }
+
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.key === "Escape") {
+                setIsMenuOpen(false);
+            }
+        };
+
+        window.addEventListener("keydown", handleKeyDown);
+
+        return () => window.removeEventListener("keydown", handleKeyDown);
+    }, [isMenuOpen]);
+
     return (
-        <Navbar isBordered isMenuOpen={isMenuOpen} onMenuOpenChange={setIsMenuOpen}>
-            <NavbarContent className="flex justify-between items-center md:justify-between md:items-center text-center">
-                <NavbarBrand className="w-full md:w-auto">
+        <header className="border-b border-border bg-background/90 backdrop-blur">
+            <nav className="mx-auto flex max-w-(--breakpoint-lg) flex-wrap items-center justify-between px-6 py-3 text-center">
+                <div className="flex-1 text-left md:flex-none md:text-center">
                     <Link to="/" className="text-xl md:text-2xl font-thin heading-font cursor-pointer">
                         {title}
                     </Link>
-                </NavbarBrand>
-                <NavbarMenuToggle
+                </div>
+                <Button
+                    variant="ghost"
+                    size="icon"
+                    type="button"
                     aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+                    aria-controls={menuId}
+                    aria-expanded={isMenuOpen}
                     className="md:hidden"
-                />
+                    onClick={() => setIsMenuOpen((open) => !open)}
+                >
+                    <span className="sr-only">{isMenuOpen ? "Close menu" : "Open menu"}</span>
+                    <span aria-hidden="true" className="flex size-5 flex-col justify-center gap-1">
+                        <span
+                            className={`block h-0.5 w-5 bg-current transition-transform ${
+                                isMenuOpen ? "translate-y-1.5 rotate-45" : ""
+                            }`}
+                        />
+                        <span
+                            className={`block h-0.5 w-5 bg-current transition-opacity ${
+                                isMenuOpen ? "opacity-0" : ""
+                            }`}
+                        />
+                        <span
+                            className={`block h-0.5 w-5 bg-current transition-transform ${
+                                isMenuOpen ? "-translate-y-1.5 -rotate-45" : ""
+                            }`}
+                        />
+                    </span>
+                </Button>
                 <div className="hidden md:flex items-center space-x-8">
-                    <NavBarEntry url="/" className="hover:text-primary-hover transition-colors">
-                        Home
-                    </NavBarEntry>
-                    <NavBarEntry url="/about" className="hover:text-primary-hover transition-colors">
-                        About
-                    </NavBarEntry>
-                    <NavBarEntry url="/articles" className="hover:text-primary-hover transition-colors">
-                        Articles
-                    </NavBarEntry>
+                    {navigationItems.map((item) => (
+                        <NavBarEntry key={item.url} url={item.url} className="hover:text-primary-hover transition-colors">
+                            {item.label}
+                        </NavBarEntry>
+                    ))}
                     <ThemeToggle />
                 </div>
-            </NavbarContent>
-            <NavbarMenu className="md:hidden text-center">
-                <NavbarMenuItem onClick={handleMenuItemClick}>
-                    <NavBarEntry url="/" className="hover:text-primary-hover transition-colors text-base py-2">
-                        Home
-                    </NavBarEntry>
-                </NavbarMenuItem>
-                <NavbarMenuItem onClick={handleMenuItemClick}>
-                    <NavBarEntry url="/about" className="hover:text-primary-hover transition-colors text-base py-2">
-                        About
-                    </NavBarEntry>
-                </NavbarMenuItem>
-                <NavbarMenuItem onClick={handleMenuItemClick}>
-                    <NavBarEntry url="/articles" className="hover:text-primary-hover transition-colors text-base py-2">
-                        Articles
-                    </NavBarEntry>
-                </NavbarMenuItem>
-                <NavbarMenuItem className="mt-4 pt-4 border-t border-border">
-                    <div className="flex justify-center">
-                        <ThemeToggle />
+                <div id={menuId} className={`${isMenuOpen ? "block" : "hidden"} w-full md:hidden text-center`}>
+                    <div className="flex flex-col pt-4">
+                        {navigationItems.map((item) => (
+                            <div key={item.url} onClick={handleMenuItemClick}>
+                                <NavBarEntry
+                                    url={item.url}
+                                    className="hover:text-primary-hover transition-colors text-base py-2"
+                                >
+                                    {item.label}
+                                </NavBarEntry>
+                            </div>
+                        ))}
+                        <div className="mt-4 flex justify-center border-t border-border pt-4">
+                            <ThemeToggle />
+                        </div>
                     </div>
-                </NavbarMenuItem>
-            </NavbarMenu>
-        </Navbar>
+                </div>
+            </nav>
+        </header>
     );
 };
 

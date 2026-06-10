@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import ClientTooltip from "@/components/shared/ClientTooltip";
+import Tooltip from "@/components/shared/Tooltip";
 import { Heading3 } from "@/components/shared/typography";
 
 type CardTitleWithTooltipProps = {
@@ -26,7 +26,7 @@ const CardTitleWithTooltip: React.FC<CardTitleWithTooltipProps> = ({ children, c
         </Heading3>
     );
 
-    return isOverflowing ? <ClientTooltip content={children}>{heading}</ClientTooltip> : heading;
+    return isOverflowing ? <Tooltip content={children}>{heading}</Tooltip> : heading;
 };
 
 export default CardTitleWithTooltip;

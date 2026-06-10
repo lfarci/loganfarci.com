@@ -1,6 +1,6 @@
 import React from "react";
-import { ChevronDownIcon } from "./icons";
-import { Tooltip } from "@heroui/react";
+import Tooltip from "@/components/shared/Tooltip";
+import { ChevronDownIcon } from "@/components/shared/icons";
 
 interface ChevronToggleButtonProps {
     isExpanded: boolean;
