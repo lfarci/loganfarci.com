@@ -25,7 +25,7 @@ export default function PageTransition({ children }: PageTransitionProps) {
     }, [location.pathname]);
 
     return (
-        <div className="overflow-x-hidden">
+        <div className="overflow-x-clip">
             <AnimatePresence mode="wait" initial={false} custom={direction}>
                 <motion.div
                     key={locationKey}
