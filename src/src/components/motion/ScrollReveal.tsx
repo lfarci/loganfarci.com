@@ -12,7 +12,7 @@ interface ScrollRevealProps {
 export default function ScrollReveal({
     children,
     className,
-    amount = 0.2,
+    amount = 0.45,
     delay = 0,
 }: ScrollRevealProps) {
     const [hasMounted, setHasMounted] = useState(false);

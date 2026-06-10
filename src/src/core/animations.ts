@@ -4,7 +4,7 @@ export type RouteMotionDirection = -1 | 0 | 1;
 
 export const motionDurations = {
     fast: 0.18,
-    normal: 0.24,
+    normal: 0.28,
     page: 0.34,
 } as const;
 
@@ -35,7 +35,7 @@ export const fadeInVariants: Variants = {
 };
 
 export const slideUpVariants: Variants = {
-    hidden: { opacity: 0, y: 16 },
+    hidden: { opacity: 0, y: 28 },
     visible: { opacity: 1, y: 0 },
 };
 

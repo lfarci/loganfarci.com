@@ -17,7 +17,7 @@ describe("motion primitives", () => {
     });
 
     it("uses transform and opacity for slide-up reveals", () => {
-        expect(slideUpVariants.hidden).toEqual({ opacity: 0, y: 16 });
+        expect(slideUpVariants.hidden).toEqual({ opacity: 0, y: 28 });
         expect(slideUpVariants.visible).toEqual({ opacity: 1, y: 0 });
     });
 
