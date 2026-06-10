@@ -76,7 +76,7 @@ export default function ArticlePage() {
             <meta name="twitter:image" content={siteOgImage} />
             <JsonLd data={[breadcrumbJsonLd, createArticleJsonLd(article)]} />
             <article className="py-8 md:py-10">
-                <header className="max-w-[72ch]">
+                <header>
                     <Heading1 className="mb-5">{article.title}</Heading1>
                     <ArticleMeta
                         publishedAt={article.publishedAt}
@@ -84,7 +84,7 @@ export default function ArticlePage() {
                         coauthoredWithAgent={article.coauthoredWithAgent}
                         tags={article.tags}
                     />
-                    <Secondary className="italic">{article.description}</Secondary>
+                    <Secondary className="max-w-[72ch] italic">{article.description}</Secondary>
                 </header>
                 <Separator className="mt-6 mb-8 md:mb-10" />
                 <MarkdownContent content={article.content} measure />

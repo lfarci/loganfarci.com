@@ -44,10 +44,10 @@ function createMarkdownComponents(measure: boolean): Components {
     const measureClassName = measure ? "max-w-[72ch]" : undefined;
 
     return {
-        h1: ({ children }) => <Heading2 className={mergeClassNames("mb-4 mt-10 first:mt-0", measureClassName)}>{children}</Heading2>,
-        h2: ({ children }) => <Heading2 className={mergeClassNames("mb-4 mt-10 first:mt-0", measureClassName)}>{children}</Heading2>,
-        h3: ({ children }) => <Heading3 className={mergeClassNames("mb-3 mt-8 first:mt-0", measureClassName)}>{children}</Heading3>,
-        h4: ({ children }) => <Heading4 className={mergeClassNames("mb-3 mt-6 first:mt-0", measureClassName)}>{children}</Heading4>,
+        h1: ({ children }) => <Heading2 className="mb-4 mt-10 first:mt-0">{children}</Heading2>,
+        h2: ({ children }) => <Heading2 className="mb-4 mt-10 first:mt-0">{children}</Heading2>,
+        h3: ({ children }) => <Heading3 className="mb-3 mt-8 first:mt-0">{children}</Heading3>,
+        h4: ({ children }) => <Heading4 className="mb-3 mt-6 first:mt-0">{children}</Heading4>,
         p: ({ children }) => <Text className={mergeClassNames("mb-5", measureClassName)}>{children}</Text>,
         ul: ({ children }) => <UnorderedList className={measureClassName}>{children}</UnorderedList>,
         ol: ({ children }) => <OrderedList className={measureClassName}>{children}</OrderedList>,
