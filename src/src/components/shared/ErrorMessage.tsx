@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import { typographyStyles } from "@/components/shared/typography/core/styles";
+import { contentWidthStyles } from "@/components/layout/contentWidthStyles";
 
 interface ErrorMessageProps {
     title: string;
@@ -17,7 +18,7 @@ export default function ErrorMessage({ title, heading, message, children }: Erro
             <h2 className={`${typographyStyles.heading2} mb-6`}>
                 {heading}
             </h2>
-            <p className={`${typographyStyles.text} mb-8 max-w-md`}>
+            <p className={`${typographyStyles.text} mb-8 ${contentWidthStyles.compact}`}>
                 {message}
             </p>
             {children}

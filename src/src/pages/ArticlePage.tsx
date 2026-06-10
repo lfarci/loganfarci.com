@@ -4,6 +4,7 @@ import MarkdownContent from "@/components/shared/MarkdownContent";
 import JsonLd from "@/components/shared/JsonLd";
 import { Separator } from "@/components/shared/primitives/Separator";
 import { Heading1, Secondary } from "@/components/shared/typography";
+import { typographyStyles } from "@/components/shared/typography/core";
 import { formatDate } from "@/core/date";
 import { createArticleJsonLd, createBreadcrumbJsonLd, createCanonicalUrl } from "@/core/seo";
 import Tooltip from "@/components/shared/Tooltip";
@@ -19,31 +20,29 @@ interface ArticleMetaProps {
 
 function ArticleMeta({ publishedAt, author, coauthoredWithAgent, tags }: Readonly<ArticleMetaProps>) {
     return (
-        <Secondary className="mb-4">
-            <span className="flex flex-row flex-wrap items-center gap-2">
-                <Secondary>{formatDate(publishedAt)}</Secondary>
-                <Separator orientation="vertical" className="h-6 mx-2" />
-                <Secondary>{author}</Secondary>
-                {coauthoredWithAgent && (
-                    <>
-                        <Separator orientation="vertical" className="h-6 mx-2" />
-                        <Tooltip content="This article was co-authored with help from an AI assistant.">
-                            <Secondary>Co-authored with AI</Secondary>
-                        </Tooltip>
-                    </>
-                )}
-                {tags && tags.length > 0 && (
-                    <>
-                        <Separator orientation="vertical" className="h-6 mx-2" />
-                        <span className="flex flex-wrap gap-2 align-middle">
-                            {tags.map((tag: string) => (
-                                <IconTag key={tag}>{tag}</IconTag>
-                            ))}
-                        </span>
-                    </>
-                )}
-            </span>
-        </Secondary>
+        <div className="mb-4 flex w-full flex-row flex-wrap items-center gap-2">
+            <span className={typographyStyles.caption}>{formatDate(publishedAt)}</span>
+            <Separator orientation="vertical" className="h-6 mx-2" />
+            <span className={typographyStyles.caption}>{author}</span>
+            {coauthoredWithAgent && (
+                <>
+                    <Separator orientation="vertical" className="h-6 mx-2" />
+                    <Tooltip content="This article was co-authored with help from an AI assistant.">
+                        <span className={typographyStyles.caption}>Co-authored with AI</span>
+                    </Tooltip>
+                </>
+            )}
+            {tags && tags.length > 0 && (
+                <>
+                    <Separator orientation="vertical" className="h-6 mx-2" />
+                    <span className="flex min-w-0 flex-wrap gap-2 align-middle">
+                        {tags.map((tag: string) => (
+                            <IconTag key={tag}>{tag}</IconTag>
+                        ))}
+                    </span>
+                </>
+            )}
+        </div>
     );
 }
 
@@ -76,9 +75,9 @@ export default function ArticlePage() {
             <meta name="twitter:description" content={article.description} />
             <meta name="twitter:image" content={siteOgImage} />
             <JsonLd data={[breadcrumbJsonLd, createArticleJsonLd(article)]} />
-            <article className="max-w-none">
-                <header>
-                    <Heading1 className="mb-6 mt-8">{article.title}</Heading1>
+            <article className="py-8 md:py-10">
+                <header className="w-full">
+                    <Heading1 className="mb-5">{article.title}</Heading1>
                     <ArticleMeta
                         publishedAt={article.publishedAt}
                         author={article.author}
@@ -87,7 +86,7 @@ export default function ArticlePage() {
                     />
                     <Secondary className="italic">{article.description}</Secondary>
                 </header>
-                <Separator className="mt-4 mb-8" />
+                <Separator className="mt-6 mb-8 md:mb-10" />
                 <MarkdownContent content={article.content} />
             </article>
         </>
