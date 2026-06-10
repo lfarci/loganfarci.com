@@ -19,7 +19,7 @@ const MarkdownSection: React.FC<MarkdownSectionProps> = ({
     imageAlt = "",
 }) => (
     <Section heading={heading} redirectPath={redirectPath} redirectLabel={redirectLabel}>
-        <div className="text-justify">
+        <div className="flow-root">
             {imageSrc && (
                 <img
                     src={imageSrc}

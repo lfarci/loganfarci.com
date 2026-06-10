@@ -11,7 +11,7 @@ const LayoutWrapper: React.FC<Readonly<LayoutWrapperProps>> = ({ children, githu
     return (
         <>
             <NavigationBar title="Logan Farci" />
-            <main className="max-w-(--breakpoint-lg) mx-auto px-6">{children}</main>
+            <main className="mx-auto w-full max-w-(--breakpoint-lg) px-5 sm:px-6 lg:px-8">{children}</main>
             <hr className="border-t border-border my-8" />
             <Footer githubRepositoryUrl={githubRepositoryUrl} commitHash={commitHash} />
         </>

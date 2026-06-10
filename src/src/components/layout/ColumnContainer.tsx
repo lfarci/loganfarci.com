@@ -7,7 +7,7 @@ interface ColumnContainerProps {
 
 // Simple vertical stack with default spacing, for consistent layouts.
 const ColumnContainer: React.FC<ColumnContainerProps> = ({ children, className = "" }) => {
-    const baseClassName = "flex flex-col gap-4";
+    const baseClassName = "flex flex-col gap-5 md:gap-6";
     const mergedClassName = className ? `${baseClassName} ${className}` : baseClassName;
 
     return <div className={mergedClassName}>{children}</div>;

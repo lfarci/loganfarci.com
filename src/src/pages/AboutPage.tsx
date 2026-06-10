@@ -61,9 +61,9 @@ export default function AboutPage() {
             <meta name="twitter:title" content={pageTitle} />
             <meta name="twitter:description" content={pageDescription} />
             <JsonLd data={breadcrumbJsonLd} />
-            <article className="py-8">
-                <Heading1 id="about-me" className="mb-8 scroll-mt-24">About Me</Heading1>
-                <div className="text-justify">
+            <article className="py-8 md:py-10">
+                <Heading1 id="about-me" className="mb-6 scroll-mt-24 md:mb-8">About Me</Heading1>
+                <div className="flow-root">
                     <img
                         src={profile.avatar.src}
                         alt={profile.avatar.alt}

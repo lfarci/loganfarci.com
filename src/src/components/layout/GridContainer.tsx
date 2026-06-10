@@ -17,7 +17,7 @@ const gridColumns: Record<number, string> = {
 };
 
 const GridContainer: React.FC<GridContainerProps> = ({ children, columns = 3, className = "" }) => {
-    const baseClassName = "grid gap-4";
+    const baseClassName = "grid gap-5 md:gap-6";
     const columnClass = gridColumns[columns] ?? gridColumns[3];
     const mergedClassName = className ? `${baseClassName} ${columnClass} ${className}` : `${baseClassName} ${columnClass}`;
 

@@ -1,7 +1,7 @@
 import { Link } from "react-router";
 import Tooltip from "@/components/shared/Tooltip";
 import ChevronRightIcon from "@/components/shared/icons/ChevronRightIcon";
-import { Heading2, Text } from "@/components/shared/typography";
+import { Heading2, Label, Text } from "@/components/shared/typography";
 import { createId } from "@/core/string";
 
 interface SectionProps {
@@ -17,12 +17,12 @@ const Section: React.FC<SectionProps> = ({ heading, label, redirectPath, redirec
     const toolTip = <Text>{redirectLabel}</Text>;
 
     return (
-        <section id={id ?? createId(heading)} className="pt-8 scroll-mt-24">
-            <div className="flex flex-col mb-4">
+        <section id={id ?? createId(heading)} className="pt-8 md:pt-10 scroll-mt-24">
+            <div className="flex flex-col mb-5 md:mb-6">
                 {label && (
-                    <span className="text-xs font-semibold tracking-widest uppercase text-text-muted mb-1">
+                    <Label className="mb-2">
                         {label}
-                    </span>
+                    </Label>
                 )}
                 <div className="flex items-center">
                     {redirectPath ? (
@@ -33,7 +33,7 @@ const Section: React.FC<SectionProps> = ({ heading, label, redirectPath, redirec
                             >
                                 <Heading2 className="mb-0">{heading}</Heading2>
                                 <ChevronRightIcon
-                                    className="size-7 md:size-9 ml-2 shrink-0 self-center text-text-tertiary"
+                                    className="size-6 md:size-8 ml-2 shrink-0 self-center text-text-tertiary"
                                     strokeWidth={2}
                                 />
                             </Link>

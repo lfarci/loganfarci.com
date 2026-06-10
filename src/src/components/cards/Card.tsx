@@ -2,6 +2,7 @@ import type React from "react";
 import { Link } from "react-router";
 import { mergeClassNames } from "@/core/mergeClassNames";
 import { Heading3 } from "@/components/shared/typography";
+import { typographyStyles } from "@/components/shared/typography/core";
 import { ImageProps } from "@/types";
 import GridContainer from "@/components/layout/GridContainer";
 import { cardRootClassName } from "@/components/shared/primitives/CardPrimitives";
@@ -66,7 +67,7 @@ export const CardTitle: React.FC<SimpleProps> = ({ children, className }) => (
 export const CardSubtitle: React.FC<PolymorphicProps<React.ElementType>> = ({ as, children, className, ...props }) => {
     const Component = (as as React.ElementType) ?? "p";
     return (
-        <Component className={mergeClassNames("text-base text-text-muted", className)} {...props}>
+        <Component className={mergeClassNames(typographyStyles.caption, className)} {...props}>
             {children}
         </Component>
     );

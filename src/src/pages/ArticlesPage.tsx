@@ -27,14 +27,14 @@ export default function ArticlesPage() {
             <meta name="twitter:title" content={pageTitle} />
             <meta name="twitter:description" content={pageDescription} />
             <JsonLd data={breadcrumbJsonLd} />
-            <section className="flex flex-col py-8">
+            <section className="flex flex-col py-8 md:py-10">
                 <Heading1 className="mb-8">Articles</Heading1>
                 <Heading2 className="sr-only">All articles</Heading2>
 
                 {articles.length === 0 ? (
                     <Text className="text-text-secondary">No articles published yet.</Text>
                 ) : (
-                    <div className="space-y-6">
+                    <div className="space-y-5 md:space-y-6">
                         {articles.map((article) => (
                             <ArticleListCard key={article.slug} article={article} showTags />
                         ))}

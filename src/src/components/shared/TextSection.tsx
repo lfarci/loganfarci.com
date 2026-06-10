@@ -11,7 +11,7 @@ interface TextSection {
 
 const TextSection: React.FC<TextSection> = ({ heading, label, text, redirectPath, redirectLabel }) => (
     <Section heading={heading} label={label} redirectPath={redirectPath} redirectLabel={redirectLabel}>
-        <Text>{text}</Text>
+        <Text className="max-w-[72ch]">{text}</Text>
     </Section>
 );
 

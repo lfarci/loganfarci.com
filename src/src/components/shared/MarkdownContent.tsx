@@ -7,18 +7,20 @@ import {
     Heading2,
     Heading3,
     Heading4,
-    Heading1,
     UnorderedList,
     OrderedList,
     ListItem,
     Strong,
     Emphasis,
 } from "@/components/shared/typography";
+import { mergeClassNames } from "@/core/mergeClassNames";
 import NewTabLink from "./NewTabLink";
 import CodeSnippet, { CodeSnippetProps } from "./CodeSnippet";
 
 interface MarkdownContentProps {
     content: string;
+    measure?: boolean;
+    className?: string;
 }
 
 function MarkdownCodeBlock({ children }: { children: React.ReactNode }) {
@@ -38,50 +40,54 @@ function MarkdownCodeBlock({ children }: { children: React.ReactNode }) {
     return <>{children}</>;
 }
 
-const markdownComponents: Components = {
-    h1: ({ children }) => <Heading1 className="mb-6 mt-8">{children}</Heading1>,
-    h2: ({ children }) => <Heading2 className="mb-4 mt-6">{children}</Heading2>,
-    h3: ({ children }) => <Heading3 className="mb-3 mt-5">{children}</Heading3>,
-    h4: ({ children }) => <Heading4 className="mb-2 mt-4">{children}</Heading4>,
-    p: ({ children }) => <Text className="mb-4">{children}</Text>,
-    ul: ({ children }) => <UnorderedList>{children}</UnorderedList>,
-    ol: ({ children }) => <OrderedList>{children}</OrderedList>,
-    li: ({ children }) => <ListItem>{children}</ListItem>,
-    blockquote: ({ children }) => (
-        <blockquote className="border-l-4 border-primary pl-4 py-2 mb-4 bg-primary-light italic text-text-secondary">
-            {children}
-        </blockquote>
-    ),
-    code: ({ children, className }) => <CodeSnippet className={className}>{children}</CodeSnippet>,
-    pre: ({ children }) => <MarkdownCodeBlock>{children}</MarkdownCodeBlock>,
-    a: ({ href, children }) => <NewTabLink url={href ?? ""}>{children}</NewTabLink>,
-    strong: ({ children }) => <Strong>{children}</Strong>,
-    em: ({ children }) => <Emphasis>{children}</Emphasis>,
-    hr: () => <hr className="border-t border-border my-8" />,
-    table: ({ children }) => (
-        <table className="w-full border border-border rounded-lg overflow-hidden my-6 text-sm bg-surface">
-            {children}
-        </table>
-    ),
-    thead: ({ children }) => <thead className="bg-surface-elevated">{children}</thead>,
-    tbody: ({ children }) => <tbody>{children}</tbody>,
-    tr: ({ children }) => <tr className="border-b border-border-light last:border-b-0">{children}</tr>,
-    th: ({ children }) => (
-        <th className="px-4 py-2 text-left font-semibold text-text-primary bg-surface-elevated border-b border-border">
-            {children}
-        </th>
-    ),
-    td: ({ children }) => (
-        <td className="px-4 py-2 text-text-secondary bg-surface border-b border-border-light">
-            {children}
-        </td>
-    ),
-};
+function createMarkdownComponents(measure: boolean): Components {
+    const measureClassName = measure ? "max-w-[72ch]" : undefined;
 
-export default function MarkdownContent({ content }: MarkdownContentProps) {
+    return {
+        h1: ({ children }) => <Heading2 className={mergeClassNames("mb-4 mt-10 first:mt-0", measureClassName)}>{children}</Heading2>,
+        h2: ({ children }) => <Heading2 className={mergeClassNames("mb-4 mt-10 first:mt-0", measureClassName)}>{children}</Heading2>,
+        h3: ({ children }) => <Heading3 className={mergeClassNames("mb-3 mt-8 first:mt-0", measureClassName)}>{children}</Heading3>,
+        h4: ({ children }) => <Heading4 className={mergeClassNames("mb-3 mt-6 first:mt-0", measureClassName)}>{children}</Heading4>,
+        p: ({ children }) => <Text className={mergeClassNames("mb-5", measureClassName)}>{children}</Text>,
+        ul: ({ children }) => <UnorderedList className={measureClassName}>{children}</UnorderedList>,
+        ol: ({ children }) => <OrderedList className={measureClassName}>{children}</OrderedList>,
+        li: ({ children }) => <ListItem>{children}</ListItem>,
+        blockquote: ({ children }) => (
+            <blockquote className={mergeClassNames("mb-6 border-l-4 border-primary bg-primary-light py-3 pl-5 italic text-text-secondary", measureClassName)}>
+                {children}
+            </blockquote>
+        ),
+        code: ({ children, className }) => <CodeSnippet className={className}>{children}</CodeSnippet>,
+        pre: ({ children }) => <MarkdownCodeBlock>{children}</MarkdownCodeBlock>,
+        a: ({ href, children }) => <NewTabLink url={href ?? ""}>{children}</NewTabLink>,
+        strong: ({ children }) => <Strong>{children}</Strong>,
+        em: ({ children }) => <Emphasis>{children}</Emphasis>,
+        hr: () => <hr className={mergeClassNames("my-10 border-t border-border", measureClassName)} />,
+        table: ({ children }) => (
+            <table className="my-8 w-full overflow-hidden rounded-lg border border-border bg-surface text-sm">
+                {children}
+            </table>
+        ),
+        thead: ({ children }) => <thead className="bg-surface-elevated">{children}</thead>,
+        tbody: ({ children }) => <tbody>{children}</tbody>,
+        tr: ({ children }) => <tr className="border-b border-border-light last:border-b-0">{children}</tr>,
+        th: ({ children }) => (
+            <th className="border-b border-border bg-surface-elevated px-4 py-3 text-left font-semibold text-text-primary">
+                {children}
+            </th>
+        ),
+        td: ({ children }) => (
+            <td className="border-b border-border-light bg-surface px-4 py-3 text-text-secondary">
+                {children}
+            </td>
+        ),
+    };
+}
+
+export default function MarkdownContent({ content, measure = false, className }: MarkdownContentProps) {
     return (
-        <div className="max-w-none">
-            <ReactMarkdown components={markdownComponents} remarkPlugins={[remarkGfm]}>
+        <div className={mergeClassNames("w-full", className)}>
+            <ReactMarkdown components={createMarkdownComponents(measure)} remarkPlugins={[remarkGfm]}>
                 {content}
             </ReactMarkdown>
         </div>
