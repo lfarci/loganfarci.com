@@ -86,6 +86,7 @@ After only a few days, it already feels like the direction I want my workflow to
 ## References
 
 -   [About Copilot cloud agent](https://docs.github.com/en/copilot/concepts/agents/cloud-agent/about-cloud-agent)
+-   [GitHub Copilot app repository](https://github.com/github/app)
 -   [GitHub Copilot coding agent public preview](https://github.blog/changelog/2025-05-19/github-copilot-coding-agent-in-public-preview/)
 -   [Use Copilot cloud agent on GitHub](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/use-cloud-agent-on-github)
 -   [Manage and track agent sessions](https://docs.github.com/en/copilot/how-tos/copilot-on-github/use-copilot-agents/manage-and-track-agents)
