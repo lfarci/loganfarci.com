@@ -87,7 +87,7 @@ export default function ArticlePage() {
                     <Secondary className="italic">{article.description}</Secondary>
                 </header>
                 <Separator className="mt-6 mb-8 md:mb-10" />
-                <MarkdownContent content={article.content} measure />
+                <MarkdownContent content={article.content} />
             </article>
         </>
     );
