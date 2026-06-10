@@ -5,20 +5,12 @@ import {
     motionDurations,
     naturalEase,
     pageTransitionVariants,
-    slideUpVariants,
 } from "./animations";
 
 describe("motion primitives", () => {
-    it("keeps shared durations within the expected UI motion range", () => {
-        expect(motionDurations.fast).toBeGreaterThanOrEqual(0.15);
-        expect(motionDurations.normal).toBeLessThanOrEqual(0.3);
+    it("keeps page transitions within the expected UI motion range", () => {
         expect(motionDurations.page).toBeLessThanOrEqual(0.4);
         expect(naturalEase).not.toEqual([0, 0, 1, 1]);
-    });
-
-    it("uses transform and opacity for slide-up reveals", () => {
-        expect(slideUpVariants.hidden).toEqual({ opacity: 0, y: 28 });
-        expect(slideUpVariants.visible).toEqual({ opacity: 1, y: 0 });
     });
 
     it("groups article detail pages with the article list for route orientation", () => {

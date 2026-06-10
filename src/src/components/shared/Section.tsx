@@ -1,6 +1,5 @@
 import { Link } from "react-router";
 import Tooltip from "@/components/shared/Tooltip";
-import ScrollReveal from "@/components/motion/ScrollReveal";
 import ChevronRightIcon from "@/components/shared/icons/ChevronRightIcon";
 import { Heading2, Text } from "@/components/shared/typography";
 import { createId } from "@/core/string";
@@ -11,14 +10,14 @@ interface SectionProps {
     redirectPath?: string;
     redirectLabel?: string;
     id?: string;
-    reveal?: boolean;
     children?: React.ReactNode;
 }
 
-const Section: React.FC<SectionProps> = ({ heading, label, redirectPath, redirectLabel, children, id, reveal = false }) => {
+const Section: React.FC<SectionProps> = ({ heading, label, redirectPath, redirectLabel, children, id }) => {
     const toolTip = <Text>{redirectLabel}</Text>;
-    const content = (
-        <>
+
+    return (
+        <section id={id ?? createId(heading)} className="pt-8 scroll-mt-24">
             <div className="flex flex-col mb-4">
                 {label && (
                     <span className="text-xs font-semibold tracking-widest uppercase text-text-muted mb-1">
@@ -45,12 +44,6 @@ const Section: React.FC<SectionProps> = ({ heading, label, redirectPath, redirec
                 </div>
             </div>
             {children}
-        </>
-    );
-
-    return (
-        <section id={id ?? createId(heading)} className="pt-8 scroll-mt-24">
-            {reveal ? <ScrollReveal>{content}</ScrollReveal> : content}
         </section>
     );
 };

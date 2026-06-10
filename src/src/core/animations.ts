@@ -3,22 +3,10 @@ import type { Transition, Variants } from "framer-motion";
 export type RouteMotionDirection = -1 | 0 | 1;
 
 export const motionDurations = {
-    fast: 0.18,
-    normal: 0.28,
     page: 0.34,
 } as const;
 
 export const naturalEase: [number, number, number, number] = [0.22, 1, 0.36, 1];
-
-export const fadeInTransition: Transition = {
-    duration: motionDurations.normal,
-    ease: naturalEase,
-};
-
-export const slideUpTransition: Transition = {
-    duration: motionDurations.normal,
-    ease: naturalEase,
-};
 
 export const pageTransition: Transition = {
     duration: motionDurations.page,
@@ -27,26 +15,6 @@ export const pageTransition: Transition = {
 
 export const reducedMotionTransition: Transition = {
     duration: 0,
-};
-
-export const fadeInVariants: Variants = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1 },
-};
-
-export const slideUpVariants: Variants = {
-    hidden: { opacity: 0, y: 28 },
-    visible: { opacity: 1, y: 0 },
-};
-
-export const staggerChildrenVariants: Variants = {
-    hidden: {},
-    visible: {
-        transition: {
-            staggerChildren: 0.06,
-            delayChildren: 0.03,
-        },
-    },
 };
 
 export const pageTransitionVariants: Variants = {
