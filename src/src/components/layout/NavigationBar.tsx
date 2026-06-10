@@ -16,26 +16,15 @@ const navigationItems = [
 
 const NavigationBar: React.FC<NavigationBarProps> = ({ title }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [isMenuRendered, setIsMenuRendered] = useState(false);
     const menuId = useId();
     const location = useLocation();
 
     const handleMenuToggle = () => {
-        if (!isMenuOpen) {
-            setIsMenuRendered(true);
-        }
-
         setIsMenuOpen((open) => !open);
     };
 
     const handleMenuItemClick = () => {
         setIsMenuOpen(false);
-    };
-
-    const handleMenuTransitionEnd = (event: React.TransitionEvent<HTMLDivElement>) => {
-        if (event.target === event.currentTarget && !isMenuOpen) {
-            setIsMenuRendered(false);
-        }
     };
 
     useEffect(() => {
@@ -103,37 +92,34 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ title }) => {
                     ))}
                     <ThemeToggle />
                 </div>
-                {isMenuRendered && (
-                    <div
-                        id={menuId}
-                        aria-hidden={!isMenuOpen}
-                        inert={!isMenuOpen}
-                        onTransitionEnd={handleMenuTransitionEnd}
-                        className={`grid w-full overflow-hidden text-center transition-[grid-template-rows,opacity,transform] duration-200 ease-out motion-reduce:transition-none md:hidden ${
-                            isMenuOpen
-                                ? "grid-rows-[1fr] translate-y-0 opacity-100"
-                                : "pointer-events-none -translate-y-1 opacity-0 grid-rows-[0fr]"
-                        }`}
-                    >
-                        <div className="min-h-0">
-                            <div className="flex flex-col pt-4">
-                                {navigationItems.map((item) => (
-                                    <div key={item.url} onClick={handleMenuItemClick}>
-                                        <NavBarEntry
-                                            url={item.url}
-                                            className="hover:text-primary-hover transition-colors text-base py-2 motion-reduce:transition-none"
-                                        >
-                                            {item.label}
-                                        </NavBarEntry>
-                                    </div>
-                                ))}
-                                <div className="mt-4 flex justify-center border-t border-border pt-4">
-                                    <ThemeToggle />
+                <div
+                    id={menuId}
+                    aria-hidden={!isMenuOpen}
+                    inert={!isMenuOpen}
+                    className={`grid w-full overflow-hidden text-center transition-[grid-template-rows,opacity,transform] duration-300 ease-out motion-reduce:transition-none md:hidden ${
+                        isMenuOpen
+                            ? "grid-rows-[1fr] translate-y-0 opacity-100"
+                            : "pointer-events-none -translate-y-2 opacity-0 grid-rows-[0fr]"
+                    }`}
+                >
+                    <div className="min-h-0">
+                        <div className="flex flex-col pt-4">
+                            {navigationItems.map((item) => (
+                                <div key={item.url} onClick={handleMenuItemClick}>
+                                    <NavBarEntry
+                                        url={item.url}
+                                        className="hover:text-primary-hover transition-colors text-base py-2 motion-reduce:transition-none"
+                                    >
+                                        {item.label}
+                                    </NavBarEntry>
                                 </div>
+                            ))}
+                            <div className="mt-4 flex justify-center border-t border-border pt-4">
+                                <ThemeToggle />
                             </div>
                         </div>
                     </div>
-                )}
+                </div>
             </nav>
         </header>
     );
