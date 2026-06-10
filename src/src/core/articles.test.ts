@@ -30,11 +30,16 @@ describe("articles", () => {
         expect(getArticleBySlug("missing-article")).toBeNull();
     });
 
-    it("returns only featured articles from the full set", () => {
+    it("returns the three latest featured articles from the full set", () => {
         const featuredArticles = getFeaturedArticles();
+        const expectedFeaturedArticles = getAllArticles()
+            .filter((article) => article.featured)
+            .slice(0, 3);
 
         expect(featuredArticles.length).toBeGreaterThan(0);
+        expect(featuredArticles.length).toBeLessThanOrEqual(3);
         expect(featuredArticles.every((article) => article.featured)).toBe(true);
+        expect(featuredArticles).toEqual(expectedFeaturedArticles);
     });
 
     it("keeps SEO-focused descriptions for the affected articles", () => {

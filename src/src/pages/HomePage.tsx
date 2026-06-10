@@ -63,7 +63,7 @@ export default function HomePage() {
                 <ArticleListSection
                     heading="Featured Articles"
                     articles={featuredArticles}
-                    limit={4}
+                    limit={3}
                     redirectPath="/articles"
                     redirectLabel="View all my articles"
                     emptyMessage="No featured articles found."
