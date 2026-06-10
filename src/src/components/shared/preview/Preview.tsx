@@ -15,11 +15,11 @@ function Preview({ collapsedContent, expandedContent }: PreviewProps) {
     return (
         <div className="w-full">
             <div
-                className="relative transition-all duration-300 ease-in-out overflow-hidden"
+                className="relative overflow-hidden transition-[height] duration-300 ease-in-out motion-reduce:transition-none"
                 style={{ height: isExpanded ? `${expandedContentRef.current?.scrollHeight || 0}px` : "2em" }}
             >
                 <div
-                    className={`w-full transition-opacity duration-300 overflow-hidden ${
+                    className={`w-full overflow-hidden transition-opacity duration-300 motion-reduce:transition-none ${
                         !isExpanded ? "opacity-100" : "opacity-0 pointer-events-none absolute top-0"
                     }`}
                     style={{ maxHeight: "2em" }}
@@ -29,7 +29,7 @@ function Preview({ collapsedContent, expandedContent }: PreviewProps) {
 
                 <div
                     ref={expandedContentRef}
-                    className={`w-full transition-opacity duration-300 ${
+                    className={`w-full transition-opacity duration-300 motion-reduce:transition-none ${
                         isExpanded ? "opacity-100" : "opacity-0 pointer-events-none absolute top-0"
                     }`}
                 >

@@ -19,6 +19,10 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ title }) => {
     const menuId = useId();
     const location = useLocation();
 
+    const handleMenuToggle = () => {
+        setIsMenuOpen((open) => !open);
+    };
+
     const handleMenuItemClick = () => {
         setIsMenuOpen(false);
     };
@@ -59,22 +63,22 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ title }) => {
                     aria-controls={menuId}
                     aria-expanded={isMenuOpen}
                     className="md:hidden"
-                    onClick={() => setIsMenuOpen((open) => !open)}
+                    onClick={handleMenuToggle}
                 >
                     <span className="sr-only">{isMenuOpen ? "Close menu" : "Open menu"}</span>
                     <span aria-hidden="true" className="flex size-5 flex-col justify-center gap-1">
                         <span
-                            className={`block h-0.5 w-5 bg-current transition-transform ${
+                            className={`block h-0.5 w-5 bg-current transition-transform duration-200 ease-out motion-reduce:transition-none ${
                                 isMenuOpen ? "translate-y-1.5 rotate-45" : ""
                             }`}
                         />
                         <span
-                            className={`block h-0.5 w-5 bg-current transition-opacity ${
+                            className={`block h-0.5 w-5 bg-current transition-opacity duration-150 ease-out motion-reduce:transition-none ${
                                 isMenuOpen ? "opacity-0" : ""
                             }`}
                         />
                         <span
-                            className={`block h-0.5 w-5 bg-current transition-transform ${
+                            className={`block h-0.5 w-5 bg-current transition-transform duration-200 ease-out motion-reduce:transition-none ${
                                 isMenuOpen ? "-translate-y-1.5 -rotate-45" : ""
                             }`}
                         />
@@ -88,20 +92,31 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ title }) => {
                     ))}
                     <ThemeToggle />
                 </div>
-                <div id={menuId} className={`${isMenuOpen ? "block" : "hidden"} w-full md:hidden text-center`}>
-                    <div className="flex flex-col pt-4">
-                        {navigationItems.map((item) => (
-                            <div key={item.url} onClick={handleMenuItemClick}>
-                                <NavBarEntry
-                                    url={item.url}
-                                    className="hover:text-primary-hover transition-colors text-base py-2"
-                                >
-                                    {item.label}
-                                </NavBarEntry>
+                <div
+                    id={menuId}
+                    aria-hidden={!isMenuOpen}
+                    inert={!isMenuOpen}
+                    className={`grid w-full overflow-hidden text-center transition-[grid-template-rows,opacity,transform] duration-300 ease-out motion-reduce:transition-none md:hidden ${
+                        isMenuOpen
+                            ? "grid-rows-[1fr] translate-y-0 opacity-100"
+                            : "pointer-events-none -translate-y-2 opacity-0 grid-rows-[0fr]"
+                    }`}
+                >
+                    <div className="min-h-0">
+                        <div className="flex flex-col pt-4">
+                            {navigationItems.map((item) => (
+                                <div key={item.url} onClick={handleMenuItemClick}>
+                                    <NavBarEntry
+                                        url={item.url}
+                                        className="hover:text-primary-hover transition-colors text-base py-2 motion-reduce:transition-none"
+                                    >
+                                        {item.label}
+                                    </NavBarEntry>
+                                </div>
+                            ))}
+                            <div className="mt-4 flex justify-center border-t border-border pt-4">
+                                <ThemeToggle />
                             </div>
-                        ))}
-                        <div className="mt-4 flex justify-center border-t border-border pt-4">
-                            <ThemeToggle />
                         </div>
                     </div>
                 </div>

@@ -3,6 +3,7 @@ import { useRoutes } from "react-router";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import LayoutWrapper from "@/components/layout/LayoutWrapper";
 import Analytics from "@/components/Analytics";
+import PageTransition from "@/components/motion/PageTransition";
 import JsonLd from "@/components/shared/JsonLd";
 import { TooltipProvider } from "@/components/shared/primitives/TooltipPrimitives";
 import { getContacts, getExperiences, getProfile } from "@/core/data";
@@ -48,7 +49,7 @@ export default function App() {
                     githubRepositoryUrl={githubRepositoryUrl}
                     commitHash={isPreviewEnvironment ? latestCommitHash : undefined}
                 >
-                    {element}
+                    <PageTransition>{element}</PageTransition>
                 </LayoutWrapper>
             </TooltipProvider>
         </ThemeProvider>
