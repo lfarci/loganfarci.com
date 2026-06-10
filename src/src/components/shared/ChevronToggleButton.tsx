@@ -21,7 +21,7 @@ function ChevronToggleButton({ isExpanded, onToggle }: ChevronToggleButtonProps)
                 >
                     <ChevronDownIcon
                         strokeWidth={1}
-                        className={`h-5 w-5 text-text-tertiary transition-transform duration-300 ${
+                        className={`h-5 w-5 text-text-tertiary transition-transform duration-300 motion-reduce:transition-none ${
                             isExpanded ? "rotate-180" : ""
                         }`}
                     />
