@@ -1,12 +1,14 @@
 import { useParams, Navigate } from "react-router";
 import { getArticleBySlug } from "@/core/articles";
 import MarkdownContent from "@/components/shared/MarkdownContent";
+import JsonLd from "@/components/shared/JsonLd";
 import { Separator } from "@/components/shared/primitives/Separator";
 import { Heading1, Secondary } from "@/components/shared/typography";
 import { formatDate } from "@/core/date";
+import { createArticleJsonLd, createBreadcrumbJsonLd, createCanonicalUrl } from "@/core/seo";
 import Tooltip from "@/components/shared/Tooltip";
 import IconTag from "@/components/shared/IconTag";
-import { siteOgImage, siteUrl } from "@/core/site";
+import { siteOgImage } from "@/core/site";
 
 interface ArticleMetaProps {
     publishedAt: string;
@@ -54,11 +56,17 @@ export default function ArticlePage() {
     }
 
     const articleTitle = `${article.title} - Logan Farci`;
-    const articleUrl = `${siteUrl}/articles/${slug}`;
+    const articleUrl = createCanonicalUrl(`/articles/${slug}`);
+    const breadcrumbJsonLd = createBreadcrumbJsonLd([
+        { name: "Home", path: "/" },
+        { name: "Articles", path: "/articles" },
+        { name: article.title, path: `/articles/${slug}` },
+    ]);
 
     return (
         <>
             <title>{articleTitle}</title>
+            <link rel="canonical" href={articleUrl} />
             <meta name="description" content={article.description} />
             <meta property="og:type" content="article" />
             <meta property="og:title" content={articleTitle} />
@@ -67,15 +75,18 @@ export default function ArticlePage() {
             <meta name="twitter:title" content={articleTitle} />
             <meta name="twitter:description" content={article.description} />
             <meta name="twitter:image" content={siteOgImage} />
+            <JsonLd data={[breadcrumbJsonLd, createArticleJsonLd(article)]} />
             <article className="max-w-none">
-                <Heading1 className="mb-6 mt-8">{article.title}</Heading1>
-                <ArticleMeta
-                    publishedAt={article.publishedAt}
-                    author={article.author}
-                    coauthoredWithAgent={article.coauthoredWithAgent}
-                    tags={article.tags}
-                />
-                <Secondary className="italic">{article.description}</Secondary>
+                <header>
+                    <Heading1 className="mb-6 mt-8">{article.title}</Heading1>
+                    <ArticleMeta
+                        publishedAt={article.publishedAt}
+                        author={article.author}
+                        coauthoredWithAgent={article.coauthoredWithAgent}
+                        tags={article.tags}
+                    />
+                    <Secondary className="italic">{article.description}</Secondary>
+                </header>
                 <Separator className="mt-4 mb-8" />
                 <MarkdownContent content={article.content} />
             </article>

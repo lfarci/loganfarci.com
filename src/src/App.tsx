@@ -3,7 +3,10 @@ import { useRoutes } from "react-router";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import LayoutWrapper from "@/components/layout/LayoutWrapper";
 import Analytics from "@/components/Analytics";
+import JsonLd from "@/components/shared/JsonLd";
 import { TooltipProvider } from "@/components/shared/primitives/TooltipPrimitives";
+import { getContacts, getExperiences, getProfile } from "@/core/data";
+import { createPersonJsonLd, createWebSiteJsonLd } from "@/core/seo";
 import { siteOgImage } from "@/core/site";
 import { routes } from "./routes";
 
@@ -12,6 +15,13 @@ const latestCommitHash = import.meta.env.VITE_COMMIT_HASH;
 const deploymentEnvironment = import.meta.env.VITE_DEPLOYMENT_ENVIRONMENT;
 const isConfiguredPreviewEnvironment = deploymentEnvironment?.toLowerCase() === "preview";
 const previewHostnamePattern = /(^|-)pr-\d+([.-]|$)/i;
+const profile = getProfile();
+const contacts = getContacts();
+const currentExperience = getExperiences()[0];
+const siteJsonLd = [
+    createWebSiteJsonLd(),
+    createPersonJsonLd(profile, contacts, currentExperience),
+];
 
 export default function App() {
     const element = useRoutes(routes);
@@ -33,6 +43,7 @@ export default function App() {
                 <meta property="og:image" content={siteOgImage} />
                 <meta name="twitter:card" content="summary" />
                 <meta name="twitter:image" content={siteOgImage} />
+                <JsonLd data={siteJsonLd} />
                 <LayoutWrapper
                     githubRepositoryUrl={githubRepositoryUrl}
                     commitHash={isPreviewEnvironment ? latestCommitHash : undefined}

@@ -1,29 +1,52 @@
 import React from "react";
-import ReactDOMServer from "react-dom/server";
+import { prerender } from "react-dom/static";
 import { StaticRouter } from "react-router";
 import App from "./App";
 import "./globals.css";
 
-export function render(url: string) {
-    const html = ReactDOMServer.renderToString(
-        <StaticRouter location={url}>
-            <App />
-        </StaticRouter>
+const prerenderRootMarker = '<template data-prerender-root=""></template>';
+
+const streamToString = async (stream: ReadableStream<Uint8Array>): Promise<string> => {
+    const chunks: string[] = [];
+    const decoder = new TextDecoder();
+    const reader = stream.getReader();
+
+    while (true) {
+        const { done, value } = await reader.read();
+        if (done) {
+            break;
+        }
+
+        chunks.push(decoder.decode(value, { stream: true }));
+    }
+
+    chunks.push(decoder.decode());
+
+    return chunks.join("");
+};
+
+export async function render(url: string) {
+    const { prelude } = await prerender(
+        <>
+            <template data-prerender-root="" />
+            <StaticRouter location={url}>
+                <App />
+            </StaticRouter>
+        </>
     );
 
-    // Extract <title> and <meta> tags from the rendered component tree so the
-    // prerender script can inject them into <head> of each static HTML file.
-    // React 19 hoists these on the client, but SSR renderToString puts them
-    // inline — crawlers need them in <head> to read metadata correctly.
-    const headTagPattern = /<title\b[^>]*>[\s\S]*?<\/title>|<meta\b[^>]*>/g;
-    const headTags = (html.match(headTagPattern) ?? []).join("\n");
+    const rendered = await streamToString(prelude);
+    const markerIndex = rendered.indexOf(prerenderRootMarker);
 
-    // Strip extracted tags from the root markup so the prerender script does
-    // not insert them a second time inside #root (they are injected into <head>
-    // via headTags instead).
-    const cleanedHtml = html.replace(headTagPattern, "");
+    if (markerIndex === -1) {
+        throw new Error("React prerender output did not include the root marker.");
+    }
 
-    return { html: cleanedHtml, headTags };
+    return {
+        headTags: rendered.slice(0, markerIndex),
+        html: rendered.slice(markerIndex + prerenderRootMarker.length),
+    };
 }
 
 export { getStaticRoutes } from "./routes";
+export { getAllArticles } from "@/core/articles";
