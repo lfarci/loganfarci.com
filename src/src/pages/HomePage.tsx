@@ -67,6 +67,7 @@ export default function HomePage() {
                     redirectPath="/articles"
                     redirectLabel="View all my articles"
                     emptyMessage="No featured articles found."
+                    reveal
                 />
             </ColumnContainer>
         </>

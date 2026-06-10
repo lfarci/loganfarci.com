@@ -12,6 +12,7 @@ interface ArticleListSectionProps {
     redirectPath?: string;
     redirectLabel?: string;
     emptyMessage?: string;
+    reveal?: boolean;
 }
 
 // Generic article list section usable across pages.
@@ -23,11 +24,12 @@ const ArticleListSection: React.FC<ArticleListSectionProps> = ({
     redirectPath,
     redirectLabel,
     emptyMessage = "No articles found.",
+    reveal = false,
 }) => {
     const visibleArticles = typeof limit === "number" ? articles.slice(0, limit) : articles;
 
     return (
-        <Section heading={heading} label={label} redirectPath={redirectPath} redirectLabel={redirectLabel}>
+        <Section heading={heading} label={label} redirectPath={redirectPath} redirectLabel={redirectLabel} reveal={reveal}>
             {visibleArticles.length === 0 ? (
                 <Text className="text-text-secondary">{emptyMessage}</Text>
             ) : (
