@@ -20,7 +20,7 @@ interface ArticleMetaProps {
 
 function ArticleMeta({ publishedAt, author, coauthoredWithAgent, tags }: Readonly<ArticleMetaProps>) {
     return (
-        <div className="mb-4 flex flex-row flex-wrap items-center gap-2">
+        <div className="mb-4 flex w-full flex-row flex-wrap items-center gap-2">
             <span className={typographyStyles.caption}>{formatDate(publishedAt)}</span>
             <Separator orientation="vertical" className="h-6 mx-2" />
             <span className={typographyStyles.caption}>{author}</span>
@@ -35,7 +35,7 @@ function ArticleMeta({ publishedAt, author, coauthoredWithAgent, tags }: Readonl
             {tags && tags.length > 0 && (
                 <>
                     <Separator orientation="vertical" className="h-6 mx-2" />
-                    <span className="flex flex-wrap gap-2 align-middle">
+                    <span className="flex min-w-0 flex-wrap gap-2 align-middle">
                         {tags.map((tag: string) => (
                             <IconTag key={tag}>{tag}</IconTag>
                         ))}
@@ -76,7 +76,7 @@ export default function ArticlePage() {
             <meta name="twitter:image" content={siteOgImage} />
             <JsonLd data={[breadcrumbJsonLd, createArticleJsonLd(article)]} />
             <article className="py-8 md:py-10">
-                <header>
+                <header className="w-full">
                     <Heading1 className="mb-5">{article.title}</Heading1>
                     <ArticleMeta
                         publishedAt={article.publishedAt}
@@ -84,7 +84,7 @@ export default function ArticlePage() {
                         coauthoredWithAgent={article.coauthoredWithAgent}
                         tags={article.tags}
                     />
-                    <Secondary className="max-w-[72ch] italic">{article.description}</Secondary>
+                    <Secondary className="italic">{article.description}</Secondary>
                 </header>
                 <Separator className="mt-6 mb-8 md:mb-10" />
                 <MarkdownContent content={article.content} measure />
