@@ -13,7 +13,7 @@ interface HeroSectionProps {
 const HeroSection: React.FC<HeroSectionProps> = ({ heading, description, image, actions }) => {
     const renderHeading = () => (typeof heading === "string" ? <Heading1>{heading}</Heading1> : heading);
     const renderDescription = () =>
-        typeof description === "string" ? <Text className="max-w-[42rem]">{description}</Text> : description ?? null;
+        typeof description === "string" ? <Text className="w-full">{description}</Text> : description ?? null;
 
     const buildImageClassName = () => {
         const baseClassName = "rounded-xl w-full md:w-1/3 mt-6 md:mt-0";

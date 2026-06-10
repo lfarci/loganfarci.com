@@ -16,6 +16,7 @@ import {
 import { mergeClassNames } from "@/core/mergeClassNames";
 import NewTabLink from "./NewTabLink";
 import CodeSnippet, { CodeSnippetProps } from "./CodeSnippet";
+import { contentWidthStyles } from "@/components/layout/contentWidthStyles";
 
 interface MarkdownContentProps {
     content: string;
@@ -41,7 +42,7 @@ function MarkdownCodeBlock({ children }: { children: React.ReactNode }) {
 }
 
 function createMarkdownComponents(measure: boolean): Components {
-    const measureClassName = measure ? "max-w-[72ch]" : undefined;
+    const measureClassName = measure ? contentWidthStyles.readable : undefined;
 
     return {
         h1: ({ children }) => <Heading2 className="mb-4 mt-10 first:mt-0">{children}</Heading2>,

@@ -27,7 +27,7 @@ const ArticleListCard: React.FC<ArticleListCardProps> = ({ article, showTags = f
         </CardHeader>
         {article.description && (
             <CardBody className="pt-1">
-                <Text className="max-w-[72ch]">{article.description}</Text>
+                <Text>{article.description}</Text>
             </CardBody>
         )}
 

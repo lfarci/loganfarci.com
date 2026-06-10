@@ -3,6 +3,8 @@ import { Link, useLocation } from "react-router";
 import NavBarEntry from "@/components/shared/NavBarEntry";
 import { Button } from "@/components/shared/primitives/Button";
 import ThemeToggle from "@/components/shared/ThemeToggle";
+import { contentWidthStyles } from "@/components/layout/contentWidthStyles";
+import { mergeClassNames } from "@/core/mergeClassNames";
 
 interface NavigationBarProps {
     title: string;
@@ -49,7 +51,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ title }) => {
 
     return (
         <header className="border-b border-border bg-background/90 backdrop-blur">
-            <nav className="mx-auto flex max-w-(--breakpoint-lg) flex-wrap items-center justify-between px-6 py-3 text-center">
+            <nav className={mergeClassNames(contentWidthStyles.pageContainer, "flex flex-wrap items-center justify-between py-3 text-center")}>
                 <div className="flex-1 text-left md:flex-none md:text-center">
                     <Link to="/" className="text-xl md:text-2xl font-thin heading-font cursor-pointer">
                         {title}
