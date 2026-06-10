@@ -1,5 +1,5 @@
 import React from "react";
-import ClientTooltip from "@/components/shared/ClientTooltip";
+import Tooltip from "@/components/shared/Tooltip";
 import NewTabLink from "@/components/shared/NewTabLink";
 import { BlueskyIcon, EmailIcon, GitHubIcon, LinkedInIcon } from "@/components/shared/icons";
 import type { Contact } from "@/types";
@@ -44,9 +44,9 @@ const ContactLinks: React.FC<ContactLinksProps> = ({ contacts, iconSize = 32, cl
                 const content = icon ?? <span className="text-text-tertiary font-medium">{contact.name}</span>;
 
                 return (
-                    <ClientTooltip key={contact.name} content={contact.name} placement="bottom">
+                    <Tooltip key={contact.name} content={contact.name} placement="bottom">
                         <NewTabLink url={contact.url} aria-label={contact.name}>{content}</NewTabLink>
-                    </ClientTooltip>
+                    </Tooltip>
                 );
             })}
         </div>

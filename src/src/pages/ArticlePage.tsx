@@ -3,7 +3,7 @@ import { getArticleBySlug } from "@/core/articles";
 import MarkdownContent from "@/components/shared/MarkdownContent";
 import { Heading1, Secondary } from "@/components/shared/typography";
 import { formatDate } from "@/core/date";
-import ClientTooltip from "@/components/shared/ClientTooltip";
+import Tooltip from "@/components/shared/Tooltip";
 import IconTag from "@/components/shared/IconTag";
 import { Separator } from "@/components/ui/separator";
 import { siteOgImage, siteUrl } from "@/core/site";
@@ -25,9 +25,9 @@ function ArticleMeta({ publishedAt, author, coauthoredWithAgent, tags }: Readonl
                 {coauthoredWithAgent && (
                     <>
                         <Separator orientation="vertical" className="h-6 mx-2" />
-                        <ClientTooltip content="This article was co-authored with help from an AI assistant.">
+                        <Tooltip content="This article was co-authored with help from an AI assistant.">
                             <Secondary>Co-authored with AI</Secondary>
-                        </ClientTooltip>
+                        </Tooltip>
                     </>
                 )}
                 {tags && tags.length > 0 && (

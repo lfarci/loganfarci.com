@@ -1,6 +1,6 @@
 import React from "react";
-import { ChevronDownIcon } from "./icons";
-import ClientTooltip from "./ClientTooltip";
+import Tooltip from "@/components/shared/Tooltip";
+import { ChevronDownIcon } from "@/components/shared/icons";
 
 interface ChevronToggleButtonProps {
     isExpanded: boolean;
@@ -12,7 +12,7 @@ function ChevronToggleButton({ isExpanded, onToggle }: ChevronToggleButtonProps)
 
     return (
         <div className="flex justify-center mt-2">
-            <ClientTooltip content={toggleText} placement="bottom">
+            <Tooltip content={toggleText} placement="bottom">
                 <button
                     onClick={onToggle}
                     type="button"
@@ -26,7 +26,7 @@ function ChevronToggleButton({ isExpanded, onToggle }: ChevronToggleButtonProps)
                         }`}
                     />
                 </button>
-            </ClientTooltip>
+            </Tooltip>
         </div>
     );
 }

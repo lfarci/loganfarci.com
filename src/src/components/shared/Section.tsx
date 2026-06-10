@@ -1,6 +1,6 @@
 import { Link } from "react-router";
-import ChevronRightIcon from "./icons/ChevronRightIcon";
-import ClientTooltip from "./ClientTooltip";
+import Tooltip from "@/components/shared/Tooltip";
+import ChevronRightIcon from "@/components/shared/icons/ChevronRightIcon";
 import { Heading2, Text } from "@/components/shared/typography";
 import { createId } from "@/core/string";
 
@@ -26,7 +26,7 @@ const Section: React.FC<SectionProps> = ({ heading, label, redirectPath, redirec
                 )}
                 <div className="flex items-center">
                     {redirectPath ? (
-                        <ClientTooltip content={toolTip} placement="right">
+                        <Tooltip content={toolTip} placement="right">
                             <Link
                                 to={redirectPath}
                                 className="flex items-center group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-sm"
@@ -37,7 +37,7 @@ const Section: React.FC<SectionProps> = ({ heading, label, redirectPath, redirec
                                     strokeWidth={2}
                                 />
                             </Link>
-                        </ClientTooltip>
+                        </Tooltip>
                     ) : (
                         <Heading2 className="mb-0">{heading}</Heading2>
                     )}

@@ -1,4 +1,5 @@
 import React from "react";
+import { cn } from "@/core/cn";
 import Card, { CardBody, CardFooter, CardHeader, CardMedia, CardSubtitle, CardTitle } from "./Card";
 import CardTitleWithTooltip from "./CardTitleWithTooltip";
 import { Secondary } from "@/components/shared/typography";
@@ -25,8 +26,6 @@ const mediaSizeClasses: Record<InfoCardMediaSize, string> = {
     medium: "w-16 h-16 md:w-20 md:h-20",
     large: "w-20 h-20 md:w-24 md:h-24",
 };
-
-const cn = (...classes: Array<string | undefined | null | false>) => classes.filter(Boolean).join(" ");
 
 const InfoCard: React.FC<InfoCardProps> = ({
     title,

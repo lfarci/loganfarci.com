@@ -1,5 +1,4 @@
 import React from "react";
-import { Text } from "@/components/shared/typography";
 import { Badge } from "@/components/ui/badge";
 
 interface TagIconProps {
@@ -33,7 +32,7 @@ const Tag: React.FC<TagProps> = ({ children, imageSrc = "", imageAlt = "" }) => 
     return (
         <Badge>
             {startContent}
-            <Text>{children}</Text>
+            {children}
         </Badge>
     );
 };
