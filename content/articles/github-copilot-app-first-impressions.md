@@ -16,6 +16,8 @@ This is not a full review. It is my early view after trying it in the flow of re
 
 The way I see it, the GitHub Copilot app is a dedicated place to manage coding sessions, repositories, GitHub issues, and pull requests with an agent in the loop. It brings together things that were already possible with Git, GitHub, VS Code, and Copilot Chat, but makes them feel like one product instead of a chain of manual steps.
 
+That GitHub integration is important. From the same place, I can follow the issue or pull request, quickly trigger VS Code when I need the full editor, and still use an embedded terminal when the task needs a command-line check. It feels like the central piece that was missing in my workflow is now filled. Everything I need is integrated and accessible from one place.
+
 GitHub describes the broader capability as [Copilot cloud agent](https://docs.github.com/en/copilot/concepts/agents/cloud-agent/about-cloud-agent), an agent that can work on tasks in the background, create branches, make changes, and open pull requests. The app experience is interesting to me because it turns that idea into something I can actually switch between and control during the day.
 
 That control matters. Agentic work is not just "ask once and wait". It is usually a loop: start a task, inspect the direction, adjust the prompt, review the diff, comment on a pull request, resolve some conflict, and continue. The app makes that loop much more visible.
