@@ -23,6 +23,8 @@ export default {
                     hover: "var(--color-accent-hover)",
                     subtle: "var(--color-accent-subtle)",
                     foreground: "var(--color-accent-foreground)",
+                    warm: "var(--color-accent-warm)",
+                    cool: "var(--color-accent-cool)",
                 },
                 highlight: {
                     DEFAULT: "var(--color-highlight)",
@@ -36,10 +38,16 @@ export default {
                     hover: "var(--color-brand-hover)",
                     light: "var(--color-brand-subtle)",
                     foreground: "var(--color-brand-foreground)",
+                    glow: "var(--color-primary-glow)",
                 },
                 secondary: {
                     DEFAULT: "var(--color-secondary)",
                     hover: "var(--color-secondary-hover)",
+                },
+                gradient: {
+                    start: "var(--color-gradient-start)",
+                    mid: "var(--color-gradient-mid)",
+                    end: "var(--color-gradient-end)",
                 },
 
                 // Text colors
@@ -86,19 +94,26 @@ export default {
                 "gradient-highlight": "var(--gradient-highlight)",
                 "gradient-surface": "var(--gradient-surface)",
                 "fade-surface": "var(--gradient-fade-surface)",
+                "page-grid": "var(--background-grid)",
+                "brand-gradient": "linear-gradient(135deg, var(--color-gradient-start), var(--color-gradient-mid) 52%, var(--color-gradient-end))",
             },
             boxShadow: {
+                soft: "var(--shadow-soft)",
                 card: "var(--shadow-card)",
                 "card-hover": "var(--shadow-card-hover)",
                 popover: "var(--shadow-popover)",
                 focus: "var(--shadow-focus)",
+                glow: "var(--shadow-glow)",
             },
             borderRadius: {
                 control: "var(--radius-control)",
                 card: "var(--radius-card)",
                 surface: "var(--radius-surface)",
             },
-        }
+            transitionTimingFunction: {
+                brand: "cubic-bezier(0.22, 1, 0.36, 1)",
+            },
+        },
     },
     darkMode: "class",
     plugins: [],

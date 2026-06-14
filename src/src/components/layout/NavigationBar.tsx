@@ -50,10 +50,13 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ title }) => {
     }, [isMenuOpen]);
 
     return (
-        <header className="border-b border-border bg-background/90 backdrop-blur">
+        <header className="border-b border-border-light/80 bg-background/75 backdrop-blur-xl">
             <nav className={mergeClassNames(contentWidthStyles.pageContainer, "flex flex-wrap items-center justify-between py-3 text-center")}>
                 <div className="flex-1 text-left md:flex-none md:text-center">
-                    <Link to="/" className="text-xl md:text-2xl font-thin heading-font cursor-pointer">
+                    <Link
+                        to="/"
+                        className="site-navigation-brand cursor-pointer bg-gradient-to-r from-text-primary via-primary to-accent-cool bg-clip-text text-xl font-extrabold tracking-tight text-transparent heading-font md:text-2xl"
+                    >
                         {title}
                     </Link>
                 </div>
@@ -64,7 +67,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ title }) => {
                     aria-label={isMenuOpen ? "Close menu" : "Open menu"}
                     aria-controls={menuId}
                     aria-expanded={isMenuOpen}
-                    className="md:hidden"
+                    className="md:hidden hover:border-accent-cool hover:bg-surface-elevated hover:shadow-glow"
                     onClick={handleMenuToggle}
                 >
                     <span className="sr-only">{isMenuOpen ? "Close menu" : "Open menu"}</span>
@@ -86,7 +89,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ title }) => {
                         />
                     </span>
                 </Button>
-                <div className="hidden md:flex items-center space-x-8">
+                <div className="hidden items-center space-x-8 md:flex">
                     {navigationItems.map((item) => (
                         <NavBarEntry key={item.url} url={item.url} className="hover:text-primary-hover transition-colors">
                             {item.label}
@@ -116,7 +119,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ title }) => {
                                     </NavBarEntry>
                                 </div>
                             ))}
-                            <div className="mt-4 flex justify-center border-t border-border pt-4">
+                            <div className="mt-4 flex justify-center border-t border-border-light pt-4">
                                 <ThemeToggle />
                             </div>
                         </div>

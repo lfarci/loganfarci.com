@@ -22,6 +22,17 @@
   body {
     color: var(--color-foreground);
     background: var(--color-background);
+    background-image: var(--background-page);
+    background-attachment: fixed;
+    min-height: 100vh;
+    font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    color: var(--color-text-inverse);
+    background: var(--color-selection);
   }
 
   h1,
@@ -57,8 +68,15 @@
     --color-primary: var(--color-brand);
     --color-primary-hover: var(--color-brand-hover);
     --color-primary-light: var(--color-brand-subtle);
+    --color-primary-glow: oklch(56% 0.19 258 / 0.28);
     --color-secondary: oklch(47% 0.032 262); /* graphite */
     --color-secondary-hover: oklch(36% 0.038 263); /* ink graphite */
+    --color-accent-warm: var(--color-highlight);
+    --color-accent-cool: var(--color-brand);
+    --color-gradient-start: var(--color-brand);
+    --color-gradient-mid: var(--color-accent);
+    --color-gradient-end: var(--color-highlight);
+    --color-selection: oklch(56% 0.19 258 / 0.82);
 
     /* Text semantic colors */
     --color-text-primary: oklch(23% 0.036 264); /* ink */
@@ -96,6 +114,11 @@
     --gradient-highlight: linear-gradient(135deg, var(--color-highlight) 0%, var(--color-accent) 100%);
     --gradient-surface: radial-gradient(circle at 12% 8%, var(--color-brand-subtle) 0%, transparent 36%), linear-gradient(180deg, var(--color-surface-elevated) 0%, var(--color-surface) 100%);
     --gradient-fade-surface: linear-gradient(90deg, transparent 0%, var(--color-surface) 100%);
+    --background-page:
+        radial-gradient(circle at 12% -10%, oklch(56% 0.19 258 / 0.2), transparent 34rem),
+        radial-gradient(circle at 92% 8%, oklch(74% 0.16 72 / 0.16), transparent 30rem),
+        linear-gradient(135deg, oklch(99% 0.006 255 / 0.94), oklch(96% 0.026 255 / 0.84));
+    --background-grid: linear-gradient(oklch(56% 0.19 258 / 0.06) 1px, transparent 1px), linear-gradient(90deg, oklch(56% 0.19 258 / 0.06) 1px, transparent 1px);
     --background-image-gradient-brand: var(--gradient-brand);
     --background-image-gradient-accent: var(--gradient-accent);
     --background-image-gradient-highlight: var(--gradient-highlight);
@@ -103,10 +126,12 @@
     --background-image-fade-surface: var(--gradient-fade-surface);
 
     /* Elevation and shape */
+    --shadow-soft: 0 18px 60px -40px oklch(18% 0.035 264 / 0.32);
     --shadow-card: 0 1px 2px 0 oklch(18% 0.035 264 / 0.08), 0 10px 28px -24px oklch(56% 0.19 258 / 0.34);
     --shadow-card-hover: 0 18px 36px -24px oklch(18% 0.035 264 / 0.24), 0 10px 22px -18px oklch(68% 0.14 188 / 0.28);
     --shadow-popover: 0 22px 48px -28px oklch(18% 0.035 264 / 0.32), 0 8px 20px -18px oklch(56% 0.19 258 / 0.28);
     --shadow-focus: 0 0 0 3px oklch(56% 0.19 258 / 0.24);
+    --shadow-glow: 0 0 0 1px oklch(56% 0.19 258 / 0.18), 0 18px 70px -34px var(--color-primary-glow);
     --radius-control: 0.625rem;
     --radius-card: 0.875rem;
     --radius-surface: 1.25rem;
@@ -134,6 +159,8 @@
     
     --color-secondary: oklch(73% 0.026 260); /* mist graphite */
     --color-secondary-hover: oklch(86% 0.016 258); /* bright graphite */
+    --color-primary-glow: oklch(72% 0.15 252 / 0.34);
+    --color-selection: oklch(77% 0.13 188 / 0.72);
     
     /* Text colors for dark mode */
     --color-text-primary: oklch(96.5% 0.01 255); /* moonlit text */
@@ -157,10 +184,17 @@
     --color-ring: var(--color-brand);
     --color-ring-muted: var(--color-border-strong);
 
+    --background-page:
+        radial-gradient(circle at 10% -10%, oklch(72% 0.15 252 / 0.2), transparent 34rem),
+        radial-gradient(circle at 88% 0%, oklch(80% 0.15 78 / 0.14), transparent 30rem),
+        linear-gradient(135deg, oklch(10% 0.012 264.8), oklch(14% 0.03 263));
+    --background-grid: linear-gradient(oklch(72% 0.15 252 / 0.08) 1px, transparent 1px), linear-gradient(90deg, oklch(72% 0.15 252 / 0.08) 1px, transparent 1px);
+    --shadow-soft: 0 18px 65px -42px oklch(0% 0 0 / 0.8);
     --shadow-card: 0 1px 2px 0 oklch(0% 0 0 / 0.36), 0 12px 30px -26px oklch(72% 0.15 252 / 0.5);
     --shadow-card-hover: 0 22px 42px -28px oklch(0% 0 0 / 0.68), 0 12px 28px -22px oklch(77% 0.13 188 / 0.34);
     --shadow-popover: 0 24px 58px -32px oklch(0% 0 0 / 0.72), 0 12px 28px -24px oklch(72% 0.15 252 / 0.36);
     --shadow-focus: 0 0 0 3px oklch(72% 0.15 252 / 0.32);
+    --shadow-glow: 0 0 0 1px oklch(77% 0.13 188 / 0.2), 0 18px 70px -36px var(--color-primary-glow);
 }
 
 /* Font utilities */
@@ -190,5 +224,13 @@
     *, ::before, ::after {
         transition-duration: 0.01ms !important;
         animation-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+@media (forced-colors: active), print {
+    .site-navigation-brand {
+        color: CanvasText !important;
+        background: none !important;
     }
 }

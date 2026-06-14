@@ -2,6 +2,7 @@ import { Link } from "react-router";
 import Tooltip from "@/components/shared/Tooltip";
 import ChevronRightIcon from "@/components/shared/icons/ChevronRightIcon";
 import { Heading2, Label, Text } from "@/components/shared/typography";
+import ScrollReveal from "@/components/motion/ScrollReveal";
 import { createId } from "@/core/string";
 
 interface SectionProps {
@@ -17,10 +18,10 @@ const Section: React.FC<SectionProps> = ({ heading, label, redirectPath, redirec
     const toolTip = <Text>{redirectLabel}</Text>;
 
     return (
-        <section id={id ?? createId(heading)} className="pt-8 md:pt-10 scroll-mt-24">
-            <div className="flex flex-col mb-5 md:mb-6">
+        <ScrollReveal as="section" id={id ?? createId(heading)} className="pt-10 scroll-mt-24">
+            <div className="flex flex-col mb-4">
                 {label && (
-                    <Label className="mb-2">
+                    <Label className="mb-2 tracking-[0.28em] text-accent-cool">
                         {label}
                     </Label>
                 )}
@@ -29,11 +30,11 @@ const Section: React.FC<SectionProps> = ({ heading, label, redirectPath, redirec
                         <Tooltip content={toolTip} placement="right">
                             <Link
                                 to={redirectPath}
-                                className="flex items-center group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-sm"
+                                className="group flex items-center rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                             >
                                 <Heading2 className="mb-0">{heading}</Heading2>
                                 <ChevronRightIcon
-                                    className="size-6 md:size-8 ml-2 shrink-0 self-center text-text-tertiary"
+                                    className="size-7 md:size-9 ml-2 shrink-0 self-center text-accent transition-transform duration-200 ease-brand group-hover:translate-x-1"
                                     strokeWidth={2}
                                 />
                             </Link>
@@ -44,7 +45,7 @@ const Section: React.FC<SectionProps> = ({ heading, label, redirectPath, redirec
                 </div>
             </div>
             {children}
-        </section>
+        </ScrollReveal>
     );
 };
 

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { MotionConfig } from "framer-motion";
 import { useRoutes } from "react-router";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import LayoutWrapper from "@/components/layout/LayoutWrapper";
@@ -35,23 +36,25 @@ export default function App() {
     }, []);
 
     return (
-        <ThemeProvider>
-            <TooltipProvider delayDuration={150}>
-                <Analytics />
-                {/* Site-wide OG/Twitter defaults — overridden per page */}
-                <meta property="og:site_name" content="Logan Farci" />
-                <meta property="og:locale" content="en_US" />
-                <meta property="og:image" content={siteOgImage} />
-                <meta name="twitter:card" content="summary" />
-                <meta name="twitter:image" content={siteOgImage} />
-                <JsonLd data={siteJsonLd} />
-                <LayoutWrapper
-                    githubRepositoryUrl={githubRepositoryUrl}
-                    commitHash={isPreviewEnvironment ? latestCommitHash : undefined}
-                >
-                    <PageTransition>{element}</PageTransition>
-                </LayoutWrapper>
-            </TooltipProvider>
-        </ThemeProvider>
+        <MotionConfig reducedMotion="user">
+            <ThemeProvider>
+                <TooltipProvider delayDuration={150}>
+                    <Analytics />
+                    {/* Site-wide OG/Twitter defaults — overridden per page */}
+                    <meta property="og:site_name" content="Logan Farci" />
+                    <meta property="og:locale" content="en_US" />
+                    <meta property="og:image" content={siteOgImage} />
+                    <meta name="twitter:card" content="summary" />
+                    <meta name="twitter:image" content={siteOgImage} />
+                    <JsonLd data={siteJsonLd} />
+                    <LayoutWrapper
+                        githubRepositoryUrl={githubRepositoryUrl}
+                        commitHash={isPreviewEnvironment ? latestCommitHash : undefined}
+                    >
+                        <PageTransition>{element}</PageTransition>
+                    </LayoutWrapper>
+                </TooltipProvider>
+            </ThemeProvider>
+        </MotionConfig>
     );
 }
