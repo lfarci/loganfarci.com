@@ -1,7 +1,8 @@
 import React from "react";
+import { motion } from "framer-motion";
 import Tooltip from "@/components/shared/Tooltip";
-import NewTabLink from "@/components/shared/NewTabLink";
 import { BlueskyIcon, EmailIcon, GitHubIcon, LinkedInIcon } from "@/components/shared/icons";
+import { hoverLift, pressTap } from "@/core/animations";
 import type { Contact } from "@/types";
 
 type SupportedContactIcon = "bluesky" | "email" | "github" | "linkedin";
@@ -29,6 +30,9 @@ const renderContactIcon = (icon: Contact["icon"], size: number) => {
     }
 };
 
+const contactButtonClassName =
+    "group relative inline-flex size-12 items-center justify-center overflow-hidden rounded-2xl border border-border-light/80 bg-surface/85 text-text-secondary shadow-soft ring-1 ring-white/35 backdrop-blur transition-all duration-300 ease-brand hover:-translate-y-0.5 hover:border-transparent hover:text-text-inverse hover:shadow-glow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background";
+
 // Reusable row of social/contact links rendered as icon buttons with tooltips.
 const ContactLinks: React.FC<ContactLinksProps> = ({ contacts, iconSize = 32, className = "" }) => {
     if (!contacts || contacts.length === 0) {
@@ -45,13 +49,22 @@ const ContactLinks: React.FC<ContactLinksProps> = ({ contacts, iconSize = 32, cl
 
                 return (
                     <Tooltip key={contact.name} content={contact.name} placement="bottom">
-                        <NewTabLink
-                            url={contact.url}
+                        <motion.a
+                            href={contact.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
                             aria-label={contact.name}
-                            className="inline-flex size-12 items-center justify-center rounded-full border border-border-light bg-surface/80 text-text-secondary shadow-soft backdrop-blur transition-all duration-300 ease-brand hover:border-accent-cool hover:text-primary hover:shadow-glow"
+                            whileHover={hoverLift}
+                            whileTap={pressTap}
+                            className={contactButtonClassName}
                         >
-                            {content}
-                        </NewTabLink>
+                            <span
+                                aria-hidden="true"
+                                className="absolute inset-0 bg-brand-gradient opacity-0 transition-opacity duration-300 ease-brand group-hover:opacity-100"
+                            />
+                            <span aria-hidden="true" className="absolute inset-x-3 top-0 h-px bg-white/70" />
+                            <span className="relative z-10">{content}</span>
+                        </motion.a>
                     </Tooltip>
                 );
             })}
