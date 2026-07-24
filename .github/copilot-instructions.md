@@ -5,6 +5,11 @@
 
 This repository is a Vite + React (TypeScript) web app with SSR prerendering, styled with Tailwind CSS and local shadcn-style Radix primitives, deployed as a static web app on Azure via Terraform. It is designed for maintainability, extensibility, and cloud-native best practices.
 
+The [`docs/specs/`](../docs/specs/README.md) folder is the source of truth for
+architecture, quality bars, data contracts, content style, non-goals, and the product
+vision. This file stays focused on the directory layout, developer workflows, and
+conventions; defer to the specs for detailed design decisions.
+
 ## Project Architecture
 
 ```
@@ -69,31 +74,22 @@ All commands must be run from the `src/` directory (the Vite project root).
 
 ## Coding Conventions
 
-- Use **TypeScript** for all new code.
-- Use **Tailwind CSS** for styling; extend theme in `src/tailwind.config.ts`.
-- Use the alias `@/` for imports from `src/src/` and `@content/` for imports from `content/` (see `src/tsconfig.json`).
-- Write clear, maintainable code with descriptive comments where needed.
+The quality bar (TypeScript strictness, Tailwind + semantic tokens, path aliases,
+testing, linting) is owned by [`docs/specs/quality-bars.md`](../docs/specs/quality-bars.md)
+and [`docs/specs/architecture.md`](../docs/specs/architecture.md). In short: TypeScript
+for all code, Tailwind for styling (extend the theme in `src/tailwind.config.ts`), and
+the `@/` (→ `src/src/`) and `@content/` (→ `content/`) aliases. Write clear, maintainable
+code with comments only where they clarify.
 
 ## Patterns and Integration
 
-- **Routing:**
-  - Client-side routing via React Router, configured in `src/src/routes.tsx`.
-- **SSR + Prerendering:**
-  - SSR entry point: `src/src/entry-server.tsx`.
-  - Static HTML is prerendered for all routes via `src/scripts/prerender.mjs`.
-- **Markdown Articles:**
-  - Articles are stored as `.md` files in `content/articles/`.
-  - Loaded at build time via the custom `vite-plugin-markdown` plugin (`src/plugins/vite-plugin-markdown.ts`).
-  - Core article utilities are in `src/src/core/articles.ts`.
+Routing, the SSR + prerender contract, and the markdown/JSON content pipeline are
+documented authoritatively in [`docs/specs/architecture.md`](../docs/specs/architecture.md).
+Data model shapes for `content/data/*.json` and `src/src/types/` live in
+[`docs/specs/data-contracts.md`](../docs/specs/data-contracts.md).
+
 - **Terminal UI:**
   - Located in `src/src/components/terminal/`, implements a command pattern via `src/src/core/Commands.ts` for extensible command handling.
-- **Content & Data:**
-  - Article markdown files live in `content/articles/`.
-  - Structured data (certifications, experiences, skills, etc.) lives in `content/data/` as JSON files.
-  - Images and icons are in `src/public/images/`.
-- **Data Modeling:**
-  - TypeScript types for all data models are in `src/src/types/`.
-  - Certifications, experience, and skills are modeled as typed objects for easy rendering and extension.
 
 ## Azure-Specific Guidance
 
@@ -106,6 +102,7 @@ All commands must be run from the `src/` directory (the Vite project root).
 ## Additional Notes
 
 - For onboarding, see `README.md` for setup instructions and project details.
+- For architecture, quality bars, data contracts, content style, non-goals, and the vision, see [`docs/specs/`](../docs/specs/README.md).
 - Use the provided scripts in `scripts/` for environment management.
 - Keep dependencies up to date and review for security regularly.
 
