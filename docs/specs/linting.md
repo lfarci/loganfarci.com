@@ -92,13 +92,20 @@ workflow itself) — so unrelated changes don't pay the cost.
   promises, misused type-only constructs, and similar bugs that need type information.
 - **Core JS hygiene** — the recommended set (no unused vars where configured, no
   unreachable code, etc.).
+- **Accessible images** — the `jsx-a11y` plugin's [`alt-text`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/main/docs/rules/alt-text.md)
+  rule runs as `error` on `**/*.tsx`, enforcing the "every image MUST have meaningful alt
+  text" contract in [accessibility.md](./accessibility.md). Only `alt-text` is enabled (not
+  the plugin's full `recommended` set) to keep the guardrail scoped to a documented
+  convention without introducing unrelated a11y noise. It landed clean at `error` — every
+  existing `<img>` already carries `alt`.
 - **TypeScript strictness is enforced by the compiler**, not ESLint: `strict`,
   `isolatedModules`, `resolveJsonModule`, and no implicit `any` come from
   [`tsconfig.json`](../../src/tsconfig.json) and `npm run build`. Lint and `tsc` are
   complementary gates; see [quality-bars.md](./quality-bars.md#typescript-strictness).
 
-There are **no project-specific custom rules enabled yet** — the config today is the
-recommended sets plus Prettier compatibility. The section below defines how to add them.
+Beyond the recommended sets and Prettier compatibility, the only project-specific
+guardrail enabled today is `jsx-a11y/alt-text`. The section below defines how to add
+more.
 
 ## Custom rules & guardrails
 
@@ -161,8 +168,9 @@ export default tseslint.config(
 ### Candidate guardrails
 
 These conventions from other specs are the natural first candidates to enforce in lint.
-They are **not enabled today** (this list is the backlog, not current state); each names
-the spec it would enforce and the likely mechanism:
+Each names the spec it would enforce and the likely mechanism; entries marked ✅ are
+already enabled (see [What it enforces today](#what-it-enforces-today)), the rest remain
+backlog:
 
 - **Prefer `@/` and `@content/` aliases** over deep relative imports —
   [quality-bars.md](./quality-bars.md#typescript-strictness), via `no-restricted-imports`
@@ -177,8 +185,8 @@ the spec it would enforce and the likely mechanism:
 - **Keep the client bundle lean** — restrict importing heavy dependencies (e.g. `mermaid`)
   outside the modules meant to load them, via `no-restricted-imports`
   ([non-goals.md](./non-goals.md)).
-- **Images need `alt`** — the `jsx-a11y` plugin's `alt-text` rule, complementing the
-  data-contract requirement in [accessibility.md](./accessibility.md).
+- **Images need `alt`** — **✅ enabled** (`jsx-a11y/alt-text`); see
+  [What it enforces today](#what-it-enforces-today).
 
 ## Rules for changing the lint setup
 
