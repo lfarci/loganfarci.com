@@ -103,10 +103,10 @@ and machines.
 - **Themes.** Light and dark theme support driven by user/system preference, built on
   the existing Tailwind semantic tokens (no second styling system). A manual toggle
   ships today; see [accessibility.md](./accessibility.md#themes-and-contrast).
-- **Internationalization.** Support for multiple languages over time. Keep it simple:
-  content and UI strings should be translatable without a heavy i18n framework, and
-  prerendering must still produce static pages per locale. Full plan in
-  [i18n.md](./i18n.md).
+- **Internationalization.** Available in **English, French, and Dutch** for now, with
+  room to add more. Keep it simple: content and UI strings should be translatable
+  without a heavy i18n framework, and prerendering must still produce static pages per
+  locale. Full plan in [i18n.md](./i18n.md).
 
 ## Accessibility ambitions
 
