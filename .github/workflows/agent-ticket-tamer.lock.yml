@@ -313,7 +313,7 @@ jobs:
           cat "${RUNNER_TEMP}/gh-aw/prompts/github_mcp_tools_with_safeoutputs_prompt.md"
           cat << 'GH_AW_PROMPT_a5c17a039b73a3bf_EOF'
           </system>
-          {{#runtime-import .github/workflows/shared/ticket-triage.md}}
+          {{#runtime-import .github/shared/ticket-triage.md}}
           {{#runtime-import .github/workflows/agent-ticket-tamer.md}}
           GH_AW_PROMPT_a5c17a039b73a3bf_EOF
           } > "$GH_AW_PROMPT"
