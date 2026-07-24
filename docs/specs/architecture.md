@@ -2,7 +2,8 @@
 
 How the site is built and rendered. Verified against the code referenced inline.
 See [`.github/copilot-instructions.md`](../../.github/copilot-instructions.md) for
-the full directory layout and developer workflows.
+the full directory layout and developer workflows. This spec covers the **current**
+state; see [vision.md](./vision.md) for planned direction and the target sitemap.
 
 ## Stack
 

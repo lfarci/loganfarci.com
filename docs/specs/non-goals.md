@@ -4,6 +4,9 @@ What this project is **not**. An automated code scout or fix agent should not pr
 changes that pull the site toward any of these — they are out of scope by design.
 When a proposal conflicts with this list, treat it as out of scope.
 
+For what the site *is* meant to grow into (resume, projects, themes, i18n), see
+[vision.md](./vision.md). Those planned features are in scope; the items below are not.
+
 ## Product non-goals
 
 - **Not a CMS or multi-author blog platform.** Content is authored as files in

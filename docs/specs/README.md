@@ -9,10 +9,15 @@ is and the bar it holds. They are intended to ground automated workflows (PR
 reviewers, discover → fix → review pipelines, content agents). They are **short by
 design** and link to existing docs and code rather than duplicating them.
 
+Most specs describe the **current state** of the site. [vision.md](./vision.md) is
+the exception: it captures the north star and planned direction, since the site is
+still a work in progress.
+
 ## The specs
 
 | Spec | Purpose |
 | --- | --- |
+| [vision.md](./vision.md) | The north star: core principles, planned sections, accessibility/SEO ambitions, and the target sitemap. |
 | [architecture.md](./architecture.md) | Routes and page responsibilities, SSR + prerender contract, and the content pipeline. |
 | [quality-bars.md](./quality-bars.md) | The rubric a reviewer agent checks against: accessibility, performance, TS strictness, testing, linting. |
 | [data-contracts.md](./data-contracts.md) | Shape and required fields of each `content/data/*.json` file, mirroring `src/src/types/`. |
