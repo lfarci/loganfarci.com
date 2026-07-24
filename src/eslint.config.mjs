@@ -73,16 +73,40 @@ export default tseslint.config(
                     ],
                 },
             ],
-            // `no-restricted-imports` only visits static imports, so guard deep
-            // dynamic `import("../../…")` expressions with a syntax selector too.
+            // Two guardrails share this single `no-restricted-syntax` rule (ESLint only
+            // allows one severity per rule on a given file):
+            //   1. Component conventions (docs/specs/quality-bars.md#component-conventions):
+            //      don't reimplement a shared primitive's behavior with a raw JSX element.
+            //   2. `no-restricted-imports` only visits static imports, so also flag deep
+            //      dynamic `import("../../…")` expressions here.
+            // It stays `warn` because the raw-element guardrail still has pre-existing
+            // violations to migrate; deep *static* imports are kept at `error` by the
+            // `no-restricted-imports` rule above.
             "no-restricted-syntax": [
-                "error",
+                "warn",
+                {
+                    selector: "JSXOpeningElement[name.name='button']",
+                    message:
+                        "Use the Button primitive (@/components/shared/primitives) instead of a raw <button>; don't reimplement its behavior by hand.",
+                },
+                {
+                    selector: "JSXOpeningElement[name.name='hr']",
+                    message:
+                        "Use the Separator primitive (@/components/shared/primitives) instead of a raw <hr>; don't reimplement its behavior by hand.",
+                },
                 {
                     selector: "ImportExpression > Literal[value=/^\\.\\.\\/\\.\\.\\//]",
                     message:
                         "Avoid deep relative imports. Use the '@/' (src) or '@content/' (content) path aliases instead.",
                 },
             ],
+        },
+    },
+    {
+        // The primitive source files legitimately render these raw elements.
+        files: ["src/components/shared/primitives/**/*.tsx"],
+        rules: {
+            "no-restricted-syntax": "off",
         },
     },
     {

@@ -94,9 +94,12 @@ workflow itself) — so unrelated changes don't pay the cost.
   unreachable code, etc.).
 - **Prefer `@/` and `@content/` aliases over deep relative imports** — a
   `no-restricted-imports` rule (scoped to `**/*.{ts,tsx}`) blocks `../../` and deeper
-  relative import paths, and a companion `no-restricted-syntax` selector catches the same
-  depth in dynamic `import("../../…")` expressions, pointing authors to the `@/`
-  (→ `src/src/`) and `@content/` (→ `content/`) aliases. Enforces the alias convention in
+  relative **static** import paths at `error`, and a companion `no-restricted-syntax`
+  selector catches the same depth in dynamic `import("../../…")` expressions, pointing
+  authors to the `@/` (→ `src/src/`) and `@content/` (→ `content/`) aliases. The dynamic
+  selector shares the `no-restricted-syntax` rule with the raw-primitive guardrail below,
+  so it runs at that rule's `warn` level; the static-import block keeps deep imports at
+  `error`. Enforces the alias convention in
   [quality-bars.md](./quality-bars.md#typescript-strictness).
 - **Bundle-weight guardrail for `mermaid`** — `no-restricted-imports` errors when any app
   file imports `mermaid` (or a `mermaid/*` subpath). Only
@@ -118,6 +121,16 @@ workflow itself) — so unrelated changes don't pay the cost.
   `isolatedModules`, `resolveJsonModule`, and no implicit `any` come from
   [`tsconfig.json`](../../src/tsconfig.json) and `npm run build`. Lint and `tsc` are
   complementary gates; see [quality-bars.md](./quality-bars.md#typescript-strictness).
+- **Prefer shared primitives over hand-rolled elements** — a `no-restricted-syntax` rule
+  scoped to `**/*.tsx` flags raw `<button>` (use the `Button` primitive) and raw `<hr>`
+  (use the `Separator` primitive), pointing contributors at
+  `src/src/components/shared/primitives/`. This enforces the
+  [component conventions](./quality-bars.md#component-conventions) rule that interactive
+  behavior **MUST NOT** be reimplemented by hand. The primitive source files
+  (`src/src/components/shared/primitives/**`) are exempt — they legitimately render the raw
+  elements. The rule currently runs at **`warn`** while a few pre-existing violations are
+  worked off; it will be promoted to **`error`** once the codebase is clean (tracked by
+  [issue #260](https://github.com/lfarci/loganfarci.com/issues/260)).
 - **No hardcoded colors** — a local custom rule (`local/no-hardcoded-colors`, scoped to
   `**/*.tsx`) flags raw color literals — hex (`#rgb`/`#rrggbb`), `rgb()`/`rgba()`,
   `hsl()`/`hsla()`, `hwb()`, `lab()`/`lch()`, `oklab()`/`oklch()`, and `color()` — in
@@ -134,8 +147,9 @@ workflow itself) — so unrelated changes don't pay the cost.
 Beyond the recommended sets and Prettier compatibility, a small number of project-specific
 guardrails are enabled today: the alias-import `no-restricted-imports`/`no-restricted-syntax`
 guardrail, the `mermaid` `no-restricted-imports` rule, `jsx-a11y/alt-text`,
-and the local `no-hardcoded-colors` rule (see the `local` plugin in
-[`eslint.config.mjs`](../../src/eslint.config.mjs)). The section below defines how to add
+the `no-restricted-syntax` primitives guardrail, and the local `no-hardcoded-colors` rule
+(see the `local` plugin in [`eslint.config.mjs`](../../src/eslint.config.mjs)). The section
+below defines how to add
 more.
 
 ## Custom rules & guardrails
@@ -203,9 +217,9 @@ Each names the spec it would enforce and the likely mechanism; entries marked �
 already enabled (see [What it enforces today](#what-it-enforces-today)), the rest remain
 backlog:
 
-- **Don't reimplement Radix primitive behavior by hand** —
-  [quality-bars.md](./quality-bars.md#component-conventions), via `no-restricted-syntax`
-  on the raw elements a primitive already covers.
+- **Don't reimplement Radix primitive behavior by hand** — **✅ enabled**
+  (`no-restricted-syntax` on raw `<button>`/`<hr>`); see
+  [What it enforces today](#what-it-enforces-today).
 - **Keep the client bundle lean** — **✅ enabled** for `mermaid` (`no-restricted-imports`);
   see [What it enforces today](#what-it-enforces-today). The same mechanism can be extended
   to other heavy dependencies outside the modules meant to load them as they appear
