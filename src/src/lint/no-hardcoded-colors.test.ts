@@ -31,6 +31,10 @@ ruleTester.run("no-hardcoded-colors", rule, {
         { code: `const E = () => <div className="scroll-mt-[#header]" />;` },
         // Colors outside className/style are out of scope.
         { code: `const F = () => <svg fill="#ff0000" />;` },
+        // Class-factory calls with only semantic tokens are fine.
+        { code: `const v = cva("bg-brand text-brand-foreground", { variants: {} });` },
+        // The `oklch` colorspace keyword (not the function form) is not a color literal.
+        { code: `const G = () => <div className="[color-mix(in_oklch,var(--a),var(--b))]" />;` },
     ],
     invalid: [
         {
@@ -72,6 +76,33 @@ ruleTester.run("no-hardcoded-colors", rule, {
         {
             code: `const J = () => <div className={cn("bg-[#000]", "text-[#fff]")} />;`,
             errors: [{ messageId: "hardcodedColor" }, { messageId: "hardcodedColor" }],
+        },
+        // Modern CSS color functions, incl. the repo's primary notation oklch().
+        {
+            code: `const K = () => <div className="bg-[oklch(50%_0.2_20)]" />;`,
+            errors: [{ messageId: "hardcodedColor" }],
+        },
+        {
+            code: `const L = () => <div style={{ color: "oklch(50% 0.2 20)" }} />;`,
+            errors: [{ messageId: "hardcodedColor" }],
+        },
+        {
+            code: `const M = () => <div style={{ color: "hwb(194 0% 0%)" }} />;`,
+            errors: [{ messageId: "hardcodedColor" }],
+        },
+        // Class factories used outside a JSX attribute are still scanned.
+        {
+            code: `const variants = cva("base", { variants: { danger: { on: "bg-[#f00]" } } });`,
+            errors: [{ messageId: "hardcodedColor" }],
+        },
+        {
+            code: `const classes = mergeClassNames("bg-[oklch(60%_0.1_10)]", "p-2");`,
+            errors: [{ messageId: "hardcodedColor" }],
+        },
+        // A factory call inside a className attribute is reported exactly once (deduped).
+        {
+            code: `const N = () => <div className={mergeClassNames("bg-[#fff]")} />;`,
+            errors: [{ messageId: "hardcodedColor" }],
         },
     ],
 });

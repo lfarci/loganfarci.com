@@ -12,8 +12,18 @@
 // `#about-me` (whose first characters are not all hex digits anyway).
 const HEX_COLOR = /#(?:[0-9a-fA-F]{8}|[0-9a-fA-F]{6}|[0-9a-fA-F]{4}|[0-9a-fA-F]{3})(?![0-9a-fA-F])/;
 
-// Functional color notations: rgb(), rgba(), hsl(), hsla().
-const FUNCTIONAL_COLOR = /\b(?:rgb|hsl)a?\(/i;
+// Functional color notations (CSS Color 4): rgb()/rgba(), hsl()/hsla(), hwb(),
+// lab()/lch(), oklab()/oklch(), and color(). The trailing `\(` means the CSS
+// colorspace *keyword* form (e.g. `in oklch`) and the English word "color" are
+// not matched — only the function-call form is. `oklch()` in particular is this
+// repository's primary color notation (see src/src/globals.css).
+const FUNCTIONAL_COLOR = /\b(?:rgb|hsl|hwb|(?:ok)?lab|(?:ok)?lch|color)a?\(/i;
+
+// Class-building helpers whose string arguments are class names. A hardcoded
+// color passed to any of these bypasses the JSXAttribute check (the attribute
+// value is then just an identifier), so they are scanned wherever they are
+// called — e.g. `const variants = cva("bg-[#fff]", …)`.
+const CLASS_FACTORY_NAMES = new Set(["cva", "cn", "clsx", "cx", "tv", "twMerge", "twJoin", "mergeClassNames"]);
 
 /**
  * Recursively collect every string `Literal` and template-literal
@@ -73,6 +83,38 @@ const rule = {
         },
     },
     create(context) {
+        // Dedup by string-node identity so a factory call nested inside a
+        // className/style attribute isn't reported twice.
+        /** @type {Set<object>} */
+        const reported = new Set();
+
+        /**
+         * @param {unknown} valueNode
+         */
+        function reportColorsIn(valueNode) {
+            /** @type {Array<{ text: string, node: object }>} */
+            const strings = [];
+            collectStrings(valueNode, strings);
+
+            for (const { text, node: stringNode } of strings) {
+                if (reported.has(stringNode)) {
+                    continue;
+                }
+                const hexMatch = text.match(HEX_COLOR);
+                const fnMatch = text.match(FUNCTIONAL_COLOR);
+                if (!hexMatch && !fnMatch) {
+                    continue;
+                }
+                reported.add(stringNode);
+                const color = (hexMatch ?? fnMatch)?.[0] ?? text;
+                context.report({
+                    node: /** @type {import("eslint").Rule.Node} */ (stringNode),
+                    messageId: "hardcodedColor",
+                    data: { color },
+                });
+            }
+        }
+
         return {
             JSXAttribute(node) {
                 const nameNode = node.name;
@@ -85,23 +127,21 @@ const rule = {
                 if (!node.value) {
                     return;
                 }
-
-                /** @type {Array<{ text: string, node: object }>} */
-                const strings = [];
-                collectStrings(node.value, strings);
-
-                for (const { text, node: stringNode } of strings) {
-                    const hexMatch = text.match(HEX_COLOR);
-                    const fnMatch = text.match(FUNCTIONAL_COLOR);
-                    if (!hexMatch && !fnMatch) {
-                        continue;
-                    }
-                    const color = (hexMatch ?? fnMatch)?.[0] ?? text;
-                    context.report({
-                        node: /** @type {import("eslint").Rule.Node} */ (stringNode),
-                        messageId: "hardcodedColor",
-                        data: { color },
-                    });
+                reportColorsIn(node.value);
+            },
+            CallExpression(node) {
+                const callee = node.callee;
+                let name = null;
+                if (callee.type === "Identifier") {
+                    name = callee.name;
+                } else if (callee.type === "MemberExpression" && callee.property.type === "Identifier") {
+                    name = callee.property.name;
+                }
+                if (!name || !CLASS_FACTORY_NAMES.has(name)) {
+                    return;
+                }
+                for (const arg of node.arguments) {
+                    reportColorsIn(arg);
                 }
             },
         };

@@ -98,8 +98,11 @@ workflow itself) — so unrelated changes don't pay the cost.
   complementary gates; see [quality-bars.md](./quality-bars.md#typescript-strictness).
 - **No hardcoded colors** — a local custom rule (`local/no-hardcoded-colors`, scoped to
   `**/*.tsx`) flags raw color literals — hex (`#rgb`/`#rrggbb`), `rgb()`/`rgba()`,
-  `hsl()`/`hsla()` — in `className` strings and inline `style` values, so colors come from
-  semantic Tailwind tokens. This enforces the accessibility gate in
+  `hsl()`/`hsla()`, `hwb()`, `lab()`/`lch()`, `oklab()`/`oklch()`, and `color()` — in
+  `className` strings and inline `style` values, plus the string arguments of class-builder
+  calls (`cva`, `mergeClassNames`/`cn`, `clsx`, …) wherever they are called, so colors come
+  from semantic Tailwind tokens. `oklch()` is the repo's primary color notation, so it is
+  covered explicitly. This enforces the accessibility gate in
   [quality-bars.md](./quality-bars.md#accessibility--target-wcag-21-aa) and
   [accessibility.md](./accessibility.md). The rule lives at
   [`src/src/lint/no-hardcoded-colors.js`](../../src/src/lint/no-hardcoded-colors.js) with a
