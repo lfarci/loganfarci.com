@@ -36,5 +36,22 @@ export default tseslint.config(
         },
     },
     ...typeCheckedConfigs,
+    {
+        files: ["**/*.{ts,tsx}"],
+        rules: {
+            "no-restricted-imports": [
+                "error",
+                {
+                    patterns: [
+                        {
+                            group: ["../../*", "../../../**"],
+                            message:
+                                "Avoid deep relative imports. Use the '@/' (src) or '@content/' (content) path aliases instead.",
+                        },
+                    ],
+                },
+            ],
+        },
+    },
     prettierConfig,
 );

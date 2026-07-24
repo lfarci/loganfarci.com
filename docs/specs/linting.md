@@ -92,13 +92,20 @@ workflow itself) — so unrelated changes don't pay the cost.
   promises, misused type-only constructs, and similar bugs that need type information.
 - **Core JS hygiene** — the recommended set (no unused vars where configured, no
   unreachable code, etc.).
+- **Prefer `@/` and `@content/` aliases over deep relative imports** — a
+  `no-restricted-imports` rule (scoped to `**/*.{ts,tsx}`) blocks `../../` and deeper
+  relative import paths, pointing authors to the `@/` (→ `src/src/`) and `@content/`
+  (→ `content/`) aliases. Enforces the alias convention in
+  [quality-bars.md](./quality-bars.md#typescript-strictness).
 - **TypeScript strictness is enforced by the compiler**, not ESLint: `strict`,
   `isolatedModules`, `resolveJsonModule`, and no implicit `any` come from
   [`tsconfig.json`](../../src/tsconfig.json) and `npm run build`. Lint and `tsc` are
   complementary gates; see [quality-bars.md](./quality-bars.md#typescript-strictness).
 
-There are **no project-specific custom rules enabled yet** — the config today is the
-recommended sets plus Prettier compatibility. The section below defines how to add them.
+There are **no local custom rules (project-specific `local/*` plugins) enabled yet** —
+the config today is the recommended sets, the alias-import guardrail above (a configured
+core rule), plus Prettier compatibility. The section below defines how to add local
+rules.
 
 ## Custom rules & guardrails
 
@@ -164,9 +171,6 @@ These conventions from other specs are the natural first candidates to enforce i
 They are **not enabled today** (this list is the backlog, not current state); each names
 the spec it would enforce and the likely mechanism:
 
-- **Prefer `@/` and `@content/` aliases** over deep relative imports —
-  [quality-bars.md](./quality-bars.md#typescript-strictness), via `no-restricted-imports`
-  patterns on `../../`.
 - **No hardcoded colors; use semantic Tailwind tokens** —
   [quality-bars.md](./quality-bars.md#accessibility--target-wcag-21-aa) and
   [accessibility.md](./accessibility.md), via a local rule flagging raw hex/`rgb()` in
