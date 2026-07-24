@@ -9,8 +9,11 @@ on:
   issues:
     types: [opened, edited, labeled]
 
-# Only proceed for issues that carry the `task` label.
-if: ${{ contains(github.event.issue.labels.*.name, 'task') }}
+# Only proceed for issues that carry the `task` label. When triggered by a `labeled`
+# event, only react to the label that adds `task` — otherwise labels this workflow
+# applies itself (e.g. `needs-clarification`, `agent:working`) would retrigger a full
+# run and post duplicate comments.
+if: ${{ contains(github.event.issue.labels.*.name, 'task') && (github.event.action != 'labeled' || github.event.label.name == 'task') }}
 
 permissions:
   contents: read
@@ -35,6 +38,11 @@ safe-outputs:
   add-labels:
     allowed: [needs-clarification, agent:working]
     max: 2
+  # Allow clearing the clarification flag once an edited issue becomes ready and is
+  # handed off, so it is not left marked both `needs-clarification` and `agent:working`.
+  remove-labels:
+    allowed: [needs-clarification]
+    max: 1
 ---
 
 {{#runtime-import shared/ticket-triage.md}}

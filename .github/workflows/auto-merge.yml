@@ -28,6 +28,34 @@ jobs:
       startsWith(github.event.pull_request.user.login, 'copilot')
     runs-on: ubuntu-latest
     steps:
+      # Guard: `gh pr merge --auto` only waits for checks that branch protection
+      # actually requires. If protection is missing or misconfigured, --auto would
+      # merge immediately with no gate. Verify all four expected contexts are required
+      # before scheduling the merge, and fail loudly otherwise.
+      - name: Verify required status checks are configured
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          BASE_REF: ${{ github.event.pull_request.base.ref }}
+        run: |
+          expected=("Run linter" "Run unit tests" "spec-sheriff" "coverage-canary")
+          contexts="$(gh api "repos/${REPO}/branches/${BASE_REF}/protection/required_status_checks" \
+            --jq '.checks[].context' 2>/dev/null || true)"
+          if [ -z "$contexts" ]; then
+            echo "::error::No required status checks are configured on '${BASE_REF}'. Refusing to enable auto-merge. Configure branch protection first (see docs/agentic-workflows.md)."
+            exit 1
+          fi
+          missing=()
+          for c in "${expected[@]}"; do
+            if ! printf '%s\n' "$contexts" | grep -qxF "$c"; then
+              missing+=("$c")
+            fi
+          done
+          if [ "${#missing[@]}" -ne 0 ]; then
+            echo "::error::Missing required status checks on '${BASE_REF}': ${missing[*]}. Refusing to enable auto-merge until all four gates are required."
+            exit 1
+          fi
+          echo "All required status checks are configured on '${BASE_REF}'."
       - name: Enable auto-merge (squash)
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

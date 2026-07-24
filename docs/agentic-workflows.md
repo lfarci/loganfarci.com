@@ -128,6 +128,14 @@ gh api -X PUT repos/lfarci/loganfarci.com/branches/main/protection \
   -F 'restrictions=null'
 ```
 
+> **Fork PRs:** the Spec Sheriff and Coverage Canary are gh-aw workflows that, for
+> security, do not run on pull requests from forks. If you require `spec-sheriff` and
+> `coverage-canary` as above, PRs opened from a fork can never produce those checks and
+> will stay unmergeable. This repo's automated flow runs on same-repo branches (the
+> Copilot coding agent pushes to a branch here), so that is fine. If you later need to
+> accept fork PRs, drop those two from the required set (or merge them manually) and keep
+> only `Run linter` / `Run unit tests` as required.
+
 ## Using the team
 
 - **Kick off work:** open an issue and label it `task` (follow

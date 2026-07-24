@@ -35,13 +35,17 @@ be implemented and, if so, hand it off to the GitHub Copilot coding agent (the t
 3. **Check readiness.** The issue is ready when it has a clear summary, verifiable
    acceptance criteria (or concrete steps), and enough technical detail (affected files
    / components) for a coding agent to act without guessing.
-   - If it is **not** ready: add the `needs-clarification` label and post one comment
-     that lists exactly what information is missing (as a short checklist). Do not
+   - If it is **not** ready: if it is not already labeled `needs-clarification`, add that
+     label and post one comment that lists exactly what information is missing (as a short
+     checklist). If it **already** carries `needs-clarification` and the missing
+     information still has not been supplied, do nothing (no duplicate comment). Do not
      assign the coding agent. (An editor can address the checklist and the edit will
      re-run you automatically.)
 4. **Hand off.** If the issue is in scope and ready:
    - Assign it to the Copilot coding agent (`assign-to-agent`).
-   - Add the `agent:working` label.
+   - Add the `agent:working` label. If the issue still carries `needs-clarification`
+     (it was clarified after an earlier pass), remove that label so the triage state is
+     not left contradictory.
    - Post one short comment confirming the coding agent has picked it up and
      restating the acceptance criteria it should satisfy, reminding it to respect
      `docs/specs/quality-bars.md` and to add tests per `docs/specs/testing.md`.

@@ -28,6 +28,11 @@ safe-outputs:
   add-labels:
     allowed: [needs-clarification, agent:working]
     max: 2
+  # Clear the clarification flag on hand-off so the issue is not left marked both
+  # `needs-clarification` and `agent:working`.
+  remove-labels:
+    allowed: [needs-clarification]
+    max: 1
 ---
 
 {{#runtime-import shared/ticket-triage.md}}
