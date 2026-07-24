@@ -57,13 +57,14 @@ Before you begin, ensure you have the following tools installed on your workstat
 
 ## Further reading
 
+- [Repository specs](docs/specs/README.md) — source-of-truth specs for architecture, quality bars, data contracts, content style, and non-goals.
 - [Analytics](docs/analytics.md) — Azure Application Insights setup, cost guardrails, and how to disable telemetry.
 
 ## Technology stack
 
 | Name                  | Description                                                  | Type  | Link                                                                                   |
 | --------------------- | ------------------------------------------------------------ | ----- | -------------------------------------------------------------------------------------- |
-| Next.js               | React framework for building web apps with SSR/SSG/ISR       | Web   | [Next.js](https://nextjs.org/)                                                         |
+| Vite                  | Build tool bundling the React SPA, with a custom SSR + prerender step for static HTML | Web   | [Vite](https://vite.dev/)                                                              |
 | React                 | JavaScript library for building user interfaces              | Web   | [React](https://react.dev/)                                                            |
 | TypeScript            | Typed superset of JavaScript                                 | Web   | [TypeScript](https://www.typescriptlang.org/)                                          |
 | Tailwind CSS          | Utility-first CSS framework for rapid UI development         | Web   | [Tailwind CSS](https://tailwindcss.com/)                                               |
