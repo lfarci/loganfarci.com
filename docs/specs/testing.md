@@ -26,8 +26,8 @@ layers.
 
 | Layer | Scope | Runs | Status |
 | --- | --- | --- | --- |
-| **Unit** | Pure logic in `core/`, components in isolation | `npm run test` (local + CI) | Current |
-| **Build gate** | `npm run build` produces valid client + SSR + prerendered HTML | CI on every change | Current |
+| **Unit** | Pure logic in `core/`, components in isolation | `npm run test` locally; CI on app changes | Current |
+| **Build gate** | `npm run build` produces valid client + SSR + prerendered HTML | CI on deploy-triggering app/content changes | Current |
 | **Deployment validation** | HTTP smoke checks against a live deployed URL | After each deploy | **Planned** |
 
 Keep the pyramid bottom-heavy: prefer many fast unit tests, a green build, and a
@@ -92,6 +92,12 @@ Verified from [`src/vite.config.ts`](../../src/vite.config.ts) and
 
 A change **MUST** pass `npm run build` (client → SSR → prerender) cleanly before it
 ships (see [quality-bars.md](./quality-bars.md#definition-of-done-reviewer-checklist)).
+In CI the build runs as the first step of the deploy workflow
+([`reusable-deploy-static-web-app.yml`](../../.github/workflows/reusable-deploy-static-web-app.yml)
+via [`deploy-app.yml`](../../.github/workflows/deploy-app.yml)), so it is exercised on
+**deploy-triggering changes** — pushes to `main` and PRs touching `src/**` or
+`content/**`. Changes that don't match those path filters (e.g. docs- or infra-only)
+are not build-gated in CI, so run `npm run build` locally for those.
 The build is itself a test: it fails if a route can't be server-rendered, if
 `getStaticRoutes()` references a missing page, or if the prerender step
 ([`scripts/prerender.mjs`](../../src/scripts/prerender.mjs)) can't emit the HTML,
