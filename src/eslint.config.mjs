@@ -5,6 +5,15 @@ import tseslint from "typescript-eslint";
 import jsxA11y from "eslint-plugin-jsx-a11y";
 import prettierConfig from "eslint-config-prettier";
 
+import noHardcodedColors from "./src/lint/no-hardcoded-colors.js";
+
+// Local plugin holding project-specific guardrail rules (see docs/specs/linting.md).
+const local = {
+    rules: {
+        "no-hardcoded-colors": noHardcodedColors,
+    },
+};
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const tsconfigPath = path.resolve(__dirname, "./tsconfig.json");
@@ -39,8 +48,9 @@ export default tseslint.config(
     ...typeCheckedConfigs,
     {
         files: ["**/*.tsx"],
-        plugins: { "jsx-a11y": jsxA11y },
+        plugins: { local, "jsx-a11y": jsxA11y },
         rules: {
+            "local/no-hardcoded-colors": "error",
             // Enforce the accessibility contract from docs/specs/accessibility.md:
             // every image must carry alt text.
             "jsx-a11y/alt-text": "error",

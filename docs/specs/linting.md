@@ -102,10 +102,23 @@ workflow itself) — so unrelated changes don't pay the cost.
   `isolatedModules`, `resolveJsonModule`, and no implicit `any` come from
   [`tsconfig.json`](../../src/tsconfig.json) and `npm run build`. Lint and `tsc` are
   complementary gates; see [quality-bars.md](./quality-bars.md#typescript-strictness).
+- **No hardcoded colors** — a local custom rule (`local/no-hardcoded-colors`, scoped to
+  `**/*.tsx`) flags raw color literals — hex (`#rgb`/`#rrggbb`), `rgb()`/`rgba()`,
+  `hsl()`/`hsla()`, `hwb()`, `lab()`/`lch()`, `oklab()`/`oklch()`, and `color()` — in
+  `className` strings and inline `style` values, plus the string arguments of class-builder
+  calls (`cva`, `mergeClassNames`/`cn`, `clsx`, …) wherever they are called, so colors come
+  from semantic Tailwind tokens. `oklch()` is the repo's primary color notation, so it is
+  covered explicitly. This enforces the accessibility gate in
+  [quality-bars.md](./quality-bars.md#accessibility--target-wcag-21-aa) and
+  [accessibility.md](./accessibility.md). The rule lives at
+  [`src/src/lint/no-hardcoded-colors.js`](../../src/src/lint/no-hardcoded-colors.js) with a
+  colocated `RuleTester` test; it landed directly at `error` because a full-codebase scan
+  found zero existing violations.
 
-Beyond the recommended sets and Prettier compatibility, the only project-specific
-guardrail enabled today is `jsx-a11y/alt-text`. The section below defines how to add
-more.
+Beyond the recommended sets and Prettier compatibility, a small number of project-specific
+guardrails are enabled today: `jsx-a11y/alt-text` and the local `no-hardcoded-colors` rule
+(see the `local` plugin in [`eslint.config.mjs`](../../src/eslint.config.mjs)). The section
+below defines how to add more.
 
 ## Custom rules & guardrails
 
@@ -175,10 +188,6 @@ backlog:
 - **Prefer `@/` and `@content/` aliases** over deep relative imports —
   [quality-bars.md](./quality-bars.md#typescript-strictness), via `no-restricted-imports`
   patterns on `../../`.
-- **No hardcoded colors; use semantic Tailwind tokens** —
-  [quality-bars.md](./quality-bars.md#accessibility--target-wcag-21-aa) and
-  [accessibility.md](./accessibility.md), via a local rule flagging raw hex/`rgb()` in
-  `className`/style.
 - **Don't reimplement Radix primitive behavior by hand** —
   [quality-bars.md](./quality-bars.md#component-conventions), via `no-restricted-syntax`
   on the raw elements a primitive already covers.
@@ -187,6 +196,8 @@ backlog:
   ([non-goals.md](./non-goals.md)).
 - **Images need `alt`** — **✅ enabled** (`jsx-a11y/alt-text`); see
   [What it enforces today](#what-it-enforces-today).
+- **No hardcoded colors; use semantic Tailwind tokens** — **✅ enabled**
+  (`local/no-hardcoded-colors`); see [What it enforces today](#what-it-enforces-today).
 
 ## Rules for changing the lint setup
 
