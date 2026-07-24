@@ -366,7 +366,7 @@ jobs:
           fi
           cat << 'GH_AW_PROMPT_639abbf20d683d9f_EOF'
           </system>
-          {{#runtime-import .github/workflows/shared/ticket-triage.md}}
+          {{#runtime-import .github/shared/ticket-triage.md}}
           {{#runtime-import .github/workflows/agent-ticket-tamer-command.md}}
           GH_AW_PROMPT_639abbf20d683d9f_EOF
           } > "$GH_AW_PROMPT"
