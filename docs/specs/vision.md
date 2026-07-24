@@ -105,8 +105,9 @@ and machines.
   styling system). Planned refinement: also honor `prefers-color-scheme` on first visit
   and keep contrast compliant in both themes — see
   [accessibility.md](./accessibility.md#themes-and-contrast).
-- **Internationalization.** Available in **English, French, and Dutch** for now, with
-  room to add more. Keep it simple: content and UI strings should be translatable
+- **Internationalization.** Available in **English** (international, `en_US`), **French**,
+  and **Dutch** (both for a Belgian audience, `fr_BE` / `nl_BE`) for now, with room to add
+  more. Keep it simple: content and UI strings should be translatable
   without a heavy i18n framework, and prerendering must still produce static pages per
   locale. Full plan in [i18n.md](./i18n.md).
 
