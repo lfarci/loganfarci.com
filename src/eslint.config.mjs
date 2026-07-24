@@ -51,6 +51,16 @@ export default tseslint.config(
                     ],
                 },
             ],
+            // `no-restricted-imports` only visits static imports, so guard deep
+            // dynamic `import("../../…")` expressions with a syntax selector too.
+            "no-restricted-syntax": [
+                "error",
+                {
+                    selector: "ImportExpression > Literal[value=/^\\.\\.\\/\\.\\.\\//]",
+                    message:
+                        "Avoid deep relative imports. Use the '@/' (src) or '@content/' (content) path aliases instead.",
+                },
+            ],
         },
     },
     prettierConfig,

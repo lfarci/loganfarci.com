@@ -94,8 +94,9 @@ workflow itself) — so unrelated changes don't pay the cost.
   unreachable code, etc.).
 - **Prefer `@/` and `@content/` aliases over deep relative imports** — a
   `no-restricted-imports` rule (scoped to `**/*.{ts,tsx}`) blocks `../../` and deeper
-  relative import paths, pointing authors to the `@/` (→ `src/src/`) and `@content/`
-  (→ `content/`) aliases. Enforces the alias convention in
+  relative import paths, and a companion `no-restricted-syntax` selector catches the same
+  depth in dynamic `import("../../…")` expressions, pointing authors to the `@/`
+  (→ `src/src/`) and `@content/` (→ `content/`) aliases. Enforces the alias convention in
   [quality-bars.md](./quality-bars.md#typescript-strictness).
 - **TypeScript strictness is enforced by the compiler**, not ESLint: `strict`,
   `isolatedModules`, `resolveJsonModule`, and no implicit `any` come from
