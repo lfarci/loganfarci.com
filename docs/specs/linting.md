@@ -92,13 +92,21 @@ workflow itself) — so unrelated changes don't pay the cost.
   promises, misused type-only constructs, and similar bugs that need type information.
 - **Core JS hygiene** — the recommended set (no unused vars where configured, no
   unreachable code, etc.).
+- **Bundle-weight guardrail for `mermaid`** — `no-restricted-imports` errors when any app
+  file imports `mermaid` (or a `mermaid/*` subpath). Only
+  [`MermaidDiagram.tsx`](../../src/src/components/shared/MermaidDiagram.tsx) — the module
+  built to lazy-load it — is allowed to, via a scoped override. This keeps the heavy
+  dependency out of the shared client bundle, enforcing the performance stance in
+  [non-goals.md](./non-goals.md) and
+  [quality-bars.md](./quality-bars.md#performance).
 - **TypeScript strictness is enforced by the compiler**, not ESLint: `strict`,
   `isolatedModules`, `resolveJsonModule`, and no implicit `any` come from
   [`tsconfig.json`](../../src/tsconfig.json) and `npm run build`. Lint and `tsc` are
   complementary gates; see [quality-bars.md](./quality-bars.md#typescript-strictness).
 
-There are **no project-specific custom rules enabled yet** — the config today is the
-recommended sets plus Prettier compatibility. The section below defines how to add them.
+The `no-restricted-imports` guardrail above is the first project-specific rule; beyond it,
+the config is the recommended sets plus Prettier compatibility. The section below defines
+how to add more.
 
 ## Custom rules & guardrails
 
@@ -174,9 +182,11 @@ the spec it would enforce and the likely mechanism:
 - **Don't reimplement Radix primitive behavior by hand** —
   [quality-bars.md](./quality-bars.md#component-conventions), via `no-restricted-syntax`
   on the raw elements a primitive already covers.
-- **Keep the client bundle lean** — restrict importing heavy dependencies (e.g. `mermaid`)
-  outside the modules meant to load them, via `no-restricted-imports`
-  ([non-goals.md](./non-goals.md)).
+- **Keep the client bundle lean** — restrict importing heavy dependencies outside the
+  modules meant to load them, via `no-restricted-imports`
+  ([non-goals.md](./non-goals.md)). _Enabled today for `mermaid`; see_
+  [What it enforces today](#what-it-enforces-today). The same mechanism can be extended to
+  other heavy deps as they appear.
 - **Images need `alt`** — the `jsx-a11y` plugin's `alt-text` rule, complementing the
   data-contract requirement in [accessibility.md](./accessibility.md).
 
