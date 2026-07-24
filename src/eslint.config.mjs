@@ -46,14 +46,14 @@ export default tseslint.config(
                         {
                             name: "mermaid",
                             message:
-                                "mermaid is a heavy dependency; import it only from src/components/shared/MermaidDiagram.tsx so it stays out of the shared client bundle (see docs/specs/non-goals.md and quality-bars.md).",
+                                "mermaid is a heavy dependency; import it only from src/components/shared/MermaidDiagram.tsx to keep it confined to that single module — the seam where it can be given a dynamic-import boundary — rather than spreading across the app (see docs/specs/non-goals.md and quality-bars.md).",
                         },
                     ],
                     patterns: [
                         {
                             group: ["mermaid/*"],
                             message:
-                                "mermaid is a heavy dependency; import it only from src/components/shared/MermaidDiagram.tsx so it stays out of the shared client bundle (see docs/specs/non-goals.md and quality-bars.md).",
+                                "mermaid is a heavy dependency; import it only from src/components/shared/MermaidDiagram.tsx to keep it confined to that single module — the seam where it can be given a dynamic-import boundary — rather than spreading across the app (see docs/specs/non-goals.md and quality-bars.md).",
                         },
                     ],
                 },

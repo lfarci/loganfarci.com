@@ -95,10 +95,13 @@ workflow itself) — so unrelated changes don't pay the cost.
 - **Bundle-weight guardrail for `mermaid`** — `no-restricted-imports` errors when any app
   file imports `mermaid` (or a `mermaid/*` subpath). Only
   [`MermaidDiagram.tsx`](../../src/src/components/shared/MermaidDiagram.tsx) — the module
-  built to lazy-load it — is allowed to, via a scoped override. This keeps the heavy
-  dependency out of the shared client bundle, enforcing the performance stance in
-  [non-goals.md](./non-goals.md) and
-  [quality-bars.md](./quality-bars.md#performance).
+  that owns the diagram runtime — is allowed to, via a scoped override. This confines the
+  heavy dependency to a single module (the seam where a dynamic-import boundary can later
+  be added) instead of letting it spread across the app, enforcing the performance stance
+  in [non-goals.md](./non-goals.md) and
+  [quality-bars.md](./quality-bars.md#performance). _Note: today that module is still
+  imported statically, so `mermaid` currently ships in the main chunk; the guardrail keeps
+  the import site singular so lazy-loading it stays a one-file change._
 - **TypeScript strictness is enforced by the compiler**, not ESLint: `strict`,
   `isolatedModules`, `resolveJsonModule`, and no implicit `any` come from
   [`tsconfig.json`](../../src/tsconfig.json) and `npm run build`. Lint and `tsc` are
