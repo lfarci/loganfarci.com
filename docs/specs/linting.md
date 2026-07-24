@@ -92,6 +92,16 @@ workflow itself) — so unrelated changes don't pay the cost.
   promises, misused type-only constructs, and similar bugs that need type information.
 - **Core JS hygiene** — the recommended set (no unused vars where configured, no
   unreachable code, etc.).
+- **Bundle-weight guardrail for `mermaid`** — `no-restricted-imports` errors when any app
+  file imports `mermaid` (or a `mermaid/*` subpath). Only
+  [`MermaidDiagram.tsx`](../../src/src/components/shared/MermaidDiagram.tsx) — the module
+  that owns the diagram runtime — is allowed to, via a scoped override. This confines the
+  heavy dependency to a single module (the seam where a dynamic-import boundary can later
+  be added) instead of letting it spread across the app, enforcing the performance stance
+  in [non-goals.md](./non-goals.md) and
+  [quality-bars.md](./quality-bars.md#performance). _Note: today that module is still
+  imported statically, so `mermaid` currently ships in the main chunk; the guardrail keeps
+  the import site singular so lazy-loading it stays a one-file change._
 - **Accessible images** — the `jsx-a11y` plugin's [`alt-text`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/main/docs/rules/alt-text.md)
   rule runs as `error` on `**/*.tsx`, enforcing the "every image MUST have meaningful alt
   text" contract in [accessibility.md](./accessibility.md). Only `alt-text` is enabled (not
@@ -116,9 +126,10 @@ workflow itself) — so unrelated changes don't pay the cost.
   found zero existing violations.
 
 Beyond the recommended sets and Prettier compatibility, a small number of project-specific
-guardrails are enabled today: `jsx-a11y/alt-text` and the local `no-hardcoded-colors` rule
-(see the `local` plugin in [`eslint.config.mjs`](../../src/eslint.config.mjs)). The section
-below defines how to add more.
+guardrails are enabled today: the `mermaid` `no-restricted-imports` rule, `jsx-a11y/alt-text`,
+and the local `no-hardcoded-colors` rule (see the `local` plugin in
+[`eslint.config.mjs`](../../src/eslint.config.mjs)). The section below defines how to add
+more.
 
 ## Custom rules & guardrails
 
@@ -191,8 +202,9 @@ backlog:
 - **Don't reimplement Radix primitive behavior by hand** —
   [quality-bars.md](./quality-bars.md#component-conventions), via `no-restricted-syntax`
   on the raw elements a primitive already covers.
-- **Keep the client bundle lean** — restrict importing heavy dependencies (e.g. `mermaid`)
-  outside the modules meant to load them, via `no-restricted-imports`
+- **Keep the client bundle lean** — **✅ enabled** for `mermaid` (`no-restricted-imports`);
+  see [What it enforces today](#what-it-enforces-today). The same mechanism can be extended
+  to other heavy dependencies outside the modules meant to load them as they appear
   ([non-goals.md](./non-goals.md)).
 - **Images need `alt`** — **✅ enabled** (`jsx-a11y/alt-text`); see
   [What it enforces today](#what-it-enforces-today).

@@ -47,6 +47,36 @@ export default tseslint.config(
     },
     ...typeCheckedConfigs,
     {
+        files: ["**/*.{ts,tsx}"],
+        rules: {
+            "no-restricted-imports": [
+                "error",
+                {
+                    paths: [
+                        {
+                            name: "mermaid",
+                            message:
+                                "mermaid is a heavy dependency; import it only from src/components/shared/MermaidDiagram.tsx to keep it confined to that single module — the seam where it can be given a dynamic-import boundary — rather than spreading across the app (see docs/specs/non-goals.md and quality-bars.md).",
+                        },
+                    ],
+                    patterns: [
+                        {
+                            group: ["mermaid/*"],
+                            message:
+                                "mermaid is a heavy dependency; import it only from src/components/shared/MermaidDiagram.tsx to keep it confined to that single module — the seam where it can be given a dynamic-import boundary — rather than spreading across the app (see docs/specs/non-goals.md and quality-bars.md).",
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        files: ["src/components/shared/MermaidDiagram.tsx"],
+        rules: {
+            "no-restricted-imports": "off",
+        },
+    },
+    {
         files: ["**/*.tsx"],
         plugins: { local, "jsx-a11y": jsxA11y },
         rules: {
