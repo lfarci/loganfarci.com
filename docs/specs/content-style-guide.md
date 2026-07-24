@@ -50,7 +50,9 @@ Notes:
 - Reuse established tags (common ones: `MCP`, `AI`, `GitHub`, `Copilot`); check
   existing articles before inventing a new tag.
 - Set `coauthoredWithAgent: true` when an AI agent materially wrote or researched the
-  piece — relevant for content agents authoring articles.
+  piece — relevant for content agents authoring articles. This supports the site's
+  **AI-transparency** stance (see [vision.md](./vision.md#ai-transparency-and-quality)):
+  be open about AI use, and never let it lower the quality bar.
 
 ## Agent hard rules (must pass)
 

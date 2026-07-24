@@ -61,6 +61,29 @@ him.
    Apps (see [non-goals.md](./non-goals.md)). New capabilities should fit that model.
 4. **Content is the product.** The site exists to present Logan's writing, profile,
    and work clearly. Design and tech serve the content, not the other way around.
+5. **AI-assisted, human-guaranteed.** The site and its content are built with AI
+   assistance, and that is stated openly. AI is a tool, not an excuse: Logan directs
+   the work, understands every part of it, and personally stands behind its quality.
+   The bar is the same as fully hand-made work — irreproachable.
+
+## AI transparency and quality
+
+Logan uses AI to build this site and write content, and the site is **transparent**
+about it. This is a deliberate professional statement, not a disclaimer to hide.
+
+- **Be open about AI use.** Where AI materially contributed, say so — for example the
+  `coauthoredWithAgent` article flag (see
+  [content-style-guide.md](./content-style-guide.md)). Do not overstate or hide it.
+- **Quality is non-negotiable.** Everything published MUST be accurate, correct, and
+  reviewed by Logan. AI assistance never lowers the bar; anything shipped is work Logan
+  vouches for.
+- **Demonstrate judgment, not just output.** The takeaway for a hiring manager should be
+  that Logan uses modern AI tooling effectively *and* knows exactly what he is doing —
+  competence and control, with AI as a force multiplier.
+- **No AI slop.** Generic, padded, unverified, or hallucinated content MUST NOT ship.
+  Technical claims and code MUST be verified (ties to the article hard rules in
+  [content-style-guide.md](./content-style-guide.md) and the bars in
+  [quality-bars.md](./quality-bars.md)).
 
 ## What the site should become
 
@@ -140,6 +163,8 @@ measurable targets (aspirational where a planned section does not exist yet):
   get in touch** without leaving the site's flow.
 - A first-time visitor can answer "**what does Logan do, and how do I contact him?**"
   within seconds of landing on the home page.
+- The site is **openly transparent about AI use**, while every published page and
+  article meets the quality bar and is work Logan personally stands behind.
 
 ## Target sitemap
 
