@@ -96,9 +96,19 @@ workflow itself) — so unrelated changes don't pay the cost.
   `isolatedModules`, `resolveJsonModule`, and no implicit `any` come from
   [`tsconfig.json`](../../src/tsconfig.json) and `npm run build`. Lint and `tsc` are
   complementary gates; see [quality-bars.md](./quality-bars.md#typescript-strictness).
+- **No hardcoded colors** — a local custom rule (`local/no-hardcoded-colors`, scoped to
+  `**/*.tsx`) flags raw color literals — hex (`#rgb`/`#rrggbb`), `rgb()`/`rgba()`,
+  `hsl()`/`hsla()` — in `className` strings and inline `style` values, so colors come from
+  semantic Tailwind tokens. This enforces the accessibility gate in
+  [quality-bars.md](./quality-bars.md#accessibility--target-wcag-21-aa) and
+  [accessibility.md](./accessibility.md). The rule lives at
+  [`src/src/lint/no-hardcoded-colors.js`](../../src/src/lint/no-hardcoded-colors.js) with a
+  colocated `RuleTester` test; it landed directly at `error` because a full-codebase scan
+  found zero existing violations.
 
-There are **no project-specific custom rules enabled yet** — the config today is the
-recommended sets plus Prettier compatibility. The section below defines how to add them.
+There are currently a small number of project-specific custom rules enabled (see the
+`local` plugin in [`eslint.config.mjs`](../../src/eslint.config.mjs)); everything else is
+the recommended sets plus Prettier compatibility. The section below defines how to add more.
 
 ## Custom rules & guardrails
 
@@ -167,10 +177,6 @@ the spec it would enforce and the likely mechanism:
 - **Prefer `@/` and `@content/` aliases** over deep relative imports —
   [quality-bars.md](./quality-bars.md#typescript-strictness), via `no-restricted-imports`
   patterns on `../../`.
-- **No hardcoded colors; use semantic Tailwind tokens** —
-  [quality-bars.md](./quality-bars.md#accessibility--target-wcag-21-aa) and
-  [accessibility.md](./accessibility.md), via a local rule flagging raw hex/`rgb()` in
-  `className`/style.
 - **Don't reimplement Radix primitive behavior by hand** —
   [quality-bars.md](./quality-bars.md#component-conventions), via `no-restricted-syntax`
   on the raw elements a primitive already covers.

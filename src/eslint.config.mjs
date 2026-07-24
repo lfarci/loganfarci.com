@@ -4,6 +4,15 @@ import js from "@eslint/js";
 import tseslint from "typescript-eslint";
 import prettierConfig from "eslint-config-prettier";
 
+import noHardcodedColors from "./src/lint/no-hardcoded-colors.js";
+
+// Local plugin holding project-specific guardrail rules (see docs/specs/linting.md).
+const local = {
+    rules: {
+        "no-hardcoded-colors": noHardcodedColors,
+    },
+};
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const tsconfigPath = path.resolve(__dirname, "./tsconfig.json");
@@ -36,5 +45,12 @@ export default tseslint.config(
         },
     },
     ...typeCheckedConfigs,
+    {
+        files: ["**/*.tsx"],
+        plugins: { local },
+        rules: {
+            "local/no-hardcoded-colors": "error",
+        },
+    },
     prettierConfig,
 );
