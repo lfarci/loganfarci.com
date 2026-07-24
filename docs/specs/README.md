@@ -1,6 +1,6 @@
 ---
 spec: loganfarci.com repository specs
-version: 0.1.0
+version: 0.2.0
 status: index
 ---
 
@@ -26,6 +26,7 @@ still a work in progress.
 | [vision.md](./vision.md) | The north star: core principles, planned sections, accessibility/SEO ambitions, and the target sitemap. |
 | [architecture.md](./architecture.md) | Routes and page responsibilities, SSR + prerender contract, and the content pipeline. |
 | [quality-bars.md](./quality-bars.md) | The rubric a reviewer agent checks against: accessibility, performance, TS strictness, testing, linting. |
+| [linting.md](./linting.md) | The linter as a guardrail: toolchain, fast local + CI runs, and how to add custom rules that enforce the other specs. |
 | [accessibility.md](./accessibility.md) | The detailed accessibility contract: current baseline, requirements, themes/contrast, machine-readability, and ideal state. |
 | [i18n.md](./i18n.md) | Multilanguage plan: locale scheme, per-locale prerendering, content/string translation, and SEO (`hreflang`). |
 | [data-contracts.md](./data-contracts.md) | Shape and required fields of each `content/data/*.json` file, mirroring `src/src/types/`. |
@@ -42,6 +43,7 @@ Read the spec that matches the task, then check it against the code before actin
 
 - Changing pages/rendering/content flow → [architecture.md](./architecture.md).
 - Reviewing or shipping a change → [quality-bars.md](./quality-bars.md).
+- Linting, adding a lint rule, or a CI lint failure → [linting.md](./linting.md).
 - Accessibility work → [accessibility.md](./accessibility.md).
 - Multilanguage / i18n work → [i18n.md](./i18n.md).
 - Editing `content/data/*.json` → [data-contracts.md](./data-contracts.md).
