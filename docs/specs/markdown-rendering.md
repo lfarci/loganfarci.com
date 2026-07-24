@@ -84,6 +84,41 @@ There is no syntax-highlighting library: fenced code keeps its `language-*` clas
 not tokenized. Do not add a highlighter without cause (see
 [non-goals.md](./non-goals.md)).
 
+## Ideal state (planned)
+
+The following are **targets**, not current behavior — they describe the reading
+experience article rendering should grow toward, guided by
+[vision.md](./vision.md). Keep the simplicity and don't-reinvent-the-wheel principles:
+prefer a small, well-established remark/rehype plugin or a lightweight component over a
+bespoke system, and only add weight where it earns its place.
+
+- **Table of contents.** Long articles should offer a ToC auto-generated from the
+  headings, with in-page anchor links. Headings should get stable slug `id`s and a
+  hover permalink so sections are deep-linkable and shareable.
+- **Code blocks.** Per-language **syntax highlighting**, a **copy-to-clipboard** button,
+  and an optional filename/caption. Line highlighting is a nice-to-have. Highlighting
+  SHOULD happen at build time where possible so it costs nothing on the client.
+- **Lists.** Nested ordered/unordered lists render cleanly, and GFM **task lists**
+  render as (non-interactive) checkboxes.
+- **Images / pictures.** Responsive images (correct `width`/`height` to avoid layout
+  shift, AVIF, `loading="lazy"`), an optional **caption** via `figure`/`figcaption`,
+  and optionally click-to-zoom. `alt` stays required (see
+  [quality-bars.md](./quality-bars.md#accessibility--target-wcag-21-aa)).
+- **Mermaid diagrams.** Ideally rendered at **build time** (during prerender) so
+  diagrams appear without JavaScript and are indexable, with a graceful fallback —
+  replacing today's client-only render.
+- **Callouts / admonitions.** Note / tip / warning blocks (e.g. via a blockquote
+  convention) for emphasis beyond a plain quote.
+- **Footnotes.** GFM footnotes with back-references for citations and asides.
+- **Tables.** Remain readable on small screens (horizontal scroll or responsive
+  treatment) without breaking layout.
+- **Anchored, shareable headings** and consistent, accessible focus/hover states across
+  all of the above.
+
+Math typesetting (KaTeX/MathJax) and rich third-party embeds (video, social) are
+**not** planned by default — they add weight and pull toward raw HTML, which this
+pipeline deliberately avoids. Revisit only if a concrete article need justifies it.
+
 ## Rules for agents
 
 - **MUST** reuse `MarkdownContent` for any new markdown surface; do not add a second
