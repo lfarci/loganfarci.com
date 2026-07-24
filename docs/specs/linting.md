@@ -92,6 +92,22 @@ workflow itself) — so unrelated changes don't pay the cost.
   promises, misused type-only constructs, and similar bugs that need type information.
 - **Core JS hygiene** — the recommended set (no unused vars where configured, no
   unreachable code, etc.).
+- **Bundle-weight guardrail for `mermaid`** — `no-restricted-imports` errors when any app
+  file imports `mermaid` (or a `mermaid/*` subpath). Only
+  [`MermaidDiagram.tsx`](../../src/src/components/shared/MermaidDiagram.tsx) — the module
+  that owns the diagram runtime — is allowed to, via a scoped override. This confines the
+  heavy dependency to a single module (the seam where a dynamic-import boundary can later
+  be added) instead of letting it spread across the app, enforcing the performance stance
+  in [non-goals.md](./non-goals.md) and
+  [quality-bars.md](./quality-bars.md#performance). _Note: today that module is still
+  imported statically, so `mermaid` currently ships in the main chunk; the guardrail keeps
+  the import site singular so lazy-loading it stays a one-file change._
+- **Accessible images** — the `jsx-a11y` plugin's [`alt-text`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/main/docs/rules/alt-text.md)
+  rule runs as `error` on `**/*.tsx`, enforcing the "every image MUST have meaningful alt
+  text" contract in [accessibility.md](./accessibility.md). Only `alt-text` is enabled (not
+  the plugin's full `recommended` set) to keep the guardrail scoped to a documented
+  convention without introducing unrelated a11y noise. It landed clean at `error` — every
+  existing `<img>` already carries `alt`.
 - **TypeScript strictness is enforced by the compiler**, not ESLint: `strict`,
   `isolatedModules`, `resolveJsonModule`, and no implicit `any` come from
   [`tsconfig.json`](../../src/tsconfig.json) and `npm run build`. Lint and `tsc` are
@@ -106,9 +122,24 @@ workflow itself) — so unrelated changes don't pay the cost.
   elements. The rule currently runs at **`warn`** while a few pre-existing violations are
   worked off; it will be promoted to **`error`** once the codebase is clean (tracked by
   [issue #260](https://github.com/lfarci/loganfarci.com/issues/260)).
+- **No hardcoded colors** — a local custom rule (`local/no-hardcoded-colors`, scoped to
+  `**/*.tsx`) flags raw color literals — hex (`#rgb`/`#rrggbb`), `rgb()`/`rgba()`,
+  `hsl()`/`hsla()`, `hwb()`, `lab()`/`lch()`, `oklab()`/`oklch()`, and `color()` — in
+  `className` strings and inline `style` values, plus the string arguments of class-builder
+  calls (`cva`, `mergeClassNames`/`cn`, `clsx`, …) wherever they are called, so colors come
+  from semantic Tailwind tokens. `oklch()` is the repo's primary color notation, so it is
+  covered explicitly. This enforces the accessibility gate in
+  [quality-bars.md](./quality-bars.md#accessibility--target-wcag-21-aa) and
+  [accessibility.md](./accessibility.md). The rule lives at
+  [`src/src/lint/no-hardcoded-colors.js`](../../src/src/lint/no-hardcoded-colors.js) with a
+  colocated `RuleTester` test; it landed directly at `error` because a full-codebase scan
+  found zero existing violations.
 
-There are **no other project-specific custom rules enabled yet** — the rest of the config
-is the recommended sets plus Prettier compatibility. The section below defines how to add
+Beyond the recommended sets and Prettier compatibility, a small number of project-specific
+guardrails are enabled today: the `mermaid` `no-restricted-imports` rule, `jsx-a11y/alt-text`,
+the `no-restricted-syntax` primitives guardrail, and the local `no-hardcoded-colors` rule
+(see the `local` plugin in [`eslint.config.mjs`](../../src/eslint.config.mjs)). The section
+below defines how to add
 more.
 
 ## Custom rules & guardrails
@@ -172,21 +203,24 @@ export default tseslint.config(
 ### Candidate guardrails
 
 These conventions from other specs are the natural first candidates to enforce in lint.
-They are **not enabled today** (this list is the backlog, not current state); each names
-the spec it would enforce and the likely mechanism:
+Each names the spec it would enforce and the likely mechanism; entries marked ✅ are
+already enabled (see [What it enforces today](#what-it-enforces-today)), the rest remain
+backlog:
 
 - **Prefer `@/` and `@content/` aliases** over deep relative imports —
   [quality-bars.md](./quality-bars.md#typescript-strictness), via `no-restricted-imports`
   patterns on `../../`.
-- **No hardcoded colors; use semantic Tailwind tokens** —
-  [quality-bars.md](./quality-bars.md#accessibility--target-wcag-21-aa) and
-  [accessibility.md](./accessibility.md), via a local rule flagging raw hex/`rgb()` in
-  `className`/style.
-- **Keep the client bundle lean** — restrict importing heavy dependencies (e.g. `mermaid`)
-  outside the modules meant to load them, via `no-restricted-imports`
+- **Don't reimplement Radix primitive behavior by hand** — **✅ enabled**
+  (`no-restricted-syntax` on raw `<button>`/`<hr>`); see
+  [What it enforces today](#what-it-enforces-today).
+- **Keep the client bundle lean** — **✅ enabled** for `mermaid` (`no-restricted-imports`);
+  see [What it enforces today](#what-it-enforces-today). The same mechanism can be extended
+  to other heavy dependencies outside the modules meant to load them as they appear
   ([non-goals.md](./non-goals.md)).
-- **Images need `alt`** — the `jsx-a11y` plugin's `alt-text` rule, complementing the
-  data-contract requirement in [accessibility.md](./accessibility.md).
+- **Images need `alt`** — **✅ enabled** (`jsx-a11y/alt-text`); see
+  [What it enforces today](#what-it-enforces-today).
+- **No hardcoded colors; use semantic Tailwind tokens** — **✅ enabled**
+  (`local/no-hardcoded-colors`); see [What it enforces today](#what-it-enforces-today).
 
 ## Rules for changing the lint setup
 
