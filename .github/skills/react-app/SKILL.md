@@ -5,66 +5,31 @@ description: Handles implementation tasks in the loganfarci.com React + Vite + T
 
 ## Overview
 
-This project is a **Vite + React 19 (TypeScript)** single-page application with SSR prerendering, styled with **Tailwind CSS v4** and the **Heroui** component library. All source code lives under `src/src/`, and all build commands must be run from the `src/` directory.
+This project is a **Vite + React 19 (TypeScript)** single-page application with SSR prerendering, styled with **Tailwind CSS v4** and **local shadcn-style Radix primitives**. All source code lives under `src/src/`, and all build commands must be run from the `src/` directory.
 
-## Project Structure
+**Source of truth:** [`docs/specs/`](../../../docs/specs/README.md) owns architecture, quality bars, data contracts, content style, non-goals, and the vision. The full directory layout and developer workflows live in [`.github/copilot-instructions.md`](../../copilot-instructions.md). This skill focuses on the React 19 implementation how-to and does not repeat those.
 
-```
-src/                          # Vite project root (run all commands here)
-├── package.json
-├── vite.config.ts            # Vite config: aliases, plugins, SSR settings
-├── tailwind.config.ts        # Tailwind v4 theme + Heroui plugin
-├── tsconfig.json
-├── eslint.config.mjs
-├── index.html
-├── plugins/
-│   └── vite-plugin-markdown.ts  # Loads .md files as JS modules at build time
-├── public/
-│   ├── staticwebapp.config.json
-│   └── images/               # Static images and icons
-├── scripts/
-│   └── prerender.mjs         # Generates static HTML for all routes
-└── src/                      # Application source
-    ├── main.tsx              # Client entry point (wraps app in HelmetProvider)
-    ├── entry-server.tsx      # SSR entry point (wraps app in HelmetProvider + StaticRouter)
-    ├── App.tsx               # Root app component
-    ├── routes.tsx            # React Router route definitions
-    ├── globals.css           # Global CSS variables and base styles
-    ├── app/                  # App-level setup (providers, wrappers)
-    ├── components/           # Shared UI components
-    │   ├── cards/            # Card-style components
-    │   ├── layout/           # Layout primitives (header, footer, etc.)
-    │   ├── shared/           # General-purpose reusable components
-    │   └── terminal/         # Terminal UI with command pattern
-    ├── contexts/             # React contexts
-    ├── core/                 # Core logic and utilities
-    │   ├── articles.ts       # Article loading utilities
-    │   ├── Commands.ts       # Terminal command pattern
-    │   └── data.ts           # Data loading utilities
-    ├── pages/                # Page-level components (one per route)
-    └── types/                # TypeScript type definitions
-```
+## Project orientation
 
-Content (articles and data) lives **outside** `src/`:
-```
-content/
-├── articles/   # Markdown articles (.md files with YAML front matter)
-└── data/       # JSON data files (certifications, experiences, skills, etc.)
-```
+- Application code is under `src/src/` (`components/`, `pages/`, `contexts/`, `core/`, `types/`).
+- Content lives **outside** the app in `content/` (`articles/` markdown, `data/` JSON), loaded at build time via Vite `import.meta.glob` — never runtime `fs`.
+- The build/SSR/prerender pipeline and content flow are documented in [`docs/specs/architecture.md`](../../../docs/specs/architecture.md); the annotated directory tree is in [`copilot-instructions.md`](../../copilot-instructions.md).
 
-## Coding Conventions
+## Coding conventions (skill-specific)
 
-- **TypeScript** for all code. No plain JS files in `src/src/`.
+For the quality bar (accessibility, performance, TS strictness, testing, linting) defer to [`docs/specs/quality-bars.md`](../../../docs/specs/quality-bars.md). The implementation-specific conventions for this app are:
+
+- **TypeScript** for all code. No plain JS files in `src/src/`; explicit prop types.
 - **No React import needed** in JSX files — the Vite JSX transform handles it. Only import specific hooks/types you use.
 - **Functional React components** with hooks only. No class components.
 - **Ref as prop** (React 19): pass `ref` directly — no `forwardRef` needed.
 - **Context without `.Provider`** (React 19): render `<MyContext value={...}>` directly.
-- **Tailwind CSS** for all styling. Extend the theme in `src/tailwind.config.ts`. Never use inline styles unless absolutely necessary.
-- **Heroui** components for UI primitives (buttons, cards, modals, etc.). Import from `@heroui/react`.
+- **Tailwind CSS** for all styling with semantic tokens (see table below). Extend the theme in `src/tailwind.config.ts`. Never use inline styles unless unavoidable.
+- **UI primitives**: use the **local shadcn-style Radix primitives** in `@/components/shared/primitives` (`Button`, `Badge`, `Card`, `Separator`, `Tooltip`). Do NOT add a third-party component library.
 - **Import aliases**:
   - `@/` → `src/src/` (e.g., `@/components/Foo` maps to `src/src/components/Foo`)
   - `@content/` → `content/` (e.g., `@content/articles/*.md`)
-- **Metadata**: Use `react-helmet-async` (`<Helmet>`) for page-level `<title>` and `<meta>` tags.
+- **Page metadata (React 19 native)**: render `<title>`, `<meta name="description">`, and `<link rel="canonical">` directly in the page JSX. There is no `react-helmet` / `HelmetProvider` in this project.
 - **Routing**: Add new routes in `src/src/routes.tsx`. Use `react-router` (v7+) — do NOT install `react-router-dom` separately.
 - **Content**: Article `.md` files go in `content/articles/`. JSON data goes in `content/data/`. Load content via Vite's `import.meta.glob` — no runtime file system access.
 
@@ -110,7 +75,7 @@ npm run prerender      # Static HTML for all routes → dist/
 
 # Quality
 npm run lint           # ESLint (TypeScript + React rules)
-npm run test           # Vitest unit/component tests (npx vitest run if no script yet)
+npm run test           # Vitest unit/component tests (or npx vitest run)
 npm run preview        # Preview the production build locally
 ```
 
@@ -179,7 +144,7 @@ function LikeButton({ initialCount }: { initialCount: number }) {
 1. Create the component in `src/src/components/` (or a sub-folder matching its category).
 2. Use TypeScript with explicit prop types — always define a `Props` interface or type.
 3. Use Tailwind utility classes for all styling; reference semantic color tokens.
-4. Use Heroui components where appropriate instead of building from scratch.
+4. Use the local Radix primitives from `@/components/shared/primitives` where appropriate instead of building from scratch.
 5. Ensure accessibility: semantic elements, ARIA labels, keyboard support.
 
 Example:
@@ -205,21 +170,20 @@ export default SectionCard;
 ## Adding New Pages
 
 1. Create the page component in `src/src/pages/`.
-2. Add a `<Helmet>` tag for the page title and meta description.
+2. Render `<title>` and `<meta name="description">` directly in the JSX (React 19 native metadata).
 3. Register the route in `src/src/routes.tsx`.
 4. Add the route path to the `routes` array in `src/scripts/prerender.mjs` so it is prerendered.
 
 Example:
 ```tsx
-import { Helmet } from "react-helmet-async";
+import { createCanonicalUrl } from "@/core/seo";
 
 export default function ExamplePage() {
   return (
     <>
-      <Helmet>
-        <title>Example – Logan Farci</title>
-        <meta name="description" content="Brief description for SEO." />
-      </Helmet>
+      <title>Example – Logan Farci</title>
+      <meta name="description" content="Brief description for SEO." />
+      <link rel="canonical" href={createCanonicalUrl("/example")} />
       <main className="container mx-auto px-4 py-12">
         <h1 className="text-3xl font-bold text-text-primary">Example</h1>
       </main>
@@ -265,8 +229,9 @@ export function useFetch<T>(url: string): UseFetchResult<T> {
 
 ## SSR Considerations
 
-- Both `src/src/main.tsx` (client) and `src/src/entry-server.tsx` (SSR) wrap the app in `<HelmetProvider>`.
-- `StaticRouter` (from `react-router` directly — in v7.12+ it is NOT exported from `react-router/server`) is used in the SSR entry point.
+The full SSR + prerender contract is in [`docs/specs/architecture.md`](../../../docs/specs/architecture.md). When writing components, keep them SSR-safe:
+
+- `src/src/entry-server.tsx` renders with `react-dom/static` + `StaticRouter` (imported from `react-router` directly). There is no `HelmetProvider`; page metadata is native React 19 (`<title>`/`<meta>` in JSX).
 - Do not use browser-only APIs (`window`, `document`, `localStorage`) at the module top level or in render logic without guarding with `typeof window !== "undefined"`.
 - Use `useEffect` for client-only side-effects (event listeners, DOM manipulation, etc.).
 - Lazy-load heavy client-only libraries (e.g., Mermaid) with `React.lazy` + `Suspense`.
@@ -291,7 +256,7 @@ function ArticlePage() {
 
 ## Testing with Vitest
 
-Use **Vitest** + **React Testing Library** for unit and component tests.
+Testing expectations (colocated `*.test.tsx`, coverage) are defined in [`docs/specs/quality-bars.md`](../../../docs/specs/quality-bars.md). This section shows the concrete patterns to follow with **Vitest** + **React Testing Library**.
 
 - Place test files alongside their source (e.g., `Button.test.tsx` next to `Button.tsx`).
 - Use `@testing-library/react` for rendering components and `@testing-library/user-event` for interactions.
@@ -349,13 +314,7 @@ describe("useFetch", () => {
 
 ## Accessibility Checklist
 
-When creating interactive components, verify:
-- [ ] Semantic element used (`<button>`, `<nav>`, `<main>`, `<article>`, etc.)
-- [ ] Every interactive element reachable via keyboard (`Tab`, `Enter`, `Space`)
-- [ ] Inputs have associated `<label>` or `aria-label`
-- [ ] Images have meaningful `alt` text (or `alt=""` for decorative images)
-- [ ] Color is not the only way to convey information
-- [ ] Focus styles are visible (Tailwind `focus-visible:ring`)
+Accessibility is part of the quality bar — follow the checklist in [`docs/specs/quality-bars.md`](../../../docs/specs/quality-bars.md) (semantic elements, keyboard reachability, labels, alt text, contrast, visible focus). Use the local Radix primitives, which provide accessible behavior out of the box.
 
 ## Verification Workflow
 
