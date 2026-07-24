@@ -1,0 +1,35 @@
+name: Auto-merge agent PRs
+
+# Enables GitHub native auto-merge on pull requests opened by the Copilot coding
+# agent. GitHub then merges the PR automatically once ALL required status checks
+# (branch protection) pass — never before. This workflow only *schedules* the merge;
+# the required checks are the gate.
+#
+# Prerequisites (see docs/agentic-workflows.md):
+#   - Repository setting "Allow auto-merge" is enabled.
+#   - Branch protection on `main` requires the checks: Run linter, Run unit tests,
+#     spec-sheriff, coverage-canary. Without required checks, auto-merge cannot be
+#     enabled and this step fails harmlessly.
+
+on:
+  pull_request:
+    types: [opened, ready_for_review, synchronize]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  enable-auto-merge:
+    # Only agent-authored, non-draft PRs. Adjust the login prefix if your coding
+    # agent bot uses a different account.
+    if: >-
+      github.event.pull_request.draft == false &&
+      startsWith(github.event.pull_request.user.login, 'copilot')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Enable auto-merge (squash)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+        run: gh pr merge --auto --squash "$PR_URL"
