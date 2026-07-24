@@ -17,7 +17,9 @@ this page captures the hard rules an agent must not break.
 ## Voice & structure
 
 - Clear, direct tone for a **technical developer audience**; assume familiarity with
-  common tools and concepts.
+  common tools and concepts. Stay **professional and technical with a light touch of
+  personality** — this is career-focused content (see
+  [vision.md](./vision.md#purpose)).
 - Active voice, concise sentences. One article = **one specific problem or concept**
   ("one main takeaway" rule).
 - Lead with working, immediately usable code examples; link to official docs instead

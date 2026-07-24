@@ -16,6 +16,39 @@ the "Planned" items as direction, not as existing features.
 Agents should use this spec to judge whether a proposed change moves the site toward
 the vision, and to avoid proposals that contradict the core principles.
 
+## Purpose
+
+loganfarci.com is Logan's **professional point of exposure** — a place for people to
+find him, understand what he does, and get in touch. It exists to:
+
+- Present his **experience, interests, projects, and related resources** clearly.
+- **Impress potential employers and businesses** who look him up, and help them quickly
+  grasp his skills and the value he brings.
+- Publish **technical articles** that are well referenced and discoverable, so other
+  developers who share his interests can find them and reach out.
+
+This is a **career-focused** site, not a personal-life blog. It stays **professional,
+clear, and technical, with a light touch of personality** — competence first, character
+second. Content that does not serve Logan's professional presence is out of scope (see
+[non-goals.md](./non-goals.md)).
+
+## Audience
+
+The site serves a range of technical and business readers, and should work for all of
+them at once:
+
+- **Peers and fellow developers** — evaluating his work, reading articles, and possibly
+  reaching out to collaborate or connect.
+- **Senior engineers and technical leads** — assessing depth, judgment, and the quality
+  of his thinking.
+- **Hiring managers and businesses** — deciding quickly whether Logan is a strong fit,
+  often from a first look.
+
+Design and content choices SHOULD keep all three in mind: skimmable and credible for a
+hiring manager in a hurry, and substantive and precise for a technical reader going
+deep. Every page SHOULD make it easy to understand what Logan does and how to contact
+him.
+
 ## Core principles
 
 1. **Simplicity first.** The simplest solution that meets the need wins. Favor less
@@ -103,6 +136,10 @@ measurable targets (aspirational where a planned section does not exist yet):
   the existing profile/experience/education data (no duplicated source of truth).
 - Each project in the projects section has a summary, tech list, and at least one link
   (repo, demo, or article).
+- A reader who lands on an article can tell **who wrote it** and reach a clear **way to
+  get in touch** without leaving the site's flow.
+- A first-time visitor can answer "**what does Logan do, and how do I contact him?**"
+  within seconds of landing on the home page.
 
 ## Target sitemap
 
