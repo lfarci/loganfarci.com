@@ -60,7 +60,11 @@ relevant rule in your comments so the author can follow up.
 ## What to do
 
 1. Read the PR title and description to understand its **stated intent**.
-2. Read the specs above (if present), then the PR diff via `git` and the GitHub tools.
+2. **At the start of the review, attempt to read `docs/specs/quality-bars.md` and
+   `docs/specs/non-goals.md`.** If present, treat them as the authoritative rubric and scope
+   definition and flag any change that regresses them. If they are not present yet (they may
+   not be merged to main), fall back to the baseline rubric below. Then read the PR diff via
+   `git` and the GitHub tools.
 3. Review **only changed lines and their immediate context** — never pre-existing code.
 4. Flag only **project-specific, high-confidence** violations from the rubric below.
 5. Add an inline comment on the exact line (right side) for each, citing the spec/rule and a
