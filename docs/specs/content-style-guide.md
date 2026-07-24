@@ -1,4 +1,12 @@
+---
+spec: content-style-guide
+version: 0.1.0
+status: current-state
+---
+
 # Content Style Guide
+
+[Back to the specs index.](./README.md)
 
 Rules for writing articles in `content/articles/*.md`. This spec is a short,
 agent-facing summary; the **authoritative, detailed guide** is
@@ -53,4 +61,6 @@ Notes:
 - [ ] `tags` reuse existing names where possible.
 
 For anything not covered here, defer to
-[`articles.instructions.md`](../../.github/instructions/articles.instructions.md).
+[`articles.instructions.md`](../../.github/instructions/articles.instructions.md). For
+how the markdown body is rendered (supported syntax, headings, code, Mermaid), see
+[markdown-rendering.md](./markdown-rendering.md).

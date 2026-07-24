@@ -1,4 +1,12 @@
+---
+spec: data-contracts
+version: 0.1.0
+status: current-state
+---
+
 # Data Contracts
+
+[Back to the specs index.](./README.md)
 
 Every file in `content/data/` is imported and cast to a type in `src/src/types/` by
 [`src/src/core/data.ts`](../../src/src/core/data.ts). The TypeScript types are the

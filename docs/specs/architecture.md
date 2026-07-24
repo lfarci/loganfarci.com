@@ -1,4 +1,12 @@
+---
+spec: architecture
+version: 0.1.0
+status: current-state
+---
+
 # Architecture Spec
+
+[Back to the specs index.](./README.md)
 
 How the site is built and rendered. Verified against the code referenced inline.
 See [`.github/copilot-instructions.md`](../../.github/copilot-instructions.md) for
@@ -91,6 +99,11 @@ content/data/*.json  ──(Vite JSON import, inlined at build)─────�
 - **Structured data:** JSON files in `content/data/` are imported and cast to types
   in [`src/src/core/data.ts`](../../src/src/core/data.ts). See
   [data-contracts.md](./data-contracts.md).
+
+Article markdown bodies are rendered by a single pipeline
+([`MarkdownContent.tsx`](../../src/src/components/shared/MarkdownContent.tsx)); the
+supported syntax and element mapping are specified in
+[markdown-rendering.md](./markdown-rendering.md).
 
 Because content is resolved at build time, **adding or editing content requires a
 rebuild** — there is no runtime fetching for core content.

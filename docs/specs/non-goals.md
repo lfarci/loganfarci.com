@@ -1,4 +1,12 @@
+---
+spec: non-goals
+version: 0.1.0
+status: current-state
+---
+
 # Non-Goals
+
+[Back to the specs index.](./README.md)
 
 What this project is **not**. An automated code scout or fix agent should not propose
 changes that pull the site toward any of these — they are out of scope by design.

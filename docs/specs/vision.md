@@ -1,4 +1,12 @@
+---
+spec: vision
+version: 0.1.0
+status: vision
+---
+
 # Vision
+
+[Back to the specs index.](./README.md)
 
 The north star for **loganfarci.com**. Where [architecture.md](./architecture.md)
 describes what exists today, this spec describes what the site is meant to become and
@@ -77,6 +85,24 @@ Referencing is key: the site should be well indexed and rank well where possible
   desktops. Layout and interactions must be usable at every breakpoint.
 - **Usability over decoration.** Prioritize clarity, readable typography, and obvious
   navigation over visual flourish.
+
+## Success criteria
+
+Concrete, checkable signals that the vision is being met. Agents can treat these as
+measurable targets (aspirational where a planned section does not exist yet):
+
+- Core routes score **100 on Lighthouse Accessibility** and pass automated axe checks.
+- **Every page** ships a title, meta description, canonical URL, Open Graph tags, and
+  valid JSON-LD (validates in Google's Rich Results test).
+- `sitemap.xml`, `robots.txt`, `llms.txt`, and `llms-full.txt` list **every** shipped
+  route with no stale or missing entries.
+- The site is **fully usable with the keyboard alone** and with a screen reader on the
+  home, about, and article-reading flows.
+- Layout holds with **no horizontal scroll or overlap** from 320px up to wide desktop.
+- The resume is **viewable in the browser and downloadable as a PDF**, generated from
+  the existing profile/experience/education data (no duplicated source of truth).
+- Each project in the projects section has a summary, tech list, and at least one link
+  (repo, demo, or article).
 
 ## Target sitemap
 
