@@ -17,6 +17,9 @@ SHOULD is a strong default that needs a stated reason to break. All commands run
 
 ## Accessibility — target WCAG 2.1 AA
 
+This is the enforced gate; the full accessibility contract and ideal state are in
+[accessibility.md](./accessibility.md).
+
 - Use semantic HTML and the local shadcn-style **Radix** primitives; interactive
   behavior (tooltips, separators, etc.) MUST NOT be reimplemented by hand.
 - Every image MUST have meaningful `alt` text. The `Image` type requires `alt`, and

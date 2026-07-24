@@ -101,21 +101,24 @@ and machines.
   short summary, tech used, and links (repo, live demo, article). Modeled as typed
   data in `content/data/` mirroring the existing content pipeline.
 - **Themes.** Light and dark theme support driven by user/system preference, built on
-  the existing Tailwind semantic tokens (no second styling system).
+  the existing Tailwind semantic tokens (no second styling system). A manual toggle
+  ships today; see [accessibility.md](./accessibility.md#themes-and-contrast).
 - **Internationalization.** Support for multiple languages over time. Keep it simple:
   content and UI strings should be translatable without a heavy i18n framework, and
-  prerendering must still produce static pages per locale.
+  prerendering must still produce static pages per locale. Full plan in
+  [i18n.md](./i18n.md).
 
 ## Accessibility ambitions
 
-Accessibility is a first-class goal, not an afterthought. Beyond the WCAG 2.1 AA bar
-in [quality-bars.md](./quality-bars.md), the site should keep improving toward:
+Accessibility is a first-class goal, not an afterthought. The enforced bar is
+[quality-bars.md](./quality-bars.md) and the full contract plus ideal state is
+[accessibility.md](./accessibility.md). In short, the site should keep improving toward:
 
 - **Screen-reader / blind users.** Correct semantics, landmarks, focus order, ARIA
   where needed, and meaningful alt text everywhere. Test key flows with a screen
   reader.
-- **Languages.** Content available in more than one language (see i18n above), with
-  correct `lang` attributes per page.
+- **Languages.** Content available in more than one language ([i18n.md](./i18n.md)),
+  with correct `lang` attributes per page.
 - **Themes.** Respect `prefers-color-scheme` and offer a manual toggle; ensure
   contrast holds in every theme.
 - **LLMs / machine readers.** Keep the site machine-friendly. The prerender step

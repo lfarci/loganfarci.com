@@ -26,6 +26,8 @@ still a work in progress.
 | [vision.md](./vision.md) | The north star: core principles, planned sections, accessibility/SEO ambitions, and the target sitemap. |
 | [architecture.md](./architecture.md) | Routes and page responsibilities, SSR + prerender contract, and the content pipeline. |
 | [quality-bars.md](./quality-bars.md) | The rubric a reviewer agent checks against: accessibility, performance, TS strictness, testing, linting. |
+| [accessibility.md](./accessibility.md) | The detailed accessibility contract: current baseline, requirements, themes/contrast, machine-readability, and ideal state. |
+| [i18n.md](./i18n.md) | Multilanguage plan: locale scheme, per-locale prerendering, content/string translation, and SEO (`hreflang`). |
 | [data-contracts.md](./data-contracts.md) | Shape and required fields of each `content/data/*.json` file, mirroring `src/src/types/`. |
 | [content-style-guide.md](./content-style-guide.md) | Tone, structure, and front-matter rules for articles. Extends the article instructions. |
 | [markdown-rendering.md](./markdown-rendering.md) | How article/markdown content is rendered: supported GFM syntax, element mapping, code blocks, and Mermaid. |
@@ -40,6 +42,8 @@ Read the spec that matches the task, then check it against the code before actin
 
 - Changing pages/rendering/content flow → [architecture.md](./architecture.md).
 - Reviewing or shipping a change → [quality-bars.md](./quality-bars.md).
+- Accessibility work → [accessibility.md](./accessibility.md).
+- Multilanguage / i18n work → [i18n.md](./i18n.md).
 - Editing `content/data/*.json` → [data-contracts.md](./data-contracts.md).
 - Writing or editing an article → [content-style-guide.md](./content-style-guide.md)
   and [markdown-rendering.md](./markdown-rendering.md).
