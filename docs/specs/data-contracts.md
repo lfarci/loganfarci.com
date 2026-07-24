@@ -27,7 +27,9 @@ Used by many contracts. All fields required
 
 > **Date drift (applies below):** Fields typed as `Date` (`certification.date`,
 > `experience.start`/`end`) are stored in JSON as **ISO date strings** (e.g.
-> `"2025-03-28"`) and cast to `Date` at build. Keep the `YYYY-MM-DD` string form in JSON.
+> `"2025-03-28"`) and only **type-asserted** to `Date` in `core/data.ts` (a TypeScript
+> `as` cast) — the runtime values remain ISO strings, and helpers like `formatDate`
+> take a string. Keep the `YYYY-MM-DD` string form in JSON.
 
 ## Files → types
 

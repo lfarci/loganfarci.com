@@ -100,9 +100,11 @@ and machines.
 - **Projects.** A dedicated projects section showcasing selected work, each with a
   short summary, tech used, and links (repo, live demo, article). Modeled as typed
   data in `content/data/` mirroring the existing content pipeline.
-- **Themes.** Light and dark theme support driven by user/system preference, built on
-  the existing Tailwind semantic tokens (no second styling system). A manual toggle
-  ships today; see [accessibility.md](./accessibility.md#themes-and-contrast).
+- **Themes.** A light/dark theme toggle **already ships** (`ThemeContext` +
+  `ThemeToggle`, Tailwind `darkMode: "class"`), built on the semantic tokens (no second
+  styling system). Planned refinement: also honor `prefers-color-scheme` on first visit
+  and keep contrast compliant in both themes — see
+  [accessibility.md](./accessibility.md#themes-and-contrast).
 - **Internationalization.** Available in **English, French, and Dutch** for now, with
   room to add more. Keep it simple: content and UI strings should be translatable
   without a heavy i18n framework, and prerendering must still produce static pages per

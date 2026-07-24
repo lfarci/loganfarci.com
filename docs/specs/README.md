@@ -89,7 +89,8 @@ Specs link to — and must stay consistent with — these existing documents:
 - **Static route** — a route enumerated by `getStaticRoutes()` and emitted as an HTML
   file at build.
 - **Primitive** — a local shadcn-style Radix component in
-  `@/components/shared/primitives` (`Button`, `Badge`, `Card`, `Separator`, `Tooltip`).
+  `@/components/shared/primitives` (`Button`, `Badge`, `Card`, `Separator`, `Tooltip`;
+  `Card`/`Tooltip` live in `CardPrimitives.tsx` / `TooltipPrimitives.tsx`).
 - **Semantic token** — a Tailwind theme color/spacing token, used instead of a
   hardcoded value so theming and contrast hold.
 - **Data contract** — the typed shape of a `content/data/*.json` file; see

@@ -74,10 +74,12 @@ All commands must be run from the `src/` directory (the Vite project root).
 
 ## Coding Conventions
 
-- Use **TypeScript** for all new code.
-- Use **Tailwind CSS** for styling; extend theme in `src/tailwind.config.ts`.
-- Use the alias `@/` for imports from `src/src/` and `@content/` for imports from `content/` (see `src/tsconfig.json`).
-- Write clear, maintainable code with descriptive comments where needed.
+The quality bar (TypeScript strictness, Tailwind + semantic tokens, path aliases,
+testing, linting) is owned by [`docs/specs/quality-bars.md`](../docs/specs/quality-bars.md)
+and [`docs/specs/architecture.md`](../docs/specs/architecture.md). In short: TypeScript
+for all code, Tailwind for styling (extend the theme in `src/tailwind.config.ts`), and
+the `@/` (→ `src/src/`) and `@content/` (→ `content/`) aliases. Write clear, maintainable
+code with comments only where they clarify.
 
 ## Patterns and Integration
 

@@ -172,7 +172,7 @@ export default SectionCard;
 1. Create the page component in `src/src/pages/`.
 2. Render `<title>` and `<meta name="description">` directly in the JSX (React 19 native metadata).
 3. Register the route in `src/src/routes.tsx`.
-4. Add the route path to the `routes` array in `src/scripts/prerender.mjs` so it is prerendered.
+4. Add the route path to `getStaticRoutes()` in `src/src/routes.tsx` so it is prerendered (`prerender.mjs` reads that list; article routes are added automatically).
 
 Example:
 ```tsx

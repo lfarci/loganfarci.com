@@ -41,6 +41,18 @@ This is the enforced gate; the full accessibility contract and ideal state are i
   (see [non-goals.md](./non-goals.md)).
 - Target: fast LCP on the static routes; no unnecessary blocking scripts.
 
+## SEO & metadata
+
+Every route ships full metadata today (see `App.tsx`, `ArticlePage.tsx`, and
+[`core/seo.ts`](../../src/src/core/seo.ts)); a change MUST NOT regress this.
+
+- A new route **MUST** ship a `<title>`, `<meta name="description">`, a canonical URL,
+  Open Graph tags, and appropriate JSON-LD (Person, WebSite, Article, or BreadcrumbList).
+- New routes **MUST** be added to `getStaticRoutes()` so they are prerendered and appear
+  in `sitemap.xml` (see [architecture.md](./architecture.md#ssr--prerender-contract)).
+- Machine-readable outputs (`sitemap.xml`, `robots.txt`, `llms.txt`, `llms-full.txt`)
+  **SHOULD** stay complete as routes are added.
+
 ## TypeScript strictness
 
 Enforced by [`src/tsconfig.json`](../../src/tsconfig.json):
@@ -82,5 +94,6 @@ A change ships only when all of these hold:
 - [ ] `npm run test` passes; new/changed core logic has tests.
 - [ ] Images have alt text and dimensions; new images are AVIF.
 - [ ] No new client-side fetching for prerenderable content.
+- [ ] New routes ship full metadata (title, description, canonical, OG, JSON-LD) and are in `getStaticRoutes()`.
 - [ ] Types added/updated in `src/src/types/`; no implicit `any`.
 - [ ] Change stays within scope ([non-goals.md](./non-goals.md)).

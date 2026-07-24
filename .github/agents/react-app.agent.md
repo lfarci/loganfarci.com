@@ -47,8 +47,7 @@ This agent works exclusively on the frontend application:
 - `src/src/` — React components, pages, hooks, contexts, core utilities, types
 - `src/tailwind.config.ts` — Tailwind theme extensions
 - `src/src/globals.css` — CSS custom properties and global styles
-- `src/src/routes.tsx` — React Router route definitions
-- `src/scripts/prerender.mjs` — Prerender route list
+- `src/src/routes.tsx` — React Router route definitions and `getStaticRoutes()` (the prerender route list)
 - `content/articles/` — Markdown articles
 - `content/data/` — JSON data files (certifications, experiences, skills, etc.)
 
@@ -66,7 +65,7 @@ Do **not** modify infrastructure (`infra/`), CI/CD workflows (`.github/workflows
 - Use `React.lazy` + `Suspense` for heavy client-only components (e.g., the Mermaid renderer)
 - Implement proper error boundaries for components that may fail at runtime
 - Add page metadata the React 19 native way: render `<title>` and `<meta name="description">` directly in the page JSX (no `react-helmet`)
-- Register every new page in both `src/src/routes.tsx` and `src/scripts/prerender.mjs`
+- Register every new page in `src/src/routes.tsx` — both the `<Route>` and the `getStaticRoutes()` prerender list
 - Use `import.meta.glob` (not runtime `fs`) to load markdown or JSON content at build time
 - Prefer the `@/` alias for all imports within `src/src/`
 - Keep components small and focused; extract custom hooks for reusable logic
@@ -76,7 +75,7 @@ Do **not** modify infrastructure (`infra/`), CI/CD workflows (`.github/workflows
 ## Common Scenarios
 
 - **Adding a component**: create in `src/src/components/`, use Tailwind semantic tokens, export as default
-- **Adding a page**: create in `src/src/pages/`, add native `<title>`/`<meta>` in the JSX, register in routes and prerender list
+- **Adding a page**: create in `src/src/pages/`, add native `<title>`/`<meta>` in the JSX, register the route and add it to `getStaticRoutes()` in `src/src/routes.tsx`
 - **Adding a custom hook**: create in `src/src/core/` or a dedicated `hooks/` directory, use TypeScript generics
 - **Styling with Tailwind**: use semantic tokens (`text-text-primary`, `bg-surface`, `border-border`); extend in `tailwind.config.ts` for new tokens
 - **Animating with Framer Motion**: use `motion.*` variants already established in the project
