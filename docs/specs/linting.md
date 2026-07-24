@@ -96,9 +96,20 @@ workflow itself) — so unrelated changes don't pay the cost.
   `isolatedModules`, `resolveJsonModule`, and no implicit `any` come from
   [`tsconfig.json`](../../src/tsconfig.json) and `npm run build`. Lint and `tsc` are
   complementary gates; see [quality-bars.md](./quality-bars.md#typescript-strictness).
+- **Prefer shared primitives over hand-rolled elements** — a `no-restricted-syntax` rule
+  scoped to `**/*.tsx` flags raw `<button>` (use the `Button` primitive) and raw `<hr>`
+  (use the `Separator` primitive), pointing contributors at
+  `src/src/components/shared/primitives/`. This enforces the
+  [component conventions](./quality-bars.md#component-conventions) rule that interactive
+  behavior **MUST NOT** be reimplemented by hand. The primitive source files
+  (`src/src/components/shared/primitives/**`) are exempt — they legitimately render the raw
+  elements. The rule currently runs at **`warn`** while a few pre-existing violations are
+  worked off; it will be promoted to **`error`** once the codebase is clean (tracked by
+  [issue #260](https://github.com/lfarci/loganfarci.com/issues/260)).
 
-There are **no project-specific custom rules enabled yet** — the config today is the
-recommended sets plus Prettier compatibility. The section below defines how to add them.
+There are **no other project-specific custom rules enabled yet** — the rest of the config
+is the recommended sets plus Prettier compatibility. The section below defines how to add
+more.
 
 ## Custom rules & guardrails
 
@@ -171,9 +182,6 @@ the spec it would enforce and the likely mechanism:
   [quality-bars.md](./quality-bars.md#accessibility--target-wcag-21-aa) and
   [accessibility.md](./accessibility.md), via a local rule flagging raw hex/`rgb()` in
   `className`/style.
-- **Don't reimplement Radix primitive behavior by hand** —
-  [quality-bars.md](./quality-bars.md#component-conventions), via `no-restricted-syntax`
-  on the raw elements a primitive already covers.
 - **Keep the client bundle lean** — restrict importing heavy dependencies (e.g. `mermaid`)
   outside the modules meant to load them, via `no-restricted-imports`
   ([non-goals.md](./non-goals.md)).
