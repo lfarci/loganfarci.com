@@ -63,11 +63,16 @@ Enforced by [`src/tsconfig.json`](../../src/tsconfig.json):
 
 ## Testing
 
+The detailed testing contract — unit-test guidelines, the build gate, and planned
+deployment validation — is in [testing.md](./testing.md).
+
 - Runner: **vitest**. `npm run test` (CI), `npm run test:watch`, `npm run test:coverage`.
 - Tests are colocated with the code as `*.test.ts` / `*.test.tsx` (e.g.
   `core/articles.test.ts`, `core/data.test.ts`).
 - A change to core logic (`src/src/core/`) or a data contract MUST add or update tests.
 - New tests use Testing Library + jsdom (already configured).
+- After a deploy, deployment validation SHOULD confirm the live URL is actually valid
+  (see [testing.md](./testing.md#deployment-validation-planned)).
 
 ## Linting & formatting
 
