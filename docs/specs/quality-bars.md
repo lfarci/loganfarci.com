@@ -76,6 +76,9 @@ deployment validation — is in [testing.md](./testing.md).
 
 ## Linting & formatting
 
+The full linting contract — toolchain, CI gate, and how to add custom guardrail rules —
+is in [linting.md](./linting.md). In short:
+
 - `npm run lint` — ESLint 9 + `typescript-eslint`, with `eslint-config-prettier`
   (config: [`src/eslint.config.mjs`](../../src/eslint.config.mjs)).
 - Formatting via Prettier (`.prettierrc`). Do not hand-fight the formatter.
