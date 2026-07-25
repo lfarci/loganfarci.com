@@ -45,4 +45,4 @@ safe-outputs:
     max: 1
 ---
 
-{{#runtime-import ../shared/ticket-triage.md}}
+{{#runtime-import .github/shared/ticket-triage.md}}
