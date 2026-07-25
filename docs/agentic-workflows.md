@@ -52,7 +52,8 @@ flowchart TD
    posts a first-class status check (`coverage-canary`, `spec-sheriff`).
 5. **Conflict Custodian** keeps long-lived PRs current with `main` and flags real
    conflicts with `has-conflicts` so nothing silently rots.
-6. Once the required checks are green, merge the PR manually.
+6. Once the required checks are green, a maintainer can merge the PR manually from the
+   GitHub UI (or with `gh pr merge`).
 
 ## Why it's safe
 
