@@ -92,6 +92,15 @@ workflow itself) — so unrelated changes don't pay the cost.
   promises, misused type-only constructs, and similar bugs that need type information.
 - **Core JS hygiene** — the recommended set (no unused vars where configured, no
   unreachable code, etc.).
+- **Prefer `@/` and `@content/` aliases over deep relative imports** — a
+  `no-restricted-imports` rule (scoped to `**/*.{ts,tsx}`) blocks `../../` and deeper
+  relative **static** import paths at `error`, and a companion `no-restricted-syntax`
+  selector catches the same depth in dynamic `import("../../…")` expressions, pointing
+  authors to the `@/` (→ `src/src/`) and `@content/` (→ `content/`) aliases. The dynamic
+  selector shares the `no-restricted-syntax` rule with the raw-primitive guardrail below,
+  so it runs at that rule's `warn` level; the static-import block keeps deep imports at
+  `error`. Enforces the alias convention in
+  [quality-bars.md](./quality-bars.md#typescript-strictness).
 - **Bundle-weight guardrail for `mermaid`** — `no-restricted-imports` errors when any app
   file imports `mermaid` (or a `mermaid/*` subpath). Only
   [`MermaidDiagram.tsx`](../../src/src/components/shared/MermaidDiagram.tsx) — the module
@@ -136,7 +145,8 @@ workflow itself) — so unrelated changes don't pay the cost.
   found zero existing violations.
 
 Beyond the recommended sets and Prettier compatibility, a small number of project-specific
-guardrails are enabled today: the `mermaid` `no-restricted-imports` rule, `jsx-a11y/alt-text`,
+guardrails are enabled today: the alias-import `no-restricted-imports`/`no-restricted-syntax`
+guardrail, the `mermaid` `no-restricted-imports` rule, `jsx-a11y/alt-text`,
 the `no-restricted-syntax` primitives guardrail, and the local `no-hardcoded-colors` rule
 (see the `local` plugin in [`eslint.config.mjs`](../../src/eslint.config.mjs)). The section
 below defines how to add
@@ -207,9 +217,6 @@ Each names the spec it would enforce and the likely mechanism; entries marked �
 already enabled (see [What it enforces today](#what-it-enforces-today)), the rest remain
 backlog:
 
-- **Prefer `@/` and `@content/` aliases** over deep relative imports —
-  [quality-bars.md](./quality-bars.md#typescript-strictness), via `no-restricted-imports`
-  patterns on `../../`.
 - **Don't reimplement Radix primitive behavior by hand** — **✅ enabled**
   (`no-restricted-syntax` on raw `<button>`/`<hr>`); see
   [What it enforces today](#what-it-enforces-today).
