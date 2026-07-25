@@ -31,7 +31,6 @@ flowchart TD
     PR --> CC[🐤 Coverage Canary<br/>check: coverage-canary]
     PR --> SS[👮 Spec Sheriff<br/>check: spec-sheriff]
     PR --> AM[🔀 Auto-merge enabled]
-    CU --> PR
     CI --> G{All required<br/>checks green?}
     CC --> G
     SS --> G
