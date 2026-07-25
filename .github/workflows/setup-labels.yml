@@ -53,6 +53,31 @@ jobs:
                 color: 'fef3c7',
                 description: 'Needs more information before work can begin'
               },
+              {
+                name: 'feature',
+                color: 'a2eeef',
+                description: 'A feature (epic) — broken down into tasks'
+              },
+              {
+                name: 'task',
+                color: '0e8a16',
+                description: 'An actionable, agent-sized unit of work (Ticket Tamer hands these to Copilot)'
+              },
+              {
+                name: 'bug',
+                color: 'd73a4a',
+                description: 'Something is broken'
+              },
+              {
+                name: 'agent:working',
+                color: '8b5cf6',
+                description: 'The Copilot coding agent has picked up this issue'
+              },
+              {
+                name: 'has-conflicts',
+                color: 'b60205',
+                description: 'PR has merge conflicts with main (flagged by the Conflict Custodian)'
+              },
             ];
 
             for (const label of labels) {
