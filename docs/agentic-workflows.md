@@ -16,7 +16,7 @@ source of truth the agents read, enforce, and are measured against.
 | 🛠️ Copilot coding agent | Writes the code and opens the PR | Assigned by the Ticket Tamer | *(GitHub-native)* |
 | 🐤 **Coverage Canary** | Verifies changed code ships with tests | `pull_request` | [`agent-coverage-canary.md`](../.github/workflows/agent-coverage-canary.md) |
 | 👮 **Spec Sheriff** | Reviews the diff against the specs (the gate) | `pull_request` | [`agent-spec-sheriff.md`](../.github/workflows/agent-spec-sheriff.md) |
-| 🔀 Auto-merge | Enables native auto-merge on agent PRs | `pull_request` | [`auto-merge.yml`](../.github/workflows/auto-merge.yml) |
+| 🧹 **Conflict Custodian** | Keeps open PRs mergeable, flags conflicts | Push to `main` + daily | [`agent-conflict-custodian.md`](../.github/workflows/agent-conflict-custodian.md) |
 
 ## The flow
 
@@ -30,7 +30,8 @@ flowchart TD
     PR --> CI[CI: lint · unit-tests · build]
     PR --> CC[🐤 Coverage Canary<br/>check: coverage-canary]
     PR --> SS[👮 Spec Sheriff<br/>check: spec-sheriff]
-    PR --> AM[🔀 Auto-merge enabled]
+    MAIN([push to main / daily]) --> CU[🧹 Conflict Custodian<br/>refresh or flag PRs]
+    CU --> PR
     CI --> G{All required<br/>checks green?}
     CC --> G
     SS --> G
@@ -49,8 +50,10 @@ flowchart TD
    `Fixes #N`).
 4. On the PR, **Coverage Canary** and **Spec Sheriff** run in parallel with CI. Each
    posts a first-class status check (`coverage-canary`, `spec-sheriff`).
-5. **Auto-merge** is enabled on the PR. GitHub squash-merges it **only** once every
-   required check is green.
+5. **Conflict Custodian** keeps long-lived PRs current with `main` and flags real
+   conflicts with `has-conflicts` so nothing silently rots.
+6. Once the required checks are green, merge the PR manually.
+
 ## Why it's safe
 
 - **Read-only agents.** Each agent runs with read-only permissions. It can only affect
@@ -68,8 +71,8 @@ flowchart TD
 
 ## Setup
 
-These are one-time repository configuration steps. Steps 3–4 are what make auto-merge
-safe — do not enable auto-merge before branch protection is in place.
+These are one-time repository configuration steps. Branch protection is what makes the
+merge gate safe.
 
 ### 1. Secret: `GH_AW_AGENT_TOKEN`
 
@@ -85,19 +88,15 @@ GitHub Copilot coding agent must be enabled for the repository.
 
 ### 2. Labels
 
-Run **Setup Repository Labels** once to create the labels the workflow team depends on
-(`feature`, `task`, `bug`, `agent:working`, `needs-clarification`) along with the
-repository's general helper labels:
+Create the labels the agents use (`feature`, `task`, `bug`, `agent:working`,
+`has-conflicts`, `needs-clarification`) by running the **Setup Repository Labels**
+workflow once:
 
 ```bash
 gh workflow run setup-labels.yml --repo lfarci/loganfarci.com
 ```
 
-### 3. Enable auto-merge
-
-Repository → **Settings → General → Pull Requests → Allow auto-merge**.
-
-### 4. Branch protection on `main`
+### 3. Branch protection on `main`
 
 Protect `main` and require these status checks to pass before merging:
 
@@ -159,8 +158,6 @@ authoring help, see the dispatcher agent at
 
 - **Too eager to fail a PR?** The Spec Sheriff only fails on `MUST`/`MUST NOT`
   violations; broaden or narrow that instruction in `agent-spec-sheriff.md`.
-- **Auto-merge scope:** `auto-merge.yml` is gated to PRs authored by the Copilot coding
-  agent (`login` starting with `copilot`). Adjust the `if:` there to widen or restrict.
-- **Conflict resolution:** if a PR falls behind `main`, use GitHub's **Update branch**
-  button (or ask the PR author / coding agent to do the equivalent git update) before
-  auto-merge can complete.
+- **Conflict resolution:** the Conflict Custodian refreshes clean-but-stale branches and
+  flags genuine conflicts rather than force-resolving them. Real conflicts are handed
+  back to the PR author / coding agent.
