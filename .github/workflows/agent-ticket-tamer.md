@@ -27,11 +27,10 @@ tools:
     toolsets: [default]
 
 safe-outputs:
-  # Assign the issue to the GitHub Copilot coding agent so it implements the work.
-  # Requires a PAT secret with Copilot Requests permission.
-  assign-to-agent:
-    name: copilot
-    target: triggering
+  # Start a Copilot coding agent session for the ready issue instead of relying on
+  # issue assignee availability in the repository.
+  create-agent-session:
+    base: main
     github-token: ${{ secrets.GH_AW_AGENT_TOKEN }}
   add-comment:
     max: 1

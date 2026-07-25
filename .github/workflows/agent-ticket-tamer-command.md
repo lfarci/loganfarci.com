@@ -19,9 +19,8 @@ tools:
     toolsets: [default]
 
 safe-outputs:
-  assign-to-agent:
-    name: copilot
-    target: triggering
+  create-agent-session:
+    base: main
     github-token: ${{ secrets.GH_AW_AGENT_TOKEN }}
   add-comment:
     max: 1
