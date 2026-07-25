@@ -12,7 +12,7 @@ source of truth the agents read, enforce, and are measured against.
 
 | Agent | Role | Trigger | Workflow file |
 | --- | --- | --- | --- |
-| 🤠 **Ticket Tamer** | Triages a `task` issue and hands ready work to the Copilot coding agent | Issue labeled `task` (opened/edited/labeled); or `/tame` comment | [`agent-ticket-tamer.md`](../.github/workflows/agent-ticket-tamer.md) · [`agent-ticket-tamer-command.md`](../.github/workflows/agent-ticket-tamer-command.md) |
+| 🤠 **Ticket Tamer** | Triages a `task` issue and starts a Copilot coding agent session for ready work | Issue labeled `task` (opened/edited/labeled); or `/tame` comment | [`agent-ticket-tamer.md`](../.github/workflows/agent-ticket-tamer.md) · [`agent-ticket-tamer-command.md`](../.github/workflows/agent-ticket-tamer-command.md) |
 | 🛠️ Copilot coding agent | Writes the code and opens the PR | Assigned by the Ticket Tamer | *(GitHub-native)* |
 | 🐤 **Coverage Canary** | Verifies changed code ships with tests | `pull_request` | [`agent-coverage-canary.md`](../.github/workflows/agent-coverage-canary.md) |
 | 👮 **Spec Sheriff** | Reviews the diff against the specs (the gate) | `pull_request` | [`agent-spec-sheriff.md`](../.github/workflows/agent-spec-sheriff.md) |
@@ -44,10 +44,10 @@ flowchart TD
 1. You open (or label) an issue as a `task`. Features and bugs are triaged separately;
    only `task` issues are auto-dispatched. You can also comment `/tame` on any existing
    issue to invoke the Tamer on demand.
-2. **Ticket Tamer** reads it, checks it against the specs, and either hands it to the
-   Copilot coding agent, asks for clarification (`needs-clarification`), or flags it as
-   out of scope (crosses a [non-goal](./specs/non-goals.md)). It skips issues already in
-   flight (`agent:working`).
+2. **Ticket Tamer** reads it, checks it against the specs, and either starts a Copilot
+   coding agent session for the work, asks for clarification (`needs-clarification`), or
+   flags it as out of scope (crosses a [non-goal](./specs/non-goals.md)). It skips issues
+   already in flight (`agent:working`).
 3. The **Copilot coding agent** implements the change and opens a PR (linked with
    `Fixes #N`).
 4. On the PR, **Coverage Canary** and **Spec Sheriff** run in parallel with CI. Each
@@ -79,15 +79,18 @@ safe — do not enable auto-merge before branch protection is in place.
 
 ### 1. Secret: `GH_AW_AGENT_TOKEN`
 
-The Ticket Tamer assigns issues to the Copilot coding agent, which needs a token with
-Copilot access. Create a fine-grained PAT with the **Copilot Requests** permission (and
-issue read/write for the target repo) and add it as a repository secret:
+Ticket Tamer starts a Copilot coding agent session with the agent tasks API instead of
+assigning the triggering issue directly. Create a fine-grained PAT with **metadata: read** and **actions**,
+**contents**, **issues**, and **pull requests: write** (or a classic PAT with `repo`)
+and add it as a repository secret:
 
 ```bash
 gh secret set GH_AW_AGENT_TOKEN --repo lfarci/loganfarci.com
 ```
 
-GitHub Copilot coding agent must be enabled for the repository.
+Do not use a GitHub App installation token; the agent tasks API only accepts
+user-to-server tokens. GitHub Copilot coding agent must also be enabled for the
+repository.
 
 ### 2. Labels
 

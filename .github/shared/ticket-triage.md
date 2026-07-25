@@ -9,6 +9,7 @@ be implemented and, if so, hand it off to the GitHub Copilot coding agent (the t
 ## Context
 
 - Issue: `#${{ github.event.issue.number }}` — "${{ github.event.issue.title }}"
+- Repository: `${{ github.repository }}`
 - The specs in `docs/specs/` are the source of truth. Read the ones relevant to the
   issue, especially:
   - `docs/specs/non-goals.md` — what the site must **not** become. This wins over
@@ -42,11 +43,14 @@ be implemented and, if so, hand it off to the GitHub Copilot coding agent (the t
      assign the coding agent. (An editor can address the checklist and the edit will
      re-run you automatically.)
 4. **Hand off.** If the issue is in scope and ready:
-   - Assign it to the Copilot coding agent (`assign-to-agent`).
+   - Start a Copilot coding agent session (`create-agent-session`).
+   - In the session task description, include the issue number and title, the repository,
+     the acceptance criteria / steps to complete, the affected files, any relevant issue
+     comments, and an explicit instruction to open a PR that closes the issue.
    - Add the `agent:working` label. If the issue still carries `needs-clarification`
      (it was clarified after an earlier pass), remove that label so the triage state is
      not left contradictory.
-   - Post one short comment confirming the coding agent has picked it up and
+   - Post one short comment confirming the coding agent session has started and
      restating the acceptance criteria it should satisfy, reminding it to respect
      `docs/specs/quality-bars.md` and to add tests per `docs/specs/testing.md`.
 
