@@ -31,7 +31,7 @@ safe-outputs:
   # issue assignee availability in the repository.
   create-agent-session:
     base: main
-    github-token: ${{ secrets.GH_AW_AGENT_TOKEN }}
+    github-token: ${{ secrets.GH_AW_AGENT_TOKEN || secrets.COPILOT_GITHUB_TOKEN }}
   add-comment:
     max: 1
   add-labels:
