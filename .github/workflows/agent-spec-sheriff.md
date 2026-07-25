@@ -4,6 +4,7 @@ name: "👮 Spec Sheriff"
 on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
+  bots: [copilot]
 
 permissions:
   contents: read
