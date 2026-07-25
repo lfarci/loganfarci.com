@@ -44,9 +44,9 @@ be implemented and, if so, hand it off to the GitHub Copilot coding agent (the t
      re-run you automatically.)
 4. **Hand off.** If the issue is in scope and ready:
    - Start a Copilot coding agent session (`create-agent-session`).
-   - In the session task description, include the issue number and title, the repository,
-     the acceptance criteria / steps to complete, the affected files, any relevant issue
-     comments, and an explicit instruction to open a PR that closes the issue.
+   - In the session task description, include the issue number and title, the acceptance
+     criteria / steps to complete, the affected files, any relevant issue comments, and
+     an explicit instruction to open a PR that closes the issue.
    - Add the `agent:working` label. If the issue still carries `needs-clarification`
      (it was clarified after an earlier pass), remove that label so the triage state is
      not left contradictory.
