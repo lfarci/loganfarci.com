@@ -73,11 +73,6 @@ jobs:
                 color: '8b5cf6',
                 description: 'The Copilot coding agent has picked up this issue'
               },
-              {
-                name: 'has-conflicts',
-                color: 'b60205',
-                description: 'PR has merge conflicts with main (flagged by the Conflict Custodian)'
-              },
             ];
 
             for (const label of labels) {

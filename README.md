@@ -58,7 +58,7 @@ Before you begin, ensure you have the following tools installed on your workstat
 ## Further reading
 
 - [Repository specs](docs/specs/README.md) — source-of-truth specs for architecture, quality bars, data contracts, content style, and non-goals.
-- [Agentic workflow team](docs/agentic-workflows.md) — the autonomous agents (Ticket Tamer, Coverage Canary, Spec Sheriff, Conflict Custodian) that take an issue to a merged PR with spec-based checks.
+- [Agentic workflow team](docs/agentic-workflows.md) — the autonomous agents and native auto-merge flow that take an issue to a merged PR with spec-based checks.
 - [Analytics](docs/analytics.md) — Azure Application Insights setup, cost guardrails, and how to disable telemetry.
 
 ## Technology stack

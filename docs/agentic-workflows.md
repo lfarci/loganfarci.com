@@ -16,7 +16,6 @@ source of truth the agents read, enforce, and are measured against.
 | 🛠️ Copilot coding agent | Writes the code and opens the PR | Assigned by the Ticket Tamer | *(GitHub-native)* |
 | 🐤 **Coverage Canary** | Verifies changed code ships with tests | `pull_request` | [`agent-coverage-canary.md`](../.github/workflows/agent-coverage-canary.md) |
 | 👮 **Spec Sheriff** | Reviews the diff against the specs (the gate) | `pull_request` | [`agent-spec-sheriff.md`](../.github/workflows/agent-spec-sheriff.md) |
-| 🧹 **Conflict Custodian** | Keeps open PRs mergeable, flags conflicts | Push to `main` + daily | [`agent-conflict-custodian.md`](../.github/workflows/agent-conflict-custodian.md) |
 | 🔀 Auto-merge | Enables native auto-merge on agent PRs | `pull_request` | [`auto-merge.yml`](../.github/workflows/auto-merge.yml) |
 
 ## The flow
@@ -32,7 +31,6 @@ flowchart TD
     PR --> CC[🐤 Coverage Canary<br/>check: coverage-canary]
     PR --> SS[👮 Spec Sheriff<br/>check: spec-sheriff]
     PR --> AM[🔀 Auto-merge enabled]
-    MAIN([push to main / daily]) --> CU[🧹 Conflict Custodian<br/>refresh or flag PRs]
     CU --> PR
     CI --> G{All required<br/>checks green?}
     CC --> G
@@ -54,9 +52,6 @@ flowchart TD
    posts a first-class status check (`coverage-canary`, `spec-sheriff`).
 5. **Auto-merge** is enabled on the PR. GitHub squash-merges it **only** once every
    required check is green.
-6. **Conflict Custodian** keeps long-lived PRs current with `main` and flags real
-   conflicts with `has-conflicts` so nothing silently rots.
-
 ## Why it's safe
 
 - **Read-only agents.** Each agent runs with read-only permissions. It can only affect
@@ -92,7 +87,7 @@ GitHub Copilot coding agent must be enabled for the repository.
 ### 2. Labels
 
 Create the labels the agents use (`feature`, `task`, `bug`, `agent:working`,
-`has-conflicts`, `needs-clarification`) by running the **Setup Repository Labels**
+`needs-clarification`) by running the **Setup Repository Labels**
 workflow once:
 
 ```bash
@@ -167,6 +162,5 @@ authoring help, see the dispatcher agent at
   violations; broaden or narrow that instruction in `agent-spec-sheriff.md`.
 - **Auto-merge scope:** `auto-merge.yml` is gated to PRs authored by the Copilot coding
   agent (`login` starting with `copilot`). Adjust the `if:` there to widen or restrict.
-- **Conflict resolution:** the Conflict Custodian refreshes clean-but-stale branches and
-  flags genuine conflicts rather than force-resolving them. Real conflicts are handed
-  back to the PR author / coding agent.
+- **Conflict resolution:** if a PR falls behind `main`, refresh it manually or ask the
+  PR author / coding agent to update it before auto-merge can complete.
