@@ -85,9 +85,9 @@ GitHub Copilot coding agent must be enabled for the repository.
 
 ### 2. Labels
 
-Create the labels the agents use (`feature`, `task`, `bug`, `agent:working`,
-`needs-clarification`) by running the **Setup Repository Labels**
-workflow once:
+Run **Setup Repository Labels** once to create the labels the workflow team depends on
+(`feature`, `task`, `bug`, `agent:working`, `needs-clarification`) along with the
+repository's general helper labels:
 
 ```bash
 gh workflow run setup-labels.yml --repo lfarci/loganfarci.com
@@ -161,5 +161,6 @@ authoring help, see the dispatcher agent at
   violations; broaden or narrow that instruction in `agent-spec-sheriff.md`.
 - **Auto-merge scope:** `auto-merge.yml` is gated to PRs authored by the Copilot coding
   agent (`login` starting with `copilot`). Adjust the `if:` there to widen or restrict.
-- **Conflict resolution:** if a PR falls behind `main`, refresh it manually or ask the
-  PR author / coding agent to update it before auto-merge can complete.
+- **Conflict resolution:** if a PR falls behind `main`, use GitHub's **Update branch**
+  button (or ask the PR author / coding agent to do the equivalent git update) before
+  auto-merge can complete.
