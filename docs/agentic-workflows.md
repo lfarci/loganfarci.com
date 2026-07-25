@@ -80,9 +80,10 @@ safe — do not enable auto-merge before branch protection is in place.
 ### 1. Secret: `GH_AW_AGENT_TOKEN`
 
 Ticket Tamer starts a Copilot coding agent session with the agent tasks API instead of
-assigning the triggering issue directly. Create a fine-grained PAT with **metadata: read** and **actions**,
-**contents**, **issues**, and **pull requests: write** (or a classic PAT with `repo`)
-and add it as a repository secret:
+assigning the triggering issue directly. Create a fine-grained PAT with **metadata: read**
+and **actions: write**, **contents: write**, **issues: write**, and
+**pull requests: write** (or a classic PAT with `repo`) and add it as a repository
+secret:
 
 ```bash
 gh secret set GH_AW_AGENT_TOKEN --repo lfarci/loganfarci.com
