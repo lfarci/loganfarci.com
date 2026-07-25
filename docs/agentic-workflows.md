@@ -16,7 +16,7 @@ source of truth the agents read, enforce, and are measured against.
 | 🛠️ Copilot coding agent | Writes the code and opens the PR | Assigned by the Ticket Tamer | *(GitHub-native)* |
 | 🐤 **Coverage Canary** | Verifies changed code ships with tests | `pull_request` | [`agent-coverage-canary.md`](../.github/workflows/agent-coverage-canary.md) |
 | 👮 **Spec Sheriff** | Reviews the diff against the specs (the gate) | `pull_request` | [`agent-spec-sheriff.md`](../.github/workflows/agent-spec-sheriff.md) |
-| 🧹 **Conflict Custodian** | Keeps open PRs mergeable, flags conflicts | Push to `main` + daily | [`agent-conflict-custodian.md`](../.github/workflows/agent-conflict-custodian.md) |
+| 🧹 **Conflict Custodian** | Keeps open PRs mergeable, watches checks, flags conflicts | Push to `main` + daily | [`agent-conflict-custodian.md`](../.github/workflows/agent-conflict-custodian.md) |
 
 ## The flow
 
@@ -50,8 +50,9 @@ flowchart TD
    `Fixes #N`).
 4. On the PR, **Coverage Canary** and **Spec Sheriff** run in parallel with CI. Each
    posts a first-class status check (`coverage-canary`, `spec-sheriff`).
-5. **Conflict Custodian** keeps long-lived PRs current with `main` and flags real
-   conflicts with `has-conflicts` so nothing silently rots.
+5. **Conflict Custodian** keeps long-lived PRs current with `main`, watches for PRs that
+   are blocked by failing or stuck checks, and flags real conflicts with
+   `has-conflicts` so nothing silently rots.
 6. Once the required checks are green, a maintainer can merge the PR manually from the
    GitHub UI (or with `gh pr merge`).
 
@@ -159,6 +160,7 @@ authoring help, see the dispatcher agent at
 
 - **Too eager to fail a PR?** The Spec Sheriff only fails on `MUST`/`MUST NOT`
   violations; broaden or narrow that instruction in `agent-spec-sheriff.md`.
-- **Conflict resolution:** the Conflict Custodian refreshes clean-but-stale branches and
-  flags genuine conflicts rather than force-resolving them. Real conflicts are handed
-  back to the PR author / coding agent.
+- **Conflict resolution:** the Conflict Custodian refreshes clean-but-stale branches,
+  calls out blocked checks when it cannot safely clear them, and flags genuine conflicts
+  rather than force-resolving them. Real conflicts are handed back to the PR author /
+  coding agent with a clear next-step comment.
