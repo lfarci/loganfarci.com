@@ -1,23 +1,24 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { MemoryRouter, useNavigate } from "react-router";
+import { Link, MemoryRouter } from "react-router";
 import { describe, expect, it } from "vitest";
 
 import NavigationBar from "./NavigationBar";
+import { ThemeProvider } from "@/contexts/ThemeContext";
 
-function renderNavigationBar() {
+function renderNavigationBarWithProviders() {
     return render(
-        <MemoryRouter initialEntries={["/"]}>
-            <NavigationBar title="Logan Farci" />
-        </MemoryRouter>
+        <ThemeProvider>
+            <MemoryRouter initialEntries={["/"]}>
+                <NavigationBar title="Logan Farci" />
+            </MemoryRouter>
+        </ThemeProvider>
     );
 }
 
-function NavigationBarWithPathChanger() {
-    const navigate = useNavigate();
-
+function NavigationTestWrapper() {
     return (
         <>
-            <button type="button" onClick={() => navigate("/about")}>Go to about</button>
+            <Link to="/about">Go to About</Link>
             <NavigationBar title="Logan Farci" />
         </>
     );
@@ -25,11 +26,11 @@ function NavigationBarWithPathChanger() {
 
 describe("NavigationBar", () => {
     it("updates the mobile menu ARIA state when toggled", () => {
-        renderNavigationBar();
+        const { container } = renderNavigationBarWithProviders();
 
         const toggleButton = screen.getByRole("button", { name: /open menu/i });
         const menuId = toggleButton.getAttribute("aria-controls");
-        const menu = menuId ? document.getElementById(menuId) : null;
+        const menu = menuId ? container.querySelector(`[id="${menuId}"]`) : null;
 
         expect(toggleButton.getAttribute("aria-expanded")).toBe("false");
         expect(menu?.getAttribute("aria-hidden")).toBe("true");
@@ -42,28 +43,33 @@ describe("NavigationBar", () => {
     });
 
     it("closes the mobile menu when Escape is pressed", () => {
-        renderNavigationBar();
+        renderNavigationBarWithProviders();
 
         const toggleButton = screen.getByRole("button", { name: /open menu/i });
         fireEvent.click(toggleButton);
+        const closeButton = screen.getByRole("button", { name: /close menu/i });
 
-        expect(screen.getByRole("button", { name: /close menu/i }).getAttribute("aria-expanded")).toBe("true");
+        expect(closeButton.getAttribute("aria-expanded")).toBe("true");
 
-        fireEvent.keyDown(window, { key: "Escape" });
+        fireEvent.keyDown(closeButton, { key: "Escape" });
 
-        expect(screen.getByRole("button", { name: /open menu/i }).getAttribute("aria-expanded")).toBe("false");
+        const reopenedToggleButton = screen.getByRole("button", { name: /open menu/i });
+        expect(reopenedToggleButton.getAttribute("aria-expanded")).toBe("false");
     });
 
     it("closes the mobile menu when the pathname changes", () => {
         render(
-            <MemoryRouter initialEntries={["/"]}>
-                <NavigationBarWithPathChanger />
-            </MemoryRouter>
+            <ThemeProvider>
+                <MemoryRouter initialEntries={["/"]}>
+                    <NavigationTestWrapper />
+                </MemoryRouter>
+            </ThemeProvider>
         );
 
         fireEvent.click(screen.getByRole("button", { name: /open menu/i }));
-        fireEvent.click(screen.getByRole("button", { name: /go to about/i }));
+        fireEvent.click(screen.getByRole("link", { name: "Go to About" }));
 
-        expect(screen.getByRole("button", { name: /open menu/i }).getAttribute("aria-expanded")).toBe("false");
+        const toggleButtonAfterPathChange = screen.getByRole("button", { name: /open menu/i });
+        expect(toggleButtonAfterPathChange.getAttribute("aria-expanded")).toBe("false");
     });
 });
