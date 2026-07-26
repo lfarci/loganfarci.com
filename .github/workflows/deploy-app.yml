@@ -74,7 +74,7 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Run smoke tests
-        run: node src/scripts/smoke.mjs "${{ needs.deploy_production.outputs.static_web_app_url }}"
+        run: npm --prefix src run smoke -- "${{ needs.deploy_production.outputs.static_web_app_url }}"
 
   smoke_preview:
     # Keep this explicit: preview smoke checks only run for active PR deploys with a resolved SWA URL output.
@@ -90,7 +90,7 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Run smoke tests
-        run: node src/scripts/smoke.mjs "${{ needs.deploy_preview.outputs.static_web_app_url }}"
+        run: npm --prefix src run smoke -- "${{ needs.deploy_preview.outputs.static_web_app_url }}"
 
   comment_preview_url:
     if: github.event_name == 'pull_request' && github.event.action != 'closed' && needs.deploy_preview.outputs.static_web_app_url != ''
