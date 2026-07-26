@@ -124,6 +124,7 @@ describe("NavigationBar", () => {
     });
 
     it("closes an open mobile menu after resizing to desktop width", () => {
+        // Use a width below Tailwind's md breakpoint to emulate a mobile viewport.
         setViewportWidth(390);
         renderNavigationBarWithProviders();
 
