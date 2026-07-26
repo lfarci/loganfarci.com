@@ -16,9 +16,11 @@ on:
 if: ${{ github.event_name != 'issue_comment' || github.event.issue.pull_request != null }}
 
 permissions:
+  checks: read
   contents: read
   issues: read
   pull-requests: read
+  statuses: read
 
 network: defaults
 
