@@ -179,8 +179,8 @@ function createChecker(baseUrl) {
     }
 
     async function checkNotFoundFallback() {
-        const nonExistentPath = `${SMOKE_NOT_FOUND_PATH_PREFIX}${Date.now()}__`;
-        const { targetUrl, response, body } = await request(nonExistentPath);
+        const testNotFoundRoute = `${SMOKE_NOT_FOUND_PATH_PREFIX}${Date.now()}__`;
+        const { targetUrl, response, body } = await request(testNotFoundRoute);
         const hasExpectedStatus = response.status === 404 || response.status === 200;
         const fallbackLooksValid =
             /<title[^>]*>\s*Page Not Found/i.test(body) ||
