@@ -1,3 +1,5 @@
+import { appendFile } from "node:fs/promises";
+
 const rawBaseUrl = process.argv[2];
 const DEFAULT_REQUEST_TIMEOUT_MS = 15000;
 const ARTICLE_ROUTE_IN_SITEMAP_REGEX = /<loc>([^<]+\/articles\/[^<]+)<\/loc>/gi;
@@ -66,13 +68,19 @@ function extractRenderableContent(html) {
 
 function createChecker(baseUrl) {
     let hasFailures = false;
+    let checksPassed = 0;
+    let checksFailed = 0;
+    const failedChecks = [];
 
     function pass(message) {
+        checksPassed += 1;
         console.log(`✅ ${message}`);
     }
 
     function fail(message) {
         hasFailures = true;
+        checksFailed += 1;
+        failedChecks.push(message);
         console.error(`❌ ${message}`);
     }
 
@@ -205,7 +213,44 @@ function createChecker(baseUrl) {
         resolveArticlePathFromSitemap,
         checkNotFoundFallback,
         hasFailures: () => hasFailures,
+        getSummary: () => ({
+            checksPassed,
+            checksFailed,
+            totalChecks: checksPassed + checksFailed,
+            failedChecks,
+        }),
     };
+}
+
+function formatSummary({ baseUrl, outcome, checksPassed, checksFailed, totalChecks, failedChecks, errorMessage }) {
+    const lines = [
+        "## Smoke test results",
+        "",
+        `- **Target URL:** ${baseUrl}`,
+        `- **Outcome:** ${outcome}`,
+        `- **Checks passed:** ${checksPassed}`,
+        `- **Checks failed:** ${checksFailed}`,
+        `- **Total checks:** ${totalChecks}`,
+    ];
+
+    if (failedChecks.length > 0) {
+        lines.push("", "### Failed checks");
+        for (const failure of failedChecks) {
+            lines.push(`- ${failure}`);
+        }
+    }
+
+    if (errorMessage) {
+        lines.push("", `### Error`, `- ${errorMessage}`);
+    }
+
+    return `${lines.join("\n")}\n\n`;
+}
+
+async function writeStepSummary(summary) {
+    const summaryPath = process.env.GITHUB_STEP_SUMMARY;
+    if (!summaryPath) return;
+    await appendFile(summaryPath, formatSummary(summary));
 }
 
 try {
@@ -229,13 +274,27 @@ try {
 
     await checker.checkNotFoundFallback();
 
+    const summary = checker.getSummary();
     if (checker.hasFailures()) {
+        await writeStepSummary({ baseUrl, outcome: "Failed", ...summary });
         console.error("❌ Smoke validation failed.");
         process.exit(1);
     }
 
+    await writeStepSummary({ baseUrl, outcome: "Passed", ...summary });
     console.log("✅ Smoke validation passed.");
 } catch (error) {
+    const baseUrl = rawBaseUrl ?? "(not provided)";
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    await writeStepSummary({
+        baseUrl,
+        outcome: "Crashed",
+        checksPassed: 0,
+        checksFailed: 0,
+        totalChecks: 0,
+        failedChecks: [],
+        errorMessage,
+    });
     console.error("❌ Smoke validation crashed:", error);
     process.exit(1);
 }
