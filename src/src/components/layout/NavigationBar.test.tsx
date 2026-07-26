@@ -29,7 +29,7 @@ function setViewportWidth(width: number, triggerResize = false) {
         writable: true,
         value: (query: string) => {
             const minWidthMatch = query.match(/\(min-width:\s*([0-9.]+)(rem|px)\)/i);
-            const rootFontSize = Number.parseFloat(window.getComputedStyle(document.documentElement).fontSize);
+            const rootFontSize = Number.parseFloat(window.getComputedStyle(document.documentElement).fontSize) || 16;
             const matches =
                 minWidthMatch === null
                     ? false
@@ -52,6 +52,10 @@ function setViewportWidth(width: number, triggerResize = false) {
     if (triggerResize) {
         fireEvent(window, new Event("resize"));
     }
+}
+
+function setRootFontSize(fontSizePx: number) {
+    document.documentElement.style.fontSize = `${fontSizePx}px`;
 }
 
 function getMenuElement(): HTMLElement {
@@ -80,7 +84,7 @@ function NavigationTestWrapper() {
 
 describe("NavigationBar", () => {
     beforeEach(() => {
-        document.documentElement.style.fontSize = "16px";
+        setRootFontSize(16);
     });
 
     afterEach(() => {
@@ -184,7 +188,7 @@ describe("NavigationBar", () => {
     });
 
     it("keeps the mobile menu open below the md media query threshold", () => {
-        document.documentElement.style.fontSize = "20px";
+        setRootFontSize(20);
         setViewportWidth(940);
         renderNavigationBarWithProviders();
 
@@ -195,7 +199,7 @@ describe("NavigationBar", () => {
     });
 
     it("closes the mobile menu when viewport satisfies the md media query threshold", () => {
-        document.documentElement.style.fontSize = "20px";
+        setRootFontSize(20);
         setViewportWidth(940);
         renderNavigationBarWithProviders();
 
