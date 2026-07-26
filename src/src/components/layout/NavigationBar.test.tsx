@@ -8,7 +8,7 @@ import { MD_BREAKPOINT_WIDTH } from "@/core/breakpoints";
 
 const MOBILE_VIEWPORT_WIDTH = MD_BREAKPOINT_WIDTH - 1;
 
-function calculateMinWidthThreshold(query: string, rootFontSize: number): number | null {
+function parseMinWidthFromMediaQuery(query: string, rootFontSize: number): number | null {
     // Test helper supports the min-width queries used by NavigationBar: (min-width: <value>rem|px).
     const minWidthMatch = query.match(/\(min-width:\s*([0-9.]+)(rem|px)\)/i);
     if (minWidthMatch === null) {
@@ -35,12 +35,13 @@ function setViewportWidth(width: number, triggerResize = false) {
         writable: true,
         value: width,
     });
+    const rootFontSize = Number.parseFloat(window.getComputedStyle(document.documentElement).fontSize) || 16;
+
     Object.defineProperty(window, "matchMedia", {
         configurable: true,
         writable: true,
         value: (query: string) => {
-            const rootFontSize = Number.parseFloat(window.getComputedStyle(document.documentElement).fontSize) || 16;
-            const minWidthThreshold = calculateMinWidthThreshold(query, rootFontSize);
+            const minWidthThreshold = parseMinWidthFromMediaQuery(query, rootFontSize);
             const matches = minWidthThreshold === null ? false : width >= minWidthThreshold;
 
             return {
