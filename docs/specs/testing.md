@@ -84,8 +84,10 @@ Verified from [`src/vite.config.ts`](../../src/vite.config.ts) and
   as content changes.
 - **Deterministic and offline.** No real network, no wall-clock dependence, no shared
   state between tests. The setup file already resets globals after each test.
-- **One behavior per `it`**, arranged Arrange–Act–Assert. Name the `describe` after
-  the unit and the `it` after the observable behavior.
+- **One behavior per `it`**, arranged Arrange–Act–Assert. Prefer one primary
+  assertion per test so failures are easy to diagnose; use a second assertion only
+  when both checks describe the same outcome. Name the `describe` after the unit and
+  the `it` after the observable behavior.
 - **Keep them fast.** A slow unit test usually means the boundary is wrong — mock it.
 
 ## Build gate
