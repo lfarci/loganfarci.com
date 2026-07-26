@@ -24,6 +24,30 @@ function setViewportWidth(width: number, triggerResize = false) {
         writable: true,
         value: width,
     });
+    Object.defineProperty(window, "matchMedia", {
+        configurable: true,
+        writable: true,
+        value: (query: string) => {
+            const minWidthMatch = query.match(/\(min-width:\s*([0-9.]+)(rem|px)\)/i);
+            const rootFontSize = Number.parseFloat(window.getComputedStyle(document.documentElement).fontSize) || 16;
+            const matches =
+                minWidthMatch === null
+                    ? false
+                    : width >=
+                      Number.parseFloat(minWidthMatch[1]) * (minWidthMatch[2].toLowerCase() === "rem" ? rootFontSize : 1);
+
+            return {
+                matches,
+                media: query,
+                onchange: null,
+                addListener: () => {},
+                removeListener: () => {},
+                addEventListener: () => {},
+                removeEventListener: () => {},
+                dispatchEvent: () => false,
+            };
+        },
+    });
 
     if (triggerResize) {
         fireEvent(window, new Event("resize"));
@@ -57,6 +81,7 @@ function NavigationTestWrapper() {
 describe("NavigationBar", () => {
     afterEach(() => {
         setViewportWidth(1024);
+        document.documentElement.style.fontSize = "";
     });
 
     it("starts with the mobile menu toggle collapsed", () => {
@@ -148,11 +173,31 @@ describe("NavigationBar", () => {
         renderNavigationBarWithProviders();
 
         fireEvent.click(screen.getByRole("button", { name: /open menu/i }));
-        expect(screen.getByRole("button", { name: /close menu/i }).getAttribute("aria-expanded")).toBe("true");
-
         setViewportWidth(1280, true);
 
         const toggleButtonAfterResize = screen.getByRole("button", { name: /open menu/i });
         expect(toggleButtonAfterResize.getAttribute("aria-expanded")).toBe("false");
+    });
+
+    it("keeps the mobile menu open below the md media query threshold", () => {
+        document.documentElement.style.fontSize = "20px";
+        setViewportWidth(940);
+        renderNavigationBarWithProviders();
+
+        fireEvent.click(screen.getByRole("button", { name: /open menu/i }));
+        setViewportWidth(940, true);
+
+        expect(screen.getByRole("button", { name: /close menu/i }).getAttribute("aria-expanded")).toBe("true");
+    });
+
+    it("closes the mobile menu when viewport satisfies the md media query threshold", () => {
+        document.documentElement.style.fontSize = "20px";
+        setViewportWidth(940);
+        renderNavigationBarWithProviders();
+
+        fireEvent.click(screen.getByRole("button", { name: /open menu/i }));
+        setViewportWidth(960, true);
+
+        expect(screen.getByRole("button", { name: /open menu/i }).getAttribute("aria-expanded")).toBe("false");
     });
 });

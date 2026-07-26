@@ -5,7 +5,7 @@ import { Button } from "@/components/shared/primitives/Button";
 import ThemeToggle from "@/components/shared/ThemeToggle";
 import { contentWidthStyles } from "@/components/layout/contentWidthStyles";
 import { mergeClassNames } from "@/core/mergeClassNames";
-import { MD_BREAKPOINT_WIDTH } from "@/core/breakpoints";
+import { MD_BREAKPOINT_MEDIA_QUERY } from "@/core/breakpoints";
 
 interface NavigationBarProps {
     title: string;
@@ -56,7 +56,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ title }) => {
         }
 
         const handleResize = () => {
-            if (window.innerWidth >= MD_BREAKPOINT_WIDTH) {
+            if (window.matchMedia(MD_BREAKPOINT_MEDIA_QUERY).matches) {
                 setIsMenuOpen(false);
             }
         };
