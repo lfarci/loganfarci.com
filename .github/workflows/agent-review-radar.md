@@ -29,11 +29,6 @@ tools:
     toolsets: [default]
 
 safe-outputs:
-  # Start a Copilot coding agent session for concrete follow-up work. Bot-authored
-  # Bot-authored Copilot mentions do not reliably trigger the coding agent, so use the agent task API.
-  create-agent-session:
-    base: main
-    github-token: ${{ secrets.GH_AW_AGENT_TOKEN || secrets.COPILOT_GITHUB_TOKEN }}
   add-comment:
     max: 5
     target: triggering
@@ -88,16 +83,14 @@ the comments that are truly useful for Logan or the Copilot coding agent.
    precise feedback.
 5. **Preserve PR scope.** Do not ask for unrelated cleanup or broad refactors.
 
-## Coding-agent escalation
+## Copilot escalation
 
-When the right next step is agent implementation, start a Copilot coding agent session
-with `create-agent-session`. Do not rely on Copilot mention comments as the trigger;
-Review Radar comments are posted by automation and may not be trusted as a human
-maintainer command. If you ever include a GitHub mention in a visibility comment, write
-it as plain text and never wrap it in backticks or code formatting.
+When the right next step is agent implementation on the existing PR, post a PR comment
+that starts with @copilot as plain GitHub text. Never wrap the mention in backticks,
+fenced code blocks, quotes, or other code formatting, so GitHub can parse it as a real
+mention.
 
-The agent-session task description must include enough context to resume work without
-re-discovery:
+The comment must include enough context to resume work without re-discovery:
 
 - the concrete issue to fix,
 - relevant files, lines, checks, or review threads,
@@ -105,11 +98,10 @@ re-discovery:
 - the expected outcome or acceptance criteria,
 - constraints from custom instructions or `docs/specs/`.
 
-Create an agent session only for concrete implementation work. Do not create one for
+Use a Copilot mention only for concrete implementation work. Do not mention Copilot for
 FYI-only summaries, vague concerns, low-confidence findings, or issues already covered by
-an active Copilot thread. When you do create a session, you may also add one concise PR
-comment for visibility that summarizes the handoff and acceptance criteria, but do not
-prefix that comment with a Copilot mention.
+an active Copilot thread. If you need to refer to the Copilot product in prose without
+triggering it, write "Copilot" without an at-sign.
 
 ## What to do
 
@@ -121,7 +113,7 @@ prefix that comment with a Copilot mention.
    - already handled,
    - no action/noise,
    - needs Logan's judgment,
-   - needs a Copilot coding agent session,
+   - needs Copilot implementation,
    - needs a concise human review comment.
 4. Leave at most the necessary comments or review comments. If everything is clean or
    already covered, produce no external comment.
