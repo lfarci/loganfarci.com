@@ -30,7 +30,7 @@ tools:
 
 safe-outputs:
   # Start a Copilot coding agent session for concrete follow-up work. Bot-authored
-  # @copilot mentions do not reliably trigger the coding agent, so use the agent task API.
+  # Bot-authored Copilot mentions do not reliably trigger the coding agent, so use the agent task API.
   create-agent-session:
     base: main
     github-token: ${{ secrets.GH_AW_AGENT_TOKEN || secrets.COPILOT_GITHUB_TOKEN }}
@@ -91,9 +91,10 @@ the comments that are truly useful for Logan or the Copilot coding agent.
 ## Coding-agent escalation
 
 When the right next step is agent implementation, start a Copilot coding agent session
-with `create-agent-session`. Do not rely on `@copilot` comments as the trigger; Review
-Radar comments are posted by automation and may not be trusted as a human maintainer
-command.
+with `create-agent-session`. Do not rely on Copilot mention comments as the trigger;
+Review Radar comments are posted by automation and may not be trusted as a human
+maintainer command. If you ever include a GitHub mention in a visibility comment, write
+it as plain text and never wrap it in backticks or code formatting.
 
 The agent-session task description must include enough context to resume work without
 re-discovery:
@@ -108,7 +109,7 @@ Create an agent session only for concrete implementation work. Do not create one
 FYI-only summaries, vague concerns, low-confidence findings, or issues already covered by
 an active Copilot thread. When you do create a session, you may also add one concise PR
 comment for visibility that summarizes the handoff and acceptance criteria, but do not
-prefix that comment with `@copilot`.
+prefix that comment with a Copilot mention.
 
 ## What to do
 
