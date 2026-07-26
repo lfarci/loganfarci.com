@@ -1,6 +1,6 @@
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import { Link, MemoryRouter } from "react-router";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 import NavigationBar from "./NavigationBar";
 import { ThemeProvider } from "@/contexts/ThemeContext";
@@ -29,7 +29,7 @@ function setViewportWidth(width: number, triggerResize = false) {
         writable: true,
         value: (query: string) => {
             const minWidthMatch = query.match(/\(min-width:\s*([0-9.]+)(rem|px)\)/i);
-            const rootFontSize = Number.parseFloat(window.getComputedStyle(document.documentElement).fontSize) || 16;
+            const rootFontSize = Number.parseFloat(window.getComputedStyle(document.documentElement).fontSize);
             const matches =
                 minWidthMatch === null
                     ? false
@@ -79,6 +79,10 @@ function NavigationTestWrapper() {
 }
 
 describe("NavigationBar", () => {
+    beforeEach(() => {
+        document.documentElement.style.fontSize = "16px";
+    });
+
     afterEach(() => {
         setViewportWidth(1024);
         document.documentElement.style.fontSize = "";
