@@ -83,10 +83,14 @@ the comments that are truly useful for Logan or the Copilot coding agent.
    precise feedback.
 5. **Preserve PR scope.** Do not ask for unrelated cleanup or broad refactors.
 
-## @copilot escalation
+## Copilot escalation
 
-When the right next step is agent implementation, post a PR comment that starts with
-`@copilot` and gives enough context to resume work without re-discovery:
+When the right next step is agent implementation on the existing PR, post a PR comment
+that starts with @copilot as plain GitHub text. Never wrap the mention in backticks,
+fenced code blocks, quotes, or other code formatting, so GitHub can parse it as a real
+mention.
+
+The comment must include enough context to resume work without re-discovery:
 
 - the concrete issue to fix,
 - relevant files, lines, checks, or review threads,
@@ -94,8 +98,10 @@ When the right next step is agent implementation, post a PR comment that starts 
 - the expected outcome or acceptance criteria,
 - constraints from custom instructions or `docs/specs/`.
 
-Use `@copilot` only for concrete work. Do not tag Copilot for FYI-only summaries, vague
-concerns, or issues already covered by an active Copilot thread.
+Use a Copilot mention only for concrete implementation work. Do not mention Copilot for
+FYI-only summaries, vague concerns, low-confidence findings, or issues already covered by
+an active Copilot thread. If you need to refer to the Copilot product in prose without
+triggering it, write "Copilot" without an at-sign.
 
 ## What to do
 
@@ -107,7 +113,7 @@ concerns, or issues already covered by an active Copilot thread.
    - already handled,
    - no action/noise,
    - needs Logan's judgment,
-   - needs `@copilot` implementation,
+   - needs Copilot implementation,
    - needs a concise human review comment.
 4. Leave at most the necessary comments or review comments. If everything is clean or
    already covered, produce no external comment.
