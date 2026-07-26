@@ -1,9 +1,13 @@
 const rawBaseUrl = process.argv[2];
 
 if (!rawBaseUrl) {
-    console.error("❌ Missing base URL. Usage: node scripts/smoke.mjs <base-url>");
+    console.error("❌ Missing base URL. Usage: node src/scripts/smoke.mjs <base-url>");
     process.exit(1);
 }
+
+const timeoutFromEnv = Number.parseInt(process.env.SMOKE_TIMEOUT_MS ?? "", 10);
+const requestTimeoutMs =
+    Number.isFinite(timeoutFromEnv) && timeoutFromEnv > 0 ? timeoutFromEnv : 15000;
 
 function normalizeBaseUrl(value) {
     const withProtocol = /^https?:\/\//i.test(value) ? value : `https://${value}`;
@@ -78,7 +82,7 @@ function createChecker(baseUrl) {
     async function request(pathname) {
         const targetUrl = new globalThis.URL(pathname, `${baseUrl}/`).toString();
         const response = await globalThis.fetch(targetUrl, {
-            signal: globalThis.AbortSignal.timeout(15000),
+            signal: globalThis.AbortSignal.timeout(requestTimeoutMs),
         });
         const body = await response.text();
         return { targetUrl, response, body };
