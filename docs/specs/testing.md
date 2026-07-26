@@ -28,7 +28,7 @@ layers.
 | --- | --- | --- | --- |
 | **Unit** | Pure logic in `core/`, components in isolation | `npm run test` locally; CI on app changes | Current |
 | **Build gate** | `npm run build` produces valid client + SSR + prerendered HTML | CI on deploy-triggering app/content changes | Current |
-| **Deployment validation** | HTTP smoke checks against a live deployed URL | After each deploy | **Planned** |
+| **Deployment validation** | HTTP smoke checks against a live deployed URL | After each deploy | Current |
 
 Keep the pyramid bottom-heavy: prefer many fast unit tests, a green build, and a
 small, high-signal set of smoke checks. Do **not** add a heavy end-to-end framework
@@ -104,10 +104,7 @@ The build is itself a test: it fails if a route can't be server-rendered, if
 `sitemap.xml`, `robots.txt`, `llms.txt`, and `llms-full.txt`. Treat a red build as a
 failing test, never as noise to work around.
 
-## Deployment validation (Planned)
-
-> **Status: planned — not yet wired.** This is the core of "quickly assess whether a
-> deployed version is actually valid." It is defined here so it lands consistently.
+## Deployment validation
 
 Goal: after a deploy — **preview** (`pr-<n>`) or **production** — run a small suite of
 HTTP checks against the **live URL** and fail loudly if the site is broken. This
@@ -116,16 +113,16 @@ catches problems a local build cannot: a bad SWA config, a broken
 
 ### Where it hooks in
 
-The deploy workflows already surface the target:
+The deploy workflows surface the target URL:
 [`reusable-deploy-static-web-app.yml`](../../.github/workflows/reusable-deploy-static-web-app.yml)
 outputs `static_web_app_url`, consumed by
-[`deploy-app.yml`](../../.github/workflows/deploy-app.yml). A validation job
-**SHOULD** run **after** `deploy_preview` / `deploy_production`, take that URL as
-input, and gate the deploy's success on the checks passing.
+[`deploy-app.yml`](../../.github/workflows/deploy-app.yml). Validation jobs run
+**after** `deploy_preview` / `deploy_production`, take that URL as input, and gate the
+deploy's success on the checks passing.
 
 ### What to check (smoke suite)
 
-Against the deployed base URL, the suite **SHOULD** assert:
+Against the deployed base URL, the suite asserts:
 
 - **Routes return `200`.** Every route from `getStaticRoutes()` — `/`, `/about`,
   `/articles`, and at least one `/articles/{slug}` — responds `200` with
@@ -133,19 +130,17 @@ Against the deployed base URL, the suite **SHOULD** assert:
 - **Content is prerendered, not blank.** Each route's HTML contains real body content
   inside `<div id="root">` (not an empty shell), confirming the prerender shipped.
 - **SEO head is intact.** Each page has a non-empty `<title>`, a
-  `<meta name="description">`, a `<link rel="canonical">`, Open Graph tags, and the
-  expected JSON-LD — matching [quality-bars.md](./quality-bars.md#seo--metadata).
+  `<meta name="description">`, a `<link rel="canonical">`, Open Graph
+  `og:title`/`og:description`, and non-empty JSON-LD markup, matching
+  [quality-bars.md](./quality-bars.md#seo--metadata).
 - **Machine files are reachable.** `sitemap.xml`, `robots.txt`, `llms.txt`, and
-  `llms-full.txt` all return `200` with a sensible content-type and non-empty body.
+  `llms-full.txt` all return `200` with file-appropriate content-type and file-specific
+  content markers, so HTML fallback pages cannot pass as valid machine files.
 - **404 fallback works.** An unknown path serves the `/404.html` fallback configured
-  in [`staticwebapp.config.json`](../../src/public/staticwebapp.config.json) — ideally
-  with a `404` status — rather than a broken or blank page.
-- **Static assets load.** A referenced hashed JS/CSS asset and a key image resolve
-  `200`.
-
-Optionally, the production run **MAY** assert the deployed commit matches the expected
-SHA by reading the `VITE_COMMIT_HASH` surfaced in the UI/footer, to confirm the right
-build went live.
+  in [`staticwebapp.config.json`](../../src/public/staticwebapp.config.json), with the
+  custom not-found page markers (not a generic host 404 page).
+The smoke command can be run locally against any deployed environment:
+`npm run smoke -- <base-url>` from `src/`.
 
 ### Constraints
 
@@ -165,4 +160,4 @@ A change satisfies the testing bar when:
 - [ ] `npm run test` passes; new/changed core logic and data contracts have colocated tests.
 - [ ] Component tests query by role/accessible name and mock content at the boundary.
 - [ ] `npm run build` succeeds (client + SSR + prerender).
-- [ ] Once deployment validation lands: the post-deploy smoke suite is green against the deployed URL.
+- [ ] Post-deploy smoke suite is green against the deployed URL.
