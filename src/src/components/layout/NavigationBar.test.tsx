@@ -72,11 +72,7 @@ describe("NavigationBar", () => {
         const menu = getMenuElement();
 
         expect(menu?.getAttribute("aria-hidden")).toBe("false");
-        if (!menu) {
-            throw new Error("Expected mobile menu to exist");
-        }
-
-        fireEvent.click(within(menu).getByRole("link", { name: "About" }));
+        fireEvent.click(within(menu as HTMLElement).getByRole("link", { name: "About" }));
 
         const reopenedToggleButton = screen.getByRole("button", { name: /open menu/i });
         expect(reopenedToggleButton.getAttribute("aria-expanded")).toBe("false");

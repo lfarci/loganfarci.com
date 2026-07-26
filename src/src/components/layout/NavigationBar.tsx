@@ -15,6 +15,7 @@ const navigationItems = [
     { url: "/about", label: "About" },
     { url: "/articles", label: "Articles" },
 ] as const;
+const DESKTOP_BREAKPOINT_WIDTH = 768;
 
 const NavigationBar: React.FC<NavigationBarProps> = ({ title }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -55,7 +56,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ title }) => {
         }
 
         const handleResize = () => {
-            if (window.innerWidth >= 768) {
+            if (window.innerWidth >= DESKTOP_BREAKPOINT_WIDTH) {
                 setIsMenuOpen(false);
             }
         };
