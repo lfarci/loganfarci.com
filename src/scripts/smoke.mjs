@@ -1,4 +1,5 @@
 const rawBaseUrl = process.argv[2];
+const DEFAULT_REQUEST_TIMEOUT_MS = 15000;
 
 if (!rawBaseUrl) {
     console.error("❌ Missing base URL. Usage: node src/scripts/smoke.mjs <base-url>");
@@ -7,7 +8,9 @@ if (!rawBaseUrl) {
 
 const timeoutFromEnv = Number.parseInt(process.env.SMOKE_TIMEOUT_MS ?? "", 10);
 const requestTimeoutMs =
-    Number.isFinite(timeoutFromEnv) && timeoutFromEnv > 0 ? timeoutFromEnv : 15000;
+    Number.isFinite(timeoutFromEnv) && timeoutFromEnv > 0
+        ? timeoutFromEnv
+        : DEFAULT_REQUEST_TIMEOUT_MS;
 
 function normalizeBaseUrl(value) {
     const withProtocol = /^https?:\/\//i.test(value) ? value : `https://${value}`;
@@ -174,8 +177,8 @@ function createChecker(baseUrl) {
     }
 
     async function checkNotFoundFallback() {
-        const unknownPath = `/__smoke_not_found_${Date.now()}__`;
-        const { targetUrl, response, body } = await request(unknownPath);
+        const nonExistentPath = `/__smoke_not_found_${Date.now()}__`;
+        const { targetUrl, response, body } = await request(nonExistentPath);
         const hasExpectedStatus = response.status === 404 || response.status === 200;
         const fallbackLooksValid =
             /<title[^>]*>\s*Page Not Found/i.test(body) ||
