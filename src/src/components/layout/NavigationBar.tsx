@@ -15,6 +15,7 @@ const navigationItems = [
     { url: "/about", label: "About" },
     { url: "/articles", label: "Articles" },
 ] as const;
+// Keep in sync with Tailwind's `md` breakpoint (768px) used in this component's classes.
 const DESKTOP_BREAKPOINT_WIDTH = 768;
 
 const NavigationBar: React.FC<NavigationBarProps> = ({ title }) => {

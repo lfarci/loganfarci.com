@@ -23,10 +23,19 @@ function setViewportWidth(width: number) {
     });
 }
 
-function getMenuElement() {
+function getMenuElement(): HTMLElement {
     const toggleButton = screen.getByRole("button", { name: /open menu|close menu/i });
     const menuId = toggleButton.getAttribute("aria-controls");
-    return menuId ? document.getElementById(menuId) : null;
+    if (!menuId) {
+        throw new Error("Expected toggle button to reference a menu element");
+    }
+
+    const menu = document.getElementById(menuId);
+    if (!(menu instanceof HTMLElement)) {
+        throw new Error("Expected referenced mobile menu element to exist");
+    }
+
+    return menu;
 }
 
 function NavigationTestWrapper() {
@@ -50,19 +59,19 @@ describe("NavigationBar", () => {
         const menu = getMenuElement();
 
         expect(toggleButton.getAttribute("aria-expanded")).toBe("false");
-        expect(menu?.getAttribute("aria-hidden")).toBe("true");
+        expect(menu.getAttribute("aria-hidden")).toBe("true");
 
         fireEvent.click(toggleButton);
 
         const closeButton = screen.getByRole("button", { name: /close menu/i });
         expect(closeButton.getAttribute("aria-expanded")).toBe("true");
-        expect(menu?.getAttribute("aria-hidden")).toBe("false");
+        expect(menu.getAttribute("aria-hidden")).toBe("false");
 
         fireEvent.click(closeButton);
 
         const reopenedToggleButton = screen.getByRole("button", { name: /open menu/i });
         expect(reopenedToggleButton.getAttribute("aria-expanded")).toBe("false");
-        expect(menu?.getAttribute("aria-hidden")).toBe("true");
+        expect(menu.getAttribute("aria-hidden")).toBe("true");
     });
 
     it("closes the mobile menu when a navigation item is clicked", () => {
@@ -71,8 +80,8 @@ describe("NavigationBar", () => {
         fireEvent.click(screen.getByRole("button", { name: /open menu/i }));
         const menu = getMenuElement();
 
-        expect(menu?.getAttribute("aria-hidden")).toBe("false");
-        fireEvent.click(within(menu as HTMLElement).getByRole("link", { name: "About" }));
+        expect(menu.getAttribute("aria-hidden")).toBe("false");
+        fireEvent.click(within(menu).getByRole("link", { name: "About" }));
 
         const reopenedToggleButton = screen.getByRole("button", { name: /open menu/i });
         expect(reopenedToggleButton.getAttribute("aria-expanded")).toBe("false");
