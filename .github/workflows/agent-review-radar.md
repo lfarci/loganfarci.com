@@ -29,6 +29,9 @@ tools:
     toolsets: [default]
 
 safe-outputs:
+  mentions:
+    allowed: [copilot]
+    max: 1
   add-comment:
     max: 5
     target: triggering
