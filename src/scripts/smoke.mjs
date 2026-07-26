@@ -7,7 +7,7 @@ if (!rawBaseUrl) {
 
 function normalizeBaseUrl(value) {
     const withProtocol = /^https?:\/\//i.test(value) ? value : `https://${value}`;
-    const normalizedUrl = new URL(withProtocol);
+    const normalizedUrl = new globalThis.URL(withProtocol);
     normalizedUrl.pathname = "/";
     normalizedUrl.search = "";
     normalizedUrl.hash = "";
@@ -76,9 +76,9 @@ function createChecker(baseUrl) {
     }
 
     async function request(pathname) {
-        const targetUrl = new URL(pathname, `${baseUrl}/`).toString();
-        const response = await fetch(targetUrl, {
-            signal: AbortSignal.timeout(15000),
+        const targetUrl = new globalThis.URL(pathname, `${baseUrl}/`).toString();
+        const response = await globalThis.fetch(targetUrl, {
+            signal: globalThis.AbortSignal.timeout(15000),
         });
         const body = await response.text();
         return { targetUrl, response, body };
@@ -164,7 +164,7 @@ function createChecker(baseUrl) {
             return null;
         }
 
-        const articlePath = new URL(firstArticleUrl).pathname;
+        const articlePath = new globalThis.URL(firstArticleUrl).pathname;
         pass(`Discovered article route from sitemap: ${articlePath}`);
         return articlePath;
     }
