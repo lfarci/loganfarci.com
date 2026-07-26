@@ -4,6 +4,43 @@ const rawBaseUrl = process.argv[2];
 const DEFAULT_REQUEST_TIMEOUT_MS = 15000;
 const ARTICLE_ROUTE_IN_SITEMAP_REGEX = /<loc>([^<]+\/articles\/[^<]+)<\/loc>/gi;
 const SMOKE_NOT_FOUND_PATH_PREFIX = "/__smoke_not_found_";
+const SITE_OWNER_NAME = "Logan Farci";
+const LLMS_FULL_TITLE = `${SITE_OWNER_NAME} - Full LLM Context`;
+const MACHINE_FILE_EXPECTATIONS = [
+    {
+        pathname: "/sitemap.xml",
+        contentTypePattern: /(application|text)\/xml/i,
+        contentTypeDescription: "application/xml or text/xml",
+        bodyPattern: /<urlset\b/i,
+        bodyPatternDescription: "<urlset>",
+    },
+    {
+        pathname: "/robots.txt",
+        contentTypePattern: /text\/plain/i,
+        contentTypeDescription: "text/plain",
+        bodyPattern: /User-agent:\s*\*/i,
+        bodyPatternDescription: "User-agent: *",
+    },
+    {
+        pathname: "/llms.txt",
+        contentTypePattern: /text\/plain/i,
+        contentTypeDescription: "text/plain",
+        bodyPattern: new RegExp(`^#\\s+${SITE_OWNER_NAME}\\b`, "im"),
+        bodyPatternDescription: `# ${SITE_OWNER_NAME}`,
+    },
+    {
+        pathname: "/llms-full.txt",
+        contentTypePattern: /text\/plain/i,
+        contentTypeDescription: "text/plain",
+        bodyPattern: new RegExp(`^#\\s+${LLMS_FULL_TITLE}\\b`, "im"),
+        bodyPatternDescription: `# ${LLMS_FULL_TITLE}`,
+    },
+];
+const CUSTOM_NOT_FOUND_EXPECTATIONS = {
+    titlePattern: new RegExp(`<title[^>]*>\\s*Page Not Found - ${SITE_OWNER_NAME}\\s*<\\/title>`, "i"),
+    robotsDirectivePattern: /\bnoindex\b/i,
+    backToHomePattern: /Back to Home/i,
+};
 
 if (!rawBaseUrl) {
     console.error("❌ Missing base URL. Usage: node src/scripts/smoke.mjs <base-url>");
@@ -66,6 +103,18 @@ function extractRenderableContent(html) {
     return "";
 }
 
+function hasJsonLdScript(html) {
+    const jsonLdMatches = html.matchAll(
+        /<script\b[^>]*type\s*=\s*["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi
+    );
+    for (const match of jsonLdMatches) {
+        if ((match[1] ?? "").trim().length > 0) {
+            return true;
+        }
+    }
+    return false;
+}
+
 function createChecker(baseUrl) {
     let hasFailures = false;
     let checksPassed = 0;
@@ -118,6 +167,19 @@ function createChecker(baseUrl) {
             (tag) => /rel\s*=\s*["']canonical["']/i.test(tag)
         );
         const canonicalHref = getAttribute(canonicalTag, "href");
+        const ogTitleTag = findTag(
+            body,
+            "meta",
+            (tag) => /property\s*=\s*["']og:title["']/i.test(tag)
+        );
+        const ogDescriptionTag = findTag(
+            body,
+            "meta",
+            (tag) => /property\s*=\s*["']og:description["']/i.test(tag)
+        );
+        const ogTitle = getAttribute(ogTitleTag, "content");
+        const ogDescription = getAttribute(ogDescriptionTag, "content");
+        const hasNonEmptyJsonLdScript = hasJsonLdScript(body);
         const renderedContent = extractRenderableContent(body);
 
         check(
@@ -150,10 +212,32 @@ function createChecker(baseUrl) {
             `${targetUrl} includes a canonical link`,
             `${targetUrl} is missing a canonical link`
         );
+        check(
+            ogTitle.length > 0,
+            `${targetUrl} includes a non-empty Open Graph title`,
+            `${targetUrl} is missing a non-empty Open Graph title`
+        );
+        check(
+            ogDescription.length > 0,
+            `${targetUrl} includes a non-empty Open Graph description`,
+            `${targetUrl} is missing a non-empty Open Graph description`
+        );
+        check(
+            hasNonEmptyJsonLdScript,
+            `${targetUrl} includes non-empty JSON-LD markup`,
+            `${targetUrl} is missing non-empty JSON-LD markup`
+        );
     }
 
-    async function checkMachineFile(pathname) {
+    async function checkMachineFile({
+        pathname,
+        contentTypePattern,
+        contentTypeDescription,
+        bodyPattern,
+        bodyPatternDescription,
+    }) {
         const { targetUrl, response, body } = await request(pathname);
+        const contentType = response.headers.get("content-type") ?? "";
         check(
             response.status === 200,
             `${targetUrl} returned HTTP 200`,
@@ -163,6 +247,16 @@ function createChecker(baseUrl) {
             body.trim().length > 0,
             `${targetUrl} returned a non-empty body`,
             `${targetUrl} returned an empty body`
+        );
+        check(
+            contentTypePattern.test(contentType),
+            `${targetUrl} returned ${contentTypeDescription}`,
+            `${targetUrl} returned content-type "${contentType}" (expected ${contentTypeDescription})`
+        );
+        check(
+            bodyPattern.test(body),
+            `${targetUrl} includes expected ${bodyPatternDescription} marker`,
+            `${targetUrl} did not include expected ${bodyPatternDescription} marker`
         );
     }
 
@@ -190,10 +284,20 @@ function createChecker(baseUrl) {
         const testNotFoundRoute = `${SMOKE_NOT_FOUND_PATH_PREFIX}${Date.now()}`;
         const { targetUrl, response, body } = await request(testNotFoundRoute);
         const hasExpectedStatus = response.status === 404 || response.status === 200;
+        const customNotFoundTitle = CUSTOM_NOT_FOUND_EXPECTATIONS.titlePattern.test(body);
+        const robotsTag = findTag(
+            body,
+            "meta",
+            (tag) => /name\s*=\s*["']robots["']/i.test(tag)
+        );
+        const robotsContent = getAttribute(robotsTag, "content");
+        const hasNoIndexRobotsDirective =
+            CUSTOM_NOT_FOUND_EXPECTATIONS.robotsDirectivePattern.test(robotsContent);
+        const hasBackToHomeLinkText = CUSTOM_NOT_FOUND_EXPECTATIONS.backToHomePattern.test(body);
         const fallbackLooksValid =
-            /<title[^>]*>\s*Page Not Found/i.test(body) ||
-            /Page Not Found/i.test(body) ||
-            /404/i.test(body);
+            customNotFoundTitle &&
+            hasNoIndexRobotsDirective &&
+            hasBackToHomeLinkText;
 
         check(
             hasExpectedStatus,
@@ -202,8 +306,8 @@ function createChecker(baseUrl) {
         );
         check(
             fallbackLooksValid,
-            `${targetUrl} served 404 fallback content`,
-            `${targetUrl} did not serve expected 404 fallback content`
+            `${targetUrl} served the custom 404 fallback content`,
+            `${targetUrl} did not serve the expected custom 404 fallback content`
         );
     }
 
@@ -270,10 +374,9 @@ try {
         await checker.checkHtmlRoute(articlePath);
     }
 
-    await checker.checkMachineFile("/sitemap.xml");
-    await checker.checkMachineFile("/robots.txt");
-    await checker.checkMachineFile("/llms.txt");
-    await checker.checkMachineFile("/llms-full.txt");
+    for (const machineFileExpectation of MACHINE_FILE_EXPECTATIONS) {
+        await checker.checkMachineFile(machineFileExpectation);
+    }
 
     await checker.checkNotFoundFallback();
 

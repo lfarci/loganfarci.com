@@ -130,13 +130,15 @@ Against the deployed base URL, the suite asserts:
 - **Content is prerendered, not blank.** Each route's HTML contains real body content
   inside `<div id="root">` (not an empty shell), confirming the prerender shipped.
 - **SEO head is intact.** Each page has a non-empty `<title>`, a
-  `<meta name="description">`, and a `<link rel="canonical">`, matching
+  `<meta name="description">`, a `<link rel="canonical">`, Open Graph
+  `og:title`/`og:description`, and non-empty JSON-LD markup, matching
   [quality-bars.md](./quality-bars.md#seo--metadata).
 - **Machine files are reachable.** `sitemap.xml`, `robots.txt`, `llms.txt`, and
-  `llms-full.txt` all return `200` with a sensible content-type and non-empty body.
+  `llms-full.txt` all return `200` with file-appropriate content-type and file-specific
+  content markers, so HTML fallback pages cannot pass as valid machine files.
 - **404 fallback works.** An unknown path serves the `/404.html` fallback configured
-  in [`staticwebapp.config.json`](../../src/public/staticwebapp.config.json) — ideally
-  with a `404` status — rather than a broken or blank page.
+  in [`staticwebapp.config.json`](../../src/public/staticwebapp.config.json), with the
+  custom not-found page markers (not a generic host 404 page).
 The smoke command can be run locally against any deployed environment:
 `npm run smoke -- <base-url>` from `src/`.
 

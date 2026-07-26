@@ -73,9 +73,9 @@ What the smoke checks validate:
 
 - HTML routes (`/`, `/about`, `/articles`, and one discovered `/articles/{slug}` from `sitemap.xml`) return `200` with `text/html`.
 - Prerendered HTML content exists in `<main>` or `#root` (not blank output).
-- SEO essentials exist on HTML routes: non-empty `<title>`, `<meta name="description">`, and canonical `<link>`.
-- Machine files (`/sitemap.xml`, `/robots.txt`, `/llms.txt`, `/llms-full.txt`) return `200` with a non-empty body.
-- A random unknown route serves expected not-found fallback content (status `404`, or `200` with fallback body).
+- SEO metadata exists on HTML routes: non-empty `<title>`, `<meta name="description">`, canonical `<link>`, `og:title`, `og:description`, and JSON-LD.
+- Machine files (`/sitemap.xml`, `/robots.txt`, `/llms.txt`, `/llms-full.txt`) return `200` with expected content-types and file-specific markers (to reject HTML fallback pages).
+- A random unknown route serves the custom not-found fallback page (status `404`, or `200` with custom fallback markers).
 
 ## Further reading
 
