@@ -29,6 +29,11 @@ tools:
     toolsets: [default]
 
 safe-outputs:
+  # Start a Copilot coding agent session for concrete follow-up work. Bot-authored
+  # @copilot mentions do not reliably trigger the coding agent, so use the agent task API.
+  create-agent-session:
+    base: main
+    github-token: ${{ secrets.GH_AW_AGENT_TOKEN || secrets.COPILOT_GITHUB_TOKEN }}
   add-comment:
     max: 5
     target: triggering
@@ -83,10 +88,15 @@ the comments that are truly useful for Logan or the Copilot coding agent.
    precise feedback.
 5. **Preserve PR scope.** Do not ask for unrelated cleanup or broad refactors.
 
-## @copilot escalation
+## Coding-agent escalation
 
-When the right next step is agent implementation, post a PR comment that starts with
-`@copilot` and gives enough context to resume work without re-discovery:
+When the right next step is agent implementation, start a Copilot coding agent session
+with `create-agent-session`. Do not rely on `@copilot` comments as the trigger; Review
+Radar comments are posted by automation and may not be trusted as a human maintainer
+command.
+
+The agent-session task description must include enough context to resume work without
+re-discovery:
 
 - the concrete issue to fix,
 - relevant files, lines, checks, or review threads,
@@ -94,8 +104,11 @@ When the right next step is agent implementation, post a PR comment that starts 
 - the expected outcome or acceptance criteria,
 - constraints from custom instructions or `docs/specs/`.
 
-Use `@copilot` only for concrete work. Do not tag Copilot for FYI-only summaries, vague
-concerns, or issues already covered by an active Copilot thread.
+Create an agent session only for concrete implementation work. Do not create one for
+FYI-only summaries, vague concerns, low-confidence findings, or issues already covered by
+an active Copilot thread. When you do create a session, you may also add one concise PR
+comment for visibility that summarizes the handoff and acceptance criteria, but do not
+prefix that comment with `@copilot`.
 
 ## What to do
 
@@ -107,7 +120,7 @@ concerns, or issues already covered by an active Copilot thread.
    - already handled,
    - no action/noise,
    - needs Logan's judgment,
-   - needs `@copilot` implementation,
+   - needs a Copilot coding agent session,
    - needs a concise human review comment.
 4. Leave at most the necessary comments or review comments. If everything is clean or
    already covered, produce no external comment.
