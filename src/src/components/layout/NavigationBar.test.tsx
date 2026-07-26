@@ -194,6 +194,17 @@ describe("NavigationBar", () => {
         expect(toggleButtonAfterResize.getAttribute("aria-expanded")).toBe("false");
     });
 
+    it("hides mobile menu content after resizing to desktop width", () => {
+        setViewportWidth(MOBILE_VIEWPORT_WIDTH);
+        renderNavigationBarWithProviders();
+
+        const menu = getMenuElement();
+        fireEvent.click(screen.getByRole("button", { name: /open menu/i }));
+        setViewportWidth(1280, true);
+
+        expect(menu.getAttribute("aria-hidden")).toBe("true");
+    });
+
     it("keeps the mobile menu open below the md media query threshold", () => {
         setRootFontSize(20);
         setViewportWidth(940);
