@@ -1,6 +1,6 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import { Link, MemoryRouter } from "react-router";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
 
 import NavigationBar from "./NavigationBar";
 import { ThemeProvider } from "@/contexts/ThemeContext";
@@ -15,6 +15,20 @@ function renderNavigationBarWithProviders() {
     );
 }
 
+function setViewportWidth(width: number) {
+    Object.defineProperty(window, "innerWidth", {
+        configurable: true,
+        writable: true,
+        value: width,
+    });
+}
+
+function getMenuElement() {
+    const toggleButton = screen.getByRole("button", { name: /open menu|close menu/i });
+    const menuId = toggleButton.getAttribute("aria-controls");
+    return menuId ? document.getElementById(menuId) : null;
+}
+
 function NavigationTestWrapper() {
     return (
         <>
@@ -25,12 +39,15 @@ function NavigationTestWrapper() {
 }
 
 describe("NavigationBar", () => {
-    it("updates the mobile menu ARIA state when toggled", () => {
-        const { container } = renderNavigationBarWithProviders();
+    afterEach(() => {
+        setViewportWidth(1024);
+    });
+
+    it("opens and closes the mobile menu when the toggle button is clicked", () => {
+        renderNavigationBarWithProviders();
 
         const toggleButton = screen.getByRole("button", { name: /open menu/i });
-        const menuId = toggleButton.getAttribute("aria-controls");
-        const menu = menuId ? container.querySelector(`[id="${menuId}"]`) : null;
+        const menu = getMenuElement();
 
         expect(toggleButton.getAttribute("aria-expanded")).toBe("false");
         expect(menu?.getAttribute("aria-hidden")).toBe("true");
@@ -40,6 +57,30 @@ describe("NavigationBar", () => {
         const closeButton = screen.getByRole("button", { name: /close menu/i });
         expect(closeButton.getAttribute("aria-expanded")).toBe("true");
         expect(menu?.getAttribute("aria-hidden")).toBe("false");
+
+        fireEvent.click(closeButton);
+
+        const reopenedToggleButton = screen.getByRole("button", { name: /open menu/i });
+        expect(reopenedToggleButton.getAttribute("aria-expanded")).toBe("false");
+        expect(menu?.getAttribute("aria-hidden")).toBe("true");
+    });
+
+    it("closes the mobile menu when a navigation item is clicked", () => {
+        renderNavigationBarWithProviders();
+
+        fireEvent.click(screen.getByRole("button", { name: /open menu/i }));
+        const menu = getMenuElement();
+
+        expect(menu?.getAttribute("aria-hidden")).toBe("false");
+        if (!menu) {
+            throw new Error("Expected mobile menu to exist");
+        }
+
+        fireEvent.click(within(menu).getByRole("link", { name: "About" }));
+
+        const reopenedToggleButton = screen.getByRole("button", { name: /open menu/i });
+        expect(reopenedToggleButton.getAttribute("aria-expanded")).toBe("false");
+        expect(menu.getAttribute("aria-hidden")).toBe("true");
     });
 
     it("closes the mobile menu when Escape is pressed", () => {
@@ -71,5 +112,19 @@ describe("NavigationBar", () => {
 
         const toggleButtonAfterPathChange = screen.getByRole("button", { name: /open menu/i });
         expect(toggleButtonAfterPathChange.getAttribute("aria-expanded")).toBe("false");
+    });
+
+    it("closes an open mobile menu after resizing to desktop width", () => {
+        setViewportWidth(390);
+        renderNavigationBarWithProviders();
+
+        fireEvent.click(screen.getByRole("button", { name: /open menu/i }));
+        expect(screen.getByRole("button", { name: /close menu/i }).getAttribute("aria-expanded")).toBe("true");
+
+        setViewportWidth(1280);
+        fireEvent(window, new Event("resize"));
+
+        const toggleButtonAfterResize = screen.getByRole("button", { name: /open menu/i });
+        expect(toggleButtonAfterResize.getAttribute("aria-expanded")).toBe("false");
     });
 });

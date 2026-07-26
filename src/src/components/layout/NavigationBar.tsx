@@ -49,6 +49,22 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ title }) => {
         return () => window.removeEventListener("keydown", handleKeyDown);
     }, [isMenuOpen]);
 
+    useEffect(() => {
+        if (!isMenuOpen) {
+            return;
+        }
+
+        const handleResize = () => {
+            if (window.innerWidth >= 768) {
+                setIsMenuOpen(false);
+            }
+        };
+
+        window.addEventListener("resize", handleResize);
+
+        return () => window.removeEventListener("resize", handleResize);
+    }, [isMenuOpen]);
+
     return (
         <header className="border-b border-border bg-background/90 backdrop-blur">
             <nav className={mergeClassNames(contentWidthStyles.pageContainer, "flex flex-wrap items-center justify-between py-3 text-center")}>
