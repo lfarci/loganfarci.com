@@ -4,6 +4,9 @@ import { afterEach, describe, expect, it } from "vitest";
 
 import NavigationBar from "./NavigationBar";
 import { ThemeProvider } from "@/contexts/ThemeContext";
+import { MD_BREAKPOINT_WIDTH } from "@/core/breakpoints";
+
+const MOBILE_VIEWPORT_WIDTH = MD_BREAKPOINT_WIDTH - 1;
 
 function renderNavigationBarWithProviders() {
     return render(
@@ -125,7 +128,7 @@ describe("NavigationBar", () => {
 
     it("closes an open mobile menu after resizing to desktop width", () => {
         // Use a width below Tailwind's md breakpoint to emulate a mobile viewport.
-        setViewportWidth(390);
+        setViewportWidth(MOBILE_VIEWPORT_WIDTH);
         renderNavigationBarWithProviders();
 
         fireEvent.click(screen.getByRole("button", { name: /open menu/i }));

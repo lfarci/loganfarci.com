@@ -5,6 +5,7 @@ import { Button } from "@/components/shared/primitives/Button";
 import ThemeToggle from "@/components/shared/ThemeToggle";
 import { contentWidthStyles } from "@/components/layout/contentWidthStyles";
 import { mergeClassNames } from "@/core/mergeClassNames";
+import { MD_BREAKPOINT_WIDTH } from "@/core/breakpoints";
 
 interface NavigationBarProps {
     title: string;
@@ -15,8 +16,6 @@ const navigationItems = [
     { url: "/about", label: "About" },
     { url: "/articles", label: "Articles" },
 ] as const;
-// Keep in sync with Tailwind's `md` breakpoint (768px) used in this component's classes.
-const DESKTOP_BREAKPOINT_WIDTH = 768;
 
 const NavigationBar: React.FC<NavigationBarProps> = ({ title }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -57,7 +56,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ title }) => {
         }
 
         const handleResize = () => {
-            if (window.innerWidth >= DESKTOP_BREAKPOINT_WIDTH) {
+            if (window.innerWidth >= MD_BREAKPOINT_WIDTH) {
                 setIsMenuOpen(false);
             }
         };
