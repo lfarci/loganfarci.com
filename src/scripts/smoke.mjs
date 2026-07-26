@@ -249,7 +249,10 @@ function formatSummary({ baseUrl, outcome, checksPassed, checksFailed, totalChec
 
 async function writeStepSummary(summary) {
     const summaryPath = process.env.GITHUB_STEP_SUMMARY;
-    if (!summaryPath) return;
+    if (!summaryPath) {
+        console.log("ℹ️ GITHUB_STEP_SUMMARY not set, skipping step summary.");
+        return;
+    }
     await appendFile(summaryPath, formatSummary(summary));
 }
 
