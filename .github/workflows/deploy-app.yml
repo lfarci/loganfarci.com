@@ -61,6 +61,7 @@ jobs:
       AZURE_KEY_VAULT_NAME: ${{ secrets.AZURE_KEY_VAULT_NAME }}
 
   smoke_production:
+    # Keep this explicit: production smoke checks only run for push deploys with a resolved SWA URL output.
     if: github.event_name == 'push' && needs.deploy_production.result == 'success' && needs.deploy_production.outputs.static_web_app_url != ''
     name: "Smoke Test Production"
     runs-on: ubuntu-latest
@@ -76,6 +77,7 @@ jobs:
         run: node src/scripts/smoke.mjs "${{ needs.deploy_production.outputs.static_web_app_url }}"
 
   smoke_preview:
+    # Keep this explicit: preview smoke checks only run for active PR deploys with a resolved SWA URL output.
     if: github.event_name == 'pull_request' && github.event.action != 'closed' && needs.deploy_preview.result == 'success' && needs.deploy_preview.outputs.static_web_app_url != ''
     name: "Smoke Test Preview"
     runs-on: ubuntu-latest

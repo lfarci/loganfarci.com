@@ -1,5 +1,7 @@
 const rawBaseUrl = process.argv[2];
 const DEFAULT_REQUEST_TIMEOUT_MS = 15000;
+const ARTICLE_ROUTE_IN_SITEMAP_REGEX = /<loc>([^<]+\/articles\/[^<]+)<\/loc>/gi;
+const SMOKE_NOT_FOUND_PATH_PREFIX = "/__smoke_not_found_";
 
 if (!rawBaseUrl) {
     console.error("❌ Missing base URL. Usage: node src/scripts/smoke.mjs <base-url>");
@@ -164,7 +166,7 @@ function createChecker(baseUrl) {
             `${targetUrl} is unavailable for route discovery`
         );
 
-        const articleMatches = [...body.matchAll(/<loc>([^<]+\/articles\/[^<]+)<\/loc>/gi)];
+        const articleMatches = [...body.matchAll(ARTICLE_ROUTE_IN_SITEMAP_REGEX)];
         const firstArticleUrl = articleMatches[0]?.[1];
         if (!firstArticleUrl) {
             fail("No /articles/{slug} route found in sitemap.xml");
@@ -177,7 +179,7 @@ function createChecker(baseUrl) {
     }
 
     async function checkNotFoundFallback() {
-        const nonExistentPath = `/__smoke_not_found_${Date.now()}__`;
+        const nonExistentPath = `${SMOKE_NOT_FOUND_PATH_PREFIX}${Date.now()}__`;
         const { targetUrl, response, body } = await request(nonExistentPath);
         const hasExpectedStatus = response.status === 404 || response.status === 200;
         const fallbackLooksValid =
