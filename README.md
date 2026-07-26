@@ -55,6 +55,28 @@ Before you begin, ensure you have the following tools installed on your workstat
    npm run lint
    ```
 
+## Smoke tests (deployment validation)
+
+Run smoke tests from `src/` against a deployed URL:
+
+```bash
+npm run smoke -- https://<your-swa-hostname>
+```
+
+You can also pass the hostname without protocol and the script normalizes it:
+
+```bash
+npm run smoke -- <your-swa-hostname>
+```
+
+What the smoke checks validate:
+
+- HTML routes (`/`, `/about`, `/articles`, and one discovered `/articles/{slug}` from `sitemap.xml`) return `200` with `text/html`.
+- Prerendered HTML content exists in `<main>` or `#root` (not blank output).
+- SEO metadata exists on HTML routes: non-empty `<title>`, `<meta name="description">`, canonical `<link>`, `og:title`, `og:description`, and JSON-LD.
+- Machine files (`/sitemap.xml`, `/robots.txt`, `/llms.txt`, `/llms-full.txt`) return `200` with expected content-types and file-specific markers (to reject HTML fallback pages).
+- A random unknown route serves the custom not-found fallback page (status `404`, or `200` with custom fallback markers).
+
 ## Further reading
 
 - [Repository specs](docs/specs/README.md) — source-of-truth specs for architecture, quality bars, data contracts, content style, and non-goals.
