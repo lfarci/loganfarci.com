@@ -15,12 +15,16 @@ function renderNavigationBarWithProviders() {
     );
 }
 
-function setViewportWidth(width: number) {
+function setViewportWidth(width: number, triggerResize = false) {
     Object.defineProperty(window, "innerWidth", {
         configurable: true,
         writable: true,
         value: width,
     });
+
+    if (triggerResize) {
+        fireEvent(window, new Event("resize"));
+    }
 }
 
 function getMenuElement(): HTMLElement {
@@ -126,8 +130,7 @@ describe("NavigationBar", () => {
         fireEvent.click(screen.getByRole("button", { name: /open menu/i }));
         expect(screen.getByRole("button", { name: /close menu/i }).getAttribute("aria-expanded")).toBe("true");
 
-        setViewportWidth(1280);
-        fireEvent(window, new Event("resize"));
+        setViewportWidth(1280, true);
 
         const toggleButtonAfterResize = screen.getByRole("button", { name: /open menu/i });
         expect(toggleButtonAfterResize.getAttribute("aria-expanded")).toBe("false");
