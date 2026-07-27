@@ -12,7 +12,7 @@ source of truth the agents read, enforce, and are measured against.
 
 | Agent | Role | Trigger | Workflow file |
 | --- | --- | --- | --- |
-| 🤠 **Ticket Tamer** | Triages a `task` issue and starts a Copilot coding agent session for ready work | Issue labeled `task` (opened/edited/labeled); or `/tame` comment | [`agent-ticket-tamer.md`](../.github/workflows/agent-ticket-tamer.md) · [`agent-ticket-tamer-command.md`](../.github/workflows/agent-ticket-tamer-command.md) |
+| 🤠 **Ticket Tamer** | Triages a `task` issue and starts a Copilot coding agent session for ready work | `task` issue opened/edited; or `/tame` comment on an issue | [`agent-ticket-tamer.md`](../.github/workflows/agent-ticket-tamer.md) · [`agent-ticket-tamer-command.md`](../.github/workflows/agent-ticket-tamer-command.md) |
 | 🛠️ Copilot coding agent | Writes the code and opens the PR | Assigned by the Ticket Tamer | *(GitHub-native)* |
 | 🐤 **Coverage Canary** | Verifies changed code ships with tests | `pull_request` | [`agent-coverage-canary.md`](../.github/workflows/agent-coverage-canary.md) |
 | 👮 **Spec Sheriff** | Reviews the diff against the specs (the gate) | `pull_request` | [`agent-spec-sheriff.md`](../.github/workflows/agent-spec-sheriff.md) |
@@ -22,7 +22,7 @@ source of truth the agents read, enforce, and are measured against.
 
 ```mermaid
 flowchart TD
-    I([task issue opened/edited/labeled<br/>or /tame comment]) --> TT[🤠 Ticket Tamer<br/>triage vs specs]
+    I([task issue opened/edited<br/>or issue /tame comment]) --> TT[🤠 Ticket Tamer<br/>triage vs specs]
     TT -- out of scope --> X([Comment + stop])
     TT -- underspecified --> NC([needs-clarification])
     TT -- ready --> COP[🛠️ Copilot coding agent<br/>writes code, opens PR]
@@ -39,9 +39,10 @@ flowchart TD
     G -- no --> COP
 ```
 
-1. You open (or label) an issue as a `task`. Features and bugs are triaged separately;
-   only `task` issues are auto-dispatched. You can also comment `/tame` on any existing
-   issue to invoke the Tamer on demand.
+1. You open or edit an issue that already has the `task` label. Features and bugs are
+   triaged separately; only `task` issues are auto-dispatched. You can also comment
+   `/tame` on any existing issue to invoke the Tamer on demand. Ticket Tamer does not
+   run on pull requests.
 2. **Ticket Tamer** reads it, checks it against the specs, and either starts a Copilot
    coding agent session for the work, asks for clarification (`needs-clarification`), or
    flags it as out of scope (crosses a [non-goal](./specs/non-goals.md)). It skips issues
@@ -137,10 +138,10 @@ gh api -X PUT repos/lfarci/loganfarci.com/branches/main/protection \
 
 ## Using the team
 
-- **Kick off work:** open an issue and label it `task` (follow
+- **Kick off work:** open or edit an issue that already has the `task` label (follow
   [`issues.instructions.md`](../.github/instructions/issues.instructions.md)). The Ticket
   Tamer picks it up automatically. For an existing issue, comment `/tame` to invoke it on
-  demand.
+  demand; `/tame` is ignored on pull requests.
 - **Watch a run:** `gh aw logs <workflow-name>` or the Actions tab.
 - **A PR is blocked:** read the Spec Sheriff / Coverage Canary check summaries — they
   cite the exact spec clause or the missing test.

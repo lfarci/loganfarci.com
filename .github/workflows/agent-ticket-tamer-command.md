@@ -1,11 +1,12 @@
 ---
 name: "🤠 Ticket Tamer (command)"
 # On-demand triage for existing issues: comment `/tame` on any issue to (re-)run the
-# Ticket Tamer. This is a manual override, so it is not restricted to `task`-labeled
-# issues — the agent's own scope check still applies.
+# Ticket Tamer. This is intentionally issue-only; pull request review is handled by
+# the PR-focused agents.
 on:
   slash_command:
     name: tame
+    events: [issues, issue_comment]
 
 permissions:
   contents: read
