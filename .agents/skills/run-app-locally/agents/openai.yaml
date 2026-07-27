@@ -1,0 +1,4 @@
+interface:
+    display_name: "Run App Locally"
+    short_description: "Start and verify the local development app"
+    default_prompt: "Use $run-app-locally to start the application for local development."
