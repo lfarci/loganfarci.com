@@ -70,7 +70,7 @@ the comments that are truly useful for Logan or the Copilot coding agent.
 - Read relevant specs in `docs/specs/`, especially architecture, quality-bars,
   data-contracts, accessibility, markdown-rendering, content-style-guide, testing,
   and non-goals when the diff touches those concerns.
-- Review existing PR comments, review threads, requested changes, unresolved
+- Review existing PR comments, review threads, requested changes, all unresolved
   conversations, and current check statuses.
 - Treat notes from **Spec Sheriff**, **Coverage Canary**, and **Conflict Custodian** as
   signals to validate, not as automatically correct conclusions.
@@ -89,6 +89,24 @@ the comments that are truly useful for Logan or the Copilot coding agent.
    precise feedback.
 5. **Preserve PR scope.** Do not ask for unrelated cleanup or broad refactors.
 
+## Unresolved comment audit
+
+Every run must check whether previous review feedback still needs action. Do not limit
+the analysis to the triggering event.
+
+For each unresolved review thread, requested-change review, or unresolved PR timeline
+comment:
+
+- compare the feedback against the current PR head and relevant diff,
+- decide whether it is already addressed, obsolete, duplicative, blocked, or still
+  actionable,
+- if it is still actionable, classify whether it needs Logan's judgment, Copilot
+  implementation, or a concise review comment,
+- if it is already addressed or obsolete, do not create a new comment just to say so.
+
+If multiple unresolved comments point to the same remaining fix, treat them as one
+issue and prefer the existing thread or Copilot assignment context over a new comment.
+
 ## Agent escalation
 
 When the right next step is agent implementation on the existing PR, do not use a
@@ -106,17 +124,19 @@ an active Copilot thread. If you need to refer to the Copilot product in prose, 
 
 1. Determine why this PR update matters: new commit, review submitted, review comment,
    PR timeline comment, ready-for-review transition, requested review, or reopened PR.
-2. Inspect only the relevant diff, checks, specs, instructions, and comments needed to
-   classify the update.
-3. Classify each signal as one of:
+2. Audit all unresolved review threads, requested-change reviews, unresolved PR timeline
+   comments, and failing checks to see whether any action is still needed.
+3. Inspect only the relevant diff, checks, specs, instructions, and comments needed to
+   classify the update and unresolved feedback.
+4. Classify each signal as one of:
    - already handled,
    - no action/noise,
    - needs Logan's judgment,
    - needs Copilot implementation,
    - needs a concise human review comment.
-4. Leave at most the necessary comments or review comments. If everything is clean or
+5. Leave at most the necessary comments or review comments. If everything is clean or
    already covered, produce no external comment.
-5. If you comment, be specific and terse: name files, checks, or spec clauses, and state
+6. If you comment, be specific and terse: name files, checks, or spec clauses, and state
    the expected fix.
 
 Log a short internal summary of what you inspected and why you did or did not comment.
