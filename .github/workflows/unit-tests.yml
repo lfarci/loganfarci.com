@@ -7,11 +7,13 @@ on:
     paths:
       - "src/src/**"
       - "src/tests/unit/**"
+      - "src/vite.config.ts"
       - ".github/workflows/unit-tests.yml"
   pull_request:
     paths:
       - "src/src/**"
       - "src/tests/unit/**"
+      - "src/vite.config.ts"
       - ".github/workflows/unit-tests.yml"
 
 jobs:
@@ -42,6 +44,9 @@ jobs:
       - name: Run unit tests
         run: npm test -- --reporter=verbose --reporter=github-actions --reporter=json --outputFile=test-results.json
 
+      - name: Run coverage
+        run: npm run test:coverage
+
       - name: Write test summary
         if: always()
         run: |
@@ -71,3 +76,30 @@ jobs:
             ' test-results.json
           } >> "$GITHUB_STEP_SUMMARY"
 
+      - name: Write coverage summary
+        if: always()
+        run: |
+          lines=$(jq '.total.lines.pct' coverage/coverage-summary.json)
+          branches=$(jq '.total.branches.pct' coverage/coverage-summary.json)
+          functions=$(jq '.total.functions.pct' coverage/coverage-summary.json)
+          statements=$(jq '.total.statements.pct' coverage/coverage-summary.json)
+
+          {
+            echo ""
+            echo "## Coverage Summary"
+            echo ""
+            echo "| Metric | Percent |"
+            echo "|---|---|"
+            echo "| Lines | ${lines}% |"
+            echo "| Branches | ${branches}% |"
+            echo "| Functions | ${functions}% |"
+            echo "| Statements | ${statements}% |"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload coverage artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unit-test-coverage
+          path: src/coverage
+          if-no-files-found: error
