@@ -7,11 +7,21 @@ on:
     paths:
       - "src/src/**"
       - "src/tests/unit/**"
+      - "src/plugins/**"
+      - "src/scripts/**"
+      - "src/vite.config.ts"
+      - "src/package.json"
+      - "src/package-lock.json"
       - ".github/workflows/unit-tests.yml"
   pull_request:
     paths:
       - "src/src/**"
       - "src/tests/unit/**"
+      - "src/plugins/**"
+      - "src/scripts/**"
+      - "src/vite.config.ts"
+      - "src/package.json"
+      - "src/package-lock.json"
       - ".github/workflows/unit-tests.yml"
 
 jobs:
@@ -70,4 +80,3 @@ jobs:
               | "- \($icon) `\(.name | ltrimstr($cwd))` (\($p) passed, \($f) failed)"
             ' test-results.json
           } >> "$GITHUB_STEP_SUMMARY"
-
