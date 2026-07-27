@@ -12,8 +12,10 @@ on:
     types: [created, edited]
   bots: [copilot]
 
-# Only PR timeline comments are in scope for issue_comment events.
-if: ${{ github.event_name != 'issue_comment' || github.event.issue.pull_request != null }}
+# Only PR timeline comments are in scope for issue_comment events. Skip pull_request
+# events triggered indirectly by GITHUB_TOKEN-created automation, which gh-aw blocks
+# during membership checks as a confused-deputy risk.
+if: ${{ github.actor != 'github-actions[bot]' && (github.event_name != 'issue_comment' || github.event.issue.pull_request != null) }}
 
 permissions:
   checks: read
