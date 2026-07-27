@@ -7,8 +7,9 @@ import {
     createCanonicalUrl,
     createPersonJsonLd,
     createWebSiteJsonLd,
-} from "./seo";
-import { siteUrl } from "./site";
+    siteName,
+} from "@/core/seo";
+import { siteUrl } from "@/core/site";
 
 const mockProfile: Profile = {
     role: "Software Engineer",
@@ -37,7 +38,7 @@ const mockArticle: Article = {
     featured: false,
     tags: ["intro", "azure"],
     content: "# Hello World\n\nThis is the content.",
-    author: "Logan Farci",
+    author: "Ada Lovelace",
     coauthoredWithAgent: false,
 };
 
@@ -60,59 +61,56 @@ describe("createCanonicalUrl", () => {
 });
 
 describe("createWebSiteJsonLd", () => {
-    it("returns an object with the required JSON-LD fields", () => {
-        const ld = createWebSiteJsonLd();
-
-        expect(ld["@context"]).toBe("https://schema.org");
-        expect(ld["@type"]).toBe("WebSite");
-        expect(typeof ld["name"]).toBe("string");
-        expect((ld["name"] as string).length).toBeGreaterThan(0);
-        expect(typeof ld["description"]).toBe("string");
-        expect((ld["description"] as string).length).toBeGreaterThan(0);
-        expect(typeof ld["url"]).toBe("string");
-        expect((ld["url"] as string).length).toBeGreaterThan(0);
+    it("sets the JSON-LD context to schema.org", () => {
+        expect(createWebSiteJsonLd()["@context"]).toBe("https://schema.org");
     });
 
-    it("sets the url to the canonical site URL", () => {
+    it("identifies the entity as a WebSite", () => {
+        expect(createWebSiteJsonLd()["@type"]).toBe("WebSite");
+    });
+
+    it("sets a non-empty site name", () => {
+        expect(createWebSiteJsonLd()["name"]).toEqual(expect.stringMatching(/\S/));
+    });
+
+    it("sets a non-empty site description", () => {
+        expect(createWebSiteJsonLd()["description"]).toEqual(expect.stringMatching(/\S/));
+    });
+
+    it("sets the URL to the canonical site URL", () => {
         expect(createWebSiteJsonLd()["url"]).toBe(siteUrl);
     });
 });
 
 describe("createPersonJsonLd", () => {
-    it("returns an object with the required JSON-LD fields", () => {
-        const ld = createPersonJsonLd(mockProfile, mockContacts);
-
-        expect(ld["@context"]).toBe("https://schema.org");
-        expect(ld["@type"]).toBe("Person");
-        expect(typeof ld["name"]).toBe("string");
-        expect((ld["name"] as string).length).toBeGreaterThan(0);
-        expect(typeof ld["url"]).toBe("string");
-        expect((ld["url"] as string).length).toBeGreaterThan(0);
-        expect(typeof ld["description"]).toBe("string");
-        expect((ld["description"] as string).length).toBeGreaterThan(0);
+    it("sets the JSON-LD context to schema.org", () => {
+        expect(createPersonJsonLd(mockProfile, mockContacts)["@context"]).toBe("https://schema.org");
     });
 
-    it("only includes absolute HTTP(S) URLs in sameAs", () => {
-        const ld = createPersonJsonLd(mockProfile, mockContacts);
-        const sameAs = ld["sameAs"] as string[];
-
-        expect(Array.isArray(sameAs)).toBe(true);
-        for (const url of sameAs) {
-            expect(url.startsWith("http://") || url.startsWith("https://")).toBe(true);
-        }
+    it("identifies the entity as a Person", () => {
+        expect(createPersonJsonLd(mockProfile, mockContacts)["@type"]).toBe("Person");
     });
 
-    it("excludes non-HTTP(S) contact URLs from sameAs", () => {
-        const ld = createPersonJsonLd(mockProfile, mockContacts);
-        const sameAs = ld["sameAs"] as string[];
+    it("sets the person name to the site name", () => {
+        expect(createPersonJsonLd(mockProfile, mockContacts)["name"]).toBe(siteName);
+    });
 
-        expect(sameAs).not.toContain("mailto:hello@example.com");
+    it("sets the person URL to the canonical site URL", () => {
+        expect(createPersonJsonLd(mockProfile, mockContacts)["url"]).toBe(siteUrl);
+    });
+
+    it("sets the description from the profile introduction", () => {
+        expect(createPersonJsonLd(mockProfile, mockContacts)["description"]).toBe(mockProfile.introduction);
+    });
+
+    it("retains only HTTP(S) contact URLs in sameAs", () => {
+        const ld = createPersonJsonLd(mockProfile, mockContacts);
+
+        expect(ld["sameAs"]).toEqual(["https://github.com/lfarci", "https://linkedin.com/in/lfarci"]);
     });
 
     it("omits sameAs when no HTTP(S) contacts are provided", () => {
-        const nonHttpContacts: Contact[] = [
-            { name: "Email", icon: "/email.svg", url: "mailto:hello@example.com" },
-        ];
+        const nonHttpContacts: Contact[] = [{ name: "Email", icon: "/email.svg", url: "mailto:hello@example.com" }];
         const ld = createPersonJsonLd(mockProfile, nonHttpContacts);
 
         expect(ld["sameAs"]).toBeUndefined();
@@ -120,11 +118,8 @@ describe("createPersonJsonLd", () => {
 
     it("includes worksFor when a current experience is provided", () => {
         const ld = createPersonJsonLd(mockProfile, mockContacts, mockExperience);
-        const worksFor = ld["worksFor"] as Record<string, string>;
 
-        expect(worksFor).toBeDefined();
-        expect(worksFor["name"]).toBe("Contoso");
-        expect(worksFor["url"]).toBe("https://contoso.com");
+        expect(ld["worksFor"]).toEqual({ "@type": "Organization", name: "Contoso", url: "https://contoso.com" });
     });
 
     it("omits worksFor when no current experience is provided", () => {
@@ -135,45 +130,38 @@ describe("createPersonJsonLd", () => {
 });
 
 describe("createBreadcrumbJsonLd", () => {
-    it("returns an object with the required JSON-LD fields", () => {
-        const ld = createBreadcrumbJsonLd([{ name: "Home", path: "/" }]);
-
-        expect(ld["@context"]).toBe("https://schema.org");
-        expect(ld["@type"]).toBe("BreadcrumbList");
-        expect(Array.isArray(ld["itemListElement"])).toBe(true);
+    it("sets the JSON-LD context to schema.org", () => {
+        expect(createBreadcrumbJsonLd([])["@context"]).toBe("https://schema.org");
     });
 
-    it("maps each item to a ListItem with the correct position and canonical URL", () => {
+    it("identifies the entity as a BreadcrumbList", () => {
+        expect(createBreadcrumbJsonLd([])["@type"]).toBe("BreadcrumbList");
+    });
+
+    it("maps each breadcrumb to an ordered canonical ListItem", () => {
         const items = [
             { name: "Home", path: "/" },
             { name: "Articles", path: "/articles" },
         ];
         const ld = createBreadcrumbJsonLd(items);
-        const list = ld["itemListElement"] as Array<Record<string, unknown>>;
 
-        expect(list).toHaveLength(2);
-        expect(list[0]["position"]).toBe(1);
-        expect(list[0]["name"]).toBe("Home");
-        expect(list[1]["position"]).toBe(2);
-        expect(list[1]["item"]).toBe(`${siteUrl}/articles`);
+        expect(ld["itemListElement"]).toEqual([
+            { "@type": "ListItem", position: 1, name: "Home", item: siteUrl },
+            { "@type": "ListItem", position: 2, name: "Articles", item: `${siteUrl}/articles` },
+        ]);
     });
 });
 
 describe("createArticleJsonLd", () => {
-    it("returns an object with the required JSON-LD fields", () => {
-        const ld = createArticleJsonLd(mockArticle);
-
-        expect(ld["@context"]).toBe("https://schema.org");
-        expect(ld["@type"]).toBe("Article");
-        expect(typeof ld["headline"]).toBe("string");
-        expect((ld["headline"] as string).length).toBeGreaterThan(0);
-        expect(typeof ld["description"]).toBe("string");
-        expect((ld["description"] as string).length).toBeGreaterThan(0);
-        expect(typeof ld["url"]).toBe("string");
-        expect((ld["url"] as string).length).toBeGreaterThan(0);
+    it("sets the JSON-LD context to schema.org", () => {
+        expect(createArticleJsonLd(mockArticle)["@context"]).toBe("https://schema.org");
     });
 
-    it("sets the url to the canonical article URL", () => {
+    it("identifies the entity as an Article", () => {
+        expect(createArticleJsonLd(mockArticle)["@type"]).toBe("Article");
+    });
+
+    it("sets the URL to the canonical article URL", () => {
         const ld = createArticleJsonLd(mockArticle);
 
         expect(ld["url"]).toBe(`${siteUrl}/articles/hello-world`);
@@ -185,18 +173,21 @@ describe("createArticleJsonLd", () => {
         expect(ld["headline"]).toBe("Hello World");
     });
 
+    it("sets the description to the article description", () => {
+        expect(createArticleJsonLd(mockArticle)["description"]).toBe(mockArticle.description);
+    });
+
     it("sets datePublished and dateModified from the article publishedAt field", () => {
         const ld = createArticleJsonLd(mockArticle);
 
-        expect(ld["datePublished"]).toBe("2024-06-01");
-        expect(ld["dateModified"]).toBe("2024-06-01");
+        expect(ld).toMatchObject({ datePublished: "2024-06-01", dateModified: "2024-06-01" });
     });
 
     it("sets the author name to the article author", () => {
         const ld = createArticleJsonLd(mockArticle);
         const author = ld["author"] as Record<string, string>;
 
-        expect(author["name"]).toBe("Logan Farci");
+        expect(author["name"]).toBe("Ada Lovelace");
     });
 
     it("falls back to the site name when the article author is empty", () => {
@@ -204,6 +195,6 @@ describe("createArticleJsonLd", () => {
         const ld = createArticleJsonLd(articleWithoutAuthor);
         const author = ld["author"] as Record<string, string>;
 
-        expect(author["name"]).toBe("Logan Farci");
+        expect(author["name"]).toBe(siteName);
     });
 });
