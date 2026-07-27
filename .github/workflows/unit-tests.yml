@@ -11,6 +11,7 @@ on:
       - "src/scripts/**"
       - "src/vite.config.ts"
       - "src/package.json"
+      - "src/package-lock.json"
       - ".github/workflows/unit-tests.yml"
   pull_request:
     paths:
@@ -20,6 +21,7 @@ on:
       - "src/scripts/**"
       - "src/vite.config.ts"
       - "src/package.json"
+      - "src/package-lock.json"
       - ".github/workflows/unit-tests.yml"
 
 jobs:
