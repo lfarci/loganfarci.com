@@ -1,19 +1,16 @@
 ---
 name: "🤠 Ticket Tamer"
-# Auto-triage: runs on issues labeled `task` (the actionable, agent-sized unit) and
-# hands ready work to Copilot. Features are epics and bugs are triaged elsewhere, so
-# only tasks reach the coding agent automatically.
+# Auto-triage: runs when `task` issues are opened or edited, then hands ready work
+# to Copilot. Features are epics and bugs are triaged elsewhere, so only tasks reach
+# the coding agent automatically.
 # The `/tame` slash command lives in agent-ticket-tamer-command.md (gh-aw does not
 # allow a command trigger and an `issues` trigger in the same workflow).
 on:
   issues:
-    types: [opened, edited, labeled]
+    types: [opened, edited]
 
-# Only proceed for issues that carry the `task` label. When triggered by a `labeled`
-# event, only react to the label that adds `task` — otherwise labels this workflow
-# applies itself (e.g. `needs-clarification`, `agent:working`) would retrigger a full
-# run and post duplicate comments.
-if: ${{ contains(github.event.issue.labels.*.name, 'task') && (github.event.action != 'labeled' || github.event.label.name == 'task') }}
+# Only proceed for issues that carry the `task` label.
+if: ${{ contains(github.event.issue.labels.*.name, 'task') }}
 
 permissions:
   contents: read

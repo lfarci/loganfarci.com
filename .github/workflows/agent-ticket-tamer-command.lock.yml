@@ -1,5 +1,5 @@
-# gh-aw-metadata: {"schema_version":"v4","frontmatter_hash":"87e2d0a20dda1d9f72cd6bf283d724e6b9ea63121abec856f6b137f554d09985","body_hash":"9841da510da55731b35e0bd005f926456edc6ca6327c1392ac41aeba9f7dc843","compiler_version":"v0.83.1","strict":true,"agent_id":"copilot","engine_versions":{"copilot":"1.0.73"}}
-# gh-aw-manifest: {"version":1,"secrets":["COPILOT_GITHUB_TOKEN","GH_AW_AGENT_TOKEN","GH_AW_GITHUB_MCP_SERVER_TOKEN","GH_AW_GITHUB_TOKEN","GITHUB_TOKEN"],"actions":[{"repo":"actions/cache/restore","sha":"55cc8345863c7cc4c66a329aec7e433d2d1c52a9","version":"v6.1.0"},{"repo":"actions/cache/save","sha":"55cc8345863c7cc4c66a329aec7e433d2d1c52a9","version":"v6.1.0"},{"repo":"actions/checkout","sha":"9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0","version":"v7.0.0"},{"repo":"actions/download-artifact","sha":"3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c","version":"v8.0.1"},{"repo":"actions/github-script","sha":"3a2844b7e9c422d3c10d287c895573f7108da1b3","version":"v9.0.0"},{"repo":"actions/setup-node","sha":"820762786026740c76f36085b0efc47a31fe5020","version":"v7.0.0"},{"repo":"actions/upload-artifact","sha":"043fb46d1a93c77aae656e7c1c64a875d1fc6a0a","version":"v7.0.1"},{"repo":"github/gh-aw/actions/setup","sha":"8bdba8075360648fe6802302a5b4e016361dc6ac","version":"8bdba8075360648fe6802302a5b4e016361dc6ac"}],"containers":[{"image":"ghcr.io/github/gh-aw-firewall/agent:0.27.38","digest":"sha256:cb928eb62d9139a013c2d278dab19af232d35a2d83dca71a3d98eb431f786243","pinned_image":"ghcr.io/github/gh-aw-firewall/agent:0.27.38@sha256:cb928eb62d9139a013c2d278dab19af232d35a2d83dca71a3d98eb431f786243"},{"image":"ghcr.io/github/gh-aw-firewall/api-proxy:0.27.38","digest":"sha256:cd6145620d96acee46e1ede25180a13aa36002467e663db0caa453a8bc8eb60c","pinned_image":"ghcr.io/github/gh-aw-firewall/api-proxy:0.27.38@sha256:cd6145620d96acee46e1ede25180a13aa36002467e663db0caa453a8bc8eb60c"},{"image":"ghcr.io/github/gh-aw-firewall/squid:0.27.38","digest":"sha256:6c19094d95aad5f9f128ad5e583f0f2b894b158aa66c3b86dd9bcc90970a2917","pinned_image":"ghcr.io/github/gh-aw-firewall/squid:0.27.38@sha256:6c19094d95aad5f9f128ad5e583f0f2b894b158aa66c3b86dd9bcc90970a2917"},{"image":"ghcr.io/github/gh-aw-mcpg:v0.4.3","digest":"sha256:3c744710ea275cd5ee65db92a1099e0d980754bd9fafda9ce67704c67004dc83","pinned_image":"ghcr.io/github/gh-aw-mcpg:v0.4.3@sha256:3c744710ea275cd5ee65db92a1099e0d980754bd9fafda9ce67704c67004dc83"},{"image":"ghcr.io/github/gh-aw-node","digest":"sha256:529d02eb970b1161aa25c593a9c3df57fdfad5a8add328cb3b6eccef66f3183b","pinned_image":"ghcr.io/github/gh-aw-node@sha256:529d02eb970b1161aa25c593a9c3df57fdfad5a8add328cb3b6eccef66f3183b"},{"image":"ghcr.io/github/github-mcp-server:v1.6.0","digest":"sha256:2b0c48b070f61e9d3969269ead600f62d00fb237b60ac849ef3d166ee7de9ad3","pinned_image":"ghcr.io/github/github-mcp-server:v1.6.0@sha256:2b0c48b070f61e9d3969269ead600f62d00fb237b60ac849ef3d166ee7de9ad3"}]}
+# gh-aw-metadata: {"schema_version":"v4","frontmatter_hash":"eb2a522f39f73f3fd61fbec24e76355e6c394056b9b7d557b4d24481e741f96e","body_hash":"9841da510da55731b35e0bd005f926456edc6ca6327c1392ac41aeba9f7dc843","compiler_version":"v0.83.1","strict":true,"agent_id":"copilot","engine_versions":{"copilot":"1.0.73"}}
+# gh-aw-manifest: {"version":1,"secrets":["COPILOT_GITHUB_TOKEN","GH_AW_AGENT_TOKEN","GH_AW_GITHUB_MCP_SERVER_TOKEN","GH_AW_GITHUB_TOKEN","GITHUB_TOKEN"],"actions":[{"repo":"actions/cache/restore","sha":"55cc8345863c7cc4c66a329aec7e433d2d1c52a9","version":"v6.1.0"},{"repo":"actions/cache/save","sha":"55cc8345863c7cc4c66a329aec7e433d2d1c52a9","version":"v6.1.0"},{"repo":"actions/checkout","sha":"9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0","version":"v7.0.0"},{"repo":"actions/download-artifact","sha":"3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c","version":"v8.0.1"},{"repo":"actions/github-script","sha":"3a2844b7e9c422d3c10d287c895573f7108da1b3","version":"v9.0.0"},{"repo":"actions/setup-node","sha":"820762786026740c76f36085b0efc47a31fe5020","version":"v7.0.0"},{"repo":"actions/upload-artifact","sha":"043fb46d1a93c77aae656e7c1c64a875d1fc6a0a","version":"v7.0.1"},{"repo":"github/gh-aw-actions/setup","sha":"8bdba8075360648fe6802302a5b4e016361dc6ac","version":"v0.83.1"}],"containers":[{"image":"ghcr.io/github/gh-aw-firewall/agent:0.27.38","digest":"sha256:cb928eb62d9139a013c2d278dab19af232d35a2d83dca71a3d98eb431f786243","pinned_image":"ghcr.io/github/gh-aw-firewall/agent:0.27.38@sha256:cb928eb62d9139a013c2d278dab19af232d35a2d83dca71a3d98eb431f786243"},{"image":"ghcr.io/github/gh-aw-firewall/api-proxy:0.27.38","digest":"sha256:cd6145620d96acee46e1ede25180a13aa36002467e663db0caa453a8bc8eb60c","pinned_image":"ghcr.io/github/gh-aw-firewall/api-proxy:0.27.38@sha256:cd6145620d96acee46e1ede25180a13aa36002467e663db0caa453a8bc8eb60c"},{"image":"ghcr.io/github/gh-aw-firewall/squid:0.27.38","digest":"sha256:6c19094d95aad5f9f128ad5e583f0f2b894b158aa66c3b86dd9bcc90970a2917","pinned_image":"ghcr.io/github/gh-aw-firewall/squid:0.27.38@sha256:6c19094d95aad5f9f128ad5e583f0f2b894b158aa66c3b86dd9bcc90970a2917"},{"image":"ghcr.io/github/gh-aw-mcpg:v0.4.3","digest":"sha256:3c744710ea275cd5ee65db92a1099e0d980754bd9fafda9ce67704c67004dc83","pinned_image":"ghcr.io/github/gh-aw-mcpg:v0.4.3@sha256:3c744710ea275cd5ee65db92a1099e0d980754bd9fafda9ce67704c67004dc83"},{"image":"ghcr.io/github/gh-aw-node","digest":"sha256:529d02eb970b1161aa25c593a9c3df57fdfad5a8add328cb3b6eccef66f3183b","pinned_image":"ghcr.io/github/gh-aw-node@sha256:529d02eb970b1161aa25c593a9c3df57fdfad5a8add328cb3b6eccef66f3183b"},{"image":"ghcr.io/github/github-mcp-server:v1.6.0","digest":"sha256:2b0c48b070f61e9d3969269ead600f62d00fb237b60ac849ef3d166ee7de9ad3","pinned_image":"ghcr.io/github/github-mcp-server:v1.6.0@sha256:2b0c48b070f61e9d3969269ead600f62d00fb237b60ac849ef3d166ee7de9ad3"}]}
 # This file was automatically generated by gh-aw (v0.83.1). DO NOT EDIT. To debug this workflow, load the skill at https://github.com/github/gh-aw/blob/main/debug.md
 #
 #    ___                   _   _
@@ -40,7 +40,7 @@
 #   - actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0 (source v9)
 #   - actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
 #   - actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-#   - github/gh-aw-actions/setup@8bdba8075360648fe6802302a5b4e016361dc6ac
+#   - github/gh-aw-actions/setup@8bdba8075360648fe6802302a5b4e016361dc6ac # v0.83.1
 #
 # Container images used:
 #   - ghcr.io/github/gh-aw-firewall/agent:0.27.38@sha256:cb928eb62d9139a013c2d278dab19af232d35a2d83dca71a3d98eb431f786243
@@ -52,14 +52,6 @@
 
 name: "🤠 Ticket Tamer (command)"
 on:
-  discussion:
-    types:
-      - created
-      - edited
-  discussion_comment:
-    types:
-      - created
-      - edited
   issue_comment:
     types:
       - created
@@ -69,15 +61,6 @@ on:
       - opened
       - edited
       - reopened
-  pull_request:
-    types:
-      - opened
-      - edited
-      - reopened
-  pull_request_review_comment:
-    types:
-      - created
-      - edited
 
 permissions: {}
 
@@ -89,12 +72,11 @@ run-name: "🤠 Ticket Tamer (command)"
 jobs:
   activation:
     needs: pre_activation
-    if: "needs.pre_activation.outputs.activated == 'true' && (github.event_name == 'issues' && (startsWith(github.event.issue.body, '/tame ') || startsWith(github.event.issue.body, '/tame\n') || github.event.issue.body == '/tame') || github.event_name == 'issue_comment' && (startsWith(github.event.comment.body, '/tame ') || startsWith(github.event.comment.body, '/tame\n') || github.event.comment.body == '/tame') && github.event.issue.pull_request == null || github.event_name == 'issue_comment' && (startsWith(github.event.comment.body, '/tame ') || startsWith(github.event.comment.body, '/tame\n') || github.event.comment.body == '/tame') && github.event.issue.pull_request != null || github.event_name == 'pull_request_review_comment' && (startsWith(github.event.comment.body, '/tame ') || startsWith(github.event.comment.body, '/tame\n') || github.event.comment.body == '/tame') || github.event_name == 'pull_request' && (startsWith(github.event.pull_request.body, '/tame ') || startsWith(github.event.pull_request.body, '/tame\n') || github.event.pull_request.body == '/tame') || github.event_name == 'discussion' && (startsWith(github.event.discussion.body, '/tame ') || startsWith(github.event.discussion.body, '/tame\n') || github.event.discussion.body == '/tame') || github.event_name == 'discussion_comment' && (startsWith(github.event.comment.body, '/tame ') || startsWith(github.event.comment.body, '/tame\n') || github.event.comment.body == '/tame'))"
+    if: "needs.pre_activation.outputs.activated == 'true' && (github.event_name == 'issues' && (startsWith(github.event.issue.body, '/tame ') || startsWith(github.event.issue.body, '/tame\n') || github.event.issue.body == '/tame') || github.event_name == 'issue_comment' && (startsWith(github.event.comment.body, '/tame ') || startsWith(github.event.comment.body, '/tame\n') || github.event.comment.body == '/tame') && github.event.issue.pull_request == null)"
     runs-on: ubuntu-slim
     permissions:
       actions: read
       contents: read
-      discussions: write
       issues: write
       pull-requests: write
     env:
@@ -123,7 +105,7 @@ jobs:
     steps:
       - name: Setup Scripts
         id: setup
-        uses: github/gh-aw-actions/setup@8bdba8075360648fe6802302a5b4e016361dc6ac
+        uses: github/gh-aw-actions/setup@8bdba8075360648fe6802302a5b4e016361dc6ac # v0.83.1
         with:
           destination: ${{ runner.temp }}/gh-aw/actions
           job-name: ${{ github.job }}
@@ -490,7 +472,7 @@ jobs:
     steps:
       - name: Setup Scripts
         id: setup
-        uses: github/gh-aw-actions/setup@8bdba8075360648fe6802302a5b4e016361dc6ac
+        uses: github/gh-aw-actions/setup@8bdba8075360648fe6802302a5b4e016361dc6ac # v0.83.1
         with:
           destination: ${{ runner.temp }}/gh-aw/actions
           job-name: ${{ github.job }}
@@ -580,14 +562,15 @@ jobs:
         run: bash "${RUNNER_TEMP}/gh-aw/actions/download_docker_images.sh" ghcr.io/github/gh-aw-firewall/agent:0.27.38@sha256:cb928eb62d9139a013c2d278dab19af232d35a2d83dca71a3d98eb431f786243 ghcr.io/github/gh-aw-firewall/api-proxy:0.27.38@sha256:cd6145620d96acee46e1ede25180a13aa36002467e663db0caa453a8bc8eb60c ghcr.io/github/gh-aw-firewall/squid:0.27.38@sha256:6c19094d95aad5f9f128ad5e583f0f2b894b158aa66c3b86dd9bcc90970a2917 ghcr.io/github/gh-aw-mcpg:v0.4.3@sha256:3c744710ea275cd5ee65db92a1099e0d980754bd9fafda9ce67704c67004dc83 ghcr.io/github/gh-aw-node@sha256:529d02eb970b1161aa25c593a9c3df57fdfad5a8add328cb3b6eccef66f3183b ghcr.io/github/github-mcp-server:v1.6.0@sha256:2b0c48b070f61e9d3969269ead600f62d00fb237b60ac849ef3d166ee7de9ad3
       - name: Generate Safe Outputs Config
         env:
+          GH_AW_SECRET_COPILOT_GITHUB_TOKEN: ${{ secrets.GH_AW_AGENT_TOKEN || secrets.COPILOT_GITHUB_TOKEN }}
           GH_AW_SECRET_GH_AW_AGENT_TOKEN: ${{ secrets.GH_AW_AGENT_TOKEN || secrets.COPILOT_GITHUB_TOKEN }}
         run: |
           mkdir -p "${RUNNER_TEMP}/gh-aw/safeoutputs"
           mkdir -p /tmp/gh-aw/safeoutputs
           mkdir -p /tmp/gh-aw/mcp-logs/safeoutputs
-          cat > "${RUNNER_TEMP}/gh-aw/safeoutputs/config.json" << 'GH_AW_SAFE_OUTPUTS_CONFIG_4225ea56e4dedce8_EOF'
-          {"add_comment":{"max":1},"add_labels":{"allowed":["needs-clarification","agent:working"],"max":2},"create_agent_session":{"base":"main","github-token":"${GH_AW_SECRET_GH_AW_AGENT_TOKEN}","max":1},"create_report_incomplete_issue":{},"missing_data":{},"missing_tool":{},"noop":{"max":1,"report-as-issue":"true"},"remove_labels":{"allowed":["needs-clarification"],"max":1},"report_incomplete":{}}
-          GH_AW_SAFE_OUTPUTS_CONFIG_4225ea56e4dedce8_EOF
+          cat > "${RUNNER_TEMP}/gh-aw/safeoutputs/config.json" << 'GH_AW_SAFE_OUTPUTS_CONFIG_290a0aada0108e7c_EOF'
+          {"add_comment":{"max":1},"add_labels":{"allowed":["needs-clarification","agent:working"],"max":2},"create_agent_session":{"base":"main","github-token":"${GH_AW_SECRET_COPILOT_GITHUB_TOKEN}","max":1},"create_report_incomplete_issue":{},"missing_data":{},"missing_tool":{},"noop":{"max":1,"report-as-issue":"true"},"remove_labels":{"allowed":["needs-clarification"],"max":1},"report_incomplete":{}}
+          GH_AW_SAFE_OUTPUTS_CONFIG_290a0aada0108e7c_EOF
       - name: Generate Safe Outputs Tools
         env:
           GH_AW_TOOLS_META_JSON: |
@@ -1114,7 +1097,7 @@ jobs:
     steps:
       - name: Setup Scripts
         id: setup
-        uses: github/gh-aw-actions/setup@8bdba8075360648fe6802302a5b4e016361dc6ac
+        uses: github/gh-aw-actions/setup@8bdba8075360648fe6802302a5b4e016361dc6ac # v0.83.1
         with:
           destination: ${{ runner.temp }}/gh-aw/actions
           job-name: ${{ github.job }}
@@ -1385,7 +1368,7 @@ jobs:
     steps:
       - name: Setup Scripts
         id: setup
-        uses: github/gh-aw-actions/setup@8bdba8075360648fe6802302a5b4e016361dc6ac
+        uses: github/gh-aw-actions/setup@8bdba8075360648fe6802302a5b4e016361dc6ac # v0.83.1
         with:
           destination: ${{ runner.temp }}/gh-aw/actions
           job-name: ${{ github.job }}
@@ -1612,7 +1595,7 @@ jobs:
             }
 
   pre_activation:
-    if: "(github.event_name != 'issue_comment' && github.event_name != 'pull_request_review_comment' || contains(fromJSON('[\"OWNER\",\"MEMBER\",\"COLLABORATOR\"]'), github.event.comment.author_association)) && (github.event_name == 'issues' && (startsWith(github.event.issue.body, '/tame ') || startsWith(github.event.issue.body, '/tame\n') || github.event.issue.body == '/tame') || github.event_name == 'issue_comment' && (startsWith(github.event.comment.body, '/tame ') || startsWith(github.event.comment.body, '/tame\n') || github.event.comment.body == '/tame') && github.event.issue.pull_request == null || github.event_name == 'issue_comment' && (startsWith(github.event.comment.body, '/tame ') || startsWith(github.event.comment.body, '/tame\n') || github.event.comment.body == '/tame') && github.event.issue.pull_request != null || github.event_name == 'pull_request_review_comment' && (startsWith(github.event.comment.body, '/tame ') || startsWith(github.event.comment.body, '/tame\n') || github.event.comment.body == '/tame') || github.event_name == 'pull_request' && (startsWith(github.event.pull_request.body, '/tame ') || startsWith(github.event.pull_request.body, '/tame\n') || github.event.pull_request.body == '/tame') || github.event_name == 'discussion' && (startsWith(github.event.discussion.body, '/tame ') || startsWith(github.event.discussion.body, '/tame\n') || github.event.discussion.body == '/tame') || github.event_name == 'discussion_comment' && (startsWith(github.event.comment.body, '/tame ') || startsWith(github.event.comment.body, '/tame\n') || github.event.comment.body == '/tame'))"
+    if: "(github.event_name != 'issue_comment' || contains(fromJSON('[\"OWNER\",\"MEMBER\",\"COLLABORATOR\"]'), github.event.comment.author_association)) && (github.event_name == 'issues' && (startsWith(github.event.issue.body, '/tame ') || startsWith(github.event.issue.body, '/tame\n') || github.event.issue.body == '/tame') || github.event_name == 'issue_comment' && (startsWith(github.event.comment.body, '/tame ') || startsWith(github.event.comment.body, '/tame\n') || github.event.comment.body == '/tame') && github.event.issue.pull_request == null)"
     runs-on: ubuntu-slim
     env:
       GH_AW_RUNTIME_FEATURES: ${{ vars.GH_AW_RUNTIME_FEATURES }}
@@ -1625,7 +1608,7 @@ jobs:
     steps:
       - name: Setup Scripts
         id: setup
-        uses: github/gh-aw-actions/setup@8bdba8075360648fe6802302a5b4e016361dc6ac
+        uses: github/gh-aw-actions/setup@8bdba8075360648fe6802302a5b4e016361dc6ac # v0.83.1
         with:
           destination: ${{ runner.temp }}/gh-aw/actions
           job-name: ${{ github.job }}
@@ -1702,7 +1685,7 @@ jobs:
     steps:
       - name: Setup Scripts
         id: setup
-        uses: github/gh-aw-actions/setup@8bdba8075360648fe6802302a5b4e016361dc6ac
+        uses: github/gh-aw-actions/setup@8bdba8075360648fe6802302a5b4e016361dc6ac # v0.83.1
         with:
           destination: ${{ runner.temp }}/gh-aw/actions
           job-name: ${{ github.job }}
