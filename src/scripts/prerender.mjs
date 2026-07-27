@@ -37,9 +37,7 @@ function writeTextFile(distDir, fileName, content) {
 
 function generateSitemap(routes, articles) {
     const buildDate = new Date().toISOString().slice(0, 10);
-    const articlesByRoute = new Map(
-        articles.map((article) => [`/articles/${article.slug}`, article])
-    );
+    const articlesByRoute = new Map(articles.map((article) => [`/articles/${article.slug}`, article]));
 
     const urls = routes.map((route) => {
         const article = articlesByRoute.get(route);
@@ -74,7 +72,7 @@ function generateRobotsTxt() {
 
 function generateLlmsTxt(articles) {
     const articleLinks = articles.map(
-        (article) => `- [${article.title}](${createAbsoluteUrl(`/articles/${article.slug}`)}): ${article.description}`
+        (article) => `- [${article.title}](${createAbsoluteUrl(`/articles/${article.slug}`)}): ${article.description}`,
     );
 
     return [
@@ -101,20 +99,22 @@ function generateLlmsTxt(articles) {
 }
 
 function generateLlmsFullTxt(articles) {
-    const articleSections = articles.map((article) => [
-        `## ${article.title}`,
-        "",
-        `URL: ${createAbsoluteUrl(`/articles/${article.slug}`)}`,
-        `Published: ${article.publishedAt}`,
-        `Author: ${article.author}`,
-        `Tags: ${article.tags.join(", ")}`,
-        "",
-        "Description:",
-        article.description,
-        "",
-        "Content:",
-        article.content.trim(),
-    ].join("\n"));
+    const articleSections = articles.map((article) =>
+        [
+            `## ${article.title}`,
+            "",
+            `URL: ${createAbsoluteUrl(`/articles/${article.slug}`)}`,
+            `Published: ${article.publishedAt}`,
+            `Author: ${article.author}`,
+            `Tags: ${article.tags.join(", ")}`,
+            "",
+            "Description:",
+            article.description,
+            "",
+            "Content:",
+            article.content.trim(),
+        ].join("\n"),
+    );
 
     return [
         "# Logan Farci - Full LLM Context",
@@ -140,9 +140,7 @@ async function prerender() {
     const template = fs.readFileSync(path.join(distDir, "index.html"), "utf-8");
 
     // Import the SSR bundle
-    const { render, getStaticRoutes, getAllArticles } = await import(
-        path.join(distDir, "server/entry-server.js")
-    );
+    const { render, getStaticRoutes, getAllArticles } = await import(path.join(distDir, "server/entry-server.js"));
 
     const routes = getStaticRoutes();
     const articles = getAllArticles();
@@ -151,10 +149,7 @@ async function prerender() {
         const { html, headTags } = await render(route);
 
         // Inject rendered HTML and head metadata into the template
-        let page = template.replace(
-            '<div id="root"></div>',
-            `<div id="root">${html}</div>`
-        );
+        let page = template.replace('<div id="root"></div>', `<div id="root">${html}</div>`);
         page = injectHeadTags(page, headTags);
 
         // Write to dist/{route}/index.html
@@ -168,10 +163,7 @@ async function prerender() {
 
     // Generate 404.html from the /404 route (for Azure SWA fallback)
     const { html: notFoundHtml, headTags: notFoundHeadTags } = await render("/404");
-    let notFoundPage = template.replace(
-        '<div id="root"></div>',
-        `<div id="root">${notFoundHtml}</div>`
-    );
+    let notFoundPage = template.replace('<div id="root"></div>', `<div id="root">${notFoundHtml}</div>`);
     notFoundPage = injectHeadTags(notFoundPage, notFoundHeadTags);
     fs.writeFileSync(path.join(distDir, "404.html"), notFoundPage);
     console.log("  Prerendered: /404 → 404.html");

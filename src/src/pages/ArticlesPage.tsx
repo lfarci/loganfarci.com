@@ -5,7 +5,8 @@ import { Heading1, Heading2, Text } from "@/components/shared/typography";
 import { createBreadcrumbJsonLd, createCanonicalUrl } from "@/core/seo";
 
 const pageTitle = "Articles - Logan Farci";
-const pageDescription = "Technical articles on Azure, C#, .NET, cloud engineering, and software development by Logan Farci.";
+const pageDescription =
+    "Technical articles on Azure, C#, .NET, cloud engineering, and software development by Logan Farci.";
 const pageUrl = createCanonicalUrl("/articles");
 const breadcrumbJsonLd = createBreadcrumbJsonLd([
     { name: "Home", path: "/" },

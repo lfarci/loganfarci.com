@@ -33,9 +33,7 @@ export default function CodeSnippet({ children, className, forceBlock = false }:
             {children}
         </code>
     ) : (
-        <pre
-            className="my-4 w-full overflow-x-auto rounded-lg border border-border bg-surface-elevated p-4 text-sm leading-relaxed text-text-primary"
-        >
+        <pre className="my-4 w-full overflow-x-auto rounded-lg border border-border bg-surface-elevated p-4 text-sm leading-relaxed text-text-primary">
             <code className={className}>{children}</code>
         </pre>
     );

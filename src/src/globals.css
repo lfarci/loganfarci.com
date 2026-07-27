@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 @config '../tailwind.config.ts';
 
@@ -11,27 +11,27 @@
   color utility to any element that depends on these defaults.
 */
 @layer base {
-  *,
-  ::after,
-  ::before,
-  ::backdrop,
-  ::file-selector-button {
-    border-color: var(--color-border, currentcolor);
-  }
-  
-  body {
-    color: var(--color-foreground);
-    background: var(--color-background);
-  }
+    *,
+    ::after,
+    ::before,
+    ::backdrop,
+    ::file-selector-button {
+        border-color: var(--color-border, currentcolor);
+    }
 
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    font-family: var(--font-manrope);
-  }
+    body {
+        color: var(--color-foreground);
+        background: var(--color-background);
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-family: var(--font-manrope);
+    }
 }
 
 /* Base theme configuration using Tailwind v4 @theme directive */
@@ -66,7 +66,7 @@
     --color-text-tertiary: oklch(53% 0.03 262); /* soft slate */
     --color-text-muted: oklch(65% 0.026 260); /* quiet slate */
     --color-text-inverse: oklch(100% 0 0); /* white */
-    
+
     /* Border semantic colors */
     --color-border: oklch(86% 0.018 258); /* cool line */
     --color-border-light: oklch(92.5% 0.012 258); /* hairline */
@@ -92,9 +92,16 @@
 
     /* Gradients */
     --gradient-brand: linear-gradient(135deg, var(--color-brand) 0%, var(--color-accent) 100%);
-    --gradient-accent: linear-gradient(135deg, var(--color-accent-subtle) 0%, var(--color-brand-subtle) 62%, var(--color-highlight-subtle) 100%);
+    --gradient-accent: linear-gradient(
+        135deg,
+        var(--color-accent-subtle) 0%,
+        var(--color-brand-subtle) 62%,
+        var(--color-highlight-subtle) 100%
+    );
     --gradient-highlight: linear-gradient(135deg, var(--color-highlight) 0%, var(--color-accent) 100%);
-    --gradient-surface: radial-gradient(circle at 12% 8%, var(--color-brand-subtle) 0%, transparent 36%), linear-gradient(180deg, var(--color-surface-elevated) 0%, var(--color-surface) 100%);
+    --gradient-surface:
+        radial-gradient(circle at 12% 8%, var(--color-brand-subtle) 0%, transparent 36%),
+        linear-gradient(180deg, var(--color-surface-elevated) 0%, var(--color-surface) 100%);
     --gradient-fade-surface: linear-gradient(90deg, transparent 0%, var(--color-surface) 100%);
     --background-image-gradient-brand: var(--gradient-brand);
     --background-image-gradient-accent: var(--gradient-accent);
@@ -118,7 +125,7 @@
     color-scheme: dark;
     --color-background: oklch(13.5% 0.028 264); /* midnight */
     --color-foreground: oklch(96.5% 0.01 255); /* moonlit text */
-    
+
     /* Brand and accent colors for dark mode */
     --color-brand: oklch(72% 0.15 252); /* luminous signal blue */
     --color-brand-hover: oklch(78% 0.13 246); /* sky glow */
@@ -131,22 +138,22 @@
     --color-highlight: oklch(80% 0.15 78); /* warm instrument light */
     --color-highlight-subtle: oklch(26% 0.055 76); /* ember glass */
     --color-highlight-foreground: oklch(12.5% 0.03 264); /* ink */
-    
+
     --color-secondary: oklch(73% 0.026 260); /* mist graphite */
     --color-secondary-hover: oklch(86% 0.016 258); /* bright graphite */
-    
+
     /* Text colors for dark mode */
     --color-text-primary: oklch(96.5% 0.01 255); /* moonlit text */
     --color-text-secondary: oklch(86% 0.018 258); /* silver */
     --color-text-tertiary: oklch(75% 0.024 260); /* dim silver */
     --color-text-muted: oklch(63% 0.028 262); /* blue ash */
     --color-text-inverse: oklch(18% 0.035 264); /* midnight ink */
-    
+
     /* Border colors for dark mode */
     --color-border: oklch(34% 0.038 262); /* night line */
     --color-border-light: oklch(27% 0.034 262); /* low line */
     --color-border-strong: oklch(47% 0.038 260); /* bright line */
-    
+
     /* Surface colors for dark mode */
     --color-surface: oklch(18.5% 0.034 264); /* ink panel */
     --color-surface-elevated: oklch(23.5% 0.042 264); /* raised ink */
@@ -187,7 +194,9 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-    *, ::before, ::after {
+    *,
+    ::before,
+    ::after {
         transition-duration: 0.01ms !important;
         animation-duration: 0.01ms !important;
     }

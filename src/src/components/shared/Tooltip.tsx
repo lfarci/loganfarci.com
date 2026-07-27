@@ -1,5 +1,9 @@
 import type { ReactElement, ReactNode } from "react";
-import { Tooltip as TooltipRoot, TooltipContent, TooltipTrigger } from "@/components/shared/primitives/TooltipPrimitives";
+import {
+    Tooltip as TooltipRoot,
+    TooltipContent,
+    TooltipTrigger,
+} from "@/components/shared/primitives/TooltipPrimitives";
 
 type TooltipPlacement = "top" | "right" | "bottom" | "left";
 

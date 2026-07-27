@@ -32,7 +32,7 @@ export async function render(url: string) {
             <StaticRouter location={url}>
                 <App />
             </StaticRouter>
-        </>
+        </>,
     );
 
     const rendered = await streamToString(prelude);
@@ -42,10 +42,7 @@ export async function render(url: string) {
         throw new Error("React prerender output did not include the root marker.");
     }
 
-    return {
-        headTags: rendered.slice(0, markerIndex),
-        html: rendered.slice(markerIndex + prerenderRootMarker.length),
-    };
+    return { headTags: rendered.slice(0, markerIndex), html: rendered.slice(markerIndex + prerenderRootMarker.length) };
 }
 
 export { getStaticRoutes } from "./routes";

@@ -22,38 +22,47 @@ Before you begin, ensure you have the following tools installed on your workstat
 
 1. **Install dependencies:**
 
-   ```bash
-   cd src
-   npm install
-   ```
+    ```bash
+    cd src
+    npm install
+    ```
 
 2. **(Optional) Configure environment variables:**
 
-   Copy the example environment file and customize it if needed:
+    Copy the example environment file and customize it if needed:
 
-   ```bash
-   cp .env.local.example .env.local
-   ```
+    ```bash
+    cp .env.local.example .env.local
+    ```
 
-   The application works out of the box with default values. Environment variables are only needed if you want to customize paths or run in special configurations.
+    The application works out of the box with default values. Environment variables are only needed if you want to customize paths or run in special configurations.
 
 3. **Start development server:**
 
-   ```bash
-   npm run dev
-   ```
+    ```bash
+    npm run dev
+    ```
 
 4. **Build for production:**
 
-   ```bash
-   npm run build
-   ```
+    ```bash
+    npm run build
+    ```
 
 5. **Lint code:**
 
-   ```bash
-   npm run lint
-   ```
+    ```bash
+    npm run lint
+    ```
+
+6. **Format code:**
+
+    ```bash
+    npm run format
+    ```
+
+    To verify formatting without changing files, run `npm run format:check`. The same
+    check runs in CI.
 
 ## Smoke tests (deployment validation)
 
@@ -85,14 +94,14 @@ What the smoke checks validate:
 
 ## Technology stack
 
-| Name                  | Description                                                  | Type  | Link                                                                                   |
-| --------------------- | ------------------------------------------------------------ | ----- | -------------------------------------------------------------------------------------- |
+| Name                  | Description                                                                           | Type  | Link                                                                                   |
+| --------------------- | ------------------------------------------------------------------------------------- | ----- | -------------------------------------------------------------------------------------- |
 | Vite                  | Build tool bundling the React SPA, with a custom SSR + prerender step for static HTML | Web   | [Vite](https://vite.dev/)                                                              |
-| React                 | JavaScript library for building user interfaces              | Web   | [React](https://react.dev/)                                                            |
-| TypeScript            | Typed superset of JavaScript                                 | Web   | [TypeScript](https://www.typescriptlang.org/)                                          |
-| Tailwind CSS          | Utility-first CSS framework for rapid UI development         | Web   | [Tailwind CSS](https://tailwindcss.com/)                                               |
-| shadcn/ui + Radix UI  | Local component primitives with accessible Radix behavior     | Web   | [shadcn/ui](https://ui.shadcn.com/)                                                    |
-| Azure Static Web Apps | Azure service for hosting static web applications            | Cloud | [Azure Static Web Apps](https://azure.microsoft.com/en-us/products/app-service/static) |
-| Terraform             | Infrastructure as Code tool for provisioning cloud resources | IaC   | [Terraform](https://www.terraform.io/)                                                 |
-| Azure CLI             | Command-line tool for managing Azure resources               | Cloud | [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/)                              |
-| GitHub Actions        | CI/CD platform for automating workflows and deployments      | CI/CD | [GitHub Actions](https://github.com/features/actions)                                  |
+| React                 | JavaScript library for building user interfaces                                       | Web   | [React](https://react.dev/)                                                            |
+| TypeScript            | Typed superset of JavaScript                                                          | Web   | [TypeScript](https://www.typescriptlang.org/)                                          |
+| Tailwind CSS          | Utility-first CSS framework for rapid UI development                                  | Web   | [Tailwind CSS](https://tailwindcss.com/)                                               |
+| shadcn/ui + Radix UI  | Local component primitives with accessible Radix behavior                             | Web   | [shadcn/ui](https://ui.shadcn.com/)                                                    |
+| Azure Static Web Apps | Azure service for hosting static web applications                                     | Cloud | [Azure Static Web Apps](https://azure.microsoft.com/en-us/products/app-service/static) |
+| Terraform             | Infrastructure as Code tool for provisioning cloud resources                          | IaC   | [Terraform](https://www.terraform.io/)                                                 |
+| Azure CLI             | Command-line tool for managing Azure resources                                        | Cloud | [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/)                              |
+| GitHub Actions        | CI/CD platform for automating workflows and deployments                               | CI/CD | [GitHub Actions](https://github.com/features/actions)                                  |

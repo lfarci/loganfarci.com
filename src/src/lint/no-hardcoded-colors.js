@@ -61,7 +61,7 @@ function collectStrings(node, out) {
         } else if (
             child !== null &&
             typeof child === "object" &&
-            typeof (/** @type {{ type?: string }} */ (child)).type === "string"
+            typeof (/** @type {{ type?: string }} */ (child).type) === "string"
         ) {
             collectStrings(child, out);
         }
@@ -78,9 +78,7 @@ const rule = {
             recommended: false,
         },
         schema: [],
-        messages: {
-            hardcodedColor: 'Use a semantic Tailwind color token instead of the hardcoded color "{{color}}".',
-        },
+        messages: { hardcodedColor: 'Use a semantic Tailwind color token instead of the hardcoded color "{{color}}".' },
     },
     create(context) {
         // Dedup by string-node identity so a factory call nested inside a

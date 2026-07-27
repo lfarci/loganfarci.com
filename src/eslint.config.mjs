@@ -8,11 +8,7 @@ import prettierConfig from "eslint-config-prettier";
 import noHardcodedColors from "./src/lint/no-hardcoded-colors.js";
 
 // Local plugin holding project-specific guardrail rules (see docs/specs/linting.md).
-const local = {
-    rules: {
-        "no-hardcoded-colors": noHardcodedColors,
-    },
-};
+const local = { rules: { "no-hardcoded-colors": noHardcodedColors } };
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -23,28 +19,14 @@ const typeCheckedConfigs = tseslint.configs.recommendedTypeChecked.map((config) 
     files: ["**/*.{ts,tsx}"],
     languageOptions: {
         ...config.languageOptions,
-        parserOptions: {
-            ...config.languageOptions?.parserOptions,
-            project: tsconfigPath,
-            tsconfigRootDir: __dirname,
-        },
+        parserOptions: { ...config.languageOptions?.parserOptions, project: tsconfigPath, tsconfigRootDir: __dirname },
     },
 }));
 
 export default tseslint.config(
-    {
-        ignores: ["dist", "node_modules", "coverage"],
-    },
+    { ignores: ["dist", "node_modules", "coverage"] },
     js.configs.recommended,
-    {
-        files: ["scripts/**/*.mjs"],
-        languageOptions: {
-            globals: {
-                console: "readonly",
-                process: "readonly",
-            },
-        },
-    },
+    { files: ["scripts/**/*.mjs"], languageOptions: { globals: { console: "readonly", process: "readonly" } } },
     ...typeCheckedConfigs,
     {
         files: ["**/*.{ts,tsx}"],
@@ -105,16 +87,9 @@ export default tseslint.config(
     {
         // The primitive source files legitimately render these raw elements.
         files: ["src/components/shared/primitives/**/*.tsx"],
-        rules: {
-            "no-restricted-syntax": "off",
-        },
+        rules: { "no-restricted-syntax": "off" },
     },
-    {
-        files: ["src/components/shared/MermaidDiagram.tsx"],
-        rules: {
-            "no-restricted-imports": "off",
-        },
-    },
+    { files: ["src/components/shared/MermaidDiagram.tsx"], rules: { "no-restricted-imports": "off" } },
     {
         files: ["**/*.tsx"],
         plugins: { local, "jsx-a11y": jsxA11y },

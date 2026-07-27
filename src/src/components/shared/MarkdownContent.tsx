@@ -54,7 +54,12 @@ function createMarkdownComponents(measure: boolean): Components {
         ol: ({ children }) => <OrderedList className={measureClassName}>{children}</OrderedList>,
         li: ({ children }) => <ListItem>{children}</ListItem>,
         blockquote: ({ children }) => (
-            <blockquote className={mergeClassNames("mb-6 border-l-4 border-primary bg-primary-light py-3 pl-5 italic text-text-secondary", measureClassName)}>
+            <blockquote
+                className={mergeClassNames(
+                    "mb-6 border-l-4 border-primary bg-primary-light py-3 pl-5 italic text-text-secondary",
+                    measureClassName,
+                )}
+            >
                 {children}
             </blockquote>
         ),
@@ -78,9 +83,7 @@ function createMarkdownComponents(measure: boolean): Components {
             </th>
         ),
         td: ({ children }) => (
-            <td className="border-b border-border-light bg-surface px-4 py-3 text-text-secondary">
-                {children}
-            </td>
+            <td className="border-b border-border-light bg-surface px-4 py-3 text-text-secondary">{children}</td>
         ),
     };
 }

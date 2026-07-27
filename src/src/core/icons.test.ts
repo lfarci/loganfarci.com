@@ -15,10 +15,7 @@ describe("getIcon", () => {
     it("returns icon metadata for a known icon name", async () => {
         const { getIcon } = await import("./icons");
 
-        expect(getIcon("azure")).toEqual({
-            src: "/images/azure.svg",
-            alt: "Azure icon",
-        });
+        expect(getIcon("azure")).toEqual({ src: "/images/azure.svg", alt: "Azure icon" });
     });
 
     it("normalizes casing and whitespace before looking up icons", async () => {

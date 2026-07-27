@@ -19,10 +19,7 @@ const previewHostnamePattern = /(^|-)pr-\d+([.-]|$)/i;
 const profile = getProfile();
 const contacts = getContacts();
 const currentExperience = getExperiences()[0];
-const siteJsonLd = [
-    createWebSiteJsonLd(),
-    createPersonJsonLd(profile, contacts, currentExperience),
-];
+const siteJsonLd = [createWebSiteJsonLd(), createPersonJsonLd(profile, contacts, currentExperience)];
 
 export default function App() {
     const element = useRoutes(routes);

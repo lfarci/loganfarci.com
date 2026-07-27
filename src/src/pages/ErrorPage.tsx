@@ -6,10 +6,7 @@ import { Button } from "@/components/shared/primitives/Button";
 export default function ErrorPage({
     error,
     resetErrorBoundary,
-}: Readonly<{
-    error: Error;
-    resetErrorBoundary: () => void;
-}>) {
+}: Readonly<{ error: Error; resetErrorBoundary: () => void }>) {
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -25,11 +22,7 @@ export default function ErrorPage({
             message="An unexpected error has occurred. Please try again or return to the home page."
         >
             <div className="flex gap-4">
-                <Button
-                    onClick={() => resetErrorBoundary()}
-                >
-                    Try Again
-                </Button>
+                <Button onClick={() => resetErrorBoundary()}>Try Again</Button>
                 <Button
                     variant="secondary"
                     onClick={() => {

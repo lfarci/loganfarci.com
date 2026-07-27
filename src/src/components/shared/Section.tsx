@@ -19,11 +19,7 @@ const Section: React.FC<SectionProps> = ({ heading, label, redirectPath, redirec
     return (
         <section id={id ?? createId(heading)} className="pt-8 md:pt-10 scroll-mt-24">
             <div className="flex flex-col mb-5 md:mb-6">
-                {label && (
-                    <Label className="mb-2">
-                        {label}
-                    </Label>
-                )}
+                {label && <Label className="mb-2">{label}</Label>}
                 <div className="flex items-center">
                     {redirectPath ? (
                         <Tooltip content={toolTip} placement="right">

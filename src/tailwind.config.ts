@@ -1,10 +1,7 @@
 import type { Config } from "tailwindcss";
 
 export default {
-    content: [
-        "./index.html",
-        "./src/**/*.{js,ts,jsx,tsx}",
-    ],
+    content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
     theme: {
         extend: {
             colors: {
@@ -37,10 +34,7 @@ export default {
                     light: "var(--color-brand-subtle)",
                     foreground: "var(--color-brand-foreground)",
                 },
-                secondary: {
-                    DEFAULT: "var(--color-secondary)",
-                    hover: "var(--color-secondary-hover)",
-                },
+                secondary: { DEFAULT: "var(--color-secondary)", hover: "var(--color-secondary-hover)" },
 
                 // Text colors
                 text: {
@@ -65,14 +59,8 @@ export default {
                     hover: "var(--color-surface-hover)",
                     muted: "var(--color-surface-muted)",
                 },
-                muted: {
-                    DEFAULT: "var(--color-muted)",
-                    foreground: "var(--color-muted-foreground)",
-                },
-                ring: {
-                    DEFAULT: "var(--color-ring)",
-                    muted: "var(--color-ring-muted)",
-                },
+                muted: { DEFAULT: "var(--color-muted)", foreground: "var(--color-muted-foreground)" },
+                ring: { DEFAULT: "var(--color-ring)", muted: "var(--color-ring-muted)" },
 
                 // Status colors
                 success: "var(--color-success)",
@@ -98,7 +86,7 @@ export default {
                 card: "var(--radius-card)",
                 surface: "var(--radius-surface)",
             },
-        }
+        },
     },
     darkMode: "class",
     plugins: [],

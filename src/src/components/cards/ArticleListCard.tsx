@@ -5,10 +5,7 @@ import IconTag from "@/components/shared/IconTag";
 import { Text } from "@/components/shared/typography";
 import { Article } from "@/types/article";
 
-type ArticleListCardProps = {
-    article: Article;
-    showTags?: boolean;
-};
+type ArticleListCardProps = { article: Article; showTags?: boolean };
 
 const ArticleListCard: React.FC<ArticleListCardProps> = ({ article, showTags = false }) => (
     <Card as="article" className="flex flex-col gap-3">
