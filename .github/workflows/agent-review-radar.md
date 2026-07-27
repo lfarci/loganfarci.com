@@ -29,12 +29,16 @@ tools:
     toolsets: [default]
 
 safe-outputs:
-  mentions:
-    allowed: [copilot]
-    max: 1
+  mentions: false
   add-comment:
     max: 5
     target: triggering
+  assign-to-agent:
+    name: copilot
+    allowed: [copilot]
+    max: 1
+    target: triggering
+    github-token: ${{ secrets.GH_AW_AGENT_TOKEN || secrets.COPILOT_GITHUB_TOKEN }}
   submit-pull-request-review:
     allowed-events: [COMMENT]
     target: triggering
@@ -86,12 +90,15 @@ the comments that are truly useful for Logan or the Copilot coding agent.
    precise feedback.
 5. **Preserve PR scope.** Do not ask for unrelated cleanup or broad refactors.
 
-## Copilot escalation
+## Agent escalation
 
-When the right next step is agent implementation on the existing PR, post a PR comment
-that starts with @copilot as plain GitHub text. Never wrap the mention in backticks,
-fenced code blocks, quotes, or other code formatting, so GitHub can parse it as a real
-mention.
+When the right next step is agent implementation on the existing PR, do not use a
+Copilot at-mention. Instead, use both safe outputs below in this order:
+
+1. Post a normal PR comment with `add_comment`. Start it with `Copilot handoff:` and
+   include the implementation context below. Do not include any at-mentions.
+2. Assign the PR to Copilot with `assign_to_agent` using the configured default agent.
+   Include `pull_number` set to the triggering PR number.
 
 The comment must include enough context to resume work without re-discovery:
 
@@ -101,10 +108,10 @@ The comment must include enough context to resume work without re-discovery:
 - the expected outcome or acceptance criteria,
 - constraints from custom instructions or `docs/specs/`.
 
-Use a Copilot mention only for concrete implementation work. Do not mention Copilot for
+Use Copilot assignment only for concrete implementation work. Do not assign Copilot for
 FYI-only summaries, vague concerns, low-confidence findings, or issues already covered by
-an active Copilot thread. If you need to refer to the Copilot product in prose without
-triggering it, write "Copilot" without an at-sign.
+an active Copilot thread. If you need to refer to the Copilot product in prose, write
+"Copilot" without an at-sign.
 
 ## What to do
 
