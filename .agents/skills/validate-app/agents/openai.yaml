@@ -1,0 +1,4 @@
+interface:
+    display_name: "Validate App"
+    short_description: "Run the complete local app quality gate"
+    default_prompt: "Use $validate-app to validate the application before shipping."
