@@ -29,12 +29,7 @@ export default defineConfig({
                 functions: 50,
                 branches: 40,
                 statements: 50,
-                "src/core/**": {
-                    lines: 80,
-                    functions: 80,
-                    branches: 70,
-                    statements: 80,
-                },
+                "src/core/**": { lines: 80, functions: 80, branches: 70, statements: 80 },
             },
         },
     },
