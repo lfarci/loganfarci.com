@@ -5,12 +5,7 @@ import { ImageProps } from "@/types";
 
 export type MediaTileSize = "small" | "medium" | "large";
 
-type MediaTileCardProps = {
-    title: string;
-    description?: string;
-    image?: ImageProps;
-    size?: MediaTileSize;
-};
+type MediaTileCardProps = { title: string; description?: string; image?: ImageProps; size?: MediaTileSize };
 
 const sizeClasses: Record<MediaTileSize, string> = {
     small: "max-h-16 md:max-h-20",

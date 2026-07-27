@@ -9,7 +9,7 @@ describe("ThemeToggle", () => {
         render(
             <ThemeProvider>
                 <ThemeToggle />
-            </ThemeProvider>
+            </ThemeProvider>,
         );
 
         const button = await screen.findByRole("button", { name: "Switch to dark mode" });

@@ -68,7 +68,12 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ title }) => {
 
     return (
         <header className="border-b border-border bg-background/90 backdrop-blur">
-            <nav className={mergeClassNames(contentWidthStyles.pageContainer, "flex flex-wrap items-center justify-between py-3 text-center")}>
+            <nav
+                className={mergeClassNames(
+                    contentWidthStyles.pageContainer,
+                    "flex flex-wrap items-center justify-between py-3 text-center",
+                )}
+            >
                 <div className="flex-1 text-left md:flex-none md:text-center">
                     <Link to="/" className="text-xl md:text-2xl font-thin heading-font cursor-pointer">
                         {title}
@@ -105,7 +110,11 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ title }) => {
                 </Button>
                 <div className="hidden md:flex items-center space-x-8">
                     {navigationItems.map((item) => (
-                        <NavBarEntry key={item.url} url={item.url} className="hover:text-primary-hover transition-colors">
+                        <NavBarEntry
+                            key={item.url}
+                            url={item.url}
+                            className="hover:text-primary-hover transition-colors"
+                        >
                             {item.label}
                         </NavBarEntry>
                     ))}

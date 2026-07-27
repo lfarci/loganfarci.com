@@ -13,10 +13,7 @@
         "isolatedModules": true,
         "jsx": "react-jsx",
         "types": ["vite/client"],
-        "paths": {
-            "@/*": ["./src/*"],
-            "@content/*": ["../content/*"]
-        }
+        "paths": { "@/*": ["./src/*"], "@content/*": ["../content/*"] }
     },
     "include": ["**/*.ts", "**/*.tsx", "plugins/**/*.ts"],
     "exclude": ["node_modules"]

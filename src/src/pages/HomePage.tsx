@@ -16,7 +16,8 @@ const profile = getProfile();
 const featuredArticles = getFeaturedArticles();
 
 const pageTitle = "Logan Farci - Software Engineer";
-const pageDescription = "Software Engineer specializing in Azure, C#, .NET, and cloud-native solutions. Explore my work, articles, and certifications.";
+const pageDescription =
+    "Software Engineer specializing in Azure, C#, .NET, and cloud-native solutions. Explore my work, articles, and certifications.";
 const pageUrl = createCanonicalUrl("/");
 
 export default function HomePage() {

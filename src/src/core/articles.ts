@@ -1,10 +1,10 @@
 import { Article } from "@/types";
 
 // Vite resolves this glob at build time — no fs needed
-const articleModules = import.meta.glob<{
-    frontmatter: Record<string, unknown>;
-    content: string;
-}>("@content/articles/*.md", { eager: true });
+const articleModules = import.meta.glob<{ frontmatter: Record<string, unknown>; content: string }>(
+    "@content/articles/*.md",
+    { eager: true },
+);
 
 const parseArticle = (modulePath: string, mod: { frontmatter: Record<string, unknown>; content: string }): Article => {
     const slug = modulePath.split("/").pop()!.replace(".md", "");
@@ -30,9 +30,9 @@ const featuredArticleLimit = 3;
 
 export const getArticleSlugs = (): string[] => allArticles.map((a) => a.slug);
 
-export const getArticleBySlug = (slug: string): Article | null =>
-    allArticles.find((a) => a.slug === slug) ?? null;
+export const getArticleBySlug = (slug: string): Article | null => allArticles.find((a) => a.slug === slug) ?? null;
 
 export const getAllArticles = (): Article[] => allArticles;
 
-export const getFeaturedArticles = (): Article[] => allArticles.filter((a) => a.featured).slice(0, featuredArticleLimit);
+export const getFeaturedArticles = (): Article[] =>
+    allArticles.filter((a) => a.featured).slice(0, featuredArticleLimit);

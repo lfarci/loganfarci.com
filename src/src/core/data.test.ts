@@ -15,22 +15,11 @@ vi.mock("@content/data/certifications.json", () => ({
 }));
 
 vi.mock("@content/data/experiences.json", () => ({
-    default: [
-        {
-            name: "Software Engineer",
-            company: { name: "Acme", url: "https://acme.com" },
-            start: "2022-01-01",
-        },
-    ],
+    default: [{ name: "Software Engineer", company: { name: "Acme", url: "https://acme.com" }, start: "2022-01-01" }],
 }));
 
 vi.mock("@content/data/skills.json", () => ({
-    default: [
-        {
-            name: "Frontend",
-            skills: [{ name: "TypeScript" }, { name: "React" }],
-        },
-    ],
+    default: [{ name: "Frontend", skills: [{ name: "TypeScript" }, { name: "React" }] }],
 }));
 
 vi.mock("@content/data/icons.json", () => ({
@@ -41,23 +30,11 @@ vi.mock("@content/data/icons.json", () => ({
 }));
 
 vi.mock("@content/data/interests.json", () => ({
-    default: [
-        {
-            title: "Open Source",
-            image: { src: "/oss.png", alt: "oss" },
-            description: "Contributing to OSS",
-        },
-    ],
+    default: [{ title: "Open Source", image: { src: "/oss.png", alt: "oss" }, description: "Contributing to OSS" }],
 }));
 
 vi.mock("@content/data/contacts.json", () => ({
-    default: [
-        {
-            name: "GitHub",
-            icon: "/github.svg",
-            url: "https://github.com/test",
-        },
-    ],
+    default: [{ name: "GitHub", icon: "/github.svg", url: "https://github.com/test" }],
 }));
 
 vi.mock("@content/data/profile.json", () => ({

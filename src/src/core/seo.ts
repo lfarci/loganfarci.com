@@ -2,8 +2,7 @@ import type { Article, Contact, Experience, Profile } from "@/types";
 import { siteOgImage, siteUrl } from "@/core/site";
 
 export const siteName = "Logan Farci";
-export const siteDescription =
-    "Software Engineer specializing in Azure, C#, .NET, and cloud-native solutions.";
+export const siteDescription = "Software Engineer specializing in Azure, C#, .NET, and cloud-native solutions.";
 
 export type JsonLdPrimitive = string | number | boolean | null;
 export type JsonLdValue = JsonLdPrimitive | JsonLdObject | JsonLdValue[];
@@ -54,11 +53,7 @@ export const createPersonJsonLd = (
         image: createAbsoluteUrl(profile.avatar.src),
         jobTitle: "Software Engineer",
         description: profile.introduction,
-        hasOccupation: {
-            "@type": "Occupation",
-            name: "Software Engineer",
-            occupationalCategory: "15-1252.00",
-        },
+        hasOccupation: { "@type": "Occupation", name: "Software Engineer", occupationalCategory: "15-1252.00" },
     };
 
     if (sameAs.length > 0) {
@@ -76,9 +71,7 @@ export const createPersonJsonLd = (
     return person;
 };
 
-export const createBreadcrumbJsonLd = (
-    items: Array<{ name: string; path: string }>,
-): JsonLdObject => ({
+export const createBreadcrumbJsonLd = (items: Array<{ name: string; path: string }>): JsonLdObject => ({
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: items.map((item, index) => ({
@@ -102,11 +95,7 @@ export const createArticleJsonLd = (article: Article): JsonLdObject => {
         image: siteOgImage,
         datePublished: article.publishedAt,
         dateModified: article.publishedAt,
-        author: {
-            "@type": "Person",
-            "@id": `${siteUrl}/#person`,
-            name: article.author || siteName,
-        },
+        author: { "@type": "Person", "@id": `${siteUrl}/#person`, name: article.author || siteName },
         publisher: { "@id": `${siteUrl}/#person` },
         keywords: article.tags,
         inLanguage: "en-US",

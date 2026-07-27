@@ -7,16 +7,12 @@ import { ImageProps } from "@/types";
 import GridContainer from "@/components/layout/GridContainer";
 import { cardRootClassName } from "@/components/shared/primitives/CardPrimitives";
 
-type PolymorphicProps<E extends React.ElementType> = {
-    as?: E;
-    className?: string;
-    children?: React.ReactNode;
-} & Omit<React.ComponentPropsWithoutRef<E>, "as" | "className" | "children">;
+type PolymorphicProps<E extends React.ElementType> = { as?: E; className?: string; children?: React.ReactNode } & Omit<
+    React.ComponentPropsWithoutRef<E>,
+    "as" | "className" | "children"
+>;
 
-type SimpleProps = {
-    className?: string;
-    children?: React.ReactNode;
-};
+type SimpleProps = { className?: string; children?: React.ReactNode };
 
 type CardGridProps = SimpleProps & { columns?: number };
 
@@ -28,12 +24,7 @@ type CardMediaProps = {
     containerClassName?: string;
 };
 
-type CardLinkProps = {
-    href: string;
-    external?: boolean;
-    className?: string;
-    children: React.ReactNode;
-};
+type CardLinkProps = { href: string; external?: boolean; className?: string; children: React.ReactNode };
 
 const mediaSizes: Record<NonNullable<CardMediaProps["size"]>, string> = {
     small: "w-1/3",
@@ -42,15 +33,13 @@ const mediaSizes: Record<NonNullable<CardMediaProps["size"]>, string> = {
     full: "w-full",
 };
 
-const Card = <E extends React.ElementType = "div">({
-    as,
-    className,
-    children,
-    ...props
-}: PolymorphicProps<E>) => {
+const Card = <E extends React.ElementType = "div">({ as, className, children, ...props }: PolymorphicProps<E>) => {
     const Component = as ?? "div";
     return (
-        <Component className={mergeClassNames(cardRootClassName, className)} {...(props as React.ComponentPropsWithoutRef<E>)}>
+        <Component
+            className={mergeClassNames(cardRootClassName, className)}
+            {...(props as React.ComponentPropsWithoutRef<E>)}
+        >
             {children}
         </Component>
     );

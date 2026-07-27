@@ -7,14 +7,9 @@ import path from "node:path";
 export default defineConfig({
     plugins: [tailwindcss(), react(), markdownPlugin()],
     resolve: {
-        alias: {
-            "@/": path.resolve(__dirname, "src") + "/",
-            "@content/": path.resolve(__dirname, "../content") + "/",
-        },
+        alias: { "@/": path.resolve(__dirname, "src") + "/", "@content/": path.resolve(__dirname, "../content") + "/" },
     },
-    build: {
-        outDir: "dist",
-    },
+    build: { outDir: "dist" },
     server: {
         fs: {
             allow: [".."], // Allow reading content/ outside project root

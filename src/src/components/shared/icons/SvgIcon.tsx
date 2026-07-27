@@ -1,20 +1,14 @@
 import React from "react";
 
-export type SvgIconProps = { 
-    className?: string; 
-    strokeWidth?: number; 
-    size?: number; 
+export type SvgIconProps = {
+    className?: string;
+    strokeWidth?: number;
+    size?: number;
     viewBox?: string;
-    children?: React.ReactNode 
+    children?: React.ReactNode;
 };
 
-const SvgIcon: React.FC<SvgIconProps> = ({
-    className,
-    strokeWidth = 3,
-    size = 24,
-    viewBox,
-    children
-}) => (
+const SvgIcon: React.FC<SvgIconProps> = ({ className, strokeWidth = 3, size = 24, viewBox, children }) => (
     <svg
         xmlns="http://www.w3.org/2000/svg"
         height={size}
@@ -23,7 +17,7 @@ const SvgIcon: React.FC<SvgIconProps> = ({
         stroke="currentColor"
         strokeWidth={strokeWidth}
         className={className}
-        style={{ aspectRatio: 'auto' }}
+        style={{ aspectRatio: "auto" }}
         aria-hidden="true"
         focusable="false"
     >

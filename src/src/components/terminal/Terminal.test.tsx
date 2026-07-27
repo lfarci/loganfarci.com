@@ -1,9 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
-vi.mock("@/core/Commands", () => ({
-    default: vi.fn(),
-}));
+vi.mock("@/core/Commands", () => ({ default: vi.fn() }));
 
 import handleCommand from "@/core/Commands";
 import Terminal from "./Terminal";
@@ -11,13 +9,7 @@ import Terminal from "./Terminal";
 type MockCommandResult = ReturnType<typeof handleCommand>;
 
 const commandResult = (overrides: Partial<MockCommandResult> = {}): MockCommandResult =>
-    ({
-        hasError: false,
-        error: null,
-        clear: false,
-        output: "",
-        ...overrides,
-    }) as MockCommandResult;
+    ({ hasError: false, error: null, clear: false, output: "", ...overrides }) as MockCommandResult;
 
 describe("Terminal", () => {
     it("appends command output to the history", () => {
