@@ -15,7 +15,12 @@ const Footer: React.FC<FooterProps> = ({ githubRepositoryUrl, commitHash, commit
     const commitHashPortion = commitHash?.substring(0, commitHashLength);
     const showCommitHash = commitHash && commitHash.length > 0;
     return (
-        <footer className={mergeClassNames(contentWidthStyles.pageContainer, "flex flex-wrap justify-between items-center pb-8 gap-y-2")}>
+        <footer
+            className={mergeClassNames(
+                contentWidthStyles.pageContainer,
+                "flex flex-wrap justify-between items-center pb-8 gap-y-2",
+            )}
+        >
             <div className="flex flex-wrap items-center gap-1 min-w-0">
                 <Footnote>© Logan Farci.</Footnote>
             </div>

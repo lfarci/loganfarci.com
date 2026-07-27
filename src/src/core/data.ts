@@ -22,8 +22,5 @@ export const getDiploma = (): Diploma => education as Diploma;
 export function attemptToLoadIcons(skills: Skill[]): Array<{ skill: Skill; icon: Icon | null }> {
     const iconList = getIcons();
     const iconMap = new Map(iconList.map((i) => [i.id, i]));
-    return skills.map((skill) => ({
-        skill,
-        icon: skill.iconId ? iconMap.get(skill.iconId) || null : null,
-    }));
+    return skills.map((skill) => ({ skill, icon: skill.iconId ? iconMap.get(skill.iconId) || null : null }));
 }

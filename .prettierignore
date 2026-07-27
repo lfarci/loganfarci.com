@@ -1,4 +1,6 @@
 # Ignore artifacts:
 build
 coverage
+src/dist
+src/package-lock.json
 .github/prompts/*.prompt.md

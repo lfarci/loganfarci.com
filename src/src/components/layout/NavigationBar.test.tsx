@@ -25,16 +25,12 @@ function renderNavigationBarWithProviders() {
             <MemoryRouter initialEntries={["/"]}>
                 <NavigationBar title="Logan Farci" />
             </MemoryRouter>
-        </ThemeProvider>
+        </ThemeProvider>,
     );
 }
 
 function setViewportWidth(width: number, triggerResize = false) {
-    Object.defineProperty(window, "innerWidth", {
-        configurable: true,
-        writable: true,
-        value: width,
-    });
+    Object.defineProperty(window, "innerWidth", { configurable: true, writable: true, value: width });
     const rootFontSize = Number.parseFloat(window.getComputedStyle(document.documentElement).fontSize) || 16;
 
     Object.defineProperty(window, "matchMedia", {
@@ -173,7 +169,7 @@ describe("NavigationBar", () => {
                 <MemoryRouter initialEntries={["/"]}>
                     <NavigationTestWrapper />
                 </MemoryRouter>
-            </ThemeProvider>
+            </ThemeProvider>,
         );
 
         fireEvent.click(screen.getByRole("button", { name: /open menu/i }));

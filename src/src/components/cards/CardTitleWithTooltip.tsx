@@ -2,10 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import Tooltip from "@/components/shared/Tooltip";
 import { Heading3 } from "@/components/shared/typography";
 
-type CardTitleWithTooltipProps = {
-    children: string;
-    className?: string;
-};
+type CardTitleWithTooltipProps = { children: string; className?: string };
 
 const join = (...classes: Array<string | undefined | null | false>) => classes.filter(Boolean).join(" ");
 
@@ -21,7 +18,10 @@ const CardTitleWithTooltip: React.FC<CardTitleWithTooltipProps> = ({ children, c
     }, [children]);
 
     const heading = (
-        <Heading3 ref={headingRef} className={join("lg:whitespace-nowrap lg:overflow-hidden lg:text-ellipsis", className)}>
+        <Heading3
+            ref={headingRef}
+            className={join("lg:whitespace-nowrap lg:overflow-hidden lg:text-ellipsis", className)}
+        >
             {children}
         </Heading3>
     );

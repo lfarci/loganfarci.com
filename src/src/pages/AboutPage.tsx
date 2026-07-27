@@ -41,7 +41,8 @@ const diploma = getDiploma();
 const profile = getProfile();
 
 const pageTitle = "About - Logan Farci";
-const pageDescription = "Learn more about Logan Farci, a Software Engineer specializing in Azure, C#, .NET, and cloud-native solutions.";
+const pageDescription =
+    "Learn more about Logan Farci, a Software Engineer specializing in Azure, C#, .NET, and cloud-native solutions.";
 const pageUrl = createCanonicalUrl("/about");
 const breadcrumbJsonLd = createBreadcrumbJsonLd([
     { name: "Home", path: "/" },
@@ -62,7 +63,9 @@ export default function AboutPage() {
             <meta name="twitter:description" content={pageDescription} />
             <JsonLd data={breadcrumbJsonLd} />
             <article className="py-8 md:py-10">
-                <Heading1 id="about-me" className="mb-6 scroll-mt-24 md:mb-8">About Me</Heading1>
+                <Heading1 id="about-me" className="mb-6 scroll-mt-24 md:mb-8">
+                    About Me
+                </Heading1>
                 <div className="flow-root">
                     <img
                         src={profile.avatar.src}
@@ -109,12 +112,7 @@ export default function AboutPage() {
                         <MarkdownPreview>{diploma.description}</MarkdownPreview>
                     </InfoCard>
                 </Section>
-                <ThumbnailGridSection
-                    heading="Certifications"
-                    items={certifications}
-                    columns={2}
-                    size="small"
-                />
+                <ThumbnailGridSection heading="Certifications" items={certifications} columns={2} size="small" />
                 <Section heading="Skills" id="skills">
                     <ColumnContainer>
                         {skillCategories.map((category: SkillCategory) => (
@@ -126,7 +124,9 @@ export default function AboutPage() {
                                 <CardBody className="pt-1 gap-2">
                                     <Text>{category.description}</Text>
                                     <div className="flex flex-wrap gap-2 mt-6">
-                                        {category.skills.map((skill) => <IconTag key={skill.name}>{skill.name}</IconTag>)}
+                                        {category.skills.map((skill) => (
+                                            <IconTag key={skill.name}>{skill.name}</IconTag>
+                                        ))}
                                     </div>
                                 </CardBody>
                             </Card>

@@ -49,9 +49,7 @@ if (!rawBaseUrl) {
 
 const timeoutFromEnv = Number.parseInt(process.env.SMOKE_TIMEOUT_MS ?? "", 10);
 const requestTimeoutMs =
-    Number.isFinite(timeoutFromEnv) && timeoutFromEnv > 0
-        ? timeoutFromEnv
-        : DEFAULT_REQUEST_TIMEOUT_MS;
+    Number.isFinite(timeoutFromEnv) && timeoutFromEnv > 0 ? timeoutFromEnv : DEFAULT_REQUEST_TIMEOUT_MS;
 
 function normalizeBaseUrl(value) {
     const withProtocol = /^https?:\/\//i.test(value) ? value : `https://${value}`;
@@ -105,7 +103,7 @@ function extractRenderableContent(html) {
 
 function hasJsonLdScript(html) {
     const jsonLdMatches = html.matchAll(
-        /<script\b[^>]*type\s*=\s*["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi
+        /<script\b[^>]*type\s*=\s*["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi,
     );
     for (const match of jsonLdMatches) {
         if ((match[1] ?? "").trim().length > 0) {
@@ -155,28 +153,12 @@ function createChecker(baseUrl) {
         const contentType = response.headers.get("content-type") ?? "";
         const titleMatch = body.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
         const title = titleMatch?.[1]?.trim() ?? "";
-        const descriptionTag = findTag(
-            body,
-            "meta",
-            (tag) => /name\s*=\s*["']description["']/i.test(tag)
-        );
+        const descriptionTag = findTag(body, "meta", (tag) => /name\s*=\s*["']description["']/i.test(tag));
         const description = getAttribute(descriptionTag, "content");
-        const canonicalTag = findTag(
-            body,
-            "link",
-            (tag) => /rel\s*=\s*["']canonical["']/i.test(tag)
-        );
+        const canonicalTag = findTag(body, "link", (tag) => /rel\s*=\s*["']canonical["']/i.test(tag));
         const canonicalHref = getAttribute(canonicalTag, "href");
-        const ogTitleTag = findTag(
-            body,
-            "meta",
-            (tag) => /property\s*=\s*["']og:title["']/i.test(tag)
-        );
-        const ogDescriptionTag = findTag(
-            body,
-            "meta",
-            (tag) => /property\s*=\s*["']og:description["']/i.test(tag)
-        );
+        const ogTitleTag = findTag(body, "meta", (tag) => /property\s*=\s*["']og:title["']/i.test(tag));
+        const ogDescriptionTag = findTag(body, "meta", (tag) => /property\s*=\s*["']og:description["']/i.test(tag));
         const ogTitle = getAttribute(ogTitleTag, "content");
         const ogDescription = getAttribute(ogDescriptionTag, "content");
         const hasNonEmptyJsonLdScript = hasJsonLdScript(body);
@@ -185,47 +167,47 @@ function createChecker(baseUrl) {
         check(
             response.status === 200,
             `${targetUrl} returned HTTP 200`,
-            `${targetUrl} returned HTTP ${response.status} (expected 200)`
+            `${targetUrl} returned HTTP ${response.status} (expected 200)`,
         );
         check(
             contentType.toLowerCase().includes("text/html"),
             `${targetUrl} returned text/html`,
-            `${targetUrl} returned content-type "${contentType}" (expected text/html)`
+            `${targetUrl} returned content-type "${contentType}" (expected text/html)`,
         );
         check(
             renderedContent.length > 0,
             `${targetUrl} contains non-empty prerendered main/root content`,
-            `${targetUrl} has empty prerendered main/root content`
+            `${targetUrl} has empty prerendered main/root content`,
         );
         check(
             title.length > 0,
             `${targetUrl} includes a non-empty <title>`,
-            `${targetUrl} is missing a non-empty <title>`
+            `${targetUrl} is missing a non-empty <title>`,
         );
         check(
             description.length > 0,
             `${targetUrl} includes a non-empty meta description`,
-            `${targetUrl} is missing a non-empty meta description`
+            `${targetUrl} is missing a non-empty meta description`,
         );
         check(
             canonicalHref.length > 0,
             `${targetUrl} includes a canonical link`,
-            `${targetUrl} is missing a canonical link`
+            `${targetUrl} is missing a canonical link`,
         );
         check(
             ogTitle.length > 0,
             `${targetUrl} includes a non-empty Open Graph title`,
-            `${targetUrl} is missing a non-empty Open Graph title`
+            `${targetUrl} is missing a non-empty Open Graph title`,
         );
         check(
             ogDescription.length > 0,
             `${targetUrl} includes a non-empty Open Graph description`,
-            `${targetUrl} is missing a non-empty Open Graph description`
+            `${targetUrl} is missing a non-empty Open Graph description`,
         );
         check(
             hasNonEmptyJsonLdScript,
             `${targetUrl} includes non-empty JSON-LD markup`,
-            `${targetUrl} is missing non-empty JSON-LD markup`
+            `${targetUrl} is missing non-empty JSON-LD markup`,
         );
     }
 
@@ -241,22 +223,18 @@ function createChecker(baseUrl) {
         check(
             response.status === 200,
             `${targetUrl} returned HTTP 200`,
-            `${targetUrl} returned HTTP ${response.status} (expected 200)`
+            `${targetUrl} returned HTTP ${response.status} (expected 200)`,
         );
-        check(
-            body.trim().length > 0,
-            `${targetUrl} returned a non-empty body`,
-            `${targetUrl} returned an empty body`
-        );
+        check(body.trim().length > 0, `${targetUrl} returned a non-empty body`, `${targetUrl} returned an empty body`);
         check(
             contentTypePattern.test(contentType),
             `${targetUrl} returned ${contentTypeDescription}`,
-            `${targetUrl} returned content-type "${contentType}" (expected ${contentTypeDescription})`
+            `${targetUrl} returned content-type "${contentType}" (expected ${contentTypeDescription})`,
         );
         check(
             bodyPattern.test(body),
             `${targetUrl} includes expected ${bodyPatternDescription} marker`,
-            `${targetUrl} did not include expected ${bodyPatternDescription} marker`
+            `${targetUrl} did not include expected ${bodyPatternDescription} marker`,
         );
     }
 
@@ -265,7 +243,7 @@ function createChecker(baseUrl) {
         check(
             response.status === 200,
             `${targetUrl} is available for route discovery`,
-            `${targetUrl} is unavailable for route discovery`
+            `${targetUrl} is unavailable for route discovery`,
         );
 
         const articleMatches = [...body.matchAll(ARTICLE_ROUTE_IN_SITEMAP_REGEX)];
@@ -285,29 +263,21 @@ function createChecker(baseUrl) {
         const { targetUrl, response, body } = await request(testNotFoundRoute);
         const hasExpectedStatus = response.status === 404 || response.status === 200;
         const customNotFoundTitle = CUSTOM_NOT_FOUND_EXPECTATIONS.titlePattern.test(body);
-        const robotsTag = findTag(
-            body,
-            "meta",
-            (tag) => /name\s*=\s*["']robots["']/i.test(tag)
-        );
+        const robotsTag = findTag(body, "meta", (tag) => /name\s*=\s*["']robots["']/i.test(tag));
         const robotsContent = getAttribute(robotsTag, "content");
-        const hasNoIndexRobotsDirective =
-            CUSTOM_NOT_FOUND_EXPECTATIONS.robotsDirectivePattern.test(robotsContent);
+        const hasNoIndexRobotsDirective = CUSTOM_NOT_FOUND_EXPECTATIONS.robotsDirectivePattern.test(robotsContent);
         const hasBackToHomeLinkText = CUSTOM_NOT_FOUND_EXPECTATIONS.backToHomePattern.test(body);
-        const fallbackLooksValid =
-            customNotFoundTitle &&
-            hasNoIndexRobotsDirective &&
-            hasBackToHomeLinkText;
+        const fallbackLooksValid = customNotFoundTitle && hasNoIndexRobotsDirective && hasBackToHomeLinkText;
 
         check(
             hasExpectedStatus,
             `${targetUrl} returned fallback status ${response.status}`,
-            `${targetUrl} returned HTTP ${response.status} (expected 404, or 200 with fallback content)`
+            `${targetUrl} returned HTTP ${response.status} (expected 404, or 200 with fallback content)`,
         );
         check(
             fallbackLooksValid,
             `${targetUrl} served the custom 404 fallback content`,
-            `${targetUrl} did not serve the expected custom 404 fallback content`
+            `${targetUrl} did not serve the expected custom 404 fallback content`,
         );
     }
 
@@ -317,12 +287,7 @@ function createChecker(baseUrl) {
         resolveArticlePathFromSitemap,
         checkNotFoundFallback,
         hasFailures: () => hasFailures,
-        getSummary: () => ({
-            checksPassed,
-            checksFailed,
-            totalChecks: checksPassed + checksFailed,
-            failedChecks,
-        }),
+        getSummary: () => ({ checksPassed, checksFailed, totalChecks: checksPassed + checksFailed, failedChecks }),
     };
 }
 

@@ -81,9 +81,10 @@ is in [linting.md](./linting.md). In short:
 
 - `npm run lint` — ESLint 9 + `typescript-eslint`, with `eslint-config-prettier`
   (config: [`src/eslint.config.mjs`](../../src/eslint.config.mjs)).
-- Formatting via Prettier (`.prettierrc`). Do not hand-fight the formatter.
-- A change MUST pass `npm run lint` and `npm run build` cleanly before it's considered
-  done.
+- Formatting via Prettier (`.prettierrc`): `npm run format` writes changes and
+  `npm run format:check` verifies them.
+- A change MUST pass `npm run lint`, `npm run format:check`, and `npm run build`
+  cleanly before it's considered done.
 
 ## Component conventions
 
@@ -98,6 +99,7 @@ From [`.github/instructions/components.instructions.md`](../../.github/instructi
 A change ships only when all of these hold:
 
 - [ ] `npm run lint` passes.
+- [ ] `npm run format:check` passes.
 - [ ] `npm run build` succeeds (client + SSR + prerender).
 - [ ] `npm run test` passes; new/changed core logic has tests.
 - [ ] Images have alt text and dimensions; new images are AVIF.

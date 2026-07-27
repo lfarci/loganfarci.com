@@ -58,11 +58,15 @@ focus on correctness.
 From `src/`:
 
 ```bash
-npm run lint      # eslint . --ext .ts,.tsx
+npm run lint          # eslint . --ext .ts,.tsx
+npm run format        # apply Prettier formatting
+npm run format:check  # verify formatting without changing files
 ```
 
 - Lint **MUST** pass cleanly (zero errors) before a change is considered done — this is a
   [Definition of Done](./quality-bars.md#definition-of-done-reviewer-checklist) item.
+- `npm run format:check` **MUST** pass before a change is considered done. Run
+  `npm run format` to resolve formatting failures.
 - A change **SHOULD** be lint-clean locally before pushing; CI is the backstop, not the
   first place you discover a failure.
 - Warnings **SHOULD** be treated as failures in intent: don't accumulate them. If a rule
@@ -74,17 +78,17 @@ npm run lint      # eslint . --ext .ts,.tsx
 
 ## CI/CD
 
-The [`Lint`](../../.github/workflows/lint.yml) workflow runs the exact same
-`npm run lint` on every push to `main` and every pull request. It is **path-filtered** —
-it runs only when lint-relevant files change (`src/src/**`, `src/scripts/**`,
-`src/plugins/**`, `eslint.config.mjs`, `package.json`, `package-lock.json`, or the
-workflow itself) — so unrelated changes don't pay the cost.
+The [`Lint`](../../.github/workflows/lint.yml) workflow runs `npm run lint` and
+`npm run format:check` on every push to `main` and every pull request. It is
+**path-filtered** — it runs only when files under `src/`, the Prettier configuration,
+the Prettier ignore file, or the workflow itself change — so unrelated changes don't
+pay the cost.
 
 - Runner: `ubuntu-latest`, Node 24, `npm ci` against `src/package-lock.json`.
 - The job **MUST** stay green for a PR to merge. A lint failure is a blocking failure, not
   advisory.
-- Keep the CI command identical to the local one (`npm run lint`) so "works locally"
-  means "passes CI". Do not let the two drift.
+- Keep the CI commands identical to the local ones (`npm run lint` and
+  `npm run format:check`) so "works locally" means "passes CI". Do not let them drift.
 
 ## What it enforces today
 
@@ -194,11 +198,7 @@ const local = {
 
 export default tseslint.config(
     // …existing config…
-    {
-        files: ["**/*.{ts,tsx}"],
-        plugins: { local },
-        rules: { "local/my-guardrail": "error" },
-    },
+    { files: ["**/*.{ts,tsx}"], plugins: { local }, rules: { "local/my-guardrail": "error" } },
 );
 ```
 
@@ -233,6 +233,7 @@ backlog:
 
 - Changing the lint config, adding a rule, or bumping a lint dependency **MUST** keep
   `npm run lint` and the [`Lint`](../../.github/workflows/lint.yml) workflow green.
-- Local and CI invocations **MUST** stay identical (`npm run lint`).
+- Local and CI invocations **MUST** stay identical (`npm run lint` and
+  `npm run format:check`).
 - When you add a rule, update this spec's [What it enforces today](#what-it-enforces-today)
   section so it stays a truthful `current-state` description.

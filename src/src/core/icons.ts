@@ -10,12 +10,9 @@ let iconMap: Map<string, IconData> | null = null;
 function buildIconMap(): Map<string, IconData> {
     const map = new Map<string, IconData>();
     const icons = getIcons();
-    
+
     icons.forEach((icon) => {
-        const iconData: IconData = {
-            src: icon.icon,
-            alt: `${icon.name} icon`,
-        };
+        const iconData: IconData = { src: icon.icon, alt: `${icon.name} icon` };
         map.set(icon.name.toLowerCase(), iconData);
     });
 

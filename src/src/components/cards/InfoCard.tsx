@@ -40,7 +40,11 @@ const InfoCard: FC<InfoCardProps> = ({
     showTitleTooltip = false,
     className,
 }) => {
-    const titleNode = showTitleTooltip ? <CardTitleWithTooltip>{title}</CardTitleWithTooltip> : <CardTitle className="leading-tight">{title}</CardTitle>;
+    const titleNode = showTitleTooltip ? (
+        <CardTitleWithTooltip>{title}</CardTitleWithTooltip>
+    ) : (
+        <CardTitle className="leading-tight">{title}</CardTitle>
+    );
 
     const subtitleNode =
         typeof subtitle === "string" ? (
@@ -59,12 +63,25 @@ const InfoCard: FC<InfoCardProps> = ({
                         media={media}
                         size="medium"
                         align={mediaAlign}
-                        containerClassName={mergeClassNames("flex shrink-0 justify-center", mediaAlign === "start" ? "items-start mt-1" : "items-center")}
+                        containerClassName={mergeClassNames(
+                            "flex shrink-0 justify-center",
+                            mediaAlign === "start" ? "items-start mt-1" : "items-center",
+                        )}
                         className={mediaSizeClasses[mediaSize]}
                     />
                 )}
-                <div className={mergeClassNames("flex flex-col flex-1 min-w-0", align === "center" ? "items-center text-center" : "items-start")}>
-                    <CardHeader className={mergeClassNames("gap-1.5 w-full", align === "center" ? "items-center text-center" : "items-start")}>
+                <div
+                    className={mergeClassNames(
+                        "flex flex-col flex-1 min-w-0",
+                        align === "center" ? "items-center text-center" : "items-start",
+                    )}
+                >
+                    <CardHeader
+                        className={mergeClassNames(
+                            "gap-1.5 w-full",
+                            align === "center" ? "items-center text-center" : "items-start",
+                        )}
+                    >
                         {titleNode}
                         {subtitleNode}
                         {details?.map((detail, idx) => (
@@ -75,13 +92,25 @@ const InfoCard: FC<InfoCardProps> = ({
                     </CardHeader>
 
                     {hasBody && (
-                        <CardBody className={mergeClassNames("pt-1 gap-2 w-full", align === "center" ? "items-center text-center" : "items-start")}>
+                        <CardBody
+                            className={mergeClassNames(
+                                "pt-1 gap-2 w-full",
+                                align === "center" ? "items-center text-center" : "items-start",
+                            )}
+                        >
                             {children}
                         </CardBody>
                     )}
 
                     {footer && (
-                        <CardFooter className={mergeClassNames("mt-4 w-full", align === "center" ? "justify-center" : "justify-start")}>{footer}</CardFooter>
+                        <CardFooter
+                            className={mergeClassNames(
+                                "mt-4 w-full",
+                                align === "center" ? "justify-center" : "justify-start",
+                            )}
+                        >
+                            {footer}
+                        </CardFooter>
                     )}
                 </div>
             </div>

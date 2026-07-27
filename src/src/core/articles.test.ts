@@ -18,14 +18,16 @@ describe("articles", () => {
     it("returns articles sorted by published date descending", () => {
         const articles = getAllArticles();
         const sortedDates = [...articles].map((article) => article.publishedAt);
-        const expectedDates = [...sortedDates].sort((left, right) => new Date(right).getTime() - new Date(left).getTime());
+        const expectedDates = [...sortedDates].sort(
+            (left, right) => new Date(right).getTime() - new Date(left).getTime(),
+        );
 
         expect(sortedDates).toEqual(expectedDates);
     });
 
     it("returns a single article by slug and null for an unknown slug", () => {
         expect(getArticleBySlug("github-copilot-customizations")?.title).toBe(
-            "Customizing GitHub Copilot for Technical Writing"
+            "Customizing GitHub Copilot for Technical Writing",
         );
         expect(getArticleBySlug("missing-article")).toBeNull();
     });

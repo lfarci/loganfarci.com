@@ -11,13 +11,7 @@ RuleTester.it = it;
 RuleTester.itOnly = it.only;
 
 const ruleTester = new RuleTester({
-    languageOptions: {
-        ecmaVersion: "latest",
-        sourceType: "module",
-        parserOptions: {
-            ecmaFeatures: { jsx: true },
-        },
-    },
+    languageOptions: { ecmaVersion: "latest", sourceType: "module", parserOptions: { ecmaFeatures: { jsx: true } } },
 });
 
 ruleTester.run("no-hardcoded-colors", rule, {
@@ -37,22 +31,10 @@ ruleTester.run("no-hardcoded-colors", rule, {
         { code: `const G = () => <div className="[color-mix(in_oklch,var(--a),var(--b))]" />;` },
     ],
     invalid: [
-        {
-            code: `const A = () => <div className="text-[#fff]" />;`,
-            errors: [{ messageId: "hardcodedColor" }],
-        },
-        {
-            code: `const B = () => <div className="bg-[#ff0000]" />;`,
-            errors: [{ messageId: "hardcodedColor" }],
-        },
-        {
-            code: "const C = () => <div className={`text-[#abcd]`} />;",
-            errors: [{ messageId: "hardcodedColor" }],
-        },
-        {
-            code: `const D = () => <div style={{ color: "#fff" }} />;`,
-            errors: [{ messageId: "hardcodedColor" }],
-        },
+        { code: `const A = () => <div className="text-[#fff]" />;`, errors: [{ messageId: "hardcodedColor" }] },
+        { code: `const B = () => <div className="bg-[#ff0000]" />;`, errors: [{ messageId: "hardcodedColor" }] },
+        { code: "const C = () => <div className={`text-[#abcd]`} />;", errors: [{ messageId: "hardcodedColor" }] },
+        { code: `const D = () => <div style={{ color: "#fff" }} />;`, errors: [{ messageId: "hardcodedColor" }] },
         {
             code: `const E = () => <div style={{ color: "rgb(255, 0, 0)" }} />;`,
             errors: [{ messageId: "hardcodedColor" }],
