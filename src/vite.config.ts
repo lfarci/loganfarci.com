@@ -28,6 +28,7 @@ export default defineConfig({
         coverage: {
             provider: "v8",
             reporter: ["text", "json", "json-summary", "html"],
+            reportOnFailure: true,
             thresholds: {
                 lines: 50,
                 functions: 50,
