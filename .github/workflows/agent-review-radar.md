@@ -32,9 +32,6 @@ tools:
 
 safe-outputs:
   mentions: false
-  add-comment:
-    max: 5
-    target: triggering
   assign-to-agent:
     name: copilot
     allowed: [copilot]
@@ -95,20 +92,10 @@ the comments that are truly useful for Logan or the Copilot coding agent.
 ## Agent escalation
 
 When the right next step is agent implementation on the existing PR, do not use a
-Copilot at-mention. Instead, use both safe outputs below in this order:
-
-1. Post a normal PR comment with `add_comment`. Start it with `Copilot handoff:` and
-   include the implementation context below. Do not include any at-mentions.
-2. Assign the PR to Copilot with `assign_to_agent` using the configured default agent.
-   Include `pull_number` set to the triggering PR number.
-
-The comment must include enough context to resume work without re-discovery:
-
-- the concrete issue to fix,
-- relevant files, lines, checks, or review threads,
-- any Spec Sheriff, Coverage Canary, or Conflict Custodian context you validated,
-- the expected outcome or acceptance criteria,
-- constraints from custom instructions or `docs/specs/`.
+Copilot at-mention or post a separate handoff comment. Assign the PR to Copilot
+with `assign_to_agent` using the configured default agent. Include `pull_number`
+set to the triggering PR number and a concise `rationale` that points to the
+existing review thread, failing check, or PR context Copilot should address.
 
 Use Copilot assignment only for concrete implementation work. Do not assign Copilot for
 FYI-only summaries, vague concerns, low-confidence findings, or issues already covered by
