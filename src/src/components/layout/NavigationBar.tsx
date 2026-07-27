@@ -5,6 +5,7 @@ import { Button } from "@/components/shared/primitives/Button";
 import ThemeToggle from "@/components/shared/ThemeToggle";
 import { contentWidthStyles } from "@/components/layout/contentWidthStyles";
 import { mergeClassNames } from "@/core/mergeClassNames";
+import { MD_BREAKPOINT_MEDIA_QUERY } from "@/core/breakpoints";
 
 interface NavigationBarProps {
     title: string;
@@ -47,6 +48,22 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ title }) => {
         window.addEventListener("keydown", handleKeyDown);
 
         return () => window.removeEventListener("keydown", handleKeyDown);
+    }, [isMenuOpen]);
+
+    useEffect(() => {
+        if (!isMenuOpen) {
+            return;
+        }
+
+        const handleResize = () => {
+            if (window.matchMedia(MD_BREAKPOINT_MEDIA_QUERY).matches) {
+                setIsMenuOpen(false);
+            }
+        };
+
+        window.addEventListener("resize", handleResize);
+
+        return () => window.removeEventListener("resize", handleResize);
     }, [isMenuOpen]);
 
     return (

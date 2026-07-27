@@ -9,6 +9,7 @@
     "build:client": "vite build",
     "build:server": "vite build --ssr src/entry-server.tsx --outDir dist/server",
     "prerender": "node scripts/prerender.mjs",
+    "smoke": "node scripts/smoke.mjs",
     "preview": "vite preview",
     "lint": "eslint . --ext .ts,.tsx",
     "test": "vitest run",
