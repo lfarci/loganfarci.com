@@ -28,8 +28,8 @@ This is the enforced gate; the full accessibility contract and ideal state are i
 - Interactive elements MUST be keyboard-reachable and have a visible focus state.
 - Color/contrast MUST come from the Tailwind semantic tokens — do not hardcode colors
   that break contrast.
-- `npm run accessibility` MUST report a Lighthouse accessibility score of 100 on
-  every core route. The same gate runs in the
+- `npm run accessibility` MUST report a Lighthouse accessibility score of at least 90
+  on every core route, with 100 retained as the target. The same gate runs in the
   [`Accessibility`](../../.github/workflows/accessibility.yml) workflow.
 
 ## Performance

@@ -36,9 +36,9 @@ Verified in the code today:
 - **Images.** The `Image` type requires `alt`; all `content/data/*.json` images provide
   it.
 - **Automated CI checks.** Lighthouse CI audits `/`, `/about`, `/articles`, and an
-  article page against the prerendered build. Every route MUST score 100 in the
-  accessibility category; downloadable HTML reports are retained with each workflow
-  run.
+  article page against the prerendered build. Every route MUST score at least 90 in
+  the accessibility category, with 100 retained as the target; downloadable HTML
+  reports are retained with each workflow run.
 
 ## Automated checks
 

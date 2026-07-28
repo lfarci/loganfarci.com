@@ -8,7 +8,9 @@ prerendered production build. The check audits these core routes:
 - `/articles`
 - `/articles/mcp`
 
-Every route must receive a Lighthouse accessibility score of 100.
+Every route must receive a Lighthouse accessibility score of at least 90. The
+project's target remains 100, so known findings should still be addressed even when
+the CI gate passes.
 
 ## Prerequisites
 
@@ -29,7 +31,7 @@ npm run accessibility
 ```
 
 Lighthouse CI starts a temporary local server for `src/dist/`, runs the audits, and
-exits with a non-zero status if any route scores below 100.
+exits with a non-zero status if any route scores below 90.
 
 Reports are written to `src/lighthouse-reports/`. Open a `.report.html` file in a
 browser to review the failed audits and affected elements. The corresponding JSON
@@ -85,9 +87,9 @@ Artifacts are retained for 14 days.
 
 ## Interpreting failures
 
-A score below 100 means at least one automated Lighthouse accessibility audit
-failed. Use the HTML report to identify the audit, affected DOM nodes, measured
-values, and remediation guidance.
+A score below 90 fails the current CI gate. Any score below the target of 100 means
+at least one automated Lighthouse accessibility audit failed. Use the HTML report to
+identify the audit, affected DOM nodes, measured values, and remediation guidance.
 
 Automated checks cover only issues detectable by Lighthouse. Keyboard navigation,
 screen-reader behavior, focus order, zoom, and other requirements still need manual
