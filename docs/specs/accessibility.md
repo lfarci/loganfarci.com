@@ -52,7 +52,9 @@ npm run accessibility
 
 The reports are written to `src/lighthouse-reports/`. The
 [`Accessibility`](../../.github/workflows/accessibility.yml) workflow runs for app and
-content changes and can also be started manually with `workflow_dispatch`.
+content changes and can also be started manually with `workflow_dispatch`. See the
+[Lighthouse usage guide](../lighthouse.md) for prerequisites, local troubleshooting,
+reports, and manual workflow instructions.
 
 ## Requirements
 
