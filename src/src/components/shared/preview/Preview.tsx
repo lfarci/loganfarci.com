@@ -19,6 +19,7 @@ function Preview({ collapsedContent, expandedContent }: PreviewProps) {
                 style={{ height: isExpanded ? `${expandedContentRef.current?.scrollHeight || 0}px` : "2em" }}
             >
                 <div
+                    aria-hidden={isExpanded}
                     className={`w-full overflow-hidden transition-opacity duration-300 motion-reduce:transition-none ${
                         !isExpanded ? "opacity-100" : "opacity-0 pointer-events-none absolute top-0"
                     }`}
@@ -28,6 +29,7 @@ function Preview({ collapsedContent, expandedContent }: PreviewProps) {
                 </div>
 
                 <div
+                    aria-hidden={!isExpanded}
                     ref={expandedContentRef}
                     className={`w-full transition-opacity duration-300 motion-reduce:transition-none ${
                         isExpanded ? "opacity-100" : "opacity-0 pointer-events-none absolute top-0"

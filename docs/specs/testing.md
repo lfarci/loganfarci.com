@@ -1,6 +1,6 @@
 ---
 spec: testing
-version: 0.1.0
+version: 0.1.1
 status: current-state
 ---
 
@@ -89,6 +89,16 @@ Verified from [`src/vite.config.ts`](../../src/vite.config.ts) and
   when both checks describe the same outcome. Name the `describe` after the unit and
   the `it` after the observable behavior.
 - **Keep them fast.** A slow unit test usually means the boundary is wrong — mock it.
+
+### Markdown and diagram test boundary
+
+Markdown tests cover semantic element mapping, GFM behavior, safe handling of raw
+HTML, Mermaid fence routing, and the Vite plugin's front-matter transformation.
+Mermaid tests mock its module boundary and verify initialization, rendering requests,
+and error reporting. Exact generated SVG markup, layout, and browser paint are
+intentionally not unit-tested: Mermaid owns that output, jsdom does not provide
+meaningful layout coverage, and browser automation would exceed this suite's
+lightweight scope.
 
 ## Build gate
 
