@@ -1,6 +1,6 @@
 ---
 spec: accessibility
-version: 0.1.0
+version: 0.2.0
 status: current-state
 ---
 
@@ -35,6 +35,24 @@ Verified in the code today:
   (see [themes and contrast](#themes-and-contrast)).
 - **Images.** The `Image` type requires `alt`; all `content/data/*.json` images provide
   it.
+- **Automated CI checks.** Lighthouse CI audits `/`, `/about`, `/articles`, and an
+  article page against the prerendered build. Every route MUST score 100 in the
+  accessibility category; downloadable HTML reports are retained with each workflow
+  run.
+
+## Automated checks
+
+From `src/`, build the production site and run the same accessibility gate used in
+CI (Google Chrome or Chromium must be installed):
+
+```sh
+npm run build
+npm run accessibility
+```
+
+The reports are written to `src/lighthouse-reports/`. The
+[`Accessibility`](../../.github/workflows/accessibility.yml) workflow runs for app and
+content changes and can also be started manually with `workflow_dispatch`.
 
 ## Requirements
 
@@ -79,8 +97,6 @@ Targets to grow toward, guided by [vision.md](./vision.md). Prefer platform feat
 established, lightweight helpers over bespoke a11y machinery:
 
 - **Skip-to-content link** as the first focusable element.
-- **Automated checks in CI** (e.g. axe / Lighthouse a11y) so regressions are caught;
-  target Lighthouse Accessibility 100 on core routes.
 - **Screen-reader passes** on the home, about, and article-reading flows, documented and
   repeated as the site grows.
 - **`prefers-reduced-motion`** honored across all framer-motion animations.
