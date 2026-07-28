@@ -90,6 +90,7 @@ What the smoke checks validate:
 
 - [Repository specs](docs/specs/README.md) — source-of-truth specs for architecture, quality bars, data contracts, content style, and non-goals.
 - [Analytics](docs/analytics.md) — Azure Application Insights setup, cost guardrails, and how to disable telemetry.
+- [Lighthouse accessibility checks](docs/lighthouse.md) — run the accessibility gate locally and download CI reports.
 
 ## Technology stack
 

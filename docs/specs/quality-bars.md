@@ -1,6 +1,6 @@
 ---
 spec: quality-bars
-version: 0.1.0
+version: 0.2.0
 status: current-state
 ---
 
@@ -28,6 +28,9 @@ This is the enforced gate; the full accessibility contract and ideal state are i
 - Interactive elements MUST be keyboard-reachable and have a visible focus state.
 - Color/contrast MUST come from the Tailwind semantic tokens — do not hardcode colors
   that break contrast.
+- `npm run accessibility` MUST report a Lighthouse accessibility score of at least 90
+  on every core route, with 100 retained as the target. The same gate runs in the
+  [`Accessibility`](../../.github/workflows/accessibility.yml) workflow.
 
 ## Performance
 
@@ -100,6 +103,7 @@ A change ships only when all of these hold:
 
 - [ ] `npm run lint` passes.
 - [ ] `npm run format:check` passes.
+- [ ] `npm run accessibility` passes after `npm run build`.
 - [ ] `npm run build` succeeds (client + SSR + prerender).
 - [ ] `npm run test` passes; new/changed core logic has tests.
 - [ ] Images have alt text and dimensions; new images are AVIF.
