@@ -1,6 +1,6 @@
 ---
 spec: vision
-version: 0.1.0
+version: 0.1.1
 status: vision
 ---
 
@@ -102,8 +102,8 @@ and machines.
   data in `content/data/` mirroring the existing content pipeline.
 - **Themes.** A light/dark theme toggle **already ships** (`ThemeContext` +
   `ThemeToggle`, Tailwind `darkMode: "class"`), built on the semantic tokens (no second
-  styling system). Planned refinement: also honor `prefers-color-scheme` on first visit
-  and keep contrast compliant in both themes — see
+  styling system). It honors `prefers-color-scheme` until the visitor explicitly
+  chooses a theme and keeps contrast compliant in both themes — see
   [accessibility.md](./accessibility.md#themes-and-contrast).
 - **Internationalization.** Available in **English** (international, `en_US`), **French**,
   and **Dutch** (both for a Belgian audience, `fr_BE` / `nl_BE`) for now, with room to add

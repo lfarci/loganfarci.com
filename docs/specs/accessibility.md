@@ -1,6 +1,6 @@
 ---
 spec: accessibility
-version: 0.2.0
+version: 0.2.1
 status: current-state
 ---
 
@@ -31,8 +31,10 @@ Verified in the code today:
 - **Headings.** One `h1` per page; visually hidden headings (`sr-only`) are used where a
   landmark needs a name without a visible title.
 - **Theme support.** A light/dark theme (`ThemeContext` + `ThemeToggle`, Tailwind
-  `darkMode: "class"`) with an accessible toggle; contrast comes from semantic tokens
-  (see [themes and contrast](#themes-and-contrast)).
+  `darkMode: "class"`) with an accessible toggle. The first visit follows
+  `prefers-color-scheme`, live system changes remain in sync until the visitor makes
+  an explicit choice, and a saved choice takes precedence; contrast comes from
+  semantic tokens (see [themes and contrast](#themes-and-contrast)).
 - **Images.** The `Image` type requires `alt`; all `content/data/*.json` images provide
   it.
 - **Automated CI checks.** Lighthouse CI audits `/`, `/about`, `/articles`, and an
@@ -102,8 +104,6 @@ established, lightweight helpers over bespoke a11y machinery:
 - **Screen-reader passes** on the home, about, and article-reading flows, documented and
   repeated as the site grows.
 - **`prefers-reduced-motion`** honored across all framer-motion animations.
-- **`prefers-color-scheme`** used to pick the initial theme on first visit (today the
-  default is light until the user toggles), without a flash of the wrong theme.
 - **Per-locale `lang`** and correct document language once multilanguage lands
   ([i18n.md](./i18n.md)).
 

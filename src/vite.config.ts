@@ -3,10 +3,11 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import markdownPlugin from "./plugins/vite-plugin-markdown";
 import stableFontDisplayPlugin from "./plugins/vite-plugin-stable-font-display";
+import themeInitializationPlugin from "./plugins/vite-plugin-theme-initialization";
 import path from "node:path";
 
 export default defineConfig({
-    plugins: [stableFontDisplayPlugin(), tailwindcss(), react(), markdownPlugin()],
+    plugins: [themeInitializationPlugin(), stableFontDisplayPlugin(), tailwindcss(), react(), markdownPlugin()],
     resolve: {
         alias: { "@/": path.resolve(__dirname, "src") + "/", "@content/": path.resolve(__dirname, "../content") + "/" },
     },
