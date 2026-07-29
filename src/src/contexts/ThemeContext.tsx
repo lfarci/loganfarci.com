@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
 
 type Theme = "light" | "dark";
+const colorSchemeQuery = "(prefers-color-scheme: dark)";
 
 interface ThemeContextType {
     theme: Theme;
@@ -13,15 +14,26 @@ interface ThemeProviderProps {
     readonly children: React.ReactNode;
 }
 
+function getSavedTheme(): Theme | null {
+    const savedTheme = localStorage.getItem("theme");
+    return savedTheme === "light" || savedTheme === "dark" ? savedTheme : null;
+}
+
+function getSystemTheme(mediaQuery: MediaQueryList): Theme {
+    return mediaQuery.matches ? "dark" : "light";
+}
+
 export function ThemeProvider({ children }: ThemeProviderProps) {
     const [theme, setTheme] = useState<Theme>("light");
+    const [hasExplicitPreference, setHasExplicitPreference] = useState(false);
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
-        const savedTheme = localStorage.getItem("theme") as Theme;
-        if (savedTheme) {
-            setTheme(savedTheme);
-        }
+        const savedTheme = getSavedTheme();
+        const systemTheme = getSystemTheme(window.matchMedia(colorSchemeQuery));
+
+        setTheme(savedTheme ?? systemTheme);
+        setHasExplicitPreference(savedTheme !== null);
         setMounted(true);
     }, []);
 
@@ -29,16 +41,27 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
         if (!mounted) return;
 
         const root = document.documentElement;
-        if (theme === "dark") {
-            root.classList.add("dark");
-        } else {
-            root.classList.remove("dark");
-        }
+        root.classList.toggle("dark", theme === "dark");
 
-        localStorage.setItem("theme", theme);
-    }, [theme, mounted]);
+        if (hasExplicitPreference) {
+            localStorage.setItem("theme", theme);
+        }
+    }, [theme, hasExplicitPreference, mounted]);
+
+    useEffect(() => {
+        if (!mounted || hasExplicitPreference) return;
+
+        const mediaQuery = window.matchMedia(colorSchemeQuery);
+        const syncSystemTheme = (event: MediaQueryListEvent) => {
+            setTheme(event.matches ? "dark" : "light");
+        };
+
+        mediaQuery.addEventListener("change", syncSystemTheme);
+        return () => mediaQuery.removeEventListener("change", syncSystemTheme);
+    }, [hasExplicitPreference, mounted]);
 
     const toggleTheme = () => {
+        setHasExplicitPreference(true);
         setTheme((prev) => (prev === "light" ? "dark" : "light"));
     };
 
