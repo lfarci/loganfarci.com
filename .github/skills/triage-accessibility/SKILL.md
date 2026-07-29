@@ -1,9 +1,9 @@
 ---
-name: triage-site-quality
+name: triage-accessibility
 description: Run accessibility-first quality audits of loganfarci.com locally or in production, using Lighthouse and targeted manual checks to find reproducible WCAG and spec gaps before secondary performance, best-practice, and SEO findings. Turn verified findings into lean GitHub tasks or bugs. Use whenever the user asks for Lighthouse, accessibility or WCAG review, a site-quality audit, issue cleanup after an audit, or recommendations about which findings deserve issues.
 ---
 
-# Triage Site Quality
+# Triage Accessibility
 
 Use this workflow to connect measured site quality to an actionable, non-duplicative
 backlog. Accessibility is the primary lens because the site targets WCAG 2.1 AA and

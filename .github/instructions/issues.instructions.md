@@ -174,5 +174,5 @@ or production diagnostics:
   debugging-only limitations unless they have a clear project requirement or user
   impact.
 - Keep raw reports and temporary browser tooling outside the repository.
-- Use the `triage-site-quality` skill for the complete local and production audit
+- Use the `triage-accessibility` skill for the complete local and production audit
   workflow.
