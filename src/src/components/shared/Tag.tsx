@@ -13,7 +13,7 @@ interface TagProps {
 }
 
 const TagIcon: React.FC<TagIconProps> = ({ src, alt }) => {
-    const imageClasses = ["mr-1"];
+    const imageClasses = ["mr-1", "h-4", "w-4", "shrink-0"];
 
     if (src.includes("-mono")) {
         imageClasses.push("filter", "dark:invert", "dark:brightness-125");
