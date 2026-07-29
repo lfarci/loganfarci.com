@@ -33,6 +33,7 @@ export function initAppInsights(): ApplicationInsights | null {
             disableCookiesUsage: true,
             enableAutoRouteTracking: true,
             disableExceptionTracking: false,
+            disablePageUnloadEvents: ["unload"],
         },
     });
 
