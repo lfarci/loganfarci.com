@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
 
-type Theme = "light" | "dark";
-const colorSchemeQuery = "(prefers-color-scheme: dark)";
+import { colorSchemeQuery, resolveThemePreference, themeStorageKey, type Theme } from "@/core/themeInitialization";
 
 interface ThemeContextType {
     theme: Theme;
@@ -14,26 +13,19 @@ interface ThemeProviderProps {
     readonly children: React.ReactNode;
 }
 
-function getSavedTheme(): Theme | null {
-    const savedTheme = localStorage.getItem("theme");
-    return savedTheme === "light" || savedTheme === "dark" ? savedTheme : null;
-}
-
-function getSystemTheme(mediaQuery: MediaQueryList): Theme {
-    return mediaQuery.matches ? "dark" : "light";
-}
-
 export function ThemeProvider({ children }: ThemeProviderProps) {
     const [theme, setTheme] = useState<Theme>("light");
     const [hasExplicitPreference, setHasExplicitPreference] = useState(false);
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
-        const savedTheme = getSavedTheme();
-        const systemTheme = getSystemTheme(window.matchMedia(colorSchemeQuery));
+        const preference = resolveThemePreference(
+            localStorage.getItem(themeStorageKey),
+            window.matchMedia(colorSchemeQuery).matches,
+        );
 
-        setTheme(savedTheme ?? systemTheme);
-        setHasExplicitPreference(savedTheme !== null);
+        setTheme(preference.theme);
+        setHasExplicitPreference(preference.hasExplicitPreference);
         setMounted(true);
     }, []);
 
@@ -44,7 +36,7 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
         root.classList.toggle("dark", theme === "dark");
 
         if (hasExplicitPreference) {
-            localStorage.setItem("theme", theme);
+            localStorage.setItem(themeStorageKey, theme);
         }
     }, [theme, hasExplicitPreference, mounted]);
 

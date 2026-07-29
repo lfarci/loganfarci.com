@@ -4,16 +4,6 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-        <script>
-            (() => {
-                const colorSchemeQuery = "(prefers-color-scheme: dark)";
-                const savedTheme = localStorage.getItem("theme");
-                const useDarkTheme =
-                    savedTheme === "dark" || (savedTheme !== "light" && window.matchMedia(colorSchemeQuery).matches);
-
-                document.documentElement.classList.toggle("dark", useDarkTheme);
-            })();
-        </script>
     </head>
     <body>
         <div id="root"></div>

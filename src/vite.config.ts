@@ -3,10 +3,11 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import markdownPlugin from "./plugins/vite-plugin-markdown";
 import stableFontDisplayPlugin from "./plugins/vite-plugin-stable-font-display";
+import themeInitializationPlugin from "./plugins/vite-plugin-theme-initialization";
 import path from "node:path";
 
 export default defineConfig({
-    plugins: [stableFontDisplayPlugin(), tailwindcss(), react(), markdownPlugin()],
+    plugins: [themeInitializationPlugin(), stableFontDisplayPlugin(), tailwindcss(), react(), markdownPlugin()],
     resolve: {
         alias: { "@/": path.resolve(__dirname, "src") + "/", "@content/": path.resolve(__dirname, "../content") + "/" },
     },
@@ -19,12 +20,7 @@ export default defineConfig({
     test: {
         globals: true,
         environment: "jsdom",
-        include: [
-            "*.test.{ts,tsx}",
-            "tests/unit/**/*.test.{ts,tsx}",
-            "src/**/*.test.{ts,tsx}",
-            "plugins/**/*.test.{ts,tsx}",
-        ],
+        include: ["tests/unit/**/*.test.{ts,tsx}", "src/**/*.test.{ts,tsx}", "plugins/**/*.test.{ts,tsx}"],
         setupFiles: ["src/test/setup.ts"],
         coverage: {
             provider: "v8",
