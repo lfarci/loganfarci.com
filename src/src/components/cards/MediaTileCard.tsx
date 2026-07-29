@@ -1,6 +1,6 @@
 import React from "react";
 import Card, { CardBody, CardMedia, CardTitle } from "./Card";
-import { Caption } from "@/components/shared/typography";
+import { Text } from "@/components/shared/typography";
 import { ImageProps } from "@/types";
 
 export type MediaTileSize = "small" | "medium" | "large";
@@ -26,7 +26,7 @@ const MediaTileCard: React.FC<MediaTileCardProps> = ({ title, description, image
             )}
             <CardBody className="items-center justify-center grow text-center">
                 <CardTitle className="text-center leading-tight">{title}</CardTitle>
-                {description && <Caption className="mt-3 text-center">{description}</Caption>}
+                {description && <Text className="mt-3 text-center">{description}</Text>}
             </CardBody>
         </div>
     </Card>
