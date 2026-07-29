@@ -18,7 +18,7 @@ const Footer: React.FC<FooterProps> = ({ githubRepositoryUrl, commitHash, commit
         <footer
             className={mergeClassNames(
                 contentWidthStyles.pageContainer,
-                "flex flex-wrap justify-between items-center pb-8 gap-y-2",
+                "flex flex-wrap justify-center items-center pb-8 gap-x-1 gap-y-2 text-center",
             )}
         >
             <div className="flex flex-wrap items-center gap-1 min-w-0">
