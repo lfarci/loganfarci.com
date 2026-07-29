@@ -2,8 +2,10 @@ import React, { forwardRef, ElementType, ComponentPropsWithoutRef } from "react"
 
 // Common props interface for all typography components
 export interface BaseTypographyProps {
+    "aria-labelledby"?: string;
     className?: string;
     children: React.ReactNode;
+    id?: string;
 }
 
 // Generic typography component that can render any HTML element

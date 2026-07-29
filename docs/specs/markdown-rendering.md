@@ -1,6 +1,6 @@
 ---
 spec: markdown-rendering
-version: 0.1.0
+version: 0.2.0
 status: current-state
 ---
 
@@ -18,9 +18,11 @@ supports and how each element looks.
 
 All markdown flows through one component:
 [`src/src/components/shared/MarkdownContent.tsx`](../../src/src/components/shared/MarkdownContent.tsx).
-It uses [`react-markdown`](https://github.com/remarkjs/react-markdown) with the single
-remark plugin [`remark-gfm`](https://github.com/remarkjs/remark-gfm), and maps every
-element to the site's typography components and Tailwind semantic tokens.
+It uses [`react-markdown`](https://github.com/remarkjs/react-markdown) with
+[`remark-gfm`](https://github.com/remarkjs/remark-gfm), and maps every element to the
+site's typography components and Tailwind semantic tokens. Article pages also enable a
+small local remark transform that derives heading metadata from the same syntax tree;
+it does not create a second Markdown parser or rendering path.
 
 Used by the article page ([`ArticlePage.tsx`](../../src/src/pages/ArticlePage.tsx)),
 the about page profile text, and `MarkdownSection` / `MarkdownPreview`. There is one
@@ -52,8 +54,8 @@ as unstyled default HTML:
 
 | Markdown | Renders as | Notes |
 | --- | --- | --- |
-| `#` and `##` | `Heading2` | Both map to `Heading2`. The article **title** comes from front matter, so a body heading MUST NOT try to be the page `h1`; start body headings at `##`. |
-| `###` / `####` | `Heading3` / `Heading4` | |
+| `#` and `##` | `Heading2` | Both map to `Heading2`. The article **title** comes from front matter, so a body heading MUST NOT try to be the page `h1`; start body headings at `##`. Article headings receive a stable ID and permalink. |
+| `###` / `####` | `Heading3` / `Heading4` | Article headings receive the same ID and permalink treatment. |
 | Paragraph | `Text` | Constrained to a readable width when `measure` is set. |
 | Lists / items | `UnorderedList` / `OrderedList` / `ListItem` | |
 | `>` blockquote | Styled blockquote | Left border + `primary-light` background, italic. |
@@ -61,6 +63,30 @@ as unstyled default HTML:
 | Inline/fenced code | `CodeSnippet` | See below. |
 | Table (GFM) | Styled `table` | Bordered, rounded, `surface` background. |
 | `---` rule / `**`/`_` | `hr` / `Strong` / `Emphasis` | |
+
+## Article heading navigation
+
+`ArticlePage` enables article navigation on `MarkdownContent`. During the existing
+remark pass, eligible body headings (`#` through `####`, rendered as `h2` through `h4`)
+are assigned deterministic URL-safe IDs. Visible text from inline emphasis, code,
+links, and images contributes to the slug and accessible label. Repeated or otherwise
+colliding slugs receive stable numeric suffixes (`section`, `section-2`, and so on).
+
+Each eligible heading includes a same-page permalink:
+
+- Its `href` targets the heading ID.
+- Its accessible name includes the visible heading text; the link icon is decorative.
+- It is keyboard reachable with a visible focus state and a touch-sized target.
+- The heading uses a scroll margin so fragment navigation clears the sticky site
+  header.
+
+When an article contains at least three eligible headings, the same transform injects a
+table of contents generated from those IDs. Heading levels remain nested in the link
+structure. The ToC uses a native, initially expanded `details` disclosure so it can be
+collapsed at mobile widths and becomes a sticky side rail on desktop.
+
+IDs, permalinks, and ToC links are all emitted during SSR/prerender and therefore exist
+before hydration.
 
 ## Code blocks and Mermaid
 
@@ -92,9 +118,6 @@ experience article rendering should grow toward, guided by
 prefer a small, well-established remark/rehype plugin or a lightweight component over a
 bespoke system, and only add weight where it earns its place.
 
-- **Table of contents.** Long articles should offer a ToC auto-generated from the
-  headings, with in-page anchor links. Headings should get stable slug `id`s and a
-  hover permalink so sections are deep-linkable and shareable.
 - **Code blocks.** Per-language **syntax highlighting**, a **copy-to-clipboard** button,
   and an optional filename/caption. Line highlighting is a nice-to-have. Highlighting
   SHOULD happen at build time where possible so it costs nothing on the client.
@@ -112,8 +135,7 @@ bespoke system, and only add weight where it earns its place.
 - **Footnotes.** GFM footnotes with back-references for citations and asides.
 - **Tables.** Remain readable on small screens (horizontal scroll or responsive
   treatment) without breaking layout.
-- **Anchored, shareable headings** and consistent, accessible focus/hover states across
-  all of the above.
+- Consistent, accessible focus/hover states across all rendered elements.
 
 Math typesetting (KaTeX/MathJax) and rich third-party embeds (video, social) are
 **not** planned by default — they add weight and pull toward raw HTML, which this
@@ -123,6 +145,8 @@ pipeline deliberately avoids. Revisit only if a concrete article need justifies 
 
 - **MUST** reuse `MarkdownContent` for any new markdown surface; do not add a second
   markdown pipeline.
+- Article heading IDs and table-of-contents links **MUST** be derived from the same
+  parsed syntax tree and remain present in prerendered HTML.
 - **MUST NOT** rely on raw HTML in markdown — it will not render.
 - Body headings **SHOULD** start at `##` (the `h1` is the front-matter title).
 - Mermaid diagrams **MUST** use a fenced ```` ```mermaid ```` block and **SHOULD** stay
