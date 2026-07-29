@@ -53,6 +53,25 @@ describe("initAppInsights", () => {
         expect(ApplicationInsights).toHaveBeenCalledOnce();
     });
 
+    it("disables only the legacy unload event in the production SDK configuration", async () => {
+        vi.stubEnv("PROD", true);
+        vi.stubEnv("VITE_APPINSIGHTS_CONNECTION_STRING", "InstrumentationKey=test");
+        const { initAppInsights } = await import("./appInsights");
+        const { ApplicationInsights } = await import("@microsoft/applicationinsights-web");
+
+        initAppInsights();
+
+        expect(ApplicationInsights).toHaveBeenCalledWith({
+            config: {
+                connectionString: "InstrumentationKey=test",
+                disableCookiesUsage: true,
+                enableAutoRouteTracking: true,
+                disableExceptionTracking: false,
+                disablePageUnloadEvents: ["unload"],
+            },
+        });
+    });
+
     it("returns the same instance on repeated calls without reinitializing", async () => {
         vi.stubEnv("PROD", true);
         vi.stubEnv("VITE_APPINSIGHTS_CONNECTION_STRING", "InstrumentationKey=test");
