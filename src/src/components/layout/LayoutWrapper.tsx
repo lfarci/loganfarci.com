@@ -1,6 +1,7 @@
 import NavigationBar from "@/components/layout/NavigationBar";
 import Footer from "@/components/layout/Footer";
 import { contentWidthStyles } from "@/components/layout/contentWidthStyles";
+import { Separator } from "@/components/shared/primitives/Separator";
 import { mergeClassNames } from "@/core/mergeClassNames";
 
 interface LayoutWrapperProps {
@@ -22,7 +23,7 @@ const LayoutWrapper: React.FC<Readonly<LayoutWrapperProps>> = ({ children, githu
             <main id="main-content" tabIndex={-1} className={contentWidthStyles.pageContainer}>
                 {children}
             </main>
-            <hr className={mergeClassNames(contentWidthStyles.pageContainer, "border-t border-border my-8")} />
+            <Separator className={mergeClassNames(contentWidthStyles.pageContainer, "my-8")} />
             <Footer githubRepositoryUrl={githubRepositoryUrl} commitHash={commitHash} />
         </>
     );
