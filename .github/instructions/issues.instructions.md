@@ -26,35 +26,11 @@ Always update issue status appropriately:
 
 ## Issue Types & Templates
 
-### Features
-
-**Labels**: `feature`  
-**Parent**: Milestone  
-**Children**: Tasks, Bugs
-
-**Template**:
-
-```markdown
-## Summary
-
-[Brief description of the feature]
-
-## Acceptance Criteria
-
-- [ ] Criterion 1
-- [ ] Criterion 2
-- [ ] Criterion 3
-
-## Implementation Notes
-
-[Any relevant design/technical details]
-```
-
 ### Tasks
 
-**Labels**: `task`  
-**Parent**: Feature  
-**Milestone**: Same as parent feature
+**Labels**: `task`
+**Hierarchy**: Standalone
+**Milestone**: Optional; use only when it helps sequence delivery
 
 **Template**:
 
@@ -81,9 +57,9 @@ Always update issue status appropriately:
 
 ### Bugs
 
-**Labels**: `bug`  
-**Parent**: Feature (if applicable) or standalone  
-**Milestone**: Same as parent feature (if applicable)
+**Labels**: `bug`
+**Hierarchy**: Standalone
+**Milestone**: Optional; use only when it helps sequence delivery
 
 **Template**:
 
@@ -111,39 +87,87 @@ Always update issue status appropriately:
 [Logs, screenshots, environment details if relevant]
 ```
 
-## Hierarchy Guidelines
+## Backlog Structure
 
 ```
 Milestone
-├─ Feature A
-│  ├─ Task 1
-│  └─ Bug 1 (related to Feature A)
-├─ Feature B
-│  └─ Task 1
-└─ Bug 2 (standalone)
+├─ Task 1
+├─ Task 2
+└─ Bug 1
 ```
+
+Keep the backlog to one actionable issue level:
+
+- Use only `task` and `bug` issue types.
+- Do not create feature, epic, or parent tracking issues.
+- Put shared context and requirements directly in each actionable issue.
+- Use milestones and cross-references for grouping and sequencing without introducing
+  parent/child hierarchy.
 
 ## Best Practices
 
 - **Titles**: Use imperative mood ("Add user authentication" not "Adding user authentication")
-- **Labels**: Always apply appropriate type labels (`feature`, `task`, `bug`)
-- **Milestones**: Assign every issue to a milestone
-- **Cross-references**: Link related issues using `#issue-number`
+- **Labels**: Always apply exactly one type label (`task` or `bug`)
+- **Milestones**: Use milestones only when they add useful delivery grouping
+- **Cross-references**: Link related or dependent issues using `#issue-number`
 - **Task Lists**: Use checkboxes for trackable progress
 - **Assignees**: Set clear ownership when creating issues
 - **Agent-Ready**: Write issues to be potentially assignable to GitHub coding agents by:
-  - Including specific file paths and locations when relevant
-  - Providing clear technical requirements and constraints
-  - Specifying expected code patterns or frameworks to use
-  - Adding detailed acceptance criteria that can be programmatically verified
-  - Including examples of desired inputs/outputs when applicable
+    - Including specific file paths and locations when relevant
+    - Providing clear technical requirements and constraints
+    - Specifying expected code patterns or frameworks to use
+    - Adding detailed acceptance criteria that can be programmatically verified
+    - Including examples of desired inputs/outputs when applicable
 
 ## Quality Gates
 
-Before creating an issue, ensure, no need to mentioned normalization criteria in the issue itself:
+Before creating an issue, verify these criteria. Do not restate this normalization
+checklist in the issue itself:
 
 - [ ] Title is clear and actionable
 - [ ] Appropriate labels are applied
 - [ ] Template sections are completed
 - [ ] Success criteria are measurable
-- [ ] Issue is properly linked to parent/children
+- [ ] Related work and dependencies are linked without creating parent/child hierarchy
+
+## Backlog Triage
+
+When reviewing existing issues:
+
+- Read the repository specs and inspect the current implementation before deciding that
+  an issue is still valid.
+- Search open and recently closed issues by concept, component, symptom, and desired
+  outcome before creating anything new.
+- Close work already present in the code as `completed`.
+- Close obsolete proposals, intentionally dropped work, and broad tracker issues as
+  `not planned` after moving any still-useful actionable context into a standalone task
+  or bug.
+- Refine vague issues around one observable problem and one measurable outcome. If an
+  issue cannot be picked up without making major product decisions, it is not ready.
+- Preserve user intent when refining. Do not silently replace the requested outcome
+  with an implementation idea.
+- When the best design is uncertain, document constraints and options to evaluate. Do
+  not make one speculative solution an acceptance criterion.
+- Keep descriptions self-contained. Cross-references provide context but must not be
+  required to understand or implement the issue.
+
+## Audit-Derived Issues
+
+For issues created or refined from Lighthouse, accessibility, performance, SEO, build,
+or production diagnostics:
+
+- Treat tool output as evidence against the specs, not as an automatic issue list.
+- Reproduce findings on canonical prerendered or deployed routes before creating an
+  issue. Local preview fallbacks and development-only behavior may produce false
+  positives.
+- Prefer updating an existing issue when it already owns the desired outcome.
+- Include the tool version, environment, route, measured current behavior, affected
+  component, and a repeatable verification step.
+- Group repeated failures caused by a shared token, component, dependency, or
+  integration into one issue.
+- Do not create issues for score-only changes, small theoretical savings, or
+  debugging-only limitations unless they have a clear project requirement or user
+  impact.
+- Keep raw reports and temporary browser tooling outside the repository.
+- Use the `triage-site-quality` skill for the complete local and production audit
+  workflow.
