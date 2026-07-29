@@ -1,6 +1,7 @@
 import NavigationBar from "@/components/layout/NavigationBar";
 import Footer from "@/components/layout/Footer";
 import { contentWidthStyles } from "@/components/layout/contentWidthStyles";
+import { Separator } from "@/components/shared/primitives/Separator";
 
 interface LayoutWrapperProps {
     readonly children: React.ReactNode;
@@ -13,7 +14,7 @@ const LayoutWrapper: React.FC<Readonly<LayoutWrapperProps>> = ({ children, githu
         <>
             <NavigationBar title="Logan Farci" />
             <main className={contentWidthStyles.pageContainer}>{children}</main>
-            <hr className="border-t border-border my-8" />
+            <Separator className="my-8" />
             <Footer githubRepositoryUrl={githubRepositoryUrl} commitHash={commitHash} />
         </>
     );
