@@ -2,10 +2,11 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import markdownPlugin from "./plugins/vite-plugin-markdown";
+import stableFontDisplayPlugin from "./plugins/vite-plugin-stable-font-display";
 import path from "node:path";
 
 export default defineConfig({
-    plugins: [tailwindcss(), react(), markdownPlugin()],
+    plugins: [stableFontDisplayPlugin(), tailwindcss(), react(), markdownPlugin()],
     resolve: {
         alias: { "@/": path.resolve(__dirname, "src") + "/", "@content/": path.resolve(__dirname, "../content") + "/" },
     },
