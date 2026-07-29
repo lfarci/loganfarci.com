@@ -7,7 +7,7 @@ type PolymorphicProps<E extends ElementType> = { as?: E; className?: string; chi
 >;
 
 export const cardRootClassName =
-    "h-full rounded-card border border-border-light bg-surface p-6 shadow-card transition-shadow duration-200 hover:shadow-card-hover active:shadow-card-hover";
+    "h-full rounded-card border border-border-strong bg-surface-elevated p-6 shadow-card transition-shadow duration-200 hover:shadow-card-hover active:shadow-card-hover";
 
 export function Card<E extends ElementType = "div">({ as, className, children, ...props }: PolymorphicProps<E>) {
     const Component = as ?? "div";

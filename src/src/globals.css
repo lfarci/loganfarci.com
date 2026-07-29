@@ -64,7 +64,7 @@
     --color-text-primary: oklch(23% 0.036 264); /* ink */
     --color-text-secondary: oklch(41% 0.034 263); /* slate */
     --color-text-tertiary: oklch(53% 0.03 262); /* soft slate */
-    --color-text-muted: oklch(65% 0.026 260); /* quiet slate */
+    --color-text-muted: oklch(54% 0.026 260); /* quiet slate */
     --color-text-inverse: oklch(100% 0 0); /* white */
 
     /* Border semantic colors */
@@ -74,7 +74,7 @@
 
     /* Surface/background colors */
     --color-surface: oklch(100% 0 0); /* white */
-    --color-surface-elevated: oklch(97.5% 0.012 255); /* frosted canvas */
+    --color-surface-elevated: oklch(96.8% 0.018 255); /* cool mist */
     --color-surface-hover: oklch(94.5% 0.018 256); /* blue-gray hover */
     --color-surface-muted: oklch(91.5% 0.02 256); /* muted canvas */
     --color-muted: oklch(95.5% 0.016 256); /* quiet canvas */
