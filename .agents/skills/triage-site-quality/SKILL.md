@@ -1,6 +1,6 @@
 ---
 name: triage-site-quality
-description: Audit loganfarci.com locally or in production, interpret Lighthouse and build findings, and turn only reproducible spec gaps into lean GitHub tasks or bugs. Use whenever the user asks for Lighthouse, a site-quality audit, performance/accessibility/SEO triage, issue cleanup after an audit, or recommendations about which findings deserve issues.
+description: Run accessibility-first quality audits of loganfarci.com locally or in production, using Lighthouse and targeted manual checks to find reproducible WCAG and spec gaps before secondary performance, best-practice, and SEO findings. Turn verified findings into lean GitHub tasks or bugs. Use whenever the user asks for Lighthouse, accessibility or WCAG review, a site-quality audit, issue cleanup after an audit, or recommendations about which findings deserve issues.
 ---
 
 # Triage Site Quality

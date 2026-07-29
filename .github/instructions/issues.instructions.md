@@ -156,6 +156,9 @@ When reviewing existing issues:
 For issues created or refined from Lighthouse, accessibility, performance, SEO, build,
 or production diagnostics:
 
+- Start with accessibility and the WCAG 2.1 AA contract. Lighthouse is supporting
+  evidence, not a substitute for keyboard, focus, semantics, contrast, zoom/reflow,
+  theme, and reduced-motion checks.
 - Treat tool output as evidence against the specs, not as an automatic issue list.
 - Reproduce findings on canonical prerendered or deployed routes before creating an
   issue. Local preview fallbacks and development-only behavior may produce false
@@ -163,6 +166,8 @@ or production diagnostics:
 - Prefer updating an existing issue when it already owns the desired outcome.
 - Include the tool version, environment, route, measured current behavior, affected
   component, and a repeatable verification step.
+- Include the relevant WCAG criterion and manual reproduction steps for accessibility
+  findings.
 - Group repeated failures caused by a shared token, component, dependency, or
   integration into one issue.
 - Do not create issues for score-only changes, small theoretical savings, or
