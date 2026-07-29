@@ -26,10 +26,12 @@ describe("MarkdownContent", () => {
         expect(screen.getByRole("link", { name: "Project" }).getAttribute("target")).toBe("_blank");
     });
 
-    it("routes Mermaid code fences to the diagram renderer", () => {
+    it("routes Mermaid code fences to the diagram renderer", async () => {
         render(<MarkdownContent content={"```mermaid\ngraph TD; A-->B\n```"} />);
 
-        expect(screen.getByRole("generic", { name: "Mermaid diagram" }).textContent).toContain("graph TD; A-->B");
+        expect((await screen.findByRole("generic", { name: "Mermaid diagram" })).textContent).toContain(
+            "graph TD; A-->B",
+        );
     });
 
     it("keeps raw HTML inert", () => {

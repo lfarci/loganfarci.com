@@ -1,13 +1,14 @@
-import React from "react";
-import MermaidDiagram from "./MermaidDiagram";
+import { lazy, Suspense, type ReactNode } from "react";
+
+const MermaidDiagram = lazy(() => import("./MermaidDiagram"));
 
 export interface CodeSnippetProps {
-    children: React.ReactNode;
+    children: ReactNode;
     className?: string;
     forceBlock?: boolean;
 }
 
-function getTextContent(value: React.ReactNode): string {
+function getTextContent(value: ReactNode): string {
     if (typeof value === "string" || typeof value === "number") {
         return String(value);
     }
@@ -25,7 +26,24 @@ export default function CodeSnippet({ children, className, forceBlock = false }:
     const isMermaid = className?.includes("language-mermaid");
 
     if (isMermaid) {
-        return <MermaidDiagram>{children}</MermaidDiagram>;
+        return (
+            <div className="my-4 flex min-h-48 w-full items-center justify-center overflow-x-auto rounded-lg border border-border bg-surface-elevated p-4">
+                <Suspense
+                    fallback={
+                        <p
+                            aria-label="Loading Mermaid diagram"
+                            aria-live="polite"
+                            className="text-sm text-text-secondary"
+                            role="status"
+                        >
+                            Loading diagram…
+                        </p>
+                    }
+                >
+                    <MermaidDiagram>{children}</MermaidDiagram>
+                </Suspense>
+            </div>
+        );
     }
 
     return isInline ? (
