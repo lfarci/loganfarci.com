@@ -82,6 +82,44 @@ describe("ThemeToggle", () => {
         expect(document.documentElement.classList.contains("dark")).toBe(false);
     });
 
+    it("keeps a saved dark theme when the system color scheme is light", async () => {
+        localStorage.setItem("theme", "dark");
+
+        render(
+            <ThemeProvider>
+                <ThemeToggle />
+            </ThemeProvider>,
+        );
+
+        expect(await screen.findByRole("button", { name: "Switch to light mode" })).toBeTruthy();
+        expect(document.documentElement.classList.contains("dark")).toBe(true);
+    });
+
+    it("ignores invalid saved theme values", async () => {
+        systemPrefersDark = true;
+        localStorage.setItem("theme", "sepia");
+
+        render(
+            <ThemeProvider>
+                <ThemeToggle />
+            </ThemeProvider>,
+        );
+
+        expect(await screen.findByRole("button", { name: "Switch to light mode" })).toBeTruthy();
+        expect(localStorage.getItem("theme")).toBe("sepia");
+    });
+
+    it("does not save the initial light system theme as an explicit preference", async () => {
+        render(
+            <ThemeProvider>
+                <ThemeToggle />
+            </ThemeProvider>,
+        );
+
+        expect(await screen.findByRole("button", { name: "Switch to dark mode" })).toBeTruthy();
+        expect(localStorage.getItem("theme")).toBeNull();
+    });
+
     it("follows system color scheme changes without an explicit preference", async () => {
         render(
             <ThemeProvider>
