@@ -25,20 +25,18 @@ export default function PageTransition({ children }: PageTransitionProps) {
     }, [location.pathname]);
 
     return (
-        <div className="overflow-x-clip">
-            <AnimatePresence mode="wait" initial={false} custom={direction}>
-                <motion.div
-                    key={locationKey}
-                    custom={direction}
-                    variants={prefersReducedMotion ? reducedPageTransitionVariants : pageTransitionVariants}
-                    initial="enter"
-                    animate="center"
-                    exit="exit"
-                    transition={prefersReducedMotion ? reducedMotionTransition : pageTransition}
-                >
-                    {children}
-                </motion.div>
-            </AnimatePresence>
-        </div>
+        <AnimatePresence mode="wait" initial={false} custom={direction}>
+            <motion.div
+                key={locationKey}
+                custom={direction}
+                variants={prefersReducedMotion ? reducedPageTransitionVariants : pageTransitionVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={prefersReducedMotion ? reducedMotionTransition : pageTransition}
+            >
+                {children}
+            </motion.div>
+        </AnimatePresence>
     );
 }

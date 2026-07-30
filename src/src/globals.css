@@ -22,6 +22,7 @@
     body {
         color: var(--color-foreground);
         background: var(--color-background);
+        overflow-x: clip;
     }
 
     h1,
@@ -177,6 +178,34 @@
 
 .text-font {
     font-family: var(--font-noto-sans);
+}
+
+/*
+ * Desktop heading permalinks use the Microsoft Learn-style reveal on hover.
+ * Large touch layouts keep them visible because hover is unavailable, while
+ * the component omits them entirely at narrower widths.
+ */
+.heading-permalink {
+    opacity: 1;
+}
+
+@media (hover: hover) {
+    .heading-permalink {
+        opacity: 0;
+    }
+
+    .markdown-heading:hover .heading-permalink,
+    .markdown-heading:focus-within .heading-permalink {
+        opacity: 1;
+    }
+}
+
+@media (hover: none) {
+    .heading-permalink {
+        position: static;
+        margin-inline: -0.5rem 0.25rem;
+        transform: none;
+    }
 }
 
 /* Font CSS variables (Fontsource self-hosted fonts) */

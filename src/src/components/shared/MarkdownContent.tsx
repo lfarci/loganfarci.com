@@ -17,11 +17,21 @@ import { mergeClassNames } from "@/core/mergeClassNames";
 import NewTabLink from "./NewTabLink";
 import CodeSnippet, { CodeSnippetProps } from "./CodeSnippet";
 import { contentWidthStyles } from "@/components/layout/contentWidthStyles";
+import HeadingPermalink from "@/components/shared/HeadingPermalink";
+import ArticleTableOfContents, {
+    ArticleMarkdownBody,
+    ArticleMarkdownLayout,
+} from "@/components/shared/ArticleTableOfContents";
+import { remarkArticleHeadings } from "@/components/shared/articleHeadings";
+import { Separator } from "@/components/shared/primitives/Separator";
+import type { Element } from "hast";
+import type { PluggableList } from "unified";
 
 interface MarkdownContentProps {
     content: string;
     measure?: boolean;
     className?: string;
+    articleNavigation?: boolean;
 }
 
 function MarkdownCodeBlock({ children }: { children: React.ReactNode }) {
@@ -41,14 +51,72 @@ function MarkdownCodeBlock({ children }: { children: React.ReactNode }) {
     return <>{children}</>;
 }
 
+function getHeadingLabel(node?: Element): string {
+    const label = node?.properties["data-heading-label"];
+    return typeof label === "string" ? label : "";
+}
+
+function MarkdownHeadingContent({ children, id, node }: { children: React.ReactNode; id?: string; node?: Element }) {
+    if (!id) {
+        return <>{children}</>;
+    }
+
+    return (
+        <>
+            <HeadingPermalink headingId={id} headingText={getHeadingLabel(node)} />
+            <span id={`${id}-label`}>{children}</span>
+        </>
+    );
+}
+
 function createMarkdownComponents(measure: boolean): Components {
     const measureClassName = measure ? contentWidthStyles.readable : undefined;
 
     return {
-        h1: ({ children }) => <Heading2 className="mb-4 mt-10 first:mt-0">{children}</Heading2>,
-        h2: ({ children }) => <Heading2 className="mb-4 mt-10 first:mt-0">{children}</Heading2>,
-        h3: ({ children }) => <Heading3 className="mb-3 mt-8 first:mt-0">{children}</Heading3>,
-        h4: ({ children }) => <Heading4 className="mb-3 mt-6 first:mt-0">{children}</Heading4>,
+        h1: ({ children, id, node }) => (
+            <Heading2
+                id={id}
+                aria-labelledby={id ? `${id}-label` : undefined}
+                className="markdown-heading group relative mb-4 mt-10 scroll-mt-24 first:mt-0"
+            >
+                <MarkdownHeadingContent id={id} node={node}>
+                    {children}
+                </MarkdownHeadingContent>
+            </Heading2>
+        ),
+        h2: ({ children, id, node }) => (
+            <Heading2
+                id={id}
+                aria-labelledby={id ? `${id}-label` : undefined}
+                className="markdown-heading group relative mb-4 mt-10 scroll-mt-24 first:mt-0"
+            >
+                <MarkdownHeadingContent id={id} node={node}>
+                    {children}
+                </MarkdownHeadingContent>
+            </Heading2>
+        ),
+        h3: ({ children, id, node }) => (
+            <Heading3
+                id={id}
+                aria-labelledby={id ? `${id}-label` : undefined}
+                className="markdown-heading group relative mb-3 mt-8 scroll-mt-24 first:mt-0"
+            >
+                <MarkdownHeadingContent id={id} node={node}>
+                    {children}
+                </MarkdownHeadingContent>
+            </Heading3>
+        ),
+        h4: ({ children, id, node }) => (
+            <Heading4
+                id={id}
+                aria-labelledby={id ? `${id}-label` : undefined}
+                className="markdown-heading group relative mb-3 mt-6 scroll-mt-24 first:mt-0"
+            >
+                <MarkdownHeadingContent id={id} node={node}>
+                    {children}
+                </MarkdownHeadingContent>
+            </Heading4>
+        ),
         p: ({ children }) => <Text className={mergeClassNames("mb-5", measureClassName)}>{children}</Text>,
         ul: ({ children }) => <UnorderedList className={measureClassName}>{children}</UnorderedList>,
         ol: ({ children }) => <OrderedList className={measureClassName}>{children}</OrderedList>,
@@ -68,7 +136,7 @@ function createMarkdownComponents(measure: boolean): Components {
         a: ({ href, children }) => <NewTabLink url={href ?? ""}>{children}</NewTabLink>,
         strong: ({ children }) => <Strong>{children}</Strong>,
         em: ({ children }) => <Emphasis>{children}</Emphasis>,
-        hr: () => <hr className={mergeClassNames("my-10 border-t border-border", measureClassName)} />,
+        hr: () => <Separator decorative={false} className={mergeClassNames("my-10", measureClassName)} />,
         table: ({ children }) => (
             <table className="my-8 w-full overflow-hidden rounded-lg border border-border bg-surface text-sm">
                 {children}
@@ -85,13 +153,27 @@ function createMarkdownComponents(measure: boolean): Components {
         td: ({ children }) => (
             <td className="border-b border-border-light bg-surface px-4 py-3 text-text-secondary">{children}</td>
         ),
+        ...({
+            "article-markdown-layout": ArticleMarkdownLayout,
+            "article-markdown-body": ArticleMarkdownBody,
+            "article-table-of-contents": ArticleTableOfContents,
+        } as unknown as Components),
     };
 }
 
-export default function MarkdownContent({ content, measure = false, className }: MarkdownContentProps) {
+export default function MarkdownContent({
+    content,
+    measure = false,
+    className,
+    articleNavigation = false,
+}: MarkdownContentProps) {
+    const remarkPlugins: PluggableList = articleNavigation
+        ? [remarkGfm, [remarkArticleHeadings, { tableOfContents: true }]]
+        : [remarkGfm];
+
     return (
         <div className={mergeClassNames("w-full", className)}>
-            <ReactMarkdown components={createMarkdownComponents(measure)} remarkPlugins={[remarkGfm]}>
+            <ReactMarkdown components={createMarkdownComponents(measure)} remarkPlugins={remarkPlugins}>
                 {content}
             </ReactMarkdown>
         </div>

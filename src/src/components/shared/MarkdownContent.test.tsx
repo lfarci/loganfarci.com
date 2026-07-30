@@ -1,5 +1,6 @@
-import { render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { render, screen, within } from "@testing-library/react";
+import { renderToStaticMarkup } from "react-dom/server";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import MarkdownContent from "./MarkdownContent";
 
@@ -8,6 +9,10 @@ vi.mock("./MermaidDiagram", () => ({
 }));
 
 describe("MarkdownContent", () => {
+    afterEach(() => {
+        window.history.replaceState({}, "", "/");
+    });
+
     it("maps a body-level heading to a level-two heading", () => {
         render(<MarkdownContent content="# Body heading" />);
 
@@ -18,6 +23,24 @@ describe("MarkdownContent", () => {
         render(<MarkdownContent content={"| Name | Value |\n| --- | --- |\n| Test | Passed |"} />);
 
         expect(screen.getByRole("table")).toBeTruthy();
+    });
+
+    it("renders thematic breaks with the semantic separator primitive", () => {
+        render(<MarkdownContent content={"Before\n\n---\n\nAfter"} measure />);
+
+        const separator = screen.getByRole("separator");
+
+        expect({
+            hasPrimitiveGeometry: separator.classList.contains("h-px") && separator.classList.contains("w-full"),
+            hasSemanticColor: separator.classList.contains("bg-border"),
+            preservesSpacing: separator.classList.contains("my-10"),
+            preservesMeasure: separator.classList.contains("max-w-[72ch]"),
+        }).toEqual({
+            hasPrimitiveGeometry: true,
+            hasSemanticColor: true,
+            preservesSpacing: true,
+            preservesMeasure: true,
+        });
     });
 
     it("opens rendered links in a new tab", () => {
@@ -38,5 +61,206 @@ describe("MarkdownContent", () => {
         render(<MarkdownContent content={'<img src="invalid" alt="unsafe" />'} />);
 
         expect(screen.queryByRole("img", { name: "unsafe" })).toBeNull();
+    });
+
+    it("assigns collision-safe ids to duplicate article headings", () => {
+        const { container } = render(
+            <MarkdownContent content={"## Repeat\n\n## Repeat\n\n## Repeat 2"} articleNavigation />,
+        );
+
+        expect(Array.from(container.querySelectorAll(".markdown-heading"), (heading) => heading.id)).toEqual([
+            "repeat",
+            "repeat-2",
+            "repeat-2-2",
+        ]);
+    });
+
+    it.each([
+        ["## API\n\n## API label", ["api", "api-label-2"]],
+        ["## API label\n\n## API", ["api-label", "api-2"]],
+    ])("reserves generated label ids for headings in either order", (content, expectedHeadingIds) => {
+        const { container } = render(<MarkdownContent content={content} articleNavigation />);
+        const renderedIds = Array.from(container.querySelectorAll("[id]"), (element) => element.id);
+
+        expect(screen.getAllByRole("heading").map((heading) => heading.id)).toEqual(expectedHeadingIds);
+        expect(new Set(renderedIds).size).toBe(renderedIds.length);
+    });
+
+    it("uses inline heading content in the permalink accessible name", () => {
+        render(<MarkdownContent content={"## Install *with* `npm`"} articleNavigation />);
+
+        expect(screen.getByRole("link", { name: 'Link to "Install with npm" section' }).getAttribute("href")).toBe(
+            "#install-with-npm",
+        );
+    });
+
+    it("keeps heading permalinks keyboard reachable", () => {
+        render(<MarkdownContent content={"## Keyboard access"} articleNavigation />);
+
+        const permalink = screen.getByRole("link", { name: 'Link to "Keyboard access" section' });
+        permalink.focus();
+
+        expect(document.activeElement).toBe(permalink);
+    });
+
+    it("keeps heading permalinks simple and hides them below desktop widths", () => {
+        render(<MarkdownContent content={"## Responsive permalink"} articleNavigation />);
+
+        const permalink = screen.getByRole("link", { name: 'Link to "Responsive permalink" section' });
+        const glyph = permalink.firstElementChild as HTMLElement;
+
+        expect({
+            hiddenByDefault: permalink.classList.contains("hidden"),
+            visibleAtWideDesktop: permalink.classList.contains("xl:inline-flex"),
+            visibleAtClippedDesktopWidth: permalink.classList.contains("lg:inline-flex"),
+            hasHoverBackground: permalink.classList.contains("hover:bg-surface-hover"),
+            hasFocusBackground: permalink.classList.contains("focus-visible:bg-surface-hover"),
+            hasRoundedContainer: Array.from(permalink.classList).some((className) => className.startsWith("rounded-")),
+            suppressesBoxOutline: permalink.classList.contains("focus-visible:outline-none"),
+            hasRoundedGlyph: glyph.classList.contains("rounded-full"),
+            hasGlyphFocusOutline: glyph.classList.contains("group-focus-visible/permalink:outline-2"),
+            hasGlyphFocusOffset: glyph.classList.contains("group-focus-visible/permalink:outline-offset-2"),
+            hasGlyphFocusColor: glyph.classList.contains("group-focus-visible/permalink:outline-ring"),
+            scalesFocusedGlyph: glyph.classList.contains("group-focus-visible/permalink:scale-110"),
+        }).toEqual({
+            hiddenByDefault: true,
+            visibleAtWideDesktop: true,
+            visibleAtClippedDesktopWidth: false,
+            hasHoverBackground: false,
+            hasFocusBackground: false,
+            hasRoundedContainer: false,
+            suppressesBoxOutline: true,
+            hasRoundedGlyph: true,
+            hasGlyphFocusOutline: true,
+            hasGlyphFocusOffset: true,
+            hasGlyphFocusColor: true,
+            scalesFocusedGlyph: true,
+        });
+    });
+
+    it("preserves nested heading levels in the table of contents", () => {
+        render(<MarkdownContent content={"## Parent\n\n### Child\n\n#### Detail"} articleNavigation />);
+
+        const navigation = screen.getByRole("navigation", { name: "In this article" });
+
+        expect(within(navigation).getAllByRole("list")).toHaveLength(3);
+    });
+
+    it("shows only top-level table-of-contents lists below desktop widths", () => {
+        render(<MarkdownContent content={"## Parent\n\n### Child\n\n#### Detail"} articleNavigation />);
+
+        const navigation = screen.getByRole("navigation", { name: "In this article" });
+        const [rootList, ...nestedLists] = within(navigation).getAllByRole("list");
+
+        expect({
+            rootHidden: rootList.classList.contains("hidden"),
+            nestedVisibility: nestedLists.map((list) => ({
+                hiddenByDefault: list.classList.contains("hidden"),
+                visibleOnDesktop: list.classList.contains("lg:block"),
+            })),
+        }).toEqual({
+            rootHidden: false,
+            nestedVisibility: [
+                { hiddenByDefault: true, visibleOnDesktop: true },
+                { hiddenByDefault: true, visibleOnDesktop: true },
+            ],
+        });
+    });
+
+    it("keeps article navigation visible without a disclosure or duplicate top divider", () => {
+        const { container } = render(
+            <MarkdownContent content={"## Parent\n\n### Child\n\n## Next"} articleNavigation />,
+        );
+
+        const navigation = screen.getByRole("navigation", { name: "In this article" });
+
+        expect({
+            hasVisibleTitle: within(navigation).getByRole("heading", { level: 2, name: "In this article" }).id,
+            hasDisclosure: container.querySelector("details, summary") !== null,
+            hasBottomDivider: navigation.classList.contains("border-b"),
+            hasTopDivider: navigation.classList.contains("border-t") || navigation.classList.contains("border-y"),
+        }).toEqual({
+            hasVisibleTitle: navigation.getAttribute("aria-labelledby"),
+            hasDisclosure: false,
+            hasBottomDivider: true,
+            hasTopDivider: false,
+        });
+    });
+
+    it("marks the current table-of-contents link with neutral typographic emphasis", () => {
+        render(<MarkdownContent content={"## Parent\n\n### Child\n\n## Next"} articleNavigation />);
+
+        const navigation = screen.getByRole("navigation", { name: "In this article" });
+        const links = within(navigation).getAllByRole("link");
+        const currentLinks = links.filter((link) => link.getAttribute("aria-current") === "location");
+
+        expect({
+            currentLinkNames: currentLinks.map((link) => link.textContent),
+            usesWeight: currentLinks[0]?.classList.contains("font-semibold"),
+            usesNeutralText: currentLinks[0]?.classList.contains("text-text-primary"),
+            usesBlueIndicator: links.some(
+                (link) => link.classList.contains("border-primary") || link.classList.contains("text-primary"),
+            ),
+        }).toEqual({ currentLinkNames: ["Parent"], usesWeight: true, usesNeutralText: true, usesBlueIndicator: false });
+    });
+
+    it("targets the shared heading ids from table-of-contents links", () => {
+        render(<MarkdownContent content={"## Parent\n\n### Child\n\n## Next"} articleNavigation />);
+
+        const navigation = screen.getByRole("navigation", { name: "In this article" });
+
+        expect(
+            within(navigation)
+                .getAllByRole("link")
+                .map((link) => link.getAttribute("href")),
+        ).toEqual(["#parent", "#child", "#next"]);
+    });
+
+    it("omits the table of contents when too few headings justify it", () => {
+        render(<MarkdownContent content={"## First\n\n## Second"} articleNavigation />);
+
+        expect(screen.queryByRole("navigation", { name: "In this article" })).toBeNull();
+    });
+
+    it("does not add article navigation when there are no eligible headings", () => {
+        render(<MarkdownContent content={"##### Small detail\n\nBody copy."} articleNavigation />);
+
+        expect(screen.queryAllByRole("link")).toHaveLength(0);
+    });
+
+    it("provides a fragment target offset below the sticky header", () => {
+        window.history.replaceState({}, "", "/articles/example#getting-started");
+        render(<MarkdownContent content={"## Getting started"} articleNavigation />);
+
+        const target = screen.getByRole("heading", { name: "Getting started" });
+
+        expect(document.getElementById(window.location.hash.slice(1))).toBe(target);
+        expect(target.className).toContain("scroll-mt-24");
+    });
+
+    it("renders heading ids and fragment links in static HTML", () => {
+        const html = renderToStaticMarkup(
+            <MarkdownContent content={"## First\n\n### Second\n\n## Third"} articleNavigation />,
+        );
+
+        expect([
+            html.includes('id="first"'),
+            html.includes('href="#first"'),
+            html.includes("In this article"),
+            html.includes('data-article-end=""'),
+            html.includes('aria-hidden="true"'),
+        ]).toEqual([true, true, true, true, true]);
+    });
+
+    it("keeps nested table-of-contents links in static HTML", () => {
+        const html = renderToStaticMarkup(
+            <MarkdownContent content={"## Parent\n\n### Child\n\n#### Detail"} articleNavigation />,
+        );
+
+        expect([
+            html.includes('href="#parent"'),
+            html.includes('href="#child"'),
+            html.includes('href="#detail"'),
+        ]).toEqual([true, true, true]);
     });
 });

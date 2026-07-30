@@ -7,3 +7,4 @@ export { default as BlueskyIcon } from "@/components/shared/icons/BlueskyIcon";
 export { default as EmailIcon } from "@/components/shared/icons/EmailIcon";
 export { default as GitHubIcon } from "@/components/shared/icons/GitHubIcon";
 export { default as LinkedInIcon } from "@/components/shared/icons/LinkedInIcon";
+export { default as LinkIcon } from "@/components/shared/icons/LinkIcon";
