@@ -25,6 +25,24 @@ describe("MarkdownContent", () => {
         expect(screen.getByRole("table")).toBeTruthy();
     });
 
+    it("renders thematic breaks with the semantic separator primitive", () => {
+        render(<MarkdownContent content={"Before\n\n---\n\nAfter"} measure />);
+
+        const separator = screen.getByRole("separator");
+
+        expect({
+            hasPrimitiveGeometry: separator.classList.contains("h-px") && separator.classList.contains("w-full"),
+            hasSemanticColor: separator.classList.contains("bg-border"),
+            preservesSpacing: separator.classList.contains("my-10"),
+            preservesMeasure: separator.classList.contains("max-w-[72ch]"),
+        }).toEqual({
+            hasPrimitiveGeometry: true,
+            hasSemanticColor: true,
+            preservesSpacing: true,
+            preservesMeasure: true,
+        });
+    });
+
     it("opens rendered links in a new tab", () => {
         render(<MarkdownContent content="[Project](https://example.com)" />);
 

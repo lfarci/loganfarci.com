@@ -23,6 +23,7 @@ import ArticleTableOfContents, {
     ArticleMarkdownLayout,
 } from "@/components/shared/ArticleTableOfContents";
 import { remarkArticleHeadings } from "@/components/shared/articleHeadings";
+import { Separator } from "@/components/shared/primitives/Separator";
 import type { Element } from "hast";
 import type { PluggableList } from "unified";
 
@@ -135,7 +136,7 @@ function createMarkdownComponents(measure: boolean): Components {
         a: ({ href, children }) => <NewTabLink url={href ?? ""}>{children}</NewTabLink>,
         strong: ({ children }) => <Strong>{children}</Strong>,
         em: ({ children }) => <Emphasis>{children}</Emphasis>,
-        hr: () => <hr className={mergeClassNames("my-10 border-t border-border", measureClassName)} />,
+        hr: () => <Separator decorative={false} className={mergeClassNames("my-10", measureClassName)} />,
         table: ({ children }) => (
             <table className="my-8 w-full overflow-hidden rounded-lg border border-border bg-surface text-sm">
                 {children}
