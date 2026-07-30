@@ -1,6 +1,5 @@
-import type { ReactNode } from "react";
+import { useId, type ReactNode } from "react";
 import type { Element } from "hast";
-import { ChevronDownIcon } from "@/components/shared/icons";
 import { Label } from "@/components/shared/typography";
 import type { ArticleHeading } from "@/components/shared/articleHeadings";
 
@@ -80,22 +79,17 @@ export function ArticleMarkdownBody({ children }: Readonly<MarkdownElementProps>
 
 export default function ArticleTableOfContents({ node }: Readonly<MarkdownElementProps>) {
     const items = createTableOfContentsTree(parseHeadings(node));
+    const titleId = useId();
 
     return (
-        <details
-            open
-            className="group mb-8 border-y border-border py-2 lg:sticky lg:top-24 lg:col-start-2 lg:row-start-1 lg:mb-0 lg:border-y-0 lg:border-l lg:py-0 lg:pl-5"
+        <nav
+            aria-labelledby={titleId}
+            className="mb-8 border-b border-border pb-6 lg:sticky lg:top-24 lg:col-start-2 lg:row-start-1 lg:mb-0 lg:border-b-0 lg:border-l lg:pb-0 lg:pl-5"
         >
-            <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 rounded-control px-2 text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring [&::-webkit-details-marker]:hidden">
-                <Label as="span">On this page</Label>
-                <ChevronDownIcon
-                    size={18}
-                    className="shrink-0 text-text-muted transition-transform group-open:rotate-180"
-                />
-            </summary>
-            <nav aria-label="Table of contents" className="pb-2 pt-1 lg:pb-0">
-                <TableOfContentsList items={items} />
-            </nav>
-        </details>
+            <Label as="h2" id={titleId} className="mb-1 px-2 text-text-primary">
+                In this article
+            </Label>
+            <TableOfContentsList items={items} />
+        </nav>
     );
 }

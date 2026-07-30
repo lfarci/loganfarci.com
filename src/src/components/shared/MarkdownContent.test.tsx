@@ -46,9 +46,11 @@ describe("MarkdownContent", () => {
     });
 
     it("assigns collision-safe ids to duplicate article headings", () => {
-        render(<MarkdownContent content={"## Repeat\n\n## Repeat\n\n## Repeat 2"} articleNavigation />);
+        const { container } = render(
+            <MarkdownContent content={"## Repeat\n\n## Repeat\n\n## Repeat 2"} articleNavigation />,
+        );
 
-        expect(screen.getAllByRole("heading").map((heading) => heading.id)).toEqual([
+        expect(Array.from(container.querySelectorAll(".markdown-heading"), (heading) => heading.id)).toEqual([
             "repeat",
             "repeat-2",
             "repeat-2-2",
@@ -116,15 +118,35 @@ describe("MarkdownContent", () => {
     it("preserves nested heading levels in the table of contents", () => {
         render(<MarkdownContent content={"## Parent\n\n### Child\n\n#### Detail"} articleNavigation />);
 
-        const navigation = screen.getByRole("navigation", { name: "Table of contents" });
+        const navigation = screen.getByRole("navigation", { name: "In this article" });
 
         expect(within(navigation).getAllByRole("list")).toHaveLength(3);
+    });
+
+    it("keeps article navigation visible without a disclosure or duplicate top divider", () => {
+        const { container } = render(
+            <MarkdownContent content={"## Parent\n\n### Child\n\n## Next"} articleNavigation />,
+        );
+
+        const navigation = screen.getByRole("navigation", { name: "In this article" });
+
+        expect({
+            hasVisibleTitle: within(navigation).getByRole("heading", { level: 2, name: "In this article" }).id,
+            hasDisclosure: container.querySelector("details, summary") !== null,
+            hasBottomDivider: navigation.classList.contains("border-b"),
+            hasTopDivider: navigation.classList.contains("border-t") || navigation.classList.contains("border-y"),
+        }).toEqual({
+            hasVisibleTitle: navigation.getAttribute("aria-labelledby"),
+            hasDisclosure: false,
+            hasBottomDivider: true,
+            hasTopDivider: false,
+        });
     });
 
     it("targets the shared heading ids from table-of-contents links", () => {
         render(<MarkdownContent content={"## Parent\n\n### Child\n\n## Next"} articleNavigation />);
 
-        const navigation = screen.getByRole("navigation", { name: "Table of contents" });
+        const navigation = screen.getByRole("navigation", { name: "In this article" });
 
         expect(
             within(navigation)
@@ -136,7 +158,7 @@ describe("MarkdownContent", () => {
     it("omits the table of contents when too few headings justify it", () => {
         render(<MarkdownContent content={"## First\n\n## Second"} articleNavigation />);
 
-        expect(screen.queryByRole("navigation", { name: "Table of contents" })).toBeNull();
+        expect(screen.queryByRole("navigation", { name: "In this article" })).toBeNull();
     });
 
     it("does not add article navigation when there are no eligible headings", () => {
@@ -160,10 +182,8 @@ describe("MarkdownContent", () => {
             <MarkdownContent content={"## First\n\n### Second\n\n## Third"} articleNavigation />,
         );
 
-        expect([
-            html.includes('id="first"'),
-            html.includes('href="#first"'),
-            html.includes("Table of contents"),
-        ]).toEqual([true, true, true]);
+        expect([html.includes('id="first"'), html.includes('href="#first"'), html.includes("In this article")]).toEqual(
+            [true, true, true],
+        );
     });
 });

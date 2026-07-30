@@ -84,8 +84,9 @@ Each eligible heading includes a same-page permalink:
 
 When an article contains at least three eligible headings, the same transform injects a
 table of contents generated from those IDs. Heading levels remain nested in the link
-structure. The ToC uses a native, initially expanded `details` disclosure so it can be
-collapsed at mobile widths and becomes a sticky side rail on desktop.
+structure. The ToC is an always-visible navigation landmark titled “In this article.”
+At mobile widths, it sits between the article metadata and body with a single lower
+divider. On desktop, it becomes a sticky side rail.
 
 IDs, permalinks, and ToC links are all emitted during SSR/prerender and therefore exist
 before hydration.
