@@ -28,7 +28,7 @@ export function useActiveArticleHeading(headingIds: readonly string[]): string |
         const headingElements = headingIds
             .map((headingId) => document.getElementById(headingId))
             .filter((heading): heading is HTMLElement => heading !== null);
-        const observer = new IntersectionObserver(
+        const headingObserver = new IntersectionObserver(
             (entries) => {
                 const activeEntry = entries
                     .filter((entry) => entry.isIntersecting)
@@ -41,10 +41,30 @@ export function useActiveArticleHeading(headingIds: readonly string[]): string |
             { rootMargin: "-96px 0px -70% 0px", threshold: 0 },
         );
 
-        headingElements.forEach((heading) => observer.observe(heading));
+        headingElements.forEach((heading) => headingObserver.observe(heading));
+
+        const lastHeadingId = headingIds.at(-1);
+        const articleEndMarker = headingElements
+            .at(-1)
+            ?.closest("[data-article-markdown-body]")
+            ?.querySelector<HTMLElement>("[data-article-end]");
+        const articleEndObserver =
+            lastHeadingId && articleEndMarker
+                ? new IntersectionObserver(
+                      (entries) => {
+                          if (entries.some((entry) => entry.isIntersecting)) {
+                              setActiveHeadingId(lastHeadingId);
+                          }
+                      },
+                      { rootMargin: "-96px 0px 0px 0px", threshold: 0 },
+                  )
+                : null;
+
+        articleEndObserver?.observe(articleEndMarker);
 
         return () => {
-            observer.disconnect();
+            headingObserver.disconnect();
+            articleEndObserver?.disconnect();
             window.removeEventListener("hashchange", updateFromHash);
         };
     }, [headingIds]);

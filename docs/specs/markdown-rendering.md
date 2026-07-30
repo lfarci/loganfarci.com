@@ -89,7 +89,9 @@ At mobile widths, it sits between the article metadata and body with a single lo
 divider and shows top-level section links. On desktop, it becomes a sticky side rail
 and reveals the complete nested heading hierarchy. The section in the upper reading
 region is exposed as the current location with `aria-current` and emphasized through
-neutral font weight without decorative indicator chrome.
+neutral font weight without decorative indicator chrome. Reaching the end of the
+article marks the final section current even when there is not enough trailing content
+for its heading to enter the upper reading region.
 
 IDs, permalinks, and ToC links are all emitted during SSR/prerender and therefore exist
 before hydration.

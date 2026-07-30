@@ -225,9 +225,13 @@ describe("MarkdownContent", () => {
             <MarkdownContent content={"## First\n\n### Second\n\n## Third"} articleNavigation />,
         );
 
-        expect([html.includes('id="first"'), html.includes('href="#first"'), html.includes("In this article")]).toEqual(
-            [true, true, true],
-        );
+        expect([
+            html.includes('id="first"'),
+            html.includes('href="#first"'),
+            html.includes("In this article"),
+            html.includes('data-article-end=""'),
+            html.includes('aria-hidden="true"'),
+        ]).toEqual([true, true, true, true, true]);
     });
 
     it("keeps nested table-of-contents links in static HTML", () => {

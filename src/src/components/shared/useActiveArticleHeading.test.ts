@@ -3,33 +3,50 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { useActiveArticleHeading } from "./useActiveArticleHeading";
 
-let observerCallback: IntersectionObserverCallback;
-let observerOptions: IntersectionObserverInit | undefined;
 const observerInstances: IntersectionObserverMock[] = [];
 
 class IntersectionObserverMock implements IntersectionObserver {
+    private readonly callback: IntersectionObserverCallback;
+
     readonly root = null;
     readonly rootMargin: string;
     readonly thresholds: readonly number[];
     readonly disconnect = vi.fn();
     readonly observe = vi.fn();
+    readonly options: IntersectionObserverInit | undefined;
     readonly takeRecords = vi.fn(() => []);
     readonly unobserve = vi.fn();
 
     constructor(callback: IntersectionObserverCallback, options?: IntersectionObserverInit) {
-        observerCallback = callback;
-        observerOptions = options;
+        this.callback = callback;
+        this.options = options;
         observerInstances.push(this);
         this.rootMargin = options?.rootMargin ?? "0px";
         this.thresholds = Array.isArray(options?.threshold) ? options.threshold : [options?.threshold ?? 0];
     }
+
+    trigger(entries: IntersectionObserverEntry[]) {
+        this.callback(entries, this);
+    }
 }
 
-function addHeading(id: string): HTMLElement {
+function addHeading(id: string, parent: HTMLElement = document.body): HTMLElement {
     const heading = document.createElement("h2");
     heading.id = id;
-    document.body.append(heading);
+    parent.append(heading);
     return heading;
+}
+
+function addArticle(...headingIds: string[]) {
+    const body = document.createElement("div");
+    body.dataset.articleMarkdownBody = "";
+    headingIds.forEach((headingId) => addHeading(headingId, body));
+    const endMarker = document.createElement("span");
+    endMarker.dataset.articleEnd = "";
+    body.append(endMarker);
+    document.body.append(body);
+
+    return { endMarker };
 }
 
 function createObserverEntry(target: Element, top: number): IntersectionObserverEntry {
@@ -44,8 +61,8 @@ function createObserverEntry(target: Element, top: number): IntersectionObserver
     };
 }
 
-function getObserver(): IntersectionObserverMock {
-    const observer = observerInstances.at(-1);
+function getObserver(index = 0): IntersectionObserverMock {
+    const observer = observerInstances[index];
 
     if (!observer) {
         throw new Error("Expected an IntersectionObserver instance");
@@ -83,7 +100,7 @@ describe("useActiveArticleHeading", () => {
 
         expect({
             observedHeadings: getObserver().observe.mock.calls.map((call) => call[0] as Element),
-            options: observerOptions,
+            options: getObserver().options,
         }).toEqual({
             observedHeadings: [firstHeading, secondHeading],
             options: { rootMargin: "-96px 0px -70% 0px", threshold: 0 },
@@ -96,10 +113,7 @@ describe("useActiveArticleHeading", () => {
         const { result } = renderHook(() => useActiveArticleHeading(["first", "second"]));
 
         act(() => {
-            observerCallback(
-                [createObserverEntry(secondHeading, 180), createObserverEntry(firstHeading, 120)],
-                getObserver(),
-            );
+            getObserver().trigger([createObserverEntry(secondHeading, 180), createObserverEntry(firstHeading, 120)]);
         });
 
         expect(result.current).toBe("first");
@@ -111,10 +125,30 @@ describe("useActiveArticleHeading", () => {
         const { result } = renderHook(() => useActiveArticleHeading(["first", "second"]));
 
         act(() => {
-            observerCallback([createObserverEntry(secondHeading, 120)], getObserver());
+            getObserver().trigger([createObserverEntry(secondHeading, 120)]);
         });
 
         expect(result.current).toBe("second");
+    });
+
+    it("activates the final heading when the article end enters the viewport", () => {
+        const { endMarker } = addArticle("first", "last");
+        const { result } = renderHook(() => useActiveArticleHeading(["first", "last"]));
+        const articleEndObserver = getObserver(1);
+
+        act(() => {
+            articleEndObserver.trigger([createObserverEntry(endMarker, 700)]);
+        });
+
+        expect({
+            activeHeading: result.current,
+            observedMarker: articleEndObserver.observe.mock.calls[0]?.[0] as Element | undefined,
+            options: articleEndObserver.options,
+        }).toEqual({
+            activeHeading: "last",
+            observedMarker: endMarker,
+            options: { rootMargin: "-96px 0px 0px 0px", threshold: 0 },
+        });
     });
 
     it("uses matching hash changes and ignores unknown hashes", () => {
@@ -146,16 +180,16 @@ describe("useActiveArticleHeading", () => {
     });
 
     it("disconnects the observer when the component unmounts", () => {
-        addHeading("first");
+        addArticle("first", "second");
         const removeEventListener = vi.spyOn(window, "removeEventListener");
-        const { unmount } = renderHook(() => useActiveArticleHeading(["first"]));
+        const { unmount } = renderHook(() => useActiveArticleHeading(["first", "second"]));
 
         unmount();
 
         expect({
-            disconnected: getObserver().disconnect.mock.calls.length,
+            disconnected: observerInstances.map((observer) => observer.disconnect.mock.calls.length),
             removedHashListener: removeEventListener.mock.calls.some(([eventName]) => eventName === "hashchange"),
-        }).toEqual({ disconnected: 1, removedHashListener: true });
+        }).toEqual({ disconnected: [1, 1], removedHashListener: true });
     });
 
     it("retains hash navigation when IntersectionObserver is unavailable", () => {

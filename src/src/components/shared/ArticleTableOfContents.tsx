@@ -88,7 +88,12 @@ export function ArticleMarkdownLayout({ children }: Readonly<MarkdownElementProp
 }
 
 export function ArticleMarkdownBody({ children }: Readonly<MarkdownElementProps>) {
-    return <div className="min-w-0 lg:col-start-1 lg:row-start-1">{children}</div>;
+    return (
+        <div data-article-markdown-body="" className="min-w-0 lg:col-start-1 lg:row-start-1">
+            {children}
+            <span data-article-end="" aria-hidden="true" className="block h-px w-full" />
+        </div>
+    );
 }
 
 export default function ArticleTableOfContents({ node }: Readonly<MarkdownElementProps>) {
