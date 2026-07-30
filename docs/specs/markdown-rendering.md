@@ -86,7 +86,10 @@ When an article contains at least three eligible headings, the same transform in
 table of contents generated from those IDs. Heading levels remain nested in the link
 structure. The ToC is an always-visible navigation landmark titled “In this article.”
 At mobile widths, it sits between the article metadata and body with a single lower
-divider. On desktop, it becomes a sticky side rail.
+divider and shows top-level section links. On desktop, it becomes a sticky side rail
+and reveals the complete nested heading hierarchy. The section in the upper reading
+region is emphasized without shifting link layout and exposed as the current location
+with `aria-current`.
 
 IDs, permalinks, and ToC links are all emitted during SSR/prerender and therefore exist
 before hydration.

@@ -1,7 +1,9 @@
-import { useId, type ReactNode } from "react";
+import { useId, useMemo, type ReactNode } from "react";
 import type { Element } from "hast";
 import { Label } from "@/components/shared/typography";
 import type { ArticleHeading } from "@/components/shared/articleHeadings";
+import { mergeClassNames } from "@/core/mergeClassNames";
+import { useActiveArticleHeading } from "@/components/shared/useActiveArticleHeading";
 
 interface MarkdownElementProps {
     children?: ReactNode;
@@ -47,18 +49,30 @@ function createTableOfContentsTree(headings: ArticleHeading[]): TableOfContentsI
     return roots;
 }
 
-function TableOfContentsList({ items, nested = false }: { items: TableOfContentsItem[]; nested?: boolean }) {
+interface TableOfContentsListProps {
+    activeHeadingId: string | null;
+    items: TableOfContentsItem[];
+    nested?: boolean;
+}
+
+function TableOfContentsList({ activeHeadingId, items, nested = false }: TableOfContentsListProps) {
     return (
-        <ol className={nested ? "ml-3 border-l border-border-light pl-3" : "space-y-0.5"}>
+        <ol className={nested ? "ml-3 hidden border-l border-border-light pl-3 lg:block" : "space-y-0.5"}>
             {items.map((item) => (
                 <li key={item.id}>
                     <a
                         href={`#${item.id}`}
-                        className="flex min-h-11 items-center rounded-control px-2 py-2 text-sm leading-5 text-text-secondary underline-offset-4 transition-colors hover:text-primary hover:underline focus-visible:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                        aria-current={activeHeadingId === item.id ? "location" : undefined}
+                        className={mergeClassNames(
+                            "flex min-h-11 items-center rounded-control border-l-2 border-transparent px-2 py-2 text-sm leading-5 text-text-secondary underline-offset-4 transition-colors hover:text-primary hover:underline focus-visible:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                            activeHeadingId === item.id && "border-primary font-semibold text-primary",
+                        )}
                     >
                         {item.text}
                     </a>
-                    {item.children.length > 0 && <TableOfContentsList items={item.children} nested />}
+                    {item.children.length > 0 && (
+                        <TableOfContentsList activeHeadingId={activeHeadingId} items={item.children} nested />
+                    )}
                 </li>
             ))}
         </ol>
@@ -78,7 +92,10 @@ export function ArticleMarkdownBody({ children }: Readonly<MarkdownElementProps>
 }
 
 export default function ArticleTableOfContents({ node }: Readonly<MarkdownElementProps>) {
-    const items = createTableOfContentsTree(parseHeadings(node));
+    const headings = useMemo(() => parseHeadings(node), [node]);
+    const items = useMemo(() => createTableOfContentsTree(headings), [headings]);
+    const headingIds = useMemo(() => headings.map((heading) => heading.id), [headings]);
+    const activeHeadingId = useActiveArticleHeading(headingIds);
     const titleId = useId();
 
     return (
@@ -89,7 +106,7 @@ export default function ArticleTableOfContents({ node }: Readonly<MarkdownElemen
             <Label as="h2" id={titleId} className="mb-1 px-2 text-text-primary">
                 In this article
             </Label>
-            <TableOfContentsList items={items} />
+            <TableOfContentsList activeHeadingId={activeHeadingId} items={items} />
         </nav>
     );
 }

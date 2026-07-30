@@ -89,6 +89,7 @@ describe("MarkdownContent", () => {
         render(<MarkdownContent content={"## Responsive permalink"} articleNavigation />);
 
         const permalink = screen.getByRole("link", { name: 'Link to "Responsive permalink" section' });
+        const glyph = permalink.firstElementChild as HTMLElement;
 
         expect({
             hiddenByDefault: permalink.classList.contains("hidden"),
@@ -96,21 +97,25 @@ describe("MarkdownContent", () => {
             visibleAtClippedDesktopWidth: permalink.classList.contains("lg:inline-flex"),
             hasHoverBackground: permalink.classList.contains("hover:bg-surface-hover"),
             hasFocusBackground: permalink.classList.contains("focus-visible:bg-surface-hover"),
-            hasFocusOutline: permalink.classList.contains("focus-visible:outline-2"),
-            hasFocusRing: permalink.classList.contains("focus-visible:ring-2"),
             hasRoundedContainer: Array.from(permalink.classList).some((className) => className.startsWith("rounded-")),
             suppressesBoxOutline: permalink.classList.contains("focus-visible:outline-none"),
-            scalesFocusedGlyph: permalink.classList.contains("focus-visible:[&>svg]:scale-110"),
+            hasRoundedGlyph: glyph.classList.contains("rounded-full"),
+            hasGlyphFocusOutline: glyph.classList.contains("group-focus-visible/permalink:outline-2"),
+            hasGlyphFocusOffset: glyph.classList.contains("group-focus-visible/permalink:outline-offset-2"),
+            hasGlyphFocusColor: glyph.classList.contains("group-focus-visible/permalink:outline-ring"),
+            scalesFocusedGlyph: glyph.classList.contains("group-focus-visible/permalink:scale-110"),
         }).toEqual({
             hiddenByDefault: true,
             visibleAtWideDesktop: true,
             visibleAtClippedDesktopWidth: false,
             hasHoverBackground: false,
             hasFocusBackground: false,
-            hasFocusOutline: false,
-            hasFocusRing: false,
             hasRoundedContainer: false,
             suppressesBoxOutline: true,
+            hasRoundedGlyph: true,
+            hasGlyphFocusOutline: true,
+            hasGlyphFocusOffset: true,
+            hasGlyphFocusColor: true,
             scalesFocusedGlyph: true,
         });
     });
@@ -121,6 +126,27 @@ describe("MarkdownContent", () => {
         const navigation = screen.getByRole("navigation", { name: "In this article" });
 
         expect(within(navigation).getAllByRole("list")).toHaveLength(3);
+    });
+
+    it("shows only top-level table-of-contents lists below desktop widths", () => {
+        render(<MarkdownContent content={"## Parent\n\n### Child\n\n#### Detail"} articleNavigation />);
+
+        const navigation = screen.getByRole("navigation", { name: "In this article" });
+        const [rootList, ...nestedLists] = within(navigation).getAllByRole("list");
+
+        expect({
+            rootHidden: rootList.classList.contains("hidden"),
+            nestedVisibility: nestedLists.map((list) => ({
+                hiddenByDefault: list.classList.contains("hidden"),
+                visibleOnDesktop: list.classList.contains("lg:block"),
+            })),
+        }).toEqual({
+            rootHidden: false,
+            nestedVisibility: [
+                { hiddenByDefault: true, visibleOnDesktop: true },
+                { hiddenByDefault: true, visibleOnDesktop: true },
+            ],
+        });
     });
 
     it("keeps article navigation visible without a disclosure or duplicate top divider", () => {
@@ -140,6 +166,26 @@ describe("MarkdownContent", () => {
             hasDisclosure: false,
             hasBottomDivider: true,
             hasTopDivider: false,
+        });
+    });
+
+    it("marks the current table-of-contents link with text and indicator emphasis", () => {
+        render(<MarkdownContent content={"## Parent\n\n### Child\n\n## Next"} articleNavigation />);
+
+        const navigation = screen.getByRole("navigation", { name: "In this article" });
+        const links = within(navigation).getAllByRole("link");
+        const currentLinks = links.filter((link) => link.getAttribute("aria-current") === "location");
+
+        expect({
+            currentLinkNames: currentLinks.map((link) => link.textContent),
+            reservesIndicatorWidth: links.every((link) => link.classList.contains("border-l-2")),
+            usesWeight: currentLinks[0]?.classList.contains("font-semibold"),
+            usesIndicator: currentLinks[0]?.classList.contains("border-primary"),
+        }).toEqual({
+            currentLinkNames: ["Parent"],
+            reservesIndicatorWidth: true,
+            usesWeight: true,
+            usesIndicator: true,
         });
     });
 
@@ -185,5 +231,17 @@ describe("MarkdownContent", () => {
         expect([html.includes('id="first"'), html.includes('href="#first"'), html.includes("In this article")]).toEqual(
             [true, true, true],
         );
+    });
+
+    it("keeps nested table-of-contents links in static HTML", () => {
+        const html = renderToStaticMarkup(
+            <MarkdownContent content={"## Parent\n\n### Child\n\n#### Detail"} articleNavigation />,
+        );
+
+        expect([
+            html.includes('href="#parent"'),
+            html.includes('href="#child"'),
+            html.includes('href="#detail"'),
+        ]).toEqual([true, true, true]);
     });
 });
