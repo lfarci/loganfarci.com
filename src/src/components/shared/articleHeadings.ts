@@ -53,12 +53,13 @@ function createUniqueHeadingId(text: string, usedIds: Set<string>): string {
     let id = baseId;
     let suffix = 2;
 
-    while (usedIds.has(id)) {
+    while (usedIds.has(id) || usedIds.has(`${id}-label`)) {
         id = `${baseId}-${suffix}`;
         suffix += 1;
     }
 
     usedIds.add(id);
+    usedIds.add(`${id}-label`);
     return id;
 }
 

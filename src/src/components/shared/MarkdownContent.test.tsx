@@ -55,6 +55,17 @@ describe("MarkdownContent", () => {
         ]);
     });
 
+    it.each([
+        ["## API\n\n## API label", ["api", "api-label-2"]],
+        ["## API label\n\n## API", ["api-label", "api-2"]],
+    ])("reserves generated label ids for headings in either order", (content, expectedHeadingIds) => {
+        const { container } = render(<MarkdownContent content={content} articleNavigation />);
+        const renderedIds = Array.from(container.querySelectorAll("[id]"), (element) => element.id);
+
+        expect(screen.getAllByRole("heading").map((heading) => heading.id)).toEqual(expectedHeadingIds);
+        expect(new Set(renderedIds).size).toBe(renderedIds.length);
+    });
+
     it("uses inline heading content in the permalink accessible name", () => {
         render(<MarkdownContent content={"## Install *with* `npm`"} articleNavigation />);
 
@@ -79,7 +90,8 @@ describe("MarkdownContent", () => {
 
         expect({
             hiddenByDefault: permalink.classList.contains("hidden"),
-            visibleOnDesktop: permalink.classList.contains("lg:inline-flex"),
+            visibleAtWideDesktop: permalink.classList.contains("xl:inline-flex"),
+            visibleAtClippedDesktopWidth: permalink.classList.contains("lg:inline-flex"),
             hasHoverBackground: permalink.classList.contains("hover:bg-surface-hover"),
             hasFocusBackground: permalink.classList.contains("focus-visible:bg-surface-hover"),
             hasFocusOutline: permalink.classList.contains("focus-visible:outline-2"),
@@ -89,7 +101,8 @@ describe("MarkdownContent", () => {
             scalesFocusedGlyph: permalink.classList.contains("focus-visible:[&>svg]:scale-110"),
         }).toEqual({
             hiddenByDefault: true,
-            visibleOnDesktop: true,
+            visibleAtWideDesktop: true,
+            visibleAtClippedDesktopWidth: false,
             hasHoverBackground: false,
             hasFocusBackground: false,
             hasFocusOutline: false,
