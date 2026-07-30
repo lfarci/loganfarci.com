@@ -22,6 +22,7 @@
     body {
         color: var(--color-foreground);
         background: var(--color-background);
+        overflow-x: clip;
     }
 
     h1,
