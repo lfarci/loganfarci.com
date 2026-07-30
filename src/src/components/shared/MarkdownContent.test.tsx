@@ -82,11 +82,21 @@ describe("MarkdownContent", () => {
             visibleOnDesktop: permalink.classList.contains("lg:inline-flex"),
             hasHoverBackground: permalink.classList.contains("hover:bg-surface-hover"),
             hasFocusBackground: permalink.classList.contains("focus-visible:bg-surface-hover"),
+            hasFocusOutline: permalink.classList.contains("focus-visible:outline-2"),
+            hasFocusRing: permalink.classList.contains("focus-visible:ring-2"),
+            hasRoundedContainer: Array.from(permalink.classList).some((className) => className.startsWith("rounded-")),
+            suppressesBoxOutline: permalink.classList.contains("focus-visible:outline-none"),
+            scalesFocusedGlyph: permalink.classList.contains("focus-visible:[&>svg]:scale-110"),
         }).toEqual({
             hiddenByDefault: true,
             visibleOnDesktop: true,
             hasHoverBackground: false,
             hasFocusBackground: false,
+            hasFocusOutline: false,
+            hasFocusRing: false,
+            hasRoundedContainer: false,
+            suppressesBoxOutline: true,
+            scalesFocusedGlyph: true,
         });
     });
 
