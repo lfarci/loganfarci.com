@@ -64,8 +64,8 @@ function TableOfContentsList({ activeHeadingId, items, nested = false }: TableOf
                         href={`#${item.id}`}
                         aria-current={activeHeadingId === item.id ? "location" : undefined}
                         className={mergeClassNames(
-                            "flex min-h-11 items-center rounded-control border-l-2 border-transparent px-2 py-2 text-sm leading-5 text-text-secondary underline-offset-4 transition-colors hover:text-primary hover:underline focus-visible:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-                            activeHeadingId === item.id && "border-primary font-semibold text-primary",
+                            "flex min-h-11 items-center rounded-control px-2 py-2 text-sm leading-5 text-text-secondary underline-offset-4 transition-colors hover:text-primary hover:underline focus-visible:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                            activeHeadingId === item.id && "font-semibold text-text-primary",
                         )}
                     >
                         {item.text}

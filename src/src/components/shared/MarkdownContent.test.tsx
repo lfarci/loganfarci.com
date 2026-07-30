@@ -169,7 +169,7 @@ describe("MarkdownContent", () => {
         });
     });
 
-    it("marks the current table-of-contents link with text and indicator emphasis", () => {
+    it("marks the current table-of-contents link with neutral typographic emphasis", () => {
         render(<MarkdownContent content={"## Parent\n\n### Child\n\n## Next"} articleNavigation />);
 
         const navigation = screen.getByRole("navigation", { name: "In this article" });
@@ -178,15 +178,12 @@ describe("MarkdownContent", () => {
 
         expect({
             currentLinkNames: currentLinks.map((link) => link.textContent),
-            reservesIndicatorWidth: links.every((link) => link.classList.contains("border-l-2")),
             usesWeight: currentLinks[0]?.classList.contains("font-semibold"),
-            usesIndicator: currentLinks[0]?.classList.contains("border-primary"),
-        }).toEqual({
-            currentLinkNames: ["Parent"],
-            reservesIndicatorWidth: true,
-            usesWeight: true,
-            usesIndicator: true,
-        });
+            usesNeutralText: currentLinks[0]?.classList.contains("text-text-primary"),
+            usesBlueIndicator: links.some(
+                (link) => link.classList.contains("border-primary") || link.classList.contains("text-primary"),
+            ),
+        }).toEqual({ currentLinkNames: ["Parent"], usesWeight: true, usesNeutralText: true, usesBlueIndicator: false });
     });
 
     it("targets the shared heading ids from table-of-contents links", () => {

@@ -88,8 +88,8 @@ structure. The ToC is an always-visible navigation landmark titled “In this ar
 At mobile widths, it sits between the article metadata and body with a single lower
 divider and shows top-level section links. On desktop, it becomes a sticky side rail
 and reveals the complete nested heading hierarchy. The section in the upper reading
-region is emphasized without shifting link layout and exposed as the current location
-with `aria-current`.
+region is exposed as the current location with `aria-current` and emphasized through
+neutral font weight without decorative indicator chrome.
 
 IDs, permalinks, and ToC links are all emitted during SSR/prerender and therefore exist
 before hydration.
