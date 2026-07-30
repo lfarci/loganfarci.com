@@ -179,6 +179,34 @@
     font-family: var(--font-noto-sans);
 }
 
+/*
+ * Heading permalinks stay visible on touch devices, where hover is unavailable.
+ * Pointer users get the quieter Microsoft Learn-style reveal on heading hover,
+ * while keyboard focus always reveals the link.
+ */
+.heading-permalink {
+    opacity: 1;
+}
+
+@media (hover: hover) {
+    .heading-permalink {
+        opacity: 0;
+    }
+
+    .markdown-heading:hover .heading-permalink,
+    .markdown-heading:focus-within .heading-permalink {
+        opacity: 1;
+    }
+}
+
+@media (hover: none) {
+    .heading-permalink {
+        position: static;
+        margin-inline: -0.5rem 0.25rem;
+        transform: none;
+    }
+}
+
 /* Font CSS variables (Fontsource self-hosted fonts) */
 :root {
     --font-manrope: "Manrope Variable", sans-serif;

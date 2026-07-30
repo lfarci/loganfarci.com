@@ -62,8 +62,8 @@ function MarkdownHeadingContent({ children, id, node }: { children: React.ReactN
 
     return (
         <>
-            <span id={`${id}-label`}>{children}</span>
             <HeadingPermalink headingId={id} headingText={getHeadingLabel(node)} />
+            <span id={`${id}-label`}>{children}</span>
         </>
     );
 }
@@ -76,7 +76,7 @@ function createMarkdownComponents(measure: boolean): Components {
             <Heading2
                 id={id}
                 aria-labelledby={id ? `${id}-label` : undefined}
-                className="mb-4 mt-10 scroll-mt-24 first:mt-0"
+                className="markdown-heading group relative mb-4 mt-10 scroll-mt-24 first:mt-0"
             >
                 <MarkdownHeadingContent id={id} node={node}>
                     {children}
@@ -87,7 +87,7 @@ function createMarkdownComponents(measure: boolean): Components {
             <Heading2
                 id={id}
                 aria-labelledby={id ? `${id}-label` : undefined}
-                className="mb-4 mt-10 scroll-mt-24 first:mt-0"
+                className="markdown-heading group relative mb-4 mt-10 scroll-mt-24 first:mt-0"
             >
                 <MarkdownHeadingContent id={id} node={node}>
                     {children}
@@ -98,7 +98,7 @@ function createMarkdownComponents(measure: boolean): Components {
             <Heading3
                 id={id}
                 aria-labelledby={id ? `${id}-label` : undefined}
-                className="mb-3 mt-8 scroll-mt-24 first:mt-0"
+                className="markdown-heading group relative mb-3 mt-8 scroll-mt-24 first:mt-0"
             >
                 <MarkdownHeadingContent id={id} node={node}>
                     {children}
@@ -109,7 +109,7 @@ function createMarkdownComponents(measure: boolean): Components {
             <Heading4
                 id={id}
                 aria-labelledby={id ? `${id}-label` : undefined}
-                className="mb-3 mt-6 scroll-mt-24 first:mt-0"
+                className="markdown-heading group relative mb-3 mt-6 scroll-mt-24 first:mt-0"
             >
                 <MarkdownHeadingContent id={id} node={node}>
                     {children}

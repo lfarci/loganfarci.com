@@ -76,6 +76,8 @@ Each eligible heading includes a same-page permalink:
 
 - Its `href` targets the heading ID.
 - Its accessible name includes the visible heading text; the link icon is decorative.
+- It sits to the left of the heading and is revealed on heading hover or keyboard
+  focus; it remains visible on touch devices where hover is unavailable.
 - It is keyboard reachable with a visible focus state and a touch-sized target.
 - The heading uses a scroll margin so fragment navigation clears the sticky site
   header.

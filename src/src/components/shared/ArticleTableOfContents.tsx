@@ -50,12 +50,12 @@ function createTableOfContentsTree(headings: ArticleHeading[]): TableOfContentsI
 
 function TableOfContentsList({ items, nested = false }: { items: TableOfContentsItem[]; nested?: boolean }) {
     return (
-        <ol className={nested ? "mt-1 space-y-1 border-l border-border-light pl-3" : "space-y-1"}>
+        <ol className={nested ? "ml-3 border-l border-border-light pl-3" : "space-y-0.5"}>
             {items.map((item) => (
                 <li key={item.id}>
                     <a
                         href={`#${item.id}`}
-                        className="flex min-h-11 items-center rounded-control px-2 py-2 text-sm leading-5 text-text-secondary transition-colors hover:bg-surface-hover hover:text-primary focus-visible:bg-surface-hover focus-visible:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                        className="flex min-h-11 items-center rounded-control px-2 py-2 text-sm leading-5 text-text-secondary underline-offset-4 transition-colors hover:text-primary hover:underline focus-visible:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                     >
                         {item.text}
                     </a>
@@ -68,7 +68,7 @@ function TableOfContentsList({ items, nested = false }: { items: TableOfContents
 
 export function ArticleMarkdownLayout({ children }: Readonly<MarkdownElementProps>) {
     return (
-        <div className="grid w-full min-w-0 lg:grid-cols-[minmax(0,1fr)_14rem] lg:items-start lg:gap-12">
+        <div className="grid w-full min-w-0 lg:grid-cols-[minmax(0,1fr)_14rem] lg:items-start lg:gap-10 xl:gap-12">
             {children}
         </div>
     );
@@ -84,7 +84,7 @@ export default function ArticleTableOfContents({ node }: Readonly<MarkdownElemen
     return (
         <details
             open
-            className="group mb-8 rounded-card border border-border bg-surface p-3 shadow-card lg:sticky lg:top-24 lg:col-start-2 lg:row-start-1 lg:mb-0"
+            className="group mb-8 border-y border-border py-2 lg:sticky lg:top-24 lg:col-start-2 lg:row-start-1 lg:mb-0 lg:border-y-0 lg:border-l lg:py-0 lg:pl-5"
         >
             <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 rounded-control px-2 text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring [&::-webkit-details-marker]:hidden">
                 <Label as="span">On this page</Label>
@@ -93,7 +93,7 @@ export default function ArticleTableOfContents({ node }: Readonly<MarkdownElemen
                     className="shrink-0 text-text-muted transition-transform group-open:rotate-180"
                 />
             </summary>
-            <nav aria-label="Table of contents" className="mt-2 border-t border-border-light pt-2">
+            <nav aria-label="Table of contents" className="pb-2 pt-1 lg:pb-0">
                 <TableOfContentsList items={items} />
             </nav>
         </details>
