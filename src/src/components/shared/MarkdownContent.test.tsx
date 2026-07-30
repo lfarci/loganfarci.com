@@ -72,6 +72,24 @@ describe("MarkdownContent", () => {
         expect(document.activeElement).toBe(permalink);
     });
 
+    it("keeps heading permalinks simple and hides them below desktop widths", () => {
+        render(<MarkdownContent content={"## Responsive permalink"} articleNavigation />);
+
+        const permalink = screen.getByRole("link", { name: 'Link to "Responsive permalink" section' });
+
+        expect({
+            hiddenByDefault: permalink.classList.contains("hidden"),
+            visibleOnDesktop: permalink.classList.contains("lg:inline-flex"),
+            hasHoverBackground: permalink.classList.contains("hover:bg-surface-hover"),
+            hasFocusBackground: permalink.classList.contains("focus-visible:bg-surface-hover"),
+        }).toEqual({
+            hiddenByDefault: true,
+            visibleOnDesktop: true,
+            hasHoverBackground: false,
+            hasFocusBackground: false,
+        });
+    });
+
     it("preserves nested heading levels in the table of contents", () => {
         render(<MarkdownContent content={"## Parent\n\n### Child\n\n#### Detail"} articleNavigation />);
 

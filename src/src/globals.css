@@ -181,9 +181,9 @@
 }
 
 /*
- * Heading permalinks stay visible on touch devices, where hover is unavailable.
- * Pointer users get the quieter Microsoft Learn-style reveal on heading hover,
- * while keyboard focus always reveals the link.
+ * Desktop heading permalinks use the Microsoft Learn-style reveal on hover.
+ * Large touch layouts keep them visible because hover is unavailable, while
+ * the component omits them entirely at narrower widths.
  */
 .heading-permalink {
     opacity: 1;

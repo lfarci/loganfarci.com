@@ -10,7 +10,7 @@ export default function HeadingPermalink({ headingId, headingText }: Readonly<He
         <a
             href={`#${headingId}`}
             aria-label={`Link to "${headingText}" section`}
-            className="heading-permalink absolute top-1/2 right-full mr-1 inline-flex size-11 -translate-y-1/2 items-center justify-center rounded-control align-middle text-text-muted transition-[background-color,color,opacity] duration-150 hover:bg-surface-hover hover:text-primary focus-visible:bg-surface-hover focus-visible:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            className="heading-permalink absolute top-1/2 right-full mr-1 hidden size-11 -translate-y-1/2 items-center justify-center align-middle text-text-muted transition-[color,opacity] duration-150 hover:text-primary focus-visible:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary lg:inline-flex"
         >
             <LinkIcon size={17} />
         </a>
