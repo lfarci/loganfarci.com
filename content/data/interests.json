@@ -12,7 +12,7 @@
   },
   {
     "title": "AI",
-    "description": "Building practical AI solutions and developer workflows with GitHub and Azure AI.",
+    "description": "Building practical AI solutions with Azure AI services and modern developer workflows.",
     "image": {
       "src": "/images/icons/robot.avif",
       "alt": "Robot icon",
@@ -23,7 +23,7 @@
   },
   {
     "title": "DevOps",
-    "description": "Implementing CI/CD pipelines and automating workflows to enhance development efficiency.",
+    "description": "Building reliable CI/CD pipelines, infrastructure as code, and cloud networking.",
     "image": {
       "src": "/images/icons/infinity.avif",
       "alt": "Infinity icon",
