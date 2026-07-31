@@ -91,15 +91,10 @@
     --color-error: oklch(63.7% 0.237 25.331); /* red-500 */
     --color-info: var(--color-brand);
     --color-callout-note: oklch(48% 0.18 258);
-    --color-callout-note-subtle: oklch(96.5% 0.04 258);
     --color-callout-tip: oklch(43% 0.14 145);
-    --color-callout-tip-subtle: oklch(96.5% 0.05 145);
-    --color-callout-important: oklch(43% 0.13 205);
-    --color-callout-important-subtle: oklch(96.5% 0.05 205);
+    --color-callout-important: oklch(47% 0.18 305);
     --color-callout-warning: oklch(45% 0.13 75);
-    --color-callout-warning-subtle: oklch(96.5% 0.06 85);
     --color-callout-caution: oklch(48% 0.2 25);
-    --color-callout-caution-subtle: oklch(96.5% 0.04 25);
 
     /* Gradients */
     --gradient-brand: linear-gradient(135deg, var(--color-brand) 0%, var(--color-accent) 100%);
@@ -175,15 +170,10 @@
     --color-ring: var(--color-brand);
     --color-ring-muted: var(--color-border-strong);
     --color-callout-note: oklch(74% 0.14 252);
-    --color-callout-note-subtle: oklch(24% 0.055 258);
     --color-callout-tip: oklch(76% 0.13 145);
-    --color-callout-tip-subtle: oklch(23.5% 0.05 145);
-    --color-callout-important: oklch(78% 0.12 205);
-    --color-callout-important-subtle: oklch(24% 0.05 205);
+    --color-callout-important: oklch(76% 0.16 305);
     --color-callout-warning: oklch(80% 0.14 78);
-    --color-callout-warning-subtle: oklch(25% 0.055 80);
     --color-callout-caution: oklch(72% 0.19 25);
-    --color-callout-caution-subtle: oklch(24.5% 0.055 25);
 
     --shadow-card: 0 1px 2px 0 oklch(0% 0 0 / 0.36), 0 12px 30px -26px oklch(72% 0.15 252 / 0.5);
     --shadow-card-hover: 0 22px 42px -28px oklch(0% 0 0 / 0.68), 0 12px 28px -22px oklch(77% 0.13 188 / 0.34);

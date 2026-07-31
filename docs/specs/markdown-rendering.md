@@ -96,25 +96,25 @@ depends on color alone. The body uses normal article typography rather than quot
 italics. Its constrained grid and overflow wrapping preserve `MarkdownContent`'s
 `measure` behavior at narrow widths and high zoom.
 
-Each callout uses a narrowly scoped semantic accent, tinted surface, strong colored
-edge, and solid icon tile inside a neutral outline. The flat, editorial treatment
-avoids card-like elevation so the article prose remains primary. It also makes the
-variants easier to scan in light mode while the visible sentence-case label and
-distinct icon preserve meaning without color. Contrast checks for the accent against
-its corresponding surface are:
+All callouts use the same quiet neutral surface and hairline border. Only the line icon
+and sentence-case title use the variant's semantic accent; there are no variant-tinted
+backgrounds, colored edges, solid icon tiles, or card-like elevation. This keeps the
+article prose primary while blue Note, green Tip, violet Important, amber Warning, and
+red Caution remain visually separated. The visible label and distinct icon also
+preserve meaning without color. Contrast checks for each accent against the shared
+neutral surface are:
 
 | Variant | Light theme | Dark theme |
 | --- | ---: | ---: |
-| Note | 6.00:1 | 7.16:1 |
-| Tip | 6.99:1 | 8.03:1 |
-| Important | 6.48:1 | 8.39:1 |
-| Warning | 6.73:1 | 8.47:1 |
-| Caution | 6.17:1 | 5.91:1 |
+| Note | 6.12:1 | 7.25:1 |
+| Tip | 6.93:1 | 8.16:1 |
+| Important | 6.83:1 | 7.31:1 |
+| Warning | 6.90:1 | 8.81:1 |
+| Caution | 6.51:1 | 5.98:1 |
 
 These values exceed the 4.5:1 text requirement and the 3:1 meaningful graphical-object
 requirement in both themes. Body text continues to use the site's existing semantic
-text tokens. Icon glyphs use the document background token against the solid accent,
-producing 6.52–7.39:1 contrast in light mode and 7.17–10.56:1 in dark mode.
+text tokens.
 
 During local development, `/_dev/markdown-callouts` renders all variants and fallback
 states through `MarkdownContent` for visual review. The route is development-only: it

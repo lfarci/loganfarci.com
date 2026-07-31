@@ -72,24 +72,27 @@ describe("MarkdownContent", () => {
     ])("renders the %s marker as a labeled callout", (marker, label) => {
         const { container } = render(<MarkdownContent content={`> [!${marker}]\n> ${label} body content.`} />);
         const variant = marker.toLowerCase();
-        const icon = screen.getByText(label).previousElementSibling;
-        const callout = screen.getByText(label).parentElement?.parentElement?.parentElement;
+        const title = screen.getByText(label);
+        const icon = title.previousElementSibling;
+        const callout = title.parentElement?.parentElement?.parentElement;
 
         expect({
-            hasLabel: screen.getByText(label).textContent,
+            hasLabel: title.textContent,
             hasBody: screen.getByText(`${label} body content.`).textContent,
             hidesMarker: container.textContent?.includes(`[!${marker}]`),
-            hasVariantEdge: callout?.classList.contains(`border-l-callout-${variant}`),
-            hasVariantSurface: callout?.classList.contains(`bg-callout-${variant}-subtle`),
-            hasSolidIconTile: icon?.classList.contains(`bg-callout-${variant}`),
+            hasSharedSurface: callout?.classList.contains("bg-surface-elevated"),
+            hasSharedBorder: callout?.classList.contains("border-border-light"),
+            titleUsesVariantColor: title.classList.contains(`text-callout-${variant}`),
+            iconUsesVariantColor: icon?.classList.contains(`text-callout-${variant}`),
             avoidsCardElevation: callout?.classList.contains("shadow-sm"),
         }).toEqual({
             hasLabel: label,
             hasBody: `${label} body content.`,
             hidesMarker: false,
-            hasVariantEdge: true,
-            hasVariantSurface: true,
-            hasSolidIconTile: true,
+            hasSharedSurface: true,
+            hasSharedBorder: true,
+            titleUsesVariantColor: true,
+            iconUsesVariantColor: true,
             avoidsCardElevation: false,
         });
     });
