@@ -1,0 +1,4 @@
+interface:
+  display_name: "Shape Backlog Idea"
+  short_description: "Turn rough ideas into prioritized GitHub issues"
+  default_prompt: "Use $shape-backlog-idea to investigate this product idea and turn it into the right backlog action."

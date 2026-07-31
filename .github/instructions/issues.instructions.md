@@ -15,6 +15,47 @@ You are assisting with issue management for the loganfarci.com repository using 
 - **Consistency**: Use standardized templates and naming conventions
 - **Traceability**: Link issues to requirements, PRs, and related work
 
+## Product Idea Collaboration
+
+Use the repository's `shape-backlog-idea` skill when Logan talks through a product
+idea, UX observation, refactor, defect, or prioritization question.
+
+- Treat fragmented or voice-dictated language as normal exploratory input. Resolve
+  approximate component names against the code and rendered flow, then restate the
+  understood outcome in clear product language.
+- Investigate the current implementation, relevant specs, Git history, live behavior
+  when applicable, and related open/recently closed issues before deciding what belongs
+  in the backlog.
+- Preserve the requested outcome without assuming the proposed implementation is
+  correct. Give an evidence-backed recommendation to keep, change, defer, combine, or
+  remove the idea.
+- When design uncertainty is real, document 2–3 credible options, identify a preferred
+  starting point, and require the implementation to record its choice. When the owner
+  selects a standard direction, make the issue decisive rather than reopening it.
+- Prefer updating an issue that already owns the outcome. Create a follow-up bug for a
+  regression or a new task for a distinct productization pass.
+- Before a GitHub write, restate the repository, target, type label, milestone, and
+  assignee choice. Report success only after the write is confirmed.
+
+## Prioritization
+
+GitHub is the source of truth; refresh the live backlog before recommending sequence.
+Use this default order unless the owner explicitly changes it:
+
+1. Production regressions, broken core journeys, privacy/security problems,
+   deployment failures, and accessibility blockers.
+2. Foundations or quality work that unblocks multiple accepted tasks or prevents
+   repeated regressions.
+3. High-value usability improvements to shipped journeys.
+4. Coherent design/content polish and maintainability refactors.
+5. Distinctive optional features.
+6. Larger strategic expansions such as new sections and locales.
+
+Fix regressions before polishing the same surface, sequence prerequisites before
+dependants, and avoid broad file moves while accepted work is changing the same files.
+Assignee means ownership and milestone means grouping; neither proves priority. Never
+invent unreadable GitHub Project status or present inferred sequencing as confirmed.
+
 ## Issue Status Management
 
 Always update issue status appropriately:
