@@ -1,29 +1,29 @@
 [
   {
-    "title": "Backend Development",
-    "description": "Building robust and scalable backend systems using C#, .NET, and Azure.",
-    "image": {
-      "src": "/images/icons/gear.avif",
-      "alt": "Gear icon",
-      "width": 128,
-      "height": 128
-    },
-    "redirectPath": "/about#backend-development"
-  },
-  {
-    "title": "Cloud Computing",
-    "description": "Leveraging the power of Azure to deliver scalable and efficient solutions.",
+    "title": "Cloud",
+    "description": "Designing resilient, scalable solutions on Microsoft Azure.",
     "image": {
       "src": "/images/icons/cloud.avif",
       "alt": "Cloud icon",
       "width": 128,
       "height": 128
     },
-    "redirectPath": "/about#cloud-computing"
+    "redirectPath": "/about#cloud"
+  },
+  {
+    "title": "AI",
+    "description": "Building practical AI solutions and modern developer workflows with GitHub and Azure AI services.",
+    "image": {
+      "src": "/images/icons/robot.avif",
+      "alt": "Robot icon",
+      "width": 128,
+      "height": 128
+    },
+    "redirectPath": "/about#ai"
   },
   {
     "title": "DevOps",
-    "description": "Implementing CI/CD pipelines and automating workflows to enhance development efficiency.",
+    "description": "Building reliable CI/CD pipelines, infrastructure as code, and cloud networking.",
     "image": {
       "src": "/images/icons/infinity.avif",
       "alt": "Infinity icon",
@@ -33,14 +33,14 @@
     "redirectPath": "/about#devops"
   },
   {
-    "title": "Artificial Intelligence",
-    "description": "Exploring machine learning models and AI-driven solutions to solve complex problems.",
+    "title": "Software Engineering",
+    "description": "Building reliable software with C#, .NET, and modern engineering practices.",
     "image": {
-      "src": "/images/icons/robot.avif",
-      "alt": "Robot icon",
+      "src": "/images/icons/gear.avif",
+      "alt": "Gear icon",
       "width": 128,
       "height": 128
     },
-    "redirectPath": "/about#artificial-intelligence"
+    "redirectPath": "/about#software-engineering"
   }
 ]

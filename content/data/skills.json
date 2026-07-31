@@ -1,7 +1,7 @@
 [
   {
-    "name": "Backend Development",
-    "description": "Focused on building scalable backend systems and developer tooling for Azure. Experienced in designing robust APIs and services using ASP.NET or other modern technology stacks to deliver reliable, cloud-ready solutions.",
+    "name": "Software Engineering",
+    "description": "Builds reliable, maintainable software with C#, .NET, TypeScript, Java, and modern engineering practices, from APIs and data access to testing and developer tooling.",
     "skills": [
       {
         "name": ".NET",
@@ -53,8 +53,8 @@
     ]
   },
   {
-    "name": "Cloud Computing",
-    "description": "Experienced in designing, deploying, and managing scalable solutions on Microsoft Azure. Skilled in leveraging Azure services to build resilient cloud architectures, automate deployments, and deliver high-performing, maintainable applications.",
+    "name": "Cloud",
+    "description": "Designs, deploys, and manages resilient solutions on Microsoft Azure using cloud services that keep applications scalable and maintainable.",
     "skills": [
       {
         "name": "Azure App Service",
@@ -153,8 +153,8 @@
     ]
   },
   {
-    "name": "Artificial Intelligence",
-    "description": "Explores the integration of AI into applications to enhance developer workflows and user experiences. Experienced in building intelligent solutions using Azure AI services and modern frameworks for natural language processing and automation.",
+    "name": "AI",
+    "description": "Builds practical AI solutions and developer workflows with GitHub Copilot, Azure AI, and modern orchestration frameworks.",
     "skills": [
       {
         "name": "GitHub Copilot",
