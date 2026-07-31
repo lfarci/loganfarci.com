@@ -10,6 +10,7 @@ interface MarkdownCalloutProps {
 }
 
 interface CalloutPresentation {
+    containerClassName: string;
     edgeClassName: string;
     foregroundClassName: string;
     icon: ReactNode;
@@ -18,6 +19,7 @@ interface CalloutPresentation {
 
 const calloutPresentation = {
     note: {
+        containerClassName: "border-callout-note bg-callout-note-subtle",
         edgeClassName: "bg-callout-note",
         foregroundClassName: "text-callout-note",
         icon: (
@@ -29,6 +31,7 @@ const calloutPresentation = {
         label: "Note",
     },
     tip: {
+        containerClassName: "border-callout-tip bg-callout-tip-subtle",
         edgeClassName: "bg-callout-tip",
         foregroundClassName: "text-callout-tip",
         icon: (
@@ -37,6 +40,7 @@ const calloutPresentation = {
         label: "Tip",
     },
     important: {
+        containerClassName: "border-callout-important bg-callout-important-subtle",
         edgeClassName: "bg-callout-important",
         foregroundClassName: "text-callout-important",
         icon: (
@@ -45,12 +49,14 @@ const calloutPresentation = {
         label: "Important",
     },
     warning: {
+        containerClassName: "border-callout-warning bg-callout-warning-subtle",
         edgeClassName: "bg-callout-warning",
         foregroundClassName: "text-callout-warning",
         icon: <path d="M12 4 3.75 19h16.5L12 4Zm0 5.25v4.5M12 16.75h.01" />,
         label: "Warning",
     },
     caution: {
+        containerClassName: "border-callout-caution bg-callout-caution-subtle",
         edgeClassName: "bg-callout-caution",
         foregroundClassName: "text-callout-caution",
         icon: <path d="m8 3-5 5v8l5 5h8l5-5V8l-5-5H8Zm4 5.25v5.5M12 16.75h.01" />,
@@ -80,7 +86,8 @@ export default function MarkdownCallout({ children, className, variant }: Markdo
     return (
         <div
             className={mergeClassNames(
-                "mb-6 grid min-w-0 grid-cols-[0.25rem_minmax(0,1fr)] overflow-hidden rounded-card border border-border bg-surface-elevated shadow-sm",
+                "mb-6 grid min-w-0 grid-cols-[0.375rem_minmax(0,1fr)] overflow-hidden rounded-card border shadow-sm",
+                presentation.containerClassName,
                 className,
             )}
         >

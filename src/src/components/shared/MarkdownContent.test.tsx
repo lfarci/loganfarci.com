@@ -71,12 +71,22 @@ describe("MarkdownContent", () => {
         ["CAUTION", "Caution"],
     ])("renders the %s marker as a labeled callout", (marker, label) => {
         const { container } = render(<MarkdownContent content={`> [!${marker}]\n> ${label} body content.`} />);
+        const variant = marker.toLowerCase();
+        const callout = screen.getByText(label).parentElement?.parentElement?.parentElement;
 
         expect({
             hasLabel: screen.getByText(label).textContent,
             hasBody: screen.getByText(`${label} body content.`).textContent,
             hidesMarker: container.textContent?.includes(`[!${marker}]`),
-        }).toEqual({ hasLabel: label, hasBody: `${label} body content.`, hidesMarker: false });
+            hasVariantBorder: callout?.classList.contains(`border-callout-${variant}`),
+            hasVariantSurface: callout?.classList.contains(`bg-callout-${variant}-subtle`),
+        }).toEqual({
+            hasLabel: label,
+            hasBody: `${label} body content.`,
+            hidesMarker: false,
+            hasVariantBorder: true,
+            hasVariantSurface: true,
+        });
     });
 
     it("preserves Markdown semantics throughout a callout body", () => {

@@ -96,20 +96,22 @@ depends on color alone. The body uses normal article typography rather than quot
 italics. Its constrained grid and overflow wrapping preserve `MarkdownContent`'s
 `measure` behavior at narrow widths and high zoom.
 
-The callout label, icon, and edge use narrowly scoped semantic accent tokens against
-`surface-elevated`. Contrast checks for those pairings are:
+Each callout uses a narrowly scoped semantic accent, tinted surface, and matching
+border. This makes the variants easier to scan in light mode while the visible label
+and distinct icon preserve meaning without color. Contrast checks for the accent
+against its corresponding surface are:
 
 | Variant | Light theme | Dark theme |
 | --- | ---: | ---: |
-| Note | 6.12:1 | 7.25:1 |
-| Tip | 6.74:1 | 8.23:1 |
-| Important | 6.90:1 | 8.78:1 |
-| Warning | 6.93:1 | 8.81:1 |
-| Caution | 6.51:1 | 5.98:1 |
+| Note | 6.00:1 | 7.16:1 |
+| Tip | 6.99:1 | 8.03:1 |
+| Important | 6.48:1 | 8.39:1 |
+| Warning | 6.73:1 | 8.47:1 |
+| Caution | 6.17:1 | 5.91:1 |
 
 These values exceed the 4.5:1 text requirement and the 3:1 meaningful graphical-object
-requirement in both themes. Body text and the surrounding neutral border continue to
-use the site's existing text and border tokens.
+requirement in both themes. Body text continues to use the site's existing semantic
+text tokens.
 
 During local development, `/_dev/markdown-callouts` renders all variants and fallback
 states through `MarkdownContent` for visual review. The route is development-only: it

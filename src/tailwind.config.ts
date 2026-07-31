@@ -69,10 +69,15 @@ export default {
                 info: "var(--color-info)",
                 callout: {
                     note: "var(--color-callout-note)",
+                    "note-subtle": "var(--color-callout-note-subtle)",
                     tip: "var(--color-callout-tip)",
+                    "tip-subtle": "var(--color-callout-tip-subtle)",
                     important: "var(--color-callout-important)",
+                    "important-subtle": "var(--color-callout-important-subtle)",
                     warning: "var(--color-callout-warning)",
+                    "warning-subtle": "var(--color-callout-warning-subtle)",
                     caution: "var(--color-callout-caution)",
+                    "caution-subtle": "var(--color-callout-caution-subtle)",
                 },
             },
             backgroundImage: {
