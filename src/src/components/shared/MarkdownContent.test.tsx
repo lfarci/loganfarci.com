@@ -63,6 +63,121 @@ describe("MarkdownContent", () => {
         expect(screen.queryByRole("img", { name: "unsafe" })).toBeNull();
     });
 
+    it.each([
+        ["NOTE", "Note"],
+        ["TIP", "Tip"],
+        ["IMPORTANT", "Important"],
+        ["WARNING", "Warning"],
+        ["CAUTION", "Caution"],
+    ])("renders the %s marker as a labeled callout", (marker, label) => {
+        const { container } = render(<MarkdownContent content={`> [!${marker}]\n> ${label} body content.`} />);
+
+        expect({
+            hasLabel: screen.getByText(label).textContent,
+            hasBody: screen.getByText(`${label} body content.`).textContent,
+            hidesMarker: container.textContent?.includes(`[!${marker}]`),
+        }).toEqual({ hasLabel: label, hasBody: `${label} body content.`, hidesMarker: false });
+    });
+
+    it("preserves Markdown semantics throughout a callout body", () => {
+        render(
+            <MarkdownContent
+                content={
+                    "> [!TIP]\n> First paragraph with *emphasis*.\n>\n> Second paragraph with a [link](https://example.com) and `code`.\n>\n> - First item\n> - Second item"
+                }
+            />,
+        );
+
+        expect({
+            paragraphs: [screen.getByText(/First paragraph/).tagName, screen.getByText(/Second paragraph/).tagName],
+            emphasis: screen.getByText("emphasis").tagName,
+            link: screen.getByRole("link", { name: "link" }).getAttribute("href"),
+            code: screen.getByText("code").tagName,
+            listItems: screen.getAllByRole("listitem").map((item) => item.textContent),
+        }).toEqual({
+            paragraphs: ["P", "P"],
+            emphasis: "EM",
+            link: "https://example.com",
+            code: "CODE",
+            listItems: ["First item", "Second item"],
+        });
+    });
+
+    it.each([
+        ["> An ordinary quotation.", "An ordinary quotation."],
+        ["> [!ALERT]\n> Unsupported marker.", "[!ALERT]"],
+        ["> [!NOTE] Same-line content.", "[!NOTE] Same-line content."],
+        ["> Before the marker.\n> [!NOTE]\n> After the marker.", "[!NOTE]"],
+        ["> [!note]\n> Lowercase marker.", "[!note]"],
+    ])("keeps non-callout blockquotes as ordinary quotations", (content, visibleText) => {
+        const { container } = render(<MarkdownContent content={content} />);
+
+        expect({
+            blockquoteIncludesText: container.querySelector("blockquote")?.textContent?.includes(visibleText),
+            fallbackIsVisible: screen.getByText((text) => text.includes(visibleText)).textContent.includes(visibleText),
+            calloutLabel: screen.queryByText("Note")?.textContent,
+        }).toEqual({ blockquoteIncludesText: true, fallbackIsVisible: true, calloutLabel: undefined });
+    });
+
+    it("does not convert a nested callout attempt", () => {
+        const { container } = render(
+            <MarkdownContent content={"> Outer quotation.\n>\n> > [!NOTE]\n> > Nested attempt."} />,
+        );
+
+        expect({
+            blockquotes: container.querySelectorAll("blockquote").length,
+            markerVisible: container.textContent?.includes("[!NOTE]"),
+            calloutLabel: screen.queryByText("Note"),
+        }).toEqual({ blockquotes: 2, markerVisible: true, calloutLabel: null });
+    });
+
+    it("keeps callout labels in reading order without live-region semantics", () => {
+        const { container } = render(<MarkdownContent content={"> [!WARNING]\n> Read this body carefully."} />);
+        const text = container.textContent ?? "";
+
+        expect({
+            labelBeforeBody: text.indexOf("Warning") < text.indexOf("Read this body carefully."),
+            decorativeIcon: container.querySelector("svg")?.getAttribute("aria-hidden"),
+            alertRole: container.querySelector('[role="alert"]'),
+            liveRegion: container.querySelector("[aria-live]"),
+        }).toEqual({ labelBeforeBody: true, decorativeIcon: "true", alertRole: null, liveRegion: null });
+    });
+
+    it("preserves readable measure and wraps stress content within the callout", () => {
+        render(
+            <MarkdownContent
+                content={
+                    "> [!NOTE]\n> VeryLongUnbrokenCalloutContentThatMustWrapWithoutForcingPageLevelHorizontalScrolling1234567890"
+                }
+                measure
+            />,
+        );
+
+        const label = screen.getByText("Note");
+        const content = label.parentElement?.parentElement;
+        const callout = content?.parentElement;
+
+        expect({
+            readableMeasure: callout?.classList.contains("max-w-[72ch]"),
+            constrainedGrid: callout?.classList.contains("min-w-0"),
+            clippedChrome: callout?.classList.contains("overflow-hidden"),
+            wrappingBody: content?.lastElementChild?.classList.contains("[overflow-wrap:anywhere]"),
+        }).toEqual({ readableMeasure: true, constrainedGrid: true, clippedChrome: true, wrappingBody: true });
+    });
+
+    it("renders complete callout content in static HTML", () => {
+        const html = renderToStaticMarkup(
+            <MarkdownContent content={"> [!IMPORTANT]\n> Prerendered **callout content**."} />,
+        );
+
+        expect({
+            hasLabel: html.includes("Important"),
+            hasBody: html.includes("<strong"),
+            hasMarker: html.includes("[!IMPORTANT]"),
+            hidesIcon: html.includes('aria-hidden="true"'),
+        }).toEqual({ hasLabel: true, hasBody: true, hasMarker: false, hidesIcon: true });
+    });
+
     it("assigns collision-safe ids to duplicate article headings", () => {
         const { container } = render(
             <MarkdownContent content={"## Repeat\n\n## Repeat\n\n## Repeat 2"} articleNavigation />,

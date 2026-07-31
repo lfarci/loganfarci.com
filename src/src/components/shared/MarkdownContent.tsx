@@ -23,6 +23,12 @@ import ArticleTableOfContents, {
     ArticleMarkdownLayout,
 } from "@/components/shared/ArticleTableOfContents";
 import { remarkArticleHeadings } from "@/components/shared/articleHeadings";
+import MarkdownCallout from "@/components/shared/MarkdownCallout";
+import {
+    markdownCalloutVariants,
+    remarkMarkdownCallouts,
+    type MarkdownCalloutVariant,
+} from "@/components/shared/markdownCallouts";
 import { Separator } from "@/components/shared/primitives/Separator";
 import type { Element } from "hast";
 import type { PluggableList } from "unified";
@@ -56,6 +62,14 @@ function getHeadingLabel(node?: Element): string {
     return typeof label === "string" ? label : "";
 }
 
+function getCalloutVariant(node?: Element): MarkdownCalloutVariant | null {
+    const variant = node?.properties["data-callout-variant"];
+
+    return typeof variant === "string" && markdownCalloutVariants.includes(variant as MarkdownCalloutVariant)
+        ? (variant as MarkdownCalloutVariant)
+        : null;
+}
+
 function MarkdownHeadingContent({ children, id, node }: { children: React.ReactNode; id?: string; node?: Element }) {
     if (!id) {
         return <>{children}</>;
@@ -71,6 +85,16 @@ function MarkdownHeadingContent({ children, id, node }: { children: React.ReactN
 
 function createMarkdownComponents(measure: boolean): Components {
     const measureClassName = measure ? contentWidthStyles.readable : undefined;
+    const MarkdownBlockquote = ({ children }: { children: React.ReactNode }) => (
+        <blockquote
+            className={mergeClassNames(
+                "mb-6 border-l-4 border-primary bg-primary-light py-3 pl-5 italic text-text-secondary",
+                measureClassName,
+            )}
+        >
+            {children}
+        </blockquote>
+    );
 
     return {
         h1: ({ children, id, node }) => (
@@ -121,16 +145,7 @@ function createMarkdownComponents(measure: boolean): Components {
         ul: ({ children }) => <UnorderedList className={measureClassName}>{children}</UnorderedList>,
         ol: ({ children }) => <OrderedList className={measureClassName}>{children}</OrderedList>,
         li: ({ children }) => <ListItem>{children}</ListItem>,
-        blockquote: ({ children }) => (
-            <blockquote
-                className={mergeClassNames(
-                    "mb-6 border-l-4 border-primary bg-primary-light py-3 pl-5 italic text-text-secondary",
-                    measureClassName,
-                )}
-            >
-                {children}
-            </blockquote>
-        ),
+        blockquote: MarkdownBlockquote,
         code: ({ children, className }) => <CodeSnippet className={className}>{children}</CodeSnippet>,
         pre: ({ children }) => <MarkdownCodeBlock>{children}</MarkdownCodeBlock>,
         a: ({ href, children }) => <NewTabLink url={href ?? ""}>{children}</NewTabLink>,
@@ -157,6 +172,17 @@ function createMarkdownComponents(measure: boolean): Components {
             "article-markdown-layout": ArticleMarkdownLayout,
             "article-markdown-body": ArticleMarkdownBody,
             "article-table-of-contents": ArticleTableOfContents,
+            "markdown-callout": ({ children, node }: { children: React.ReactNode; node?: Element }) => {
+                const variant = getCalloutVariant(node);
+
+                return variant ? (
+                    <MarkdownCallout className={measureClassName} variant={variant}>
+                        {children}
+                    </MarkdownCallout>
+                ) : (
+                    <MarkdownBlockquote>{children}</MarkdownBlockquote>
+                );
+            },
         } as unknown as Components),
     };
 }
@@ -168,8 +194,8 @@ export default function MarkdownContent({
     articleNavigation = false,
 }: MarkdownContentProps) {
     const remarkPlugins: PluggableList = articleNavigation
-        ? [remarkGfm, [remarkArticleHeadings, { tableOfContents: true }]]
-        : [remarkGfm];
+        ? [remarkGfm, remarkMarkdownCallouts, [remarkArticleHeadings, { tableOfContents: true }]]
+        : [remarkGfm, remarkMarkdownCallouts];
 
     return (
         <div className={mergeClassNames("w-full", className)}>
