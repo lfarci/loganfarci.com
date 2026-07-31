@@ -72,20 +72,25 @@ describe("MarkdownContent", () => {
     ])("renders the %s marker as a labeled callout", (marker, label) => {
         const { container } = render(<MarkdownContent content={`> [!${marker}]\n> ${label} body content.`} />);
         const variant = marker.toLowerCase();
+        const icon = screen.getByText(label).previousElementSibling;
         const callout = screen.getByText(label).parentElement?.parentElement?.parentElement;
 
         expect({
             hasLabel: screen.getByText(label).textContent,
             hasBody: screen.getByText(`${label} body content.`).textContent,
             hidesMarker: container.textContent?.includes(`[!${marker}]`),
-            hasVariantBorder: callout?.classList.contains(`border-callout-${variant}`),
+            hasVariantEdge: callout?.classList.contains(`border-l-callout-${variant}`),
             hasVariantSurface: callout?.classList.contains(`bg-callout-${variant}-subtle`),
+            hasSolidIconTile: icon?.classList.contains(`bg-callout-${variant}`),
+            avoidsCardElevation: callout?.classList.contains("shadow-sm"),
         }).toEqual({
             hasLabel: label,
             hasBody: `${label} body content.`,
             hidesMarker: false,
-            hasVariantBorder: true,
+            hasVariantEdge: true,
             hasVariantSurface: true,
+            hasSolidIconTile: true,
+            avoidsCardElevation: false,
         });
     });
 
