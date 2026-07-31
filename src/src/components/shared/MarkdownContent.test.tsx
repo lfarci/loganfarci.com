@@ -180,7 +180,16 @@ describe("MarkdownContent", () => {
             constrainedGrid: callout?.classList.contains("min-w-0"),
             clippedChrome: callout?.classList.contains("overflow-hidden"),
             wrappingBody: content?.lastElementChild?.classList.contains("[overflow-wrap:anywhere]"),
-        }).toEqual({ readableMeasure: true, constrainedGrid: true, clippedChrome: true, wrappingBody: true });
+            matchesTitleSize: content?.lastElementChild?.classList.contains("text-sm"),
+            keepsParagraphsCompact: content?.lastElementChild?.classList.contains("[&_p]:text-sm"),
+        }).toEqual({
+            readableMeasure: true,
+            constrainedGrid: true,
+            clippedChrome: true,
+            wrappingBody: true,
+            matchesTitleSize: true,
+            keepsParagraphsCompact: true,
+        });
     });
 
     it("renders complete callout content in static HTML", () => {

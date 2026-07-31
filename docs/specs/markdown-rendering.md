@@ -93,8 +93,9 @@ Callouts are static prose. They do not use `role="alert"`, live-region semantics
 interactive behavior. A visible text label occurs before the body in reading order,
 icons are decorative and hidden from assistive technology, and variant identity never
 depends on color alone. The body uses normal article typography rather than quotation
-italics. Its constrained grid and overflow wrapping preserve `MarkdownContent`'s
-`measure` behavior at narrow widths and high zoom.
+italics, with paragraph and list text set to the same compact size as the callout title.
+Its constrained grid and overflow wrapping preserve `MarkdownContent`'s `measure`
+behavior at narrow widths and high zoom.
 
 All callouts use the same quiet neutral surface and hairline border. Only the line icon
 and sentence-case title use the variant's semantic accent; there are no variant-tinted

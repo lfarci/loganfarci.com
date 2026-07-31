@@ -97,7 +97,9 @@ export default function MarkdownCallout({ children, className, variant }: Markdo
                         {presentation.label}
                     </span>
                 </div>
-                <div className="min-w-0 [overflow-wrap:anywhere] [&>*:last-child]:mb-0">{children}</div>
+                <div className="min-w-0 text-sm leading-6 [overflow-wrap:anywhere] [&>*:last-child]:mb-0 [&_ol]:text-sm [&_ol]:leading-6 [&_p]:text-sm [&_p]:leading-6 [&_ul]:text-sm [&_ul]:leading-6">
+                    {children}
+                </div>
             </div>
         </div>
     );
