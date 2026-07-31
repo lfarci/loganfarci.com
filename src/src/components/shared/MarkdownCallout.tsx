@@ -90,16 +90,14 @@ export default function MarkdownCallout({ children, className, variant }: Markdo
                     <CalloutIcon presentation={presentation} />
                     <span
                         className={mergeClassNames(
-                            "heading-font text-sm font-bold tracking-[-0.01em]",
+                            "heading-font text-base font-bold leading-7 tracking-[-0.01em] md:text-[1.0625rem] md:leading-8",
                             presentation.foregroundClassName,
                         )}
                     >
                         {presentation.label}
                     </span>
                 </div>
-                <div className="min-w-0 text-sm leading-6 [overflow-wrap:anywhere] [&>*:last-child]:mb-0 [&_ol]:text-sm [&_ol]:leading-6 [&_p]:text-sm [&_p]:leading-6 [&_ul]:text-sm [&_ul]:leading-6">
-                    {children}
-                </div>
+                <div className="min-w-0 [overflow-wrap:anywhere] [&>*:last-child]:mb-0">{children}</div>
             </div>
         </div>
     );

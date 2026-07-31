@@ -75,15 +75,18 @@ describe("MarkdownContent", () => {
         const title = screen.getByText(label);
         const icon = title.previousElementSibling;
         const callout = title.parentElement?.parentElement?.parentElement;
+        const body = screen.getByText(`${label} body content.`);
 
         expect({
             hasLabel: title.textContent,
-            hasBody: screen.getByText(`${label} body content.`).textContent,
+            hasBody: body.textContent,
             hidesMarker: container.textContent?.includes(`[!${marker}]`),
             hasSharedSurface: callout?.classList.contains("bg-surface-elevated"),
             hasSharedBorder: callout?.classList.contains("border-border-light"),
             titleUsesVariantColor: title.classList.contains(`text-callout-${variant}`),
             iconUsesVariantColor: icon?.classList.contains(`text-callout-${variant}`),
+            titleUsesBodySize: title.classList.contains("text-base") && title.classList.contains("md:text-[1.0625rem]"),
+            bodyUsesBodySize: body.classList.contains("text-base") && body.classList.contains("md:text-[1.0625rem]"),
             avoidsCardElevation: callout?.classList.contains("shadow-sm"),
         }).toEqual({
             hasLabel: label,
@@ -93,6 +96,8 @@ describe("MarkdownContent", () => {
             hasSharedBorder: true,
             titleUsesVariantColor: true,
             iconUsesVariantColor: true,
+            titleUsesBodySize: true,
+            bodyUsesBodySize: true,
             avoidsCardElevation: false,
         });
     });
@@ -135,6 +140,29 @@ describe("MarkdownContent", () => {
             fallbackIsVisible: screen.getByText((text) => text.includes(visibleText)).textContent.includes(visibleText),
             calloutLabel: screen.queryByText("Note")?.textContent,
         }).toEqual({ blockquoteIncludesText: true, fallbackIsVisible: true, calloutLabel: undefined });
+    });
+
+    it("gives ordinary quotations a distinct editorial treatment", () => {
+        const { container } = render(<MarkdownContent content="> A considered observation." />);
+        const blockquote = container.querySelector("blockquote");
+        const quoteMark = blockquote?.querySelector('[aria-hidden="true"]');
+
+        expect({
+            keepsBlockquoteSemantics: blockquote?.tagName,
+            usesEditorialRules:
+                blockquote?.classList.contains("border-y") && blockquote.classList.contains("border-border-light"),
+            usesEditorialLayout: blockquote?.classList.contains("grid"),
+            hasDecorativeQuoteMark: quoteMark?.textContent?.trim(),
+            avoidsTintedPanel: blockquote?.classList.contains("bg-primary-light"),
+            avoidsHeavySideRule: blockquote?.classList.contains("border-l-4"),
+        }).toEqual({
+            keepsBlockquoteSemantics: "BLOCKQUOTE",
+            usesEditorialRules: true,
+            usesEditorialLayout: true,
+            hasDecorativeQuoteMark: "“",
+            avoidsTintedPanel: false,
+            avoidsHeavySideRule: false,
+        });
     });
 
     it("does not convert a nested callout attempt", () => {
@@ -180,16 +208,7 @@ describe("MarkdownContent", () => {
             constrainedGrid: callout?.classList.contains("min-w-0"),
             clippedChrome: callout?.classList.contains("overflow-hidden"),
             wrappingBody: content?.lastElementChild?.classList.contains("[overflow-wrap:anywhere]"),
-            matchesTitleSize: content?.lastElementChild?.classList.contains("text-sm"),
-            keepsParagraphsCompact: content?.lastElementChild?.classList.contains("[&_p]:text-sm"),
-        }).toEqual({
-            readableMeasure: true,
-            constrainedGrid: true,
-            clippedChrome: true,
-            wrappingBody: true,
-            matchesTitleSize: true,
-            keepsParagraphsCompact: true,
-        });
+        }).toEqual({ readableMeasure: true, constrainedGrid: true, clippedChrome: true, wrappingBody: true });
     });
 
     it("renders complete callout content in static HTML", () => {

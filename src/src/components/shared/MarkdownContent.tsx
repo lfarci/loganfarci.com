@@ -88,11 +88,19 @@ function createMarkdownComponents(measure: boolean): Components {
     const MarkdownBlockquote = ({ children }: { children: React.ReactNode }) => (
         <blockquote
             className={mergeClassNames(
-                "mb-6 border-l-4 border-primary bg-primary-light py-3 pl-5 italic text-text-secondary",
+                "mb-8 grid grid-cols-[auto_minmax(0,1fr)] gap-3 border-y border-border-light px-3 py-5 text-text-secondary sm:gap-4 sm:px-4",
                 measureClassName,
             )}
         >
-            {children}
+            <span
+                aria-hidden="true"
+                className="heading-font select-none text-[2.25rem] font-extrabold leading-[0.8] text-brand"
+            >
+                “
+            </span>
+            <div className="min-w-0 italic [overflow-wrap:anywhere] [&>*:last-child]:mb-0 [&_ol]:text-text-secondary [&_p]:text-text-secondary [&_ul]:text-text-secondary">
+                {children}
+            </div>
         </blockquote>
     );
 
