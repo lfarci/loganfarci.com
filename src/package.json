@@ -16,6 +16,7 @@
         "format:check": "prettier --check . --ignore-path ../.prettierignore",
         "accessibility": "lhci autorun",
         "test": "vitest run",
+        "test:e2e": "playwright test",
         "test:watch": "vitest",
         "test:coverage": "vitest run --coverage"
     },
@@ -42,6 +43,7 @@
         "@fontsource/noto-sans": "*",
         "@fontsource/reddit-mono": "*",
         "@lhci/cli": "^0.15.1",
+        "@playwright/test": "^1.62.1",
         "@tailwindcss/vite": "^4.2.1",
         "@testing-library/react": "^16.3.2",
         "@types/node": "^20.19.9",

@@ -1,6 +1,6 @@
 ---
 spec: quality-bars
-version: 0.2.0
+version: 0.3.0
 status: current-state
 ---
 
@@ -75,7 +75,11 @@ deployment validation — is in [testing.md](./testing.md).
 - A change to core logic (`src/src/core/`) or a data contract MUST add or update tests.
 - New tests use Testing Library + jsdom (already configured).
 - After a deploy, deployment validation SHOULD confirm the live URL is actually valid
-  (see [testing.md](./testing.md#deployment-validation-planned)).
+  (see [testing.md](./testing.md#deployment-validation)).
+- Active non-Dependabot PR previews MUST pass the Chromium-only Playwright acceptance
+  suite. It covers hydrated navigation/history, persistent theme state, runtime page
+  errors, and one representative mobile navigation path without duplicating HTTP smoke
+  coverage (see [testing.md](./testing.md#browser-acceptance-suite)).
 
 ## Linting & formatting
 
@@ -106,6 +110,7 @@ A change ships only when all of these hold:
 - [ ] `npm run accessibility` passes after `npm run build`.
 - [ ] `npm run build` succeeds (client + SSR + prerender).
 - [ ] `npm run test` passes; new/changed core logic has tests.
+- [ ] The Playwright PR-preview gate passes for deploy-triggering pull requests.
 - [ ] Images have alt text and dimensions; new images are AVIF.
 - [ ] No new client-side fetching for prerenderable content.
 - [ ] New routes ship full metadata (title, description, canonical, OG, JSON-LD) and are in `getStaticRoutes()`.

@@ -1,6 +1,6 @@
 ---
 spec: testing
-version: 0.1.1
+version: 0.2.0
 status: current-state
 ---
 
@@ -21,7 +21,7 @@ current behavior.
 
 The site is **static prerendered HTML with no runtime server** (see
 [architecture.md](./architecture.md#ssr--prerender-contract)), which shapes the whole
-strategy: there is no backend to integration-test, so confidence comes from three
+strategy: there is no backend to integration-test, so confidence comes from four
 layers.
 
 | Layer | Scope | Runs | Status |
@@ -29,11 +29,12 @@ layers.
 | **Unit** | Pure logic in `core/`, components in isolation | `npm run test` locally; CI on app changes | Current |
 | **Build gate** | `npm run build` produces valid client + SSR + prerendered HTML | CI on deploy-triggering app/content changes | Current |
 | **Deployment validation** | HTTP smoke checks against a live deployed URL | After each deploy | Current |
+| **Browser acceptance** | Hydration, client navigation/history, persistent browser state, and runtime errors | After each active non-Dependabot PR preview deploy | Current |
 
-Keep the pyramid bottom-heavy: prefer many fast unit tests, a green build, and a
-small, high-signal set of smoke checks. Do **not** add a heavy end-to-end framework
-without cause (see [non-goals.md](./non-goals.md)) — the deployment checks below are
-intentionally lightweight.
+Keep the pyramid bottom-heavy: prefer many fast unit tests, a green build, and small,
+high-signal deployment checks. Playwright is limited to Chromium on PR previews and
+only covers behavior that HTTP checks cannot observe; it remains a development/CI
+dependency and does not enter the production bundle.
 
 ## Unit tests
 
@@ -151,15 +152,38 @@ Against the deployed base URL, the suite asserts:
 - **404 fallback works.** An unknown path serves the `/404.html` fallback configured
   in [`staticwebapp.config.json`](../../src/public/staticwebapp.config.json), with the
   custom not-found page markers (not a generic host 404 page).
+
 The smoke command can be run locally against any deployed environment:
 `npm run smoke -- <base-url>` from `src/`.
 
+### Browser acceptance suite
+
+The Playwright suite runs after a successful active, non-Dependabot PR preview deploy
+and uses that deployment's `static_web_app_url`. It MUST remain narrow and verify only
+hydrated browser behavior: uncaught page errors, client-side navigation and browser
+Back/Forward, explicit theme persistence across reload, and one representative mobile
+navigation scenario. HTTP status codes, prerendered markup, metadata, machine files,
+assets, and the 404 fallback remain the Node smoke suite's responsibility.
+
+Run the browser suite against a local production preview or deployed environment from
+`src/`:
+
+```bash
+PLAYWRIGHT_BASE_URL=http://localhost:4173 npm run test:e2e
+PLAYWRIGHT_BASE_URL=https://example-preview.azurestaticapps.net npm run test:e2e
+```
+
+The blocking CI job installs Chromium only, has an explicit timeout, retries at most
+once in CI, and uploads the HTML report and retained failure trace only when the run
+fails. Tests MUST use roles and accessible names, web-first assertions, and no fixed
+sleeps or test-only selectors. The suite blocks browser requests outside the target
+preview so it remains deterministic and independent of mutable external services.
+
 ### Constraints
 
-- **Stay lightweight and static-friendly.** Prefer a small **Node script** or a
-  **vitest** suite that `fetch`es the deployed URL over a heavy browser-automation
-  framework. Any browser-driven tool (e.g. Playwright) is a heavy dependency and
-  **MUST** be justified against [non-goals.md](./non-goals.md) before adoption.
+- **Stay lightweight and static-friendly.** Keep HTTP coverage in the Node smoke
+  script. Browser automation MUST stay confined to the justified Playwright boundary
+  above and MUST NOT duplicate static deployment checks.
 - **No runtime server or datastore.** These are black-box HTTP checks against static
   output; they **MUST NOT** introduce a backend to test against.
 - **Fast and reliable.** The suite should finish in seconds and avoid flaky waits, so
@@ -173,3 +197,4 @@ A change satisfies the testing bar when:
 - [ ] Component tests query by role/accessible name and mock content at the boundary.
 - [ ] `npm run build` succeeds (client + SSR + prerender).
 - [ ] Post-deploy smoke suite is green against the deployed URL.
+- [ ] The Playwright suite is green against the PR preview URL when the change deploys a preview.
