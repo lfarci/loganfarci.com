@@ -5,8 +5,8 @@ import App from "./App";
 
 // Fontsource font imports (self-hosted, no external requests)
 import "@fontsource-variable/manrope";
-import "@fontsource/noto-sans";
-import "@fontsource/reddit-mono";
+import "@fontsource/noto-sans/latin-400.css";
+import "@fontsource/reddit-mono/latin-400.css";
 
 // Global styles (Tailwind + theme)
 import "./globals.css";
