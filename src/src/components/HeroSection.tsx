@@ -16,7 +16,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ heading, description, image, 
         typeof description === "string" ? <Text className="w-full">{description}</Text> : (description ?? null);
 
     const buildImageClassName = () => {
-        const baseClassName = "rounded-xl w-full md:w-1/3 mt-6 md:mt-0";
+        const baseClassName = "rounded-none w-full md:w-1/3 mt-6 md:mt-0";
         if (!image?.className) return baseClassName;
 
         return `${baseClassName} ${image.className}`;

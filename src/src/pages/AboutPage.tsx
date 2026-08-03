@@ -72,7 +72,7 @@ export default function AboutPage() {
                         alt={profile.avatar.alt}
                         width={300}
                         height={300}
-                        className="block mx-auto mb-6 rounded-lg md:float-right md:ml-8 md:mb-6 md:mt-0"
+                        className="block mx-auto mb-6 rounded-none md:float-right md:ml-8 md:mb-6 md:mt-0"
                     />
                     <MarkdownContent content={profile.description} />
                 </div>
