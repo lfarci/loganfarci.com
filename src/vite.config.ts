@@ -1,13 +1,13 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
+import fontOutputCheckPlugin from "./plugins/vite-plugin-font-output-check";
 import markdownPlugin from "./plugins/vite-plugin-markdown";
-import stableFontDisplayPlugin from "./plugins/vite-plugin-stable-font-display";
 import themeInitializationPlugin from "./plugins/vite-plugin-theme-initialization";
 import path from "node:path";
 
 export default defineConfig({
-    plugins: [themeInitializationPlugin(), stableFontDisplayPlugin(), tailwindcss(), react(), markdownPlugin()],
+    plugins: [themeInitializationPlugin(), fontOutputCheckPlugin(), tailwindcss(), react(), markdownPlugin()],
     resolve: {
         alias: { "@/": path.resolve(__dirname, "src") + "/", "@content/": path.resolve(__dirname, "../content") + "/" },
     },
