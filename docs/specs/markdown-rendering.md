@@ -126,7 +126,8 @@ neutral surface are:
 
 These values exceed the 4.5:1 text requirement and the 3:1 meaningful graphical-object
 requirement in both themes. Body text continues to use the site's existing semantic
-text tokens.
+text tokens. Inline links use a dedicated callout link token so their default, hover,
+and focus presentation remains compliant on the shared neutral surface in both themes.
 
 During local development, `/_dev/markdown-callouts` renders all variants and fallback
 states through `MarkdownContent` for visual review. The route is development-only: it

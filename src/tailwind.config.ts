@@ -73,6 +73,7 @@ export default {
                     important: "var(--color-callout-important)",
                     warning: "var(--color-callout-warning)",
                     caution: "var(--color-callout-caution)",
+                    link: "var(--color-callout-link)",
                 },
             },
             backgroundImage: {

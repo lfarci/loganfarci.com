@@ -115,12 +115,16 @@ describe("MarkdownContent", () => {
             paragraphs: [screen.getByText(/First paragraph/).tagName, screen.getByText(/Second paragraph/).tagName],
             emphasis: screen.getByText("emphasis").tagName,
             link: screen.getByRole("link", { name: "link" }).getAttribute("href"),
+            linkUsesCalloutColor: screen
+                .getByRole("link", { name: "link" })
+                .parentElement?.parentElement?.classList.contains("[&_a]:text-callout-link"),
             code: screen.getByText("code").tagName,
             listItems: screen.getAllByRole("listitem").map((item) => item.textContent),
         }).toEqual({
             paragraphs: ["P", "P"],
             emphasis: "EM",
             link: "https://example.com",
+            linkUsesCalloutColor: true,
             code: "CODE",
             listItems: ["First item", "Second item"],
         });
