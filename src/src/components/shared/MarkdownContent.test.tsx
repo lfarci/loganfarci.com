@@ -358,6 +358,40 @@ describe("MarkdownContent", () => {
         });
     });
 
+    it("gives article navigation a deterministic fragment and programmatic focus target", () => {
+        render(<MarkdownContent content={"## Parent\n\n### Child\n\n## Next"} articleNavigation />);
+
+        const navigation = screen.getByRole("navigation", { name: "In this article" });
+        const title = within(navigation).getByRole("heading", { level: 2, name: "In this article" });
+
+        expect({
+            navigationId: navigation.id,
+            labelledBy: navigation.getAttribute("aria-labelledby"),
+            titleId: title.id,
+            programmaticFocus: navigation.getAttribute("tabindex"),
+            stickyHeaderOffset: navigation.classList.contains("scroll-mt-24"),
+        }).toEqual({
+            navigationId: "article-table-of-contents",
+            labelledBy: "article-table-of-contents-title",
+            titleId: "article-table-of-contents-title",
+            programmaticFocus: "-1",
+            stickyHeaderOffset: true,
+        });
+    });
+
+    it("adds a hidden native return link when the table of contents is present", () => {
+        const { container } = render(
+            <MarkdownContent content={"## Parent\n\n### Child\n\n## Next"} articleNavigation />,
+        );
+
+        const link = container.querySelector<HTMLAnchorElement>('a[href="#article-table-of-contents"]');
+
+        expect({ href: link?.getAttribute("href"), ariaHidden: link?.getAttribute("aria-hidden") }).toEqual({
+            href: "#article-table-of-contents",
+            ariaHidden: "true",
+        });
+    });
+
     it("marks the current table-of-contents link with neutral typographic emphasis", () => {
         render(<MarkdownContent content={"## Parent\n\n### Child\n\n## Next"} articleNavigation />);
 
@@ -388,9 +422,12 @@ describe("MarkdownContent", () => {
     });
 
     it("omits the table of contents when too few headings justify it", () => {
-        render(<MarkdownContent content={"## First\n\n## Second"} articleNavigation />);
+        const { container } = render(<MarkdownContent content={"## First\n\n## Second"} articleNavigation />);
 
-        expect(screen.queryByRole("navigation", { name: "In this article" })).toBeNull();
+        expect({
+            navigation: screen.queryByRole("navigation", { name: "In this article" }),
+            returnLink: container.querySelector('a[href="#article-table-of-contents"]'),
+        }).toEqual({ navigation: null, returnLink: null });
     });
 
     it("does not add article navigation when there are no eligible headings", () => {
@@ -418,9 +455,12 @@ describe("MarkdownContent", () => {
             html.includes('id="first"'),
             html.includes('href="#first"'),
             html.includes("In this article"),
+            html.includes('id="article-table-of-contents"'),
+            html.includes('href="#article-table-of-contents"'),
+            html.includes('aria-hidden="true"'),
             html.includes('data-article-end=""'),
             html.includes('aria-hidden="true"'),
-        ]).toEqual([true, true, true, true, true]);
+        ]).toEqual([true, true, true, true, true, true, true, true]);
     });
 
     it("keeps nested table-of-contents links in static HTML", () => {
