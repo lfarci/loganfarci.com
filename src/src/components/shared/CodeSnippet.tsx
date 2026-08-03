@@ -12,7 +12,7 @@ export interface CodeSnippetProps {
 
 type CopyState = "idle" | "success" | "error";
 
-const markdownBlockContainerClassName =
+const codeBlockContainerClassName =
     "mb-6 min-w-0 overflow-hidden rounded-card border border-border-light bg-surface-elevated";
 
 function getTextContent(value: ReactNode): string {
@@ -69,7 +69,7 @@ function CodeBlock({ children, className, code }: { children: ReactNode; classNa
     }
 
     return (
-        <div className={markdownBlockContainerClassName}>
+        <div className={codeBlockContainerClassName}>
             <div className="flex min-w-0 items-center gap-2 border-b border-border-light px-3 py-2 sm:px-4">
                 <span className="min-w-0 flex-1 truncate font-mono text-xs font-medium text-text-secondary">
                     {languageLabel}
@@ -107,7 +107,7 @@ export default function CodeSnippet({ children, className, forceBlock = false }:
 
     if (isMermaid) {
         return (
-            <div className={markdownBlockContainerClassName}>
+            <div className="mb-6 min-w-0">
                 <div
                     aria-label="Mermaid diagram viewport"
                     className="flex min-h-48 w-full items-center justify-center overflow-x-auto p-4 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-ring sm:p-5"

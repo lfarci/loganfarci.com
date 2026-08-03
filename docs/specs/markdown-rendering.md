@@ -1,6 +1,6 @@
 ---
 spec: markdown-rendering
-version: 0.3.1
+version: 0.3.2
 status: current-state
 ---
 
@@ -180,11 +180,13 @@ renders:
 - A ```` ```mermaid ```` block renders as a diagram via
   [`MermaidDiagram.tsx`](../../src/src/components/shared/MermaidDiagram.tsx).
 
-Fenced code and Mermaid share the callout container's semantic radius, subtle border,
-elevated surface, and outer spacing rhythm. Their internal layouts remain purpose-built:
-code and wide diagrams scroll horizontally inside their containers without causing
-page-level overflow, and Mermaid does not expose the ordinary code label or copy control.
-The scrollable regions are keyboard focusable with a visible focus treatment.
+Fenced code shares the callout container's semantic radius, subtle border, elevated
+surface, and outer spacing rhythm. Mermaid preserves that outer spacing but renders
+without a panel border or background so the diagram remains visually open. Their
+internal layouts remain purpose-built: code and wide diagrams scroll horizontally
+inside their containers without causing page-level overflow, and Mermaid does not
+expose the ordinary code label or copy control. The scrollable regions are keyboard
+focusable with a visible focus treatment.
 
 **Mermaid SSR caveat:** `MermaidDiagram` runs `mermaid.run()` inside a `useEffect`, so
 diagrams render **client-side only** — they are not drawn during the prerender step and

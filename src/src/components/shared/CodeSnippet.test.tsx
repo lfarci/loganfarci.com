@@ -102,12 +102,20 @@ describe("CodeSnippet", () => {
 
         expect(screen.getByRole("status", { name: "Loading Mermaid diagram" })).toBeTruthy();
         expect({
-            sharedContainer: container.firstElementChild?.classList.contains("rounded-card"),
+            preservesSpacing: container.firstElementChild?.classList.contains("mb-6"),
+            hasPanelBorder: container.firstElementChild?.classList.contains("border"),
+            hasPanelBackground: container.firstElementChild?.classList.contains("bg-surface-elevated"),
             reservedViewport: screen
                 .getByRole("region", { name: "Mermaid diagram viewport" })
                 .classList.contains("min-h-48"),
             copyControl: screen.queryByRole("button"),
-        }).toEqual({ sharedContainer: true, reservedViewport: true, copyControl: null });
+        }).toEqual({
+            preservesSpacing: true,
+            hasPanelBorder: false,
+            hasPanelBackground: false,
+            reservedViewport: true,
+            copyControl: null,
+        });
 
         releaseDiagramModule();
 
