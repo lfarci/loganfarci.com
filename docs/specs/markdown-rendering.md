@@ -1,6 +1,6 @@
 ---
 spec: markdown-rendering
-version: 0.3.0
+version: 0.3.1
 status: current-state
 ---
 
@@ -173,9 +173,18 @@ renders:
 
 - **Inline code** (no language class, no newline) renders as a small inline `<code>`.
 - **Fenced blocks** render in a scrollable `<pre>`; the ```` ```lang ```` info string
-  becomes the `language-*` class on the `<code>`.
+  becomes the `language-*` class on the `<code>` and a visible language label. A copy
+  control sits in a separate header so it never covers the code. Copy success and
+  failure remain visible on the control and are announced through a polite status
+  region.
 - A ```` ```mermaid ```` block renders as a diagram via
   [`MermaidDiagram.tsx`](../../src/src/components/shared/MermaidDiagram.tsx).
+
+Fenced code and Mermaid share the callout container's semantic radius, subtle border,
+elevated surface, and outer spacing rhythm. Their internal layouts remain purpose-built:
+code and wide diagrams scroll horizontally inside their containers without causing
+page-level overflow, and Mermaid does not expose the ordinary code label or copy control.
+The scrollable regions are keyboard focusable with a visible focus treatment.
 
 **Mermaid SSR caveat:** `MermaidDiagram` runs `mermaid.run()` inside a `useEffect`, so
 diagrams render **client-side only** — they are not drawn during the prerender step and
@@ -196,9 +205,9 @@ experience article rendering should grow toward, guided by
 prefer a small, well-established remark/rehype plugin or a lightweight component over a
 bespoke system, and only add weight where it earns its place.
 
-- **Code blocks.** Per-language **syntax highlighting**, a **copy-to-clipboard** button,
-  and an optional filename/caption. Line highlighting is a nice-to-have. Highlighting
-  SHOULD happen at build time where possible so it costs nothing on the client.
+- **Code blocks.** Per-language **syntax highlighting** and an optional filename/caption.
+  Line highlighting is a nice-to-have. Highlighting SHOULD happen at build time where
+  possible so it costs nothing on the client.
 - **Lists.** Nested ordered/unordered lists render cleanly, and GFM **task lists**
   render as (non-interactive) checkboxes.
 - **Images / pictures.** Responsive images (correct `width`/`height` to avoid layout

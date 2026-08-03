@@ -57,6 +57,38 @@ describe("MarkdownContent", () => {
         );
     });
 
+    it("exposes fenced-code language metadata through the shared renderer", () => {
+        render(<MarkdownContent content={"```typescript\nconst answer = 42;\n```"} />);
+
+        expect({
+            language: screen.getByText("typescript").textContent,
+            copyControl: screen.getByRole("button", { name: "Copy typescript code" }).textContent,
+            codeClass: screen.getByLabelText("typescript code").firstElementChild?.className,
+        }).toEqual({ language: "typescript", copyControl: "Copy", codeClass: "language-typescript" });
+    });
+
+    it("gives callouts and fenced code a coherent container treatment", () => {
+        render(
+            <MarkdownContent
+                content={"> [!NOTE]\n> Shared visual language.\n\n```typescript\nconst answer = 42;\n```"}
+            />,
+        );
+        const callout = screen.getByText("Note").parentElement?.parentElement?.parentElement;
+        const codeBlock = screen.getByLabelText("typescript code").parentElement;
+
+        expect(
+            [callout, codeBlock].map((element) => ({
+                radius: element?.classList.contains("rounded-card"),
+                border: element?.classList.contains("border-border-light"),
+                surface: element?.classList.contains("bg-surface-elevated"),
+                spacing: element?.classList.contains("mb-6"),
+            })),
+        ).toEqual([
+            { radius: true, border: true, surface: true, spacing: true },
+            { radius: true, border: true, surface: true, spacing: true },
+        ]);
+    });
+
     it("keeps raw HTML inert", () => {
         render(<MarkdownContent content={'<img src="invalid" alt="unsafe" />'} />);
 

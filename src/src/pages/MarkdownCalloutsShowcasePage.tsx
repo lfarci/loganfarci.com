@@ -28,6 +28,23 @@ const showcaseMarkdown = `
 > Unsupported markers stay visible as ordinary blockquote content.
 
 > [!NOTE] A marker with content on the same line is malformed and also stays visible.
+
+> [!NOTE]
+> The code containers below use the same radius, border, surface, and spacing rhythm as this callout.
+
+\`\`\`typescript
+const controls = { language: "visible", copy: "accessible" };
+\`\`\`
+
+\`\`\`text
+ThisDeliberatelyLongLineStaysInsideItsScrollableCodeContainerWithoutCreatingPageLevelHorizontalOverflowAtNarrowWidthsOrHighZoom1234567890
+\`\`\`
+
+\`\`\`mermaid
+flowchart LR
+    Callout --> SharedContainerLanguage
+    CodeBlock --> SharedContainerLanguage
+\`\`\`
 `.trim();
 
 export default function MarkdownCalloutsShowcasePage() {
@@ -35,10 +52,10 @@ export default function MarkdownCalloutsShowcasePage() {
         <>
             <title>Markdown Callouts Showcase - Development</title>
             <section className="py-8 md:py-10">
-                <Heading1 className="mb-4">Markdown callouts</Heading1>
+                <Heading1 className="mb-4">Markdown containers</Heading1>
                 <Text className="mb-8 max-w-[72ch]">
-                    Development-only review surface for every supported callout, ordinary quotations, and fallback
-                    states.
+                    Development-only review surface for callouts, ordinary quotations, fenced code, Mermaid, long lines,
+                    and fallback states.
                 </Text>
                 <MarkdownContent content={showcaseMarkdown} measure />
             </section>
