@@ -163,6 +163,15 @@ neutral font weight without decorative indicator chrome. Reaching the end of the
 article marks the final section current even when there is not enough trailing content
 for its heading to enter the upper reading region.
 
+After the inline navigation scrolls above the mobile or tablet viewport, a compact
+bottom-right back-to-top link appears. The control uses a single upward icon with the
+accessible name “Back to top” and returns to the article's `#main-content` landmark.
+It stays hidden while the navigation is visible, at desktop widths, when JavaScript or
+`IntersectionObserver` is unavailable, and on articles that do not generate a table of
+contents. Activating it preserves native same-page fragment navigation and moves focus
+to the main landmark. Its viewport offsets account for device safe areas, and its
+reveal transition is removed when reduced motion is requested.
+
 IDs, permalinks, and ToC links are all emitted during SSR/prerender and therefore exist
 before hydration.
 

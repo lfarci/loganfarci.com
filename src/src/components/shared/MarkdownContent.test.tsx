@@ -390,6 +390,37 @@ describe("MarkdownContent", () => {
         });
     });
 
+    it("gives article navigation a deterministic visibility anchor", () => {
+        render(<MarkdownContent content={"## Parent\n\n### Child\n\n## Next"} articleNavigation />);
+
+        const navigation = screen.getByRole("navigation", { name: "In this article" });
+        const title = within(navigation).getByRole("heading", { level: 2, name: "In this article" });
+
+        expect({
+            navigationId: navigation.id,
+            labelledBy: navigation.getAttribute("aria-labelledby"),
+            titleId: title.id,
+        }).toEqual({
+            navigationId: "article-table-of-contents",
+            labelledBy: "article-table-of-contents-title",
+            titleId: "article-table-of-contents-title",
+        });
+    });
+
+    it("adds a hidden native back-to-top link when the table of contents is present", () => {
+        const { container } = render(
+            <MarkdownContent content={"## Parent\n\n### Child\n\n## Next"} articleNavigation />,
+        );
+
+        const link = container.querySelector<HTMLAnchorElement>('a[href="#main-content"]');
+
+        expect({
+            href: link?.getAttribute("href"),
+            accessibleName: link?.getAttribute("aria-label"),
+            ariaHidden: link?.getAttribute("aria-hidden"),
+        }).toEqual({ href: "#main-content", accessibleName: "Back to top", ariaHidden: "true" });
+    });
+
     it("marks the current table-of-contents link with neutral typographic emphasis", () => {
         render(<MarkdownContent content={"## Parent\n\n### Child\n\n## Next"} articleNavigation />);
 
@@ -420,9 +451,12 @@ describe("MarkdownContent", () => {
     });
 
     it("omits the table of contents when too few headings justify it", () => {
-        render(<MarkdownContent content={"## First\n\n## Second"} articleNavigation />);
+        const { container } = render(<MarkdownContent content={"## First\n\n## Second"} articleNavigation />);
 
-        expect(screen.queryByRole("navigation", { name: "In this article" })).toBeNull();
+        expect({
+            navigation: screen.queryByRole("navigation", { name: "In this article" }),
+            returnLink: container.querySelector('a[href="#main-content"]'),
+        }).toEqual({ navigation: null, returnLink: null });
     });
 
     it("does not add article navigation when there are no eligible headings", () => {
@@ -450,9 +484,12 @@ describe("MarkdownContent", () => {
             html.includes('id="first"'),
             html.includes('href="#first"'),
             html.includes("In this article"),
+            html.includes('id="article-table-of-contents"'),
+            html.includes('href="#main-content"'),
+            html.includes('aria-label="Back to top"'),
             html.includes('data-article-end=""'),
             html.includes('aria-hidden="true"'),
-        ]).toEqual([true, true, true, true, true]);
+        ]).toEqual([true, true, true, true, true, true, true, true]);
     });
 
     it("keeps nested table-of-contents links in static HTML", () => {
