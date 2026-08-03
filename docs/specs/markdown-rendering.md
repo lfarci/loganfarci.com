@@ -60,7 +60,7 @@ as unstyled default HTML:
 | `###` / `####` | `Heading3` / `Heading4` | Article headings receive the same ID and permalink treatment. |
 | Paragraph | `Text` | Constrained to a readable width when `measure` is set. |
 | Lists / items | `UnorderedList` / `OrderedList` / `ListItem` | |
-| Ordinary `>` blockquote | Styled blockquote | Editorial quote mark, horizontal hairlines, and italic body text. |
+| Ordinary `>` blockquote | Styled blockquote | Editorial quote mark, horizontal hairlines, and standard body text. |
 | Supported callout blockquote | Labeled callout | Compact label, decorative icon, semantic accent, and normal article typography. |
 | Link | `NewTabLink` | **All links open in a new tab** with safe `rel`. |
 | Inline/fenced code | `CodeSnippet` | See below. |
@@ -70,8 +70,9 @@ as unstyled default HTML:
 ## Blockquotes
 
 Ordinary quotations use a restrained editorial treatment: a large decorative opening
-mark sits beside italic article typography, framed by quiet horizontal hairlines. They
-do not use the former tinted panel or heavy colored side rule, which keeps them distinct
+mark sits beside standard article typography, framed by quiet horizontal hairlines. The
+copy uses the same responsive size and upright style as surrounding body text. Quotes do
+not use the former tinted panel or heavy colored side rule, which keeps them distinct
 from both normal prose and the neutral callout container. The quotation mark is hidden
 from assistive technology, while the semantic `<blockquote>` and all rendered Markdown
 content remain in the reading order. Long content wraps within the readable measure at
@@ -102,10 +103,10 @@ callouts are not supported.
 Callouts are static prose. They do not use `role="alert"`, live-region semantics, or
 interactive behavior. A visible text label occurs before the body in reading order,
 icons are decorative and hidden from assistive technology, and variant identity never
-depends on color alone. The body uses normal article typography rather than quotation
-italics. The callout title uses the same responsive size as the article body, with font
-family and weight establishing its hierarchy. Its constrained grid and overflow
-wrapping preserve `MarkdownContent`'s `measure` behavior at narrow widths and high zoom.
+depends on color alone. The body uses normal article typography. The callout title uses
+the same responsive size as the article body, with font family and weight establishing
+its hierarchy. Its constrained grid and overflow wrapping preserve `MarkdownContent`'s
+`measure` behavior at narrow widths and high zoom.
 
 All callouts use the same quiet neutral surface and hairline border. Only the line icon
 and sentence-case title use the variant's semantic accent; there are no variant-tinted

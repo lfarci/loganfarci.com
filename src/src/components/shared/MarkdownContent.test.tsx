@@ -146,6 +146,7 @@ describe("MarkdownContent", () => {
         const { container } = render(<MarkdownContent content="> A considered observation." />);
         const blockquote = container.querySelector("blockquote");
         const quoteMark = blockquote?.querySelector('[aria-hidden="true"]');
+        const quoteText = screen.getByText("A considered observation.");
 
         expect({
             keepsBlockquoteSemantics: blockquote?.tagName,
@@ -153,6 +154,9 @@ describe("MarkdownContent", () => {
                 blockquote?.classList.contains("border-y") && blockquote.classList.contains("border-border-light"),
             usesEditorialLayout: blockquote?.classList.contains("grid"),
             hasDecorativeQuoteMark: quoteMark?.textContent?.trim(),
+            usesBodyTextSize:
+                quoteText.classList.contains("text-base") && quoteText.classList.contains("md:text-[1.0625rem]"),
+            keepsBodyTextUpright: quoteText.parentElement?.classList.contains("italic"),
             avoidsTintedPanel: blockquote?.classList.contains("bg-primary-light"),
             avoidsHeavySideRule: blockquote?.classList.contains("border-l-4"),
         }).toEqual({
@@ -160,6 +164,8 @@ describe("MarkdownContent", () => {
             usesEditorialRules: true,
             usesEditorialLayout: true,
             hasDecorativeQuoteMark: "“",
+            usesBodyTextSize: true,
+            keepsBodyTextUpright: false,
             avoidsTintedPanel: false,
             avoidsHeavySideRule: false,
         });

@@ -98,7 +98,7 @@ function createMarkdownComponents(measure: boolean): Components {
             >
                 “
             </span>
-            <div className="min-w-0 italic [overflow-wrap:anywhere] [&>*:last-child]:mb-0 [&_ol]:text-text-secondary [&_p]:text-text-secondary [&_ul]:text-text-secondary">
+            <div className="min-w-0 [overflow-wrap:anywhere] [&>*:last-child]:mb-0 [&_ol]:text-text-secondary [&_p]:text-text-secondary [&_ul]:text-text-secondary">
                 {children}
             </div>
         </blockquote>
