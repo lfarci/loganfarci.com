@@ -79,7 +79,8 @@ Each worktree has its own Git state, so you can commit, push, and pull independe
 
 ### Remove a Worktree When Finished
 
-To clean up, remove a worktree with `git worktree remove`. Make sure to never delete a worktree directory manually to avoid issues:
+> [!CAUTION]
+> Remove a worktree with `git worktree remove`. Never delete a worktree directory manually.
 
 ```bash
 git worktree remove ../features

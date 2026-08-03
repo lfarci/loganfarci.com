@@ -36,7 +36,8 @@ When everything passes, the workflow resolves cleanly without leaving extra nois
 
 GitHub Agentic Workflows are defined as Markdown files with a YAML front matter block. The workflow source lives at `.github/workflows/pull-request-quality-checks.md` and looks like this:
 
-This front matter is workflow source syntax, not plain GitHub Actions YAML. Keys like `engine`, `tools`, and `safe-outputs` are GitHub Agentic Workflows extensions that `gh aw` understands before compilation.
+> [!NOTE]
+> This front matter is workflow source syntax, not plain GitHub Actions YAML. Keys like `engine`, `tools`, and `safe-outputs` are GitHub Agentic Workflows extensions that `gh aw` understands before compilation.
 
 ```yaml
 ---
@@ -101,7 +102,10 @@ You compile this Markdown source into a generated GitHub Actions lock file with 
 gh aw compile
 ```
 
-This turns `.github/workflows/pull-request-quality-checks.md` into `.github/workflows/pull-request-quality-checks.lock.yml`. Never edit the `.lock.yml` directly, it is auto-generated and will be overwritten on the next compile.
+This turns `.github/workflows/pull-request-quality-checks.md` into `.github/workflows/pull-request-quality-checks.lock.yml`.
+
+> [!CAUTION]
+> Never edit the `.lock.yml` directly. It is auto-generated and will be overwritten on the next compile.
 
 ## The Core Pattern: Shared Skill
 
