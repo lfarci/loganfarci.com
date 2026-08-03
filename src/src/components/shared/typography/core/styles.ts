@@ -1,6 +1,6 @@
 export const typographyStyles = {
     heading1:
-        "text-4xl leading-[1.16] tracking-tight md:text-6xl md:leading-[1.12] font-extrabold heading-font text-text-primary text-balance",
+        "text-4xl leading-tight tracking-normal md:text-6xl font-extrabold heading-font text-text-primary text-balance",
     heading2:
         "text-2xl leading-tight tracking-tight md:text-3xl md:leading-tight font-bold heading-font text-text-primary text-balance",
     heading3: "text-xl leading-snug tracking-tight md:text-2xl font-bold text-text-primary heading-font text-balance",
