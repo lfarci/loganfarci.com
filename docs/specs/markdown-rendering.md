@@ -163,14 +163,13 @@ neutral font weight without decorative indicator chrome. Reaching the end of the
 article marks the final section current even when there is not enough trailing content
 for its heading to enter the upper reading region.
 
-The inline navigation has the deterministic fragment target
-`#article-table-of-contents`. After it scrolls above the mobile or tablet viewport, a
-compact bottom-right “Contents” link appears and returns to that target. The link stays
-hidden while the navigation is visible, at desktop widths, when JavaScript or
+After the inline navigation scrolls above the mobile or tablet viewport, a compact
+bottom-right back-to-top link appears. The control uses a single upward icon with the
+accessible name “Back to top” and returns to the article's `#main-content` landmark.
+It stays hidden while the navigation is visible, at desktop widths, when JavaScript or
 `IntersectionObserver` is unavailable, and on articles that do not generate a table of
 contents. Activating it preserves native same-page fragment navigation and moves focus
-to the navigation landmark so its section links follow directly for keyboard and
-screen-reader users. Its viewport offsets account for device safe areas, and its
+to the main landmark. Its viewport offsets account for device safe areas, and its
 reveal transition is removed when reduced motion is requested.
 
 IDs, permalinks, and ToC links are all emitted during SSR/prerender and therefore exist

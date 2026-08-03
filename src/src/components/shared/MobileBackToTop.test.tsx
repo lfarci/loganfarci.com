@@ -2,9 +2,10 @@ import { act, fireEvent, render, screen } from "@testing-library/react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import MobileBackToContents from "./MobileBackToContents";
+import MobileBackToTop from "./MobileBackToTop";
 
-const targetId = "article-table-of-contents";
+const visibilityAnchorId = "article-table-of-contents";
+const targetId = "main-content";
 const observerInstances: IntersectionObserverMock[] = [];
 
 class IntersectionObserverMock implements IntersectionObserver {
@@ -45,8 +46,9 @@ function createObserverEntry(target: Element, isIntersecting: boolean, bottom: n
 function renderControl() {
     return render(
         <>
-            <nav id={targetId} aria-label="In this article" tabIndex={-1} />
-            <MobileBackToContents targetId={targetId} />
+            <main id={targetId} tabIndex={-1} />
+            <nav id={visibilityAnchorId} aria-label="In this article" />
+            <MobileBackToTop visibilityAnchorId={visibilityAnchorId} />
         </>,
     );
 }
@@ -65,21 +67,21 @@ function getHiddenLink(): HTMLAnchorElement {
     const link = document.querySelector<HTMLAnchorElement>(`a[href="#${targetId}"]`);
 
     if (!link) {
-        throw new Error("Expected the back-to-contents link");
+        throw new Error("Expected the back-to-top link");
     }
 
     return link;
 }
 
 function revealControl() {
-    const target = screen.getByRole("navigation", { name: "In this article" });
+    const visibilityAnchor = screen.getByRole("navigation", { name: "In this article" });
 
     act(() => {
-        getObserver().trigger([createObserverEntry(target, false, -1)]);
+        getObserver().trigger([createObserverEntry(visibilityAnchor, false, -1)]);
     });
 }
 
-describe("MobileBackToContents", () => {
+describe("MobileBackToTop", () => {
     beforeEach(() => {
         observerInstances.length = 0;
         vi.stubGlobal("IntersectionObserver", IntersectionObserverMock);
@@ -90,7 +92,7 @@ describe("MobileBackToContents", () => {
         vi.unstubAllGlobals();
     });
 
-    it("renders hidden and inert before the observer reports the table of contents has passed", () => {
+    it("renders hidden and inert before the observer reports the article navigation has passed", () => {
         renderControl();
 
         const link = getHiddenLink();
@@ -104,57 +106,57 @@ describe("MobileBackToContents", () => {
     });
 
     it("renders the same hidden state in prerendered HTML", () => {
-        const html = renderToStaticMarkup(<MobileBackToContents targetId={targetId} />);
+        const html = renderToStaticMarkup(<MobileBackToTop visibilityAnchorId={visibilityAnchorId} />);
 
         expect({
-            hasAccessibleLabel: html.includes("Contents"),
+            hasAccessibleName: html.includes('aria-label="Back to top"'),
             hasHiddenState: html.includes('aria-hidden="true"') && html.includes("opacity-0"),
             isInert: html.includes('inert=""'),
-        }).toEqual({ hasAccessibleLabel: true, hasHiddenState: true, isInert: true });
+        }).toEqual({ hasAccessibleName: true, hasHiddenState: true, isInert: true });
     });
 
-    it("observes the table-of-contents fragment target", () => {
+    it("observes the article navigation as its visibility anchor", () => {
         renderControl();
 
         expect(getObserver().observe).toHaveBeenCalledWith(screen.getByRole("navigation", { name: "In this article" }));
     });
 
-    it("reveals the link after the table of contents scrolls above the viewport", () => {
+    it("reveals the link after the article navigation scrolls above the viewport", () => {
         renderControl();
 
         revealControl();
 
-        expect(screen.getByRole("link", { name: "Contents" }).classList.contains("opacity-100")).toBe(true);
+        expect(screen.getByRole("link", { name: "Back to top" }).classList.contains("opacity-100")).toBe(true);
     });
 
-    it("keeps the link hidden when the table of contents is below the viewport", () => {
+    it("keeps the link hidden when the article navigation is below the viewport", () => {
         renderControl();
-        const target = screen.getByRole("navigation", { name: "In this article" });
+        const visibilityAnchor = screen.getByRole("navigation", { name: "In this article" });
 
         act(() => {
-            getObserver().trigger([createObserverEntry(target, false, 400)]);
+            getObserver().trigger([createObserverEntry(visibilityAnchor, false, 400)]);
         });
 
         expect(getHiddenLink().getAttribute("aria-hidden")).toBe("true");
     });
 
-    it("hides the link when the table of contents re-enters the viewport", () => {
+    it("hides the link when the article navigation re-enters the viewport", () => {
         renderControl();
         revealControl();
-        const target = screen.getByRole("navigation", { name: "In this article" });
+        const visibilityAnchor = screen.getByRole("navigation", { name: "In this article" });
 
         act(() => {
-            getObserver().trigger([createObserverEntry(target, true, 240)]);
+            getObserver().trigger([createObserverEntry(visibilityAnchor, true, 240)]);
         });
 
         expect(getHiddenLink().getAttribute("aria-hidden")).toBe("true");
     });
 
-    it("targets and focuses the table-of-contents navigation without replacing native link behavior", () => {
+    it("targets and focuses the top of the article without replacing native link behavior", () => {
         renderControl();
         revealControl();
-        const target = screen.getByRole("navigation", { name: "In this article" });
-        const link = screen.getByRole("link", { name: "Contents" });
+        const target = screen.getByRole("main");
+        const link = screen.getByRole("link", { name: "Back to top" });
 
         fireEvent.click(link);
 
@@ -162,6 +164,17 @@ describe("MobileBackToContents", () => {
             activeElement: target,
             href: `#${targetId}`,
         });
+    });
+
+    it("keeps the visual treatment to a single decorative icon", () => {
+        renderControl();
+        revealControl();
+        const link = screen.getByRole("link", { name: "Back to top" });
+
+        expect({
+            visibleText: link.textContent,
+            decorativeIcon: link.querySelector("svg")?.getAttribute("aria-hidden"),
+        }).toEqual({ visibleText: "", decorativeIcon: "true" });
     });
 
     it("uses mobile-only, safe-area, touch-target, motion, and semantic surface classes", () => {
@@ -172,17 +185,19 @@ describe("MobileBackToContents", () => {
             mobileOnly: link.classList.contains("lg:hidden"),
             safeAreaBottom: link.classList.contains("bottom-[calc(1rem+env(safe-area-inset-bottom,0px))]"),
             safeAreaRight: link.classList.contains("right-[calc(1rem+env(safe-area-inset-right,0px))]"),
-            touchTarget: link.classList.contains("h-11") && link.classList.contains("min-w-11"),
+            touchTarget: link.classList.contains("size-11"),
+            simpleShape: link.classList.contains("rounded-full"),
             reducedMotion: link.classList.contains("motion-reduce:transition-none"),
-            semanticColors: link.classList.contains("bg-brand") && link.classList.contains("text-brand-foreground"),
+            semanticSurface: link.classList.contains("bg-surface") && link.classList.contains("text-text-primary"),
             visibleFocus: link.classList.contains("focus-visible:ring-2"),
         }).toEqual({
             mobileOnly: true,
             safeAreaBottom: true,
             safeAreaRight: true,
             touchTarget: true,
+            simpleShape: true,
             reducedMotion: true,
-            semanticColors: true,
+            semanticSurface: true,
             visibleFocus: true,
         });
     });

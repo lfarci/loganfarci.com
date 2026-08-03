@@ -358,7 +358,7 @@ describe("MarkdownContent", () => {
         });
     });
 
-    it("gives article navigation a deterministic fragment and programmatic focus target", () => {
+    it("gives article navigation a deterministic visibility anchor", () => {
         render(<MarkdownContent content={"## Parent\n\n### Child\n\n## Next"} articleNavigation />);
 
         const navigation = screen.getByRole("navigation", { name: "In this article" });
@@ -368,28 +368,25 @@ describe("MarkdownContent", () => {
             navigationId: navigation.id,
             labelledBy: navigation.getAttribute("aria-labelledby"),
             titleId: title.id,
-            programmaticFocus: navigation.getAttribute("tabindex"),
-            stickyHeaderOffset: navigation.classList.contains("scroll-mt-24"),
         }).toEqual({
             navigationId: "article-table-of-contents",
             labelledBy: "article-table-of-contents-title",
             titleId: "article-table-of-contents-title",
-            programmaticFocus: "-1",
-            stickyHeaderOffset: true,
         });
     });
 
-    it("adds a hidden native return link when the table of contents is present", () => {
+    it("adds a hidden native back-to-top link when the table of contents is present", () => {
         const { container } = render(
             <MarkdownContent content={"## Parent\n\n### Child\n\n## Next"} articleNavigation />,
         );
 
-        const link = container.querySelector<HTMLAnchorElement>('a[href="#article-table-of-contents"]');
+        const link = container.querySelector<HTMLAnchorElement>('a[href="#main-content"]');
 
-        expect({ href: link?.getAttribute("href"), ariaHidden: link?.getAttribute("aria-hidden") }).toEqual({
-            href: "#article-table-of-contents",
-            ariaHidden: "true",
-        });
+        expect({
+            href: link?.getAttribute("href"),
+            accessibleName: link?.getAttribute("aria-label"),
+            ariaHidden: link?.getAttribute("aria-hidden"),
+        }).toEqual({ href: "#main-content", accessibleName: "Back to top", ariaHidden: "true" });
     });
 
     it("marks the current table-of-contents link with neutral typographic emphasis", () => {
@@ -426,7 +423,7 @@ describe("MarkdownContent", () => {
 
         expect({
             navigation: screen.queryByRole("navigation", { name: "In this article" }),
-            returnLink: container.querySelector('a[href="#article-table-of-contents"]'),
+            returnLink: container.querySelector('a[href="#main-content"]'),
         }).toEqual({ navigation: null, returnLink: null });
     });
 
@@ -456,8 +453,8 @@ describe("MarkdownContent", () => {
             html.includes('href="#first"'),
             html.includes("In this article"),
             html.includes('id="article-table-of-contents"'),
-            html.includes('href="#article-table-of-contents"'),
-            html.includes('aria-hidden="true"'),
+            html.includes('href="#main-content"'),
+            html.includes('aria-label="Back to top"'),
             html.includes('data-article-end=""'),
             html.includes('aria-hidden="true"'),
         ]).toEqual([true, true, true, true, true, true, true, true]);

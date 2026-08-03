@@ -2,7 +2,7 @@ import { useMemo, type ReactNode } from "react";
 import type { Element } from "hast";
 import { Label } from "@/components/shared/typography";
 import type { ArticleHeading } from "@/components/shared/articleHeadings";
-import MobileBackToContents from "@/components/shared/MobileBackToContents";
+import MobileBackToTop from "@/components/shared/MobileBackToTop";
 import { mergeClassNames } from "@/core/mergeClassNames";
 import { useActiveArticleHeading } from "@/components/shared/useActiveArticleHeading";
 
@@ -111,15 +111,14 @@ export default function ArticleTableOfContents({ node }: Readonly<MarkdownElemen
             <nav
                 id={tableOfContentsId}
                 aria-labelledby={tableOfContentsTitleId}
-                tabIndex={-1}
-                className="mb-8 scroll-mt-24 rounded-control border-b border-border pb-6 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background lg:sticky lg:top-24 lg:col-start-2 lg:row-start-1 lg:mb-0 lg:border-b-0 lg:border-l lg:pb-0 lg:pl-5"
+                className="mb-8 border-b border-border pb-6 lg:sticky lg:top-24 lg:col-start-2 lg:row-start-1 lg:mb-0 lg:border-b-0 lg:border-l lg:pb-0 lg:pl-5"
             >
                 <Label as="h2" id={tableOfContentsTitleId} className="mb-1 px-2 text-text-primary">
                     In this article
                 </Label>
                 <TableOfContentsList activeHeadingId={activeHeadingId} items={items} />
             </nav>
-            <MobileBackToContents targetId={tableOfContentsId} />
+            <MobileBackToTop visibilityAnchorId={tableOfContentsId} />
         </>
     );
 }
