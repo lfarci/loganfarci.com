@@ -61,7 +61,8 @@ For example, when you switch to Articles Chat Mode, Copilot stops offering code 
 
 To activate Articles Chat Mode, define it in `.github/copilot/chatmodes/articles.chatmode.md`. Once set up, select it from the Copilot chat mode picker in Visual Studio Code. This instantly shifts Copilot's persona to match your technical writing workflow, making every edit session more focused and productive.
 
-> **Note:** I'm sure this mode can be improved further, but it already helps me focus on writing without getting distracted by coding tasks. It's like having a personal writing assistant that understands my style and needs.
+> [!NOTE]
+> I'm sure this mode can be improved further, but it already helps me focus on writing without getting distracted by coding tasks. It's like having a personal writing assistant that understands my style and needs.
 
 ### Articles Instructions
 

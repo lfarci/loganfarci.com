@@ -74,7 +74,8 @@ az vm extension set \
   --version 1.0
 ```
 
-The VM must have a **system-assigned managed identity** enabled:
+> [!IMPORTANT]
+> The VM must have a **system-assigned managed identity** enabled.
 
 ```bash
 az vm identity assign \

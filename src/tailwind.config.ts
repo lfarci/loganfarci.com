@@ -67,6 +67,14 @@ export default {
                 warning: "var(--color-warning)",
                 error: "var(--color-error)",
                 info: "var(--color-info)",
+                callout: {
+                    note: "var(--color-callout-note)",
+                    tip: "var(--color-callout-tip)",
+                    important: "var(--color-callout-important)",
+                    warning: "var(--color-callout-warning)",
+                    caution: "var(--color-callout-caution)",
+                    link: "var(--color-callout-link)",
+                },
             },
             backgroundImage: {
                 "gradient-brand": "var(--gradient-brand)",

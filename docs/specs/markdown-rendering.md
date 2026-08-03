@@ -1,6 +1,6 @@
 ---
 spec: markdown-rendering
-version: 0.2.0
+version: 0.3.0
 status: current-state
 ---
 
@@ -42,6 +42,8 @@ step.
 - Tables.
 - Strikethrough.
 - Inline code and fenced code blocks (including Mermaid, below).
+- Callouts using the blockquote markers `[!NOTE]`, `[!TIP]`, `[!IMPORTANT]`,
+  `[!WARNING]`, and `[!CAUTION]`.
 
 **Raw HTML is not rendered.** There is no `rehype-raw` in the pipeline, so HTML tags in
 markdown are treated as text and escaped. Authors MUST express content with
@@ -58,11 +60,79 @@ as unstyled default HTML:
 | `###` / `####` | `Heading3` / `Heading4` | Article headings receive the same ID and permalink treatment. |
 | Paragraph | `Text` | Constrained to a readable width when `measure` is set. |
 | Lists / items | `UnorderedList` / `OrderedList` / `ListItem` | |
-| `>` blockquote | Styled blockquote | Left border + `primary-light` background, italic. |
+| Ordinary `>` blockquote | Styled blockquote | Editorial quote mark, horizontal hairlines, and standard body text. |
+| Supported callout blockquote | Labeled callout | Compact label, decorative icon, semantic accent, and normal article typography. |
 | Link | `NewTabLink` | **All links open in a new tab** with safe `rel`. |
 | Inline/fenced code | `CodeSnippet` | See below. |
 | Table (GFM) | Styled `table` | Bordered, rounded, `surface` background. |
 | `---` rule / `**`/`_` | `hr` / `Strong` / `Emphasis` | |
+
+## Blockquotes
+
+Ordinary quotations use a restrained editorial treatment: a large decorative opening
+mark sits beside standard article typography, framed by quiet horizontal hairlines. The
+copy uses the same responsive size and upright style as surrounding body text. Quotes do
+not use the former tinted panel or heavy colored side rule, which keeps them distinct
+from both normal prose and the neutral callout container. The quotation mark is hidden
+from assistive technology, while the semantic `<blockquote>` and all rendered Markdown
+content remain in the reading order. Long content wraps within the readable measure at
+narrow widths and high zoom.
+
+## Callouts
+
+Callouts use GitHub-compatible blockquote markers. The marker MUST be the first content
+in a top-level blockquote, use one of the five supported uppercase values, and appear
+on its own line:
+
+```markdown
+> [!NOTE]
+> Useful context that is worth noticing while skimming.
+```
+
+The renderer removes the marker and adds the visible label **Note**, **Tip**,
+**Important**, **Warning**, or **Caution** before the body. The body continues through
+the shared Markdown element mapping, so multiple paragraphs, emphasis, links, inline
+code, and lists retain their normal semantics.
+
+Ordinary quotations keep the editorial blockquote treatment. Unsupported markers such
+as `[!ALERT]`, lowercase or malformed markers, markers with body text on the same line,
+markers later in a quote, and nested callout attempts remain ordinary blockquote content.
+Their marker text is intentionally preserved rather than silently discarded. Nested
+callouts are not supported.
+
+Callouts are static prose. They do not use `role="alert"`, live-region semantics, or
+interactive behavior. A visible text label occurs before the body in reading order,
+icons are decorative and hidden from assistive technology, and variant identity never
+depends on color alone. The body uses normal article typography. The callout title uses
+the same responsive size as the article body, with font family and weight establishing
+its hierarchy. Its constrained grid and overflow wrapping preserve `MarkdownContent`'s
+`measure` behavior at narrow widths and high zoom.
+
+All callouts use the same quiet neutral surface and hairline border. Only the line icon
+and sentence-case title use the variant's semantic accent; there are no variant-tinted
+backgrounds, colored edges, solid icon tiles, or card-like elevation. This keeps the
+article prose primary while blue Note, green Tip, violet Important, amber Warning, and
+red Caution remain visually separated. The visible label and distinct icon also
+preserve meaning without color. Contrast checks for each accent against the shared
+neutral surface are:
+
+| Variant | Light theme | Dark theme |
+| --- | ---: | ---: |
+| Note | 6.12:1 | 7.25:1 |
+| Tip | 6.93:1 | 8.16:1 |
+| Important | 6.83:1 | 7.31:1 |
+| Warning | 6.90:1 | 8.81:1 |
+| Caution | 6.51:1 | 5.98:1 |
+
+These values exceed the 4.5:1 text requirement and the 3:1 meaningful graphical-object
+requirement in both themes. Body text continues to use the site's existing semantic
+text tokens. Inline links use a dedicated callout link token so their default, hover,
+and focus presentation remains compliant on the shared neutral surface in both themes.
+
+During local development, `/_dev/markdown-callouts` renders all variants and fallback
+states through `MarkdownContent` for visual review. The route is development-only: it
+is absent from the production route table, static route list, prerendered output,
+sitemap, and machine-readable text files.
 
 ## Article heading navigation
 
@@ -138,8 +208,6 @@ bespoke system, and only add weight where it earns its place.
 - **Mermaid diagrams.** Ideally rendered at **build time** (during prerender) so
   diagrams appear without JavaScript and are indexable, with a graceful fallback —
   replacing today's client-only render.
-- **Callouts / admonitions.** Note / tip / warning blocks (e.g. via a blockquote
-  convention) for emphasis beyond a plain quote.
 - **Footnotes.** GFM footnotes with back-references for citations and asides.
 - **Tables.** Remain readable on small screens (horizontal scroll or responsive
   treatment) without breaking layout.
@@ -156,6 +224,8 @@ pipeline deliberately avoids. Revisit only if a concrete article need justifies 
 - Article heading IDs and table-of-contents links **MUST** be derived from the same
   parsed syntax tree and remain present in prerendered HTML.
 - **MUST NOT** rely on raw HTML in markdown — it will not render.
+- Callout authors **MUST** put an exact supported marker first in a top-level
+  blockquote and on its own line; use an ordinary blockquote for quotations.
 - Body headings **SHOULD** start at `##` (the `h1` is the front-matter title).
 - Mermaid diagrams **MUST** use a fenced ```` ```mermaid ```` block and **SHOULD** stay
   lightweight, remembering they render only on the client.

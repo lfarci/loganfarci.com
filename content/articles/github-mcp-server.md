@@ -91,7 +91,8 @@ For more control, you can run the GitHub MCP server locally with Docker. In VS C
     }
     ```
 
-This local configuration does not use `http://localhost:8080`. If you want an HTTP transport instead, make sure you follow the official GitHub MCP Server transport documentation and configure the server for that transport explicitly.
+> [!IMPORTANT]
+> This local configuration does not use `http://localhost:8080`. If you want an HTTP transport instead, follow the official GitHub MCP Server transport documentation and configure the server for that transport explicitly.
 
 ### Security
 
