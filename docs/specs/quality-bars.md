@@ -79,7 +79,8 @@ deployment validation — is in [testing.md](./testing.md).
 - Active non-Dependabot PR previews MUST pass the Chromium-only Playwright acceptance
   suite. It covers hydrated navigation/history, persistent theme state, runtime page
   errors, and one representative mobile navigation path without duplicating HTTP smoke
-  coverage (see [testing.md](./testing.md#browser-acceptance-suite)).
+  coverage in the dedicated [`Playwright`](../../.github/workflows/playwright.yml)
+  workflow (see [testing.md](./testing.md#browser-acceptance-suite)).
 
 ## Linting & formatting
 

@@ -158,7 +158,8 @@ The smoke command can be run locally against any deployed environment:
 
 ### Browser acceptance suite
 
-The Playwright suite runs after a successful active, non-Dependabot PR preview deploy
+The dedicated [`playwright.yml`](../../.github/workflows/playwright.yml) workflow is
+called by `deploy-app.yml` after a successful active, non-Dependabot PR preview deploy
 and uses that deployment's `static_web_app_url`. It MUST remain narrow and verify only
 hydrated browser behavior: uncaught page errors, client-side navigation and browser
 Back/Forward, explicit theme persistence across reload, and one representative mobile
@@ -173,11 +174,12 @@ PLAYWRIGHT_BASE_URL=http://localhost:4173 npm run test:e2e
 PLAYWRIGHT_BASE_URL=https://example-preview.azurestaticapps.net npm run test:e2e
 ```
 
-The blocking CI job installs Chromium only, has an explicit timeout, retries at most
-once in CI, and uploads the HTML report and retained failure trace only when the run
-fails. Tests MUST use roles and accessible names, web-first assertions, and no fixed
-sleeps or test-only selectors. The suite blocks browser requests outside the target
-preview so it remains deterministic and independent of mutable external services.
+The reusable workflow can also be dispatched manually with a deployed base URL. Its
+blocking CI job installs Chromium only, has an explicit timeout, retries at most once
+in CI, and uploads the HTML report and retained failure trace only when the run fails.
+Tests MUST use roles and accessible names, web-first assertions, and no fixed sleeps or
+test-only selectors. The suite blocks browser requests outside the target preview so
+it remains deterministic and independent of mutable external services.
 
 ### Constraints
 
