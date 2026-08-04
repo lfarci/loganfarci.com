@@ -18,7 +18,7 @@ const GreetingHeading: React.FC<GreetingHeadingProps> = ({
     iconSize = 64,
 }) => (
     <Heading1 className="flex items-center">
-        <span className="pr-1">{greeting}</span>
+        <span className="mr-2">{greeting}</span>
         <img
             src={iconSrc}
             alt={iconAlt}
