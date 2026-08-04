@@ -160,11 +160,12 @@ The smoke command can be run locally against any deployed environment:
 
 The dedicated [`playwright.yml`](../../.github/workflows/playwright.yml) workflow is
 called by `deploy-app.yml` after a successful active, non-Dependabot PR preview deploy
-and uses that deployment's `static_web_app_url`. It MUST remain narrow and verify only
-hydrated browser behavior: uncaught page errors, client-side navigation and browser
-Back/Forward, explicit theme persistence across reload, and one representative mobile
-navigation scenario. HTTP status codes, prerendered markup, metadata, machine files,
-assets, and the 404 fallback remain the Node smoke suite's responsibility.
+and uses that deployment's `static_web_app_url`. It MUST remain focused on hydrated
+browser behavior: uncaught page errors, primary desktop and mobile navigation, menu
+dismissal and responsive state, article navigation, browser Back/Forward, keyboard
+skip navigation, and explicit theme persistence across navigation and reload. HTTP
+status codes, prerendered markup, metadata, machine files, assets, and the 404 fallback
+remain the Node smoke suite's responsibility.
 
 Run the browser suite against a local production preview or deployed environment from
 `src/`:

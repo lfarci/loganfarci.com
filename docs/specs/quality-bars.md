@@ -77,10 +77,11 @@ deployment validation — is in [testing.md](./testing.md).
 - After a deploy, deployment validation SHOULD confirm the live URL is actually valid
   (see [testing.md](./testing.md#deployment-validation)).
 - Active non-Dependabot PR previews MUST pass the Chromium-only Playwright acceptance
-  suite. It covers hydrated navigation/history, persistent theme state, runtime page
-  errors, and one representative mobile navigation path without duplicating HTTP smoke
-  coverage in the dedicated [`Playwright`](../../.github/workflows/playwright.yml)
-  workflow (see [testing.md](./testing.md#browser-acceptance-suite)).
+  suite. It covers hydrated desktop, mobile, article, history, responsive, and keyboard
+  navigation behavior alongside persistent theme state and runtime page errors, without
+  duplicating HTTP smoke coverage in the dedicated
+  [`Playwright`](../../.github/workflows/playwright.yml) workflow (see
+  [testing.md](./testing.md#browser-acceptance-suite)).
 
 ## Linting & formatting
 
