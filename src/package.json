@@ -11,6 +11,7 @@
         "prerender": "node scripts/prerender.mjs",
         "smoke": "node scripts/smoke.mjs",
         "preview": "vite preview",
+        "preview:swa": "swa start dist --host 127.0.0.1 --swa-config-location public",
         "lint": "eslint . --ext .ts,.tsx",
         "format": "prettier --write . --ignore-path ../.prettierignore",
         "format:check": "prettier --check . --ignore-path ../.prettierignore",

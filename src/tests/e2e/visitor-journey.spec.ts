@@ -215,9 +215,10 @@ test.describe("mobile navigation", () => {
         await navigation.getByRole("button", { name: "Open menu" }).click();
         await page.setViewportSize({ width: 1024, height: 768 });
         await expect(navigation.getByRole("link", { name: "About", exact: true })).toBeVisible();
+        await expect(navigation.getByLabel("Open menu", { exact: true })).toHaveAttribute("aria-expanded", "false");
 
         await page.setViewportSize({ width: 390, height: 844 });
 
-        await expect(navigation.getByRole("button", { name: "Open menu" })).toHaveAttribute("aria-expanded", "false");
+        await expect(navigation.getByRole("button", { name: "Open menu" })).toBeVisible();
     });
 });

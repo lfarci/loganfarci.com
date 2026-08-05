@@ -167,11 +167,15 @@ skip navigation, and explicit theme persistence across navigation and reload. HT
 status codes, prerendered markup, metadata, machine files, assets, and the 404 fallback
 remain the Node smoke suite's responsibility.
 
-Run the browser suite against a local production preview or deployed environment from
-`src/`:
+Run the browser suite against a local Azure Static Web Apps emulator or deployed
+environment from `src/`. The SWA emulator serves the prerendered HTML for clean deep
+links such as `/about`; Vite preview's fallback serves the root document for those
+requests and can cause hydration mismatches.
 
 ```bash
-PLAYWRIGHT_BASE_URL=http://localhost:4173 npm run test:e2e
+npm run build
+npm run preview:swa
+PLAYWRIGHT_BASE_URL=http://127.0.0.1:4280 npm run test:e2e
 PLAYWRIGHT_BASE_URL=https://example-preview.azurestaticapps.net npm run test:e2e
 ```
 
