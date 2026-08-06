@@ -1,6 +1,6 @@
 ---
 spec: testing
-version: 0.2.0
+version: 0.3.0
 status: current-state
 ---
 
@@ -160,12 +160,15 @@ The smoke command can be run locally against any deployed environment:
 
 The dedicated [`playwright.yml`](../../.github/workflows/playwright.yml) workflow is
 called by `deploy-app.yml` after a successful active, non-Dependabot PR preview deploy
-and uses that deployment's `static_web_app_url`. It MUST remain focused on hydrated
-browser behavior: uncaught page errors, primary desktop and mobile navigation, menu
-dismissal and responsive state, article navigation, browser Back/Forward, keyboard
-skip navigation, and explicit theme persistence across navigation and reload. HTTP
-status codes, prerendered markup, metadata, machine files, assets, and the 404 fallback
-remain the Node smoke suite's responsibility.
+and uses that deployment's `static_web_app_url`. Page specs are colocated with their
+page components as `*.spec.ts`, navigation coverage is colocated with the layout
+component it exercises, and shared Playwright helpers live in `src/test/playwright/`.
+The suite MUST remain focused on hydrated browser behavior: visible core-page contracts,
+primary desktop and mobile navigation, menu dismissal and responsive state, article
+deep links and navigation, browser Back/Forward, keyboard skip navigation, and explicit
+theme persistence across navigation and reload. HTTP status codes, prerendered markup,
+metadata, machine files, assets, and the 404 fallback remain the Node smoke suite's
+responsibility.
 
 Run the browser suite against a local Azure Static Web Apps emulator or deployed
 environment from `src/`. The SWA emulator serves the prerendered HTML for clean deep
