@@ -81,6 +81,24 @@ for all code, Tailwind for styling (extend the theme in `src/tailwind.config.ts`
 the `@/` (→ `src/src/`) and `@content/` (→ `content/`) aliases. Write clear, maintainable
 code with comments only where they clarify.
 
+## Pull Request Title Convention
+
+This project follows the [Conventional Commits](https://www.conventionalcommits.org/) specification for **pull request titles**. The pull request title becomes the commit message on the main branch when squash merging.
+
+**Format**: `type(scope): description`
+
+**Allowed types**: `feat`, `fix`, `docs`, `chore`, `refactor`, `test`, `ci`, `style`, `perf`, `revert`
+
+**Scope** is optional. **Description** is required and must be in lowercase.
+
+**Examples**:
+- `feat: add dark mode toggle`
+- `fix: resolve hydration mismatch on reload`
+- `chore: update dependencies`
+- `refactor(api): simplify authentication middleware`
+
+A GitHub Actions workflow (`check-pull-request-title`) validates every pull request title using [action-semantic-pull-request](https://github.com/amannn/action-semantic-pull-request). Pull requests with invalid titles will fail the check and cannot be merged until the title is corrected.
+
 ## Patterns and Integration
 
 Routing, the SSR + prerender contract, and the markdown/JSON content pipeline are
