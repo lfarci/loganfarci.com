@@ -43,15 +43,7 @@ type(scope): description
 
 A GitHub Actions workflow validates every pull request title against this convention using [action-semantic-pull-request](https://github.com/amannn/action-semantic-pull-request). Pull requests with invalid titles will fail the check and cannot be merged until the title is corrected.
 
-### Local Commit Linting
-
-For local development, commitlint enforces the Conventional Commits specification on individual commit messages. This runs automatically via a Git hook when you commit. The configuration is defined in `commitlint.config.js` at the project root.
-
-To run manually:
-
-```bash
-npx commitlint --from HEAD~1
-```
+This project uses squash merges, so the pull request title becomes the commit message on the main branch. This is the only title that needs to follow the convention.
 
 ## Development Workflow
 

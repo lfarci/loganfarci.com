@@ -19,8 +19,7 @@
     "test": "vitest run",
     "test:e2e": "playwright test",
     "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage",
-    "prepare": "cd .. && husky"
+    "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
     "@microsoft/applicationinsights-web": "^3.4.1",
@@ -40,8 +39,6 @@
   },
   "devDependencies": {
     "@azure/static-web-apps-cli": "^2.0.9",
-    "@commitlint/cli": "^21.2.1",
-    "@commitlint/config-conventional": "^21.2.0",
     "@eslint/eslintrc": "^3.3.1",
     "@fontsource-variable/manrope": "*",
     "@fontsource/noto-sans": "*",
@@ -60,7 +57,6 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "gray-matter": "^4.0.3",
-    "husky": "^9.1.7",
     "jsdom": "^28.1.0",
     "prettier": "3.6.2",
     "tailwindcss": "^4.2.1",
