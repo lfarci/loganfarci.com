@@ -28,8 +28,8 @@ jobs:
             style
             perf
             revert
-          subjectPattern: ^.+$
+          subjectPattern: ^[a-z].*\S$
           subjectPatternError: |
-            The subject (text after the colon) must not be empty.
+            The subject must start with a lowercase letter and contain at least one non-whitespace character.
             Found: "{subject}"
           validateSingleCommit: false
