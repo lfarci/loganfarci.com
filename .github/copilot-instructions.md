@@ -97,7 +97,7 @@ This project follows the [Conventional Commits](https://www.conventionalcommits.
 - `chore: update dependencies`
 - `refactor(api): simplify authentication middleware`
 
-A GitHub Actions workflow validates every pull request title using [action-semantic-pull-request](https://github.com/amannn/action-semantic-pull-request). Pull requests with invalid titles will fail the check and cannot be merged until the title is corrected.
+A GitHub Actions workflow (`check-pull-request-title`) validates every pull request title using [action-semantic-pull-request](https://github.com/amannn/action-semantic-pull-request). Pull requests with invalid titles will fail the check and cannot be merged until the title is corrected.
 
 ## Patterns and Integration
 
