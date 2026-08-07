@@ -1,6 +1,4 @@
 ---
-applyTo: ".github/prompts/issues.*.prompt.md"
----
 
 # GitHub Issues Management Instructions
 
