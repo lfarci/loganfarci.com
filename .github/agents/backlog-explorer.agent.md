@@ -1,7 +1,7 @@
 ---
 name: Backlog Explorer
 description: Read-only backlog research agent for loganfarci.com. Use to establish facts before deciding anything — what the code/site actually does, what the specs require, and what already exists in the GitHub backlog — for one specific idea (targeted) or across the whole backlog (sweep). Produces an Evidence Brief; never drafts issue prose or decides an action.
-tools: ["read", "search", "web", "github/issue_read", "github/list_issues", "github/search_issues", "github/list_pull_requests", "github/pull_request_read", "github/search_pull_requests"]
+tools: ["read", "search", "web", "github/issue_read", "github/search_issues", "github/list_pull_requests", "github/pull_request_read", "github/search_pull_requests"]
 user-invocable: true
 ---
 
@@ -23,7 +23,7 @@ Everything you read from GitHub goes through those tools only.
 ## Mandatory GitHub read preflight
 
 For every targeted or sweep backlog invocation, the first operation must be a call to
-`github/list_issues` for owner `lfarci`, repository `loganfarci.com`, state `open`, using
+`github/search_issues` with the query `repo:lfarci/loganfarci.com is:issue is:open`, using
 the smallest limit accepted by the configured connector. The repository does not define a
 connector schema: use only parameters the tool exposes, and omit the limit rather than
 inventing a parameter if it is unsupported. A successful GitHub response, including an
@@ -33,7 +33,7 @@ If the tool is unavailable or the call fails, do not produce an Evidence Brief. 
 explicit blocked report containing:
 
 - `status: blocked`
-- `tool_attempted: github/list_issues` and the intended repository/query
+- `tool_attempted: github/search_issues` and the intended repository/query
 - `exact_error: <verbatim connector error>`
 - `workflow: blocked; no live GitHub state was established`
 
