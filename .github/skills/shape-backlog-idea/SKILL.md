@@ -17,8 +17,15 @@ constraints, and issue structure he should not need to specify himself.
 3. Read the specs and path-specific instructions relevant to the idea.
 4. Inspect `git status` and use the latest available `main` state for current facts.
    Do not overwrite or mix in unrelated local work.
-5. Use the GitHub connector first for issue reads and writes. Use `gh` for gaps such
-   as targeted issue searches, milestones, local-branch context, or history.
+5. Before beginning any backlog workflow, verify live GitHub read availability with the
+   configured `github/list_issues` tool for owner `lfarci`, repository `loganfarci.com`,
+   state `open`, and the smallest supported limit. If that preflight is unavailable or
+   fails, stop with a blocked report containing the attempted tool, the exact connector
+   error, and the statement that no live GitHub state was established. Do not use `gh`,
+   `web`, local/stale snapshots, prior conversation, or inferred issue state as a
+   fallback. After a successful preflight, use the GitHub connector for issue reads and
+   writes; `gh` is available for gaps only where the invoking agent has an execute tool
+   and the operation is not a fallback for a failed preflight.
 
 ## Reconstruct the request
 
