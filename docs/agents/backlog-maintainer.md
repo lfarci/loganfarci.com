@@ -7,9 +7,10 @@ status: design
 # Backlog Maintainer Agent System — Design
 
 Design for the **product-owner side** of the agent workflow: a user-invocable
-orchestrator that owns the backlog lifecycle and delegates each phase to a focused
-subagent. This document is the design of record; the `.agent.md` files and the GitHub
-issues that track their creation derive from it.
+orchestrator that owns the backlog lifecycle, delegates read-only phases to focused
+subagents, and coordinates the human-controlled writer hand-off. This document is the
+design of record; the `.agent.md` files and the GitHub issues that track their creation
+derive from it.
 
 Sibling systems (build/ship, articles) reuse the same structural pattern and are
 designed separately.
@@ -22,12 +23,13 @@ design.
 
 | Capability | Status | Design consequence |
 | --- | --- | --- |
-| `agent` tool alias (aliases: `Task`, `custom-agent`) lets an agent dispatch another custom agent as a subagent | Supported on **Copilot CLI** and **VS Code** | The orchestrator can genuinely delegate; this is not a "playbook that tells a human what to run next". |
+| `agent` tool alias (aliases: `Task`, `custom-agent`) lets an agent dispatch another custom agent as a subagent | Supported on **Copilot CLI** and **VS Code** | The orchestrator can genuinely delegate read-only phases; gated writes require a user-controlled transition. |
 | Subagents run with their **own isolated context window** | Supported | Each phase gets a clean context; the orchestrator's context stays small and is not polluted by raw research. |
 | `tools:` **filters** the tool set actually exposed to the agent (omit = all, `[]` = none, list = only those) | Enforced, not advisory | "Only one agent may write to GitHub" is a real, enforceable boundary — not a convention. |
 | `disable-model-invocation: true` prevents the model from auto-selecting an agent as a subagent | Supported | The human write-gate can be enforced structurally on `issue-writer`, not just requested in prose. |
 | `user-invocable: false` hides an agent from the picker | Supported | Deliberately **not** used here — see "Surface portability". |
 | VS Code-only `agents:` list restricts which subagents a coordinator may dispatch, and **overrides** `disable-model-invocation` for that coordinator | VS Code only | The orchestrator's `agents:` list must **omit** `issue-writer`, or the write gate is bypassed in VS Code. |
+| VS Code-only `handoffs:` list offers user-controlled transitions between agents | VS Code only | Post-approval writes on VS Code use a handoff button/prompt, not autonomous coordinator dispatch. |
 | Subagent dispatch is **not** supported on the GitHub Copilot app / github.com | Not supported | The cycle must degrade to manual sequential invocation there. |
 | Skills are description-triggered and shared by all agents; there is no `skills:` frontmatter field | Confirmed | Agents reference `shape-backlog-idea` in their prose body; the skill stays the single source of backlog judgment. |
 | Subagent invocations are **stateless** — no follow-up messages to a running subagent | Confirmed | All context must be passed in the initial delegation, which forces explicit artifact hand-offs (below). |
@@ -48,8 +50,8 @@ design.
    remains the single source of truth for investigation depth, backlog-action choice,
    issue structure, and prioritization order. Agents reference it; they do not restate it.
 5. **The human gate is structural.** Approval before any GitHub write is enforced by
-   agent configuration (`disable-model-invocation`, omission from `agents:`), not only by
-   instructions the model could rationalize past.
+   agent configuration (`disable-model-invocation`, omission from `agents:`) plus a
+   user-controlled writer hand-off, not only by instructions the model could rationalize past.
 6. **Degrade gracefully.** The same agents must be runnable one-by-one by a human on a
    surface without delegation.
 
@@ -67,7 +69,7 @@ Six agents: one orchestrator, five subagents.
 | **Tools** | `agent` (delegation), `read`, `search`, plus GitHub **read-only**. |
 | **Must NOT have** | Any GitHub write tool, `edit`, or `execute`. It must be incapable of mutating the backlog or the repo directly. |
 | **Produces** | A phase-by-phase status and a final report: what was found, what was decided, what was written (with links), what was escalated. |
-| **VS Code `agents:` list** | `backlog-explorer`, `backlog-shaper`, `backlog-prioritizer`, `issue-reviewer`. **Deliberately excludes `issue-writer`** so the write gate cannot be overridden. |
+| **VS Code `agents:` list** | `backlog-explorer`, `backlog-shaper`, `backlog-prioritizer`, `issue-reviewer`. **Deliberately excludes `issue-writer`** so the write gate cannot be overridden; approved writes use a user-controlled handoff instead. |
 | **On failure** | If any phase reports a blocking condition, stop and report. Never skip a phase to reach a write. |
 
 **Routing responsibility.** The orchestrator first classifies the request into one of four
@@ -114,7 +116,11 @@ Between shaping and writing. **Hard, non-optional, and structurally enforced.**
   `shape-backlog-idea` already imposes on manual use.
 - The human approves, edits, or rejects **per item**.
 - Enforcement: `issue-writer` carries `disable-model-invocation: true` so the model cannot
-  auto-dispatch it, and it is omitted from the orchestrator's VS Code `agents:` list.
+  auto-dispatch it. In VS Code, it is also omitted from the orchestrator's `agents:` list,
+  because listing it there would override that gate.
+- After approval, the orchestrator prepares the exact `issue-writer` prompt. The human must
+  trigger that writer invocation explicitly: by selecting the agent in CLI, or by clicking a
+  VS Code `handoffs:` transition. The write step is therefore **not** autonomous delegation.
 - Explore, shape, and prioritize need **no** gate — they are read-only, reversible, and
   cheap to re-run.
 
@@ -141,7 +147,7 @@ Between shaping and writing. **Hard, non-optional, and structurally enforced.**
 | **Tools** | `read`, `search`, GitHub **read-only**. |
 | **Must NOT have** | Any write tool. It flags; it never edits. Keeping the auditor unable to write preserves the single-writer property. |
 | **Produces** | A **Review Verdict**: pass, or fail with specific, actionable findings. |
-| **On fail** | The orchestrator re-invokes `issue-writer` with the findings — **bounded to one retry**. A second failure escalates to the human. This prevents an unbounded write/audit loop. |
+| **On fail** | The orchestrator prepares a corrected `issue-writer` prompt with the findings — **bounded to one retry** — and asks the human to trigger the writer again. A second failure escalates to the human. This prevents an unbounded write/audit loop. |
 
 ### 6. `backlog-prioritizer` — sequencing (read-only)
 
@@ -181,10 +187,10 @@ flowchart TD
     S -->|Issue Proposal| P[backlog-prioritizer<br/>read-only]
     P -->|Sequenced Plan| G{{HUMAN APPROVAL GATE<br/>per item}}
     G -->|rejected| O
-    G -->|approved| W[issue-writer<br/>ONLY writer]
+    G -->|approved: manual writer handoff| W[issue-writer<br/>ONLY writer]
     W -->|Write Receipt| R[issue-reviewer<br/>read-only]
     R -->|pass| O
-    R -->|fail, max 1 retry| W
+    R -->|fail: propose max 1 retry| G
     R -.->|2nd failure: escalate| H
     O -->|final report| H
 ```
@@ -195,6 +201,9 @@ Notes on the flow:
   and a prioritization request require it.
 - **The write/review loop runs per item**, not per batch, so one bad item cannot block or
   corrupt the rest.
+- **The writer hop is user-controlled.** On CLI the human selects `issue-writer`; on VS Code
+  the handoff button/prompt switches to it. The receipt returns to the orchestrator before
+  review continues.
 - **The orchestrator never touches GitHub state**; it only ever reports and routes.
 
 ## Artifact contracts
@@ -237,8 +246,8 @@ specified once in the shared skill so independently-invoked agents agree on them
 
 | Surface | Behavior |
 | --- | --- |
-| **Copilot CLI** | Full delegation. The human invokes `backlog-maintainer`; it dispatches subagents. `issue-writer` still requires deliberate human triggering. |
-| **VS Code** | Full delegation via the subagent system. The orchestrator's `agents:` list must omit `issue-writer` to preserve the gate. |
+| **Copilot CLI** | Delegated read-only phases through the approval gate. The approved write is a manual user-selected `issue-writer` invocation; the human returns the Write Receipt to `backlog-maintainer`, which dispatches `issue-reviewer`. A retry repeats the same explicit writer trigger. |
+| **VS Code** | Delegated read-only phases through the approval gate. The orchestrator's `agents:` list must omit `issue-writer` to preserve the gate; `handoffs:` provide the user-controlled transition to the writer and back to the maintainer. This is intentionally not fully delegated end-to-end. |
 | **Copilot app / github.com** | No subagent dispatch. The cycle degrades to the human invoking each agent in order via `/agent`, passing the artifact from the previous phase. |
 
 To keep that degradation possible, **every subagent stays `user-invocable: true`.** The
