@@ -1,6 +1,6 @@
 ---
 spec: backlog-maintainer agent system
-version: 0.1.0
+version: 0.2.0
 status: design
 ---
 
@@ -31,8 +31,54 @@ design.
 | VS Code-only `agents:` list restricts which subagents a coordinator may dispatch, and **overrides** `disable-model-invocation` for that coordinator | VS Code only | The orchestrator's `agents:` list must **omit** `issue-writer`, or the write gate is bypassed in VS Code. |
 | VS Code-only `handoffs:` list offers user-controlled transitions between agents | VS Code only | Post-approval writes on VS Code use a handoff button/prompt, not autonomous coordinator dispatch. |
 | Subagent dispatch is **not** supported on the GitHub Copilot app / github.com | Not supported | The cycle must degrade to manual sequential invocation there. |
+| Configured GitHub read tools provide the live backlog read | Required preflight | Every backlog phase that needs live GitHub state must prove this capability before reading or writing; a local file check is not sufficient. |
 | Skills are description-triggered and shared by all agents; there is no `skills:` frontmatter field | Confirmed | Agents reference `shape-backlog-idea` in their prose body; the skill stays the single source of backlog judgment. |
 | Subagent invocations are **stateless** — no follow-up messages to a running subagent | Confirmed | All context must be passed in the initial delegation, which forces explicit artifact hand-offs (below). |
+
+## GitHub MCP configuration surface
+
+This repository already has the supported VS Code workspace configuration in
+[`.vscode/mcp.json`](../../.vscode/mcp.json), where the remote server is named `github`
+and uses GitHub's OAuth-capable hosted endpoint. Do not add a token or duplicate this
+server in another checked-in MCP file. VS Code forwards this workspace configuration to
+the Agent Host when enabled; Copilot CLI instead provides the GitHub MCP server
+read-only by default and keeps any custom CLI configuration in the user's
+`~/.copilot/mcp-config.json`. Copilot cloud agent also provides its `github` server as an
+out-of-the-box capability, configured in repository settings rather than a committed
+`.mcp.json`.
+
+The agent frontmatter uses the current GitHub MCP tool names, namespaced as
+`github/<tool>`. In particular, issue reads and writes are the combined
+`github/issue_read` and `github/issue_write` tools, and pull request reads use
+`github/pull_request_read`; obsolete names such as `github/get_issue`,
+`github/create_issue`, and `github/list_milestones` must not be added back.
+
+## GitHub read preflight and blocked state
+
+Live GitHub state is a prerequisite for every backlog workflow. Before the maintainer
+classifies or dispatches, and before any phase independently reads live backlog state, the
+agent MUST call the configured `github/list_issues` read tool for owner `lfarci`,
+repository `loganfarci.com`, state `open`, with the smallest limit accepted by that
+connector. The repository does not document the connector schema, so agents MUST use only
+parameters exposed by the tool and omit the limit if it is unsupported. A successful
+GitHub response — including an empty result — is the only valid preflight.
+
+The preflight is a capability check, not a local repository check. If the tool is
+unavailable or the call fails, the agent MUST stop and return a blocked report with:
+
+- `status: blocked`
+- `tool_attempted: github/list_issues` and the intended owner, repository, state, and
+  limit (when supported)
+- `exact_error: <verbatim connector error>`
+- `workflow: blocked; no live GitHub state was established`
+
+The blocked report MUST NOT be converted into an Evidence Brief, Issue Proposal,
+Sequenced Plan, Write Receipt, or Review Verdict, and MUST NOT be passed to the next
+phase. There is no fallback: agents MUST NOT use `gh`, `web`, a local/stale snapshot,
+prior conversation, or inferred issue state to continue. The maintainer MUST stop before
+classification and subagent dispatch. The explorer, prioritizer, reviewer, and writer
+MUST stop their respective work; the shaper MUST propagate a blocked input without
+shaping it, and MUST run this preflight first if it independently needs live GitHub reads.
 
 ## Design principles
 
@@ -231,6 +277,16 @@ specified once in the shared skill so independently-invoked agents agree on them
 - `findings[]` — each with evidence and a *suggested* action type (not a decision)
 - `unknowns` — anything that could not be verified, explicitly labelled as such
 
+**Blocked report** (terminal preflight failure)
+- `status: blocked`
+- `tool_attempted` — `github/list_issues`, with the intended owner, repository, state,
+  and smallest supported limit
+- `exact_error` — the connector error verbatim
+- `workflow` — `blocked; no live GitHub state was established`
+
+This is a terminal status for the current workflow, not an Evidence Brief. It MUST NOT be
+passed to the next phase or converted into any other artifact contract.
+
 **Issue Proposal** (shaper → gate → writer)
 - `recommendation` — create | update | close | defer | **no-op**, with the decisive tradeoff
 - `target` — repository, and issue number when updating
@@ -272,7 +328,9 @@ cycle must be runnable by hand; delegation is an accelerant, not a dependency.
 The skill stays the single source of backlog judgment — investigation depth, choosing the
 backlog action, issue structure, prioritization order, and the "state the write before
 making it" rule. Agents reference it rather than restating it, so there is one place to
-change the rules.
+change the rules. Its preparation rules also carry the GitHub read preflight and the
+no-fallback requirement; the blocked-state artifact above remains the system-level
+hand-off contract.
 
 One addition is needed: an **artifact hand-off section** documenting the contracts above,
 so agents invoked independently still produce and consume compatible shapes.
