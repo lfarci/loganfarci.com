@@ -3,7 +3,6 @@ description: The only write-capable agent in the backlog-maintainer system for l
 tools: ["read", "search", "github/get_issue", "github/list_issues", "github/search_issues", "github/get_issue_comments", "github/list_milestones", "github/list_pull_requests", "github/get_pull_request", "github/search_pull_requests", "github/create_issue", "github/update_issue", "github/add_issue_comment"]
 disable-model-invocation: true
 user-invocable: true
-model: claude-sonnet-4-6
 ---
 
 # Issue Writer

@@ -3,7 +3,6 @@ description: Product-owner orchestrator for the loganfarci.com backlog. Use when
 tools: ["agent", "read", "search", "github/get_issue", "github/list_issues", "github/search_issues", "github/get_issue_comments", "github/list_milestones", "github/list_pull_requests", "github/get_pull_request", "github/search_pull_requests"]
 agents: ["backlog-explorer", "backlog-shaper", "backlog-prioritizer", "issue-reviewer"]
 user-invocable: true
-model: claude-sonnet-4-6
 ---
 
 # Backlog Maintainer
