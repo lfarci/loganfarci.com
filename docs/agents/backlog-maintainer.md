@@ -115,6 +115,8 @@ Between shaping and writing. **Hard, non-optional, and structurally enforced.**
   (create/update/close), title, type label, milestone, and assignee — matching the rule
   `shape-backlog-idea` already imposes on manual use.
 - The human approves, edits, or rejects **per item**.
+- **Any change to proposal content re-enters this gate.** Approval covers a specific payload,
+  not an item in general, so a re-shaped proposal is a new proposal and needs fresh approval.
 - Enforcement: `issue-writer` carries `disable-model-invocation: true` so the model cannot
   auto-dispatch it. In VS Code, it is also omitted from the orchestrator's `agents:` list,
   because listing it there would override that gate.
@@ -146,8 +148,8 @@ Between shaping and writing. **Hard, non-optional, and structurally enforced.**
 | **Reads** | The Write Receipt, the posted issue, the approved proposal, sibling issues, `shape-backlog-idea`. |
 | **Tools** | `read`, `search`, GitHub **read-only**. |
 | **Must NOT have** | Any write tool. It flags; it never edits. Keeping the auditor unable to write preserves the single-writer property. |
-| **Produces** | A **Review Verdict**: pass, or fail with specific, actionable findings. |
-| **On fail** | The orchestrator prepares a corrected `issue-writer` prompt with the findings — **bounded to one retry** — and asks the human to trigger the writer again. A second failure escalates to the human. This prevents an unbounded write/audit loop. |
+| **Produces** | A **Review Verdict**: pass, or fail with specific, actionable findings, each classified as an *application failure* or a *proposal defect* (below). |
+| **On fail** | Routed by failure class. An **application failure** goes straight back to `issue-writer` with the unchanged approved payload, **bounded to one retry**. A **proposal defect** goes back to `backlog-shaper` and through the approval gate again, because fixing it changes approved content. Either way a second failure escalates to the human, which prevents an unbounded loop. |
 
 ### 6. `backlog-prioritizer` — sequencing (read-only)
 
@@ -190,7 +192,8 @@ flowchart TD
     G -->|approved: manual writer handoff| W[issue-writer<br/>ONLY writer]
     W -->|Write Receipt| R[issue-reviewer<br/>read-only]
     R -->|pass| O
-    R -->|fail: propose max 1 retry| G
+    R -->|application failure: retry unchanged payload, max 1| W
+    R -->|proposal defect: re-shape| S
     R -.->|2nd failure: escalate| H
     O -->|final report| H
 ```
@@ -204,6 +207,14 @@ Notes on the flow:
 - **The writer hop is user-controlled.** On CLI the human selects `issue-writer`; on VS Code
   the handoff button/prompt switches to it. The receipt returns to the orchestrator before
   review continues.
+- **Review failures are routed by class, not lumped together.** An *application failure*
+  means the approved payload did not land correctly — a transient API error, a field that
+  did not take, a partial write. The approved content is still valid, so the writer may be
+  re-invoked with the **unchanged** payload. A *proposal defect* means the approved content
+  itself was wrong — a bad milestone, a missing spec link, a duplicate that should have been
+  an update. Repairing that changes what was approved, so it must go back to the shaper and
+  through the gate again. Letting the writer "fix" a proposal defect would both break its
+  no-re-deciding constraint and silently bypass human approval.
 - **The orchestrator never touches GitHub state**; it only ever reports and routes.
 
 ## Artifact contracts
@@ -239,6 +250,9 @@ specified once in the shared skill so independently-invoked agents agree on them
 
 **Review Verdict** (reviewer → orchestrator)
 - `result` — pass | fail
+- `failure_class` — `application` (approved payload did not land) | `proposal` (approved
+  content itself is wrong), when failed. Determines whether the fix routes to the writer or
+  back through the shaper and gate.
 - `findings[]` — specific and actionable, when failed
 - `retry_count`
 
