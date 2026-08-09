@@ -140,3 +140,129 @@ Return:
 - any sequencing dependency or unverified assumption.
 
 Keep the handoff concise. The GitHub issue contains the implementation detail.
+
+## Artifact Hand-Off Contracts
+
+When invoked as part of the `backlog-maintainer` agent system (or when independently invoked
+agents need to hand off structured data to the next phase), use these contract shapes. Each
+shape is self-contained so stateless, context-isolated subagents can produce and consume
+compatible artifacts without shared memory. The owning agent for each contract is listed;
+refer to the corresponding `.github/agents/*.agent.md` file for the agent's full
+responsibilities.
+
+### Evidence Brief (produced by `backlog-explorer`, consumed by `backlog-shaper`)
+
+The explorer establishes facts; the Evidence Brief carries them forward.
+
+```
+## Evidence Brief
+
+**subject:** [the idea, gap, or issue under investigation]
+
+**current_behavior:** [what the code/site actually does today, with file or route citations]
+
+**spec_position:** [what the relevant specs require, with links to spec sections]
+
+**existing_backlog:** [related open/closed issues and PRs, with issue numbers and URLs]
+
+**findings:**
+1. [finding with evidence and a *suggested* action type (create/update/close/defer/no-op) — a suggestion, not a decision]
+2. ...
+
+**unknowns:** [anything that could not be verified, explicitly labelled as such]
+```
+
+### Issue Proposal (produced by `backlog-shaper`, approved at human gate, consumed by `issue-writer`)
+
+The shaper drafts and recommends; the Issue Proposal carries the exact write payload
+through the approval gate to the writer.
+
+```
+## Issue Proposal
+
+**recommendation:** [create | update | close | defer | no-op]
+
+**rationale:** [the decisive tradeoff, in 2-3 sentences]
+
+**target:** lfarci/loganfarci.com, issue #[number] (if update/close; omit for create)
+
+**title:** [exact issue title]
+
+**type_label:** [bug | task | enhancement]
+
+**milestone:** [milestone name, or "none"]
+
+**assignee:** [GitHub username, or "none"]
+
+**body:**
+[exact body text to post]
+
+**options:** (only when design is genuinely open)
+1. **Option A (preferred):** [description, tradeoffs]
+2. **Option B:** [description, tradeoffs]
+3. **Option C:** [description, tradeoffs]
+
+**scope_check:** [confirmation this does not cross non-goals.md]
+
+**verification:** [how the resulting work would be proven done — concrete, testable]
+```
+
+### Sequenced Plan (produced by `backlog-prioritizer`, consumed by human / orchestrator)
+
+The prioritizer orders work; the Sequenced Plan carries the ordering recommendation.
+
+```
+## Sequenced Plan
+
+**ordered_items:**
+1. [issue #, title] — **rationale:** [position reason, priority tier, dependencies]
+2. ...
+
+**dependencies:**
+- #[before] before #[after] — [why]
+- ...
+
+**ambiguous:** (only when genuinely ambiguous)
+- #[a] vs #[b] — [why neither has a clear objective priority]
+```
+
+### Write Receipt (produced by `issue-writer`, consumed by `issue-reviewer` and orchestrator)
+
+The writer confirms what it did; the Write Receipt carries the proof.
+
+```
+## Write Receipt
+
+**action_taken:** [create | update | close]
+**issue_number:** #[number]
+**issue_url:** [full GitHub URL]
+**fields_set:**
+- title: [actual title on GitHub]
+- type_label: [actual label]
+- milestone: [actual milestone, or "none"]
+- assignee: [actual assignee, or "none"]
+**proposal_ref:** [brief identifier for the approved proposal]
+```
+
+### Review Verdict (produced by `issue-reviewer`, consumed by orchestrator)
+
+The reviewer audits the posted issue; the Review Verdict carries the pass/fail result
+and routing information.
+
+```
+## Review Verdict
+
+**result:** [pass | fail]
+
+(When failed:)
+**failure_class:** [application | proposal]
+**findings:**
+1. [specific finding — what is wrong, where, and why it matters]
+2. ...
+**retry_count:** [0 for first review]
+
+Routing:
+- application → re-invoke issue-writer with unchanged payload, max 1 retry
+- proposal → route back to backlog-shaper → re-enter the human approval gate
+- Second failure of either class → escalate to human, stop the loop
+```
