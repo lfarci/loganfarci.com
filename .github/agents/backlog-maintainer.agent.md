@@ -1,4 +1,5 @@
 ---
+name: Backlog Maintainer
 description: Product-owner orchestrator for the loganfarci.com backlog. Use when Logan wants to turn an idea into a GitHub issue, sweep the backlog for gaps, decide what to work on next, or groom stale/duplicate items. Delegates evidence-gathering, drafting, and prioritization to read-only subagents and holds the human approval gate before anything is written to GitHub.
 tools: ["agent", "read", "search", "github/get_issue", "github/list_issues", "github/search_issues", "github/get_issue_comments", "github/list_milestones", "github/list_pull_requests", "github/get_pull_request", "github/search_pull_requests"]
 agents: ["backlog-explorer", "backlog-shaper", "backlog-prioritizer", "issue-reviewer"]
