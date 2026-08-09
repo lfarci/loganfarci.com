@@ -130,6 +130,54 @@ Apply these rules:
 - Prefer closing completed zero-open-issue milestones during a dedicated backlog
   cleanup rather than silently mutating them while shaping an unrelated idea.
 
+## Artifact hand-off contracts
+
+The `backlog-maintainer` agent system (`.github/agents/backlog-maintainer.agent.md` and
+its five subagents) applies this skill's judgment across separately-invoked,
+context-isolated agents. Because each subagent invocation is stateless, every hand-off
+between phases must be a fully self-contained artifact in one of the shapes below.
+These are specified once, here, so independently-invoked agents produce and consume
+compatible shapes without duplicating this skill's decision logic. See
+[`docs/agents/backlog-maintainer.md`](../../../docs/agents/backlog-maintainer.md) for the
+full system design.
+
+**Evidence Brief** (`backlog-explorer` → `backlog-shaper`)
+- `subject` — the idea, gap, or issue under investigation
+- `current_behavior` — what the code/site actually does today, with file or route
+  citations
+- `spec_position` — what the relevant specs require, with links
+- `existing_backlog` — related open/closed issues and PRs, with numbers
+- `findings[]` — each with evidence and a *suggested* action type (not a decision)
+- `unknowns` — anything that could not be verified, explicitly labelled as such
+
+**Issue Proposal** (`backlog-shaper` → approval gate → `issue-writer`)
+- `recommendation` — create | update | close | defer | **no-op**, with the decisive
+  tradeoff
+- `target` — repository, and issue number when updating
+- `title`, `body` — the exact final text to post
+- `type_label`, `milestone`, `assignee` — the exact metadata to set
+- `options[]` — 2–3 credible approaches with a preferred one, when design is genuinely
+  open
+- `scope_check` — confirmation it does not cross `non-goals.md`
+- `verification` — how the resulting work would be proven done
+
+**Sequenced Plan** (`backlog-prioritizer` → approval gate)
+- `ordered_items[]` — with position rationale
+- `dependencies[]` — explicit "X before Y"
+- `ambiguous[]` — orderings requiring a human decision
+
+**Write Receipt** (`issue-writer` → `issue-reviewer`)
+- `action_taken`, `issue_number`, `issue_url`, `fields_set`, `proposal_ref`
+
+**Review Verdict** (`issue-reviewer` → `backlog-maintainer`)
+- `result` — pass | fail
+- `failure_class` — `application` (approved payload did not land) | `proposal` (approved
+  content itself is wrong), when failed. Determines whether the fix routes to
+  `issue-writer` for an unchanged-payload retry (bounded to one) or back through
+  `backlog-shaper` and the approval gate.
+- `findings[]` — specific and actionable, when failed
+- `retry_count`
+
 ## Finish
 
 Return:
