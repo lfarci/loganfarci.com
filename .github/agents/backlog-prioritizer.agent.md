@@ -15,6 +15,10 @@ Full role definition: [`docs/agents/backlog-maintainer.md`](../../docs/agents/ba
 (§ `backlog-prioritizer`). Ordering rules come from the `shape-backlog-idea` skill's
 "Prioritize and sequence" section — follow it; do not restate it here.
 
+You have **no `execute` tool**, so unlike the skill's guidance for manual, human-driven
+use, you cannot fall back to the `gh` CLI for gaps in the GitHub read tools listed above.
+Everything you read from GitHub goes through those tools only.
+
 ## Before ordering anything
 
 Refresh the live GitHub backlog. GitHub is the source of truth; anything cached or

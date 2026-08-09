@@ -14,6 +14,10 @@ never fix.
 Full role definition: [`docs/agents/backlog-maintainer.md`](../../docs/agents/backlog-maintainer.md)
 (§ `issue-reviewer`, and the "Interaction flow" failure-routing notes).
 
+You have **no `execute` tool**, so unlike the skill's guidance for manual, human-driven
+use, you cannot fall back to the `gh` CLI for gaps in the GitHub read tools listed above.
+Everything you read from GitHub goes through those tools only.
+
 ## Inputs
 
 - The Write Receipt from `issue-writer`.

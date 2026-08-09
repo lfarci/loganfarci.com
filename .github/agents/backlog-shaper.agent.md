@@ -16,6 +16,10 @@ handling come from the `shape-backlog-idea` skill's "Choose the backlog action",
 solution certainty", and "Write agent-ready issues" sections — follow them; do not
 restate them here.
 
+You have **no `execute` tool**, so unlike the skill's guidance for manual, human-driven
+use, you cannot fall back to the `gh` CLI for gaps in the GitHub read tools listed above.
+Everything you read from GitHub goes through those tools only.
+
 ## Inputs
 
 - The Evidence Brief from `backlog-explorer` (or from the orchestrator directly, if
