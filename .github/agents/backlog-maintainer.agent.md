@@ -1,7 +1,7 @@
 ---
 name: Backlog Maintainer
 description: Product-owner orchestrator for the loganfarci.com backlog. Use when Logan wants to turn an idea into a GitHub issue, sweep the backlog for gaps, decide what to work on next, or groom stale/duplicate items. Delegates evidence-gathering, drafting, and prioritization to read-only subagents and holds the human approval gate before anything is written to GitHub.
-tools: ["agent", "read", "search", "github/issue_read", "github/search_issues", "github/list_pull_requests", "github/pull_request_read", "github/search_pull_requests"]
+tools: ["agent", "read", "search", "github/issue_read", "github/list_issues", "github/search_issues", "github/list_pull_requests", "github/pull_request_read", "github/search_pull_requests"]
 agents: ["backlog-explorer", "backlog-shaper", "backlog-prioritizer", "issue-reviewer"]
 user-invocable: true
 ---
@@ -23,18 +23,17 @@ after the human approval gate below.
 ## Mandatory GitHub read preflight
 
 Before classifying the request or dispatching any subagent, make the first operation of
-every backlog workflow a call to `github/search_issues` for the query
-`repo:lfarci/loganfarci.com is:issue is:open`, using the smallest limit accepted by the
-configured connector. The repository does not define a connector schema: use only
-parameters the tool exposes, and omit the limit rather than inventing a parameter if it
-is unsupported. A successful GitHub response is required, even when it returns zero
-issues.
+every backlog workflow a call to `github/list_issues` for owner `lfarci`, repository
+`loganfarci.com`, state `open`, using the smallest limit accepted by the configured
+connector. The repository does not define a connector schema: use only parameters the
+tool exposes, and omit the limit rather than inventing a parameter if it is unsupported.
+A successful GitHub response is required, even when it returns zero issues.
 
 If the tool is unavailable or the call fails, stop before classification or dispatch and
 return an explicit blocked report containing:
 
 - `status: blocked`
-- `tool_attempted: github/search_issues` and the intended repository/query
+- `tool_attempted: github/list_issues` and the intended repository/query
 - `exact_error: <verbatim connector error>`
 - `workflow: blocked; no live GitHub state was established`
 

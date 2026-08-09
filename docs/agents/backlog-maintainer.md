@@ -49,17 +49,16 @@ out-of-the-box capability, configured in repository settings rather than a commi
 
 The agent frontmatter uses the current GitHub MCP tool names, namespaced as
 `github/<tool>`. In particular, issue reads and writes are the combined
-`github/issue_read` and `github/issue_write` tools, issue searches use
-`github/search_issues`, and pull request reads use `github/pull_request_read`; obsolete
-names such as `github/get_issue`, `github/create_issue`, and `github/list_milestones` must
-not be added back.
+`github/issue_read` and `github/issue_write` tools, and pull request reads use
+`github/pull_request_read`; obsolete names such as `github/get_issue`,
+`github/create_issue`, and `github/list_milestones` must not be added back.
 
 ## GitHub read preflight and blocked state
 
 Live GitHub state is a prerequisite for every backlog workflow. Before the maintainer
 classifies or dispatches, and before any phase independently reads live backlog state, the
-agent MUST call the configured `github/search_issues` read tool with the query
-`repo:lfarci/loganfarci.com is:issue is:open`, using the smallest limit accepted by that
+agent MUST call the configured `github/list_issues` read tool for owner `lfarci`,
+repository `loganfarci.com`, state `open`, with the smallest limit accepted by that
 connector. The repository does not document the connector schema, so agents MUST use only
 parameters exposed by the tool and omit the limit if it is unsupported. A successful
 GitHub response — including an empty result — is the only valid preflight.
@@ -68,8 +67,8 @@ The preflight is a capability check, not a local repository check. If the tool i
 unavailable or the call fails, the agent MUST stop and return a blocked report with:
 
 - `status: blocked`
-- `tool_attempted: github/search_issues` and the intended repository/query and state
-  (with a limit when supported)
+- `tool_attempted: github/list_issues` and the intended owner, repository, state, and
+  limit (when supported)
 - `exact_error: <verbatim connector error>`
 - `workflow: blocked; no live GitHub state was established`
 
@@ -280,7 +279,7 @@ specified once in the shared skill so independently-invoked agents agree on them
 
 **Blocked report** (terminal preflight failure)
 - `status: blocked`
-- `tool_attempted` — `github/search_issues`, with the intended repository/query, state,
+- `tool_attempted` — `github/list_issues`, with the intended owner, repository, state,
   and smallest supported limit
 - `exact_error` — the connector error verbatim
 - `workflow` — `blocked; no live GitHub state was established`
