@@ -1,7 +1,7 @@
 ---
 name: Issue Reviewer
 description: Read-only post-write audit agent for loganfarci.com's backlog-maintainer system. Use after issue-writer executes an approved Issue Proposal, to verify what landed on GitHub matches what was approved and meets repository conventions. Flags drift, structure problems, duplication, and missing links; never edits anything itself.
-tools: ["read", "search", "github/issue_read", "github/list_issues", "github/search_issues", "github/list_pull_requests", "github/pull_request_read", "github/search_pull_requests"]
+tools: ["read", "search", "github/*"]
 user-invocable: true
 ---
 
