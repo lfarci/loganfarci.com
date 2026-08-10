@@ -1,11 +1,13 @@
 ---
-applyTo: "**/*.test.tsx"
+applyTo: "**/*.test.ts,**/*.test.tsx,**/*.spec.ts,**/*.spec.tsx"
 ---
 
 # Test File Instructions
 
-When creating or updating `*.test.tsx` files:
+When creating or updating TypeScript test files:
 
+- Follow `docs/specs/testing.md` and the applicable source scope; this file owns
+  test-local conventions only.
 - Cover the full observable behavior of the unit under test, including key state transitions, user interactions, and relevant edge cases.
 - Keep one observable behavior per `it` block using Arrange–Act–Assert.
 - Prefer one primary assertion per test case. Use a second assertion only when it validates the same observable outcome and improves signal.
