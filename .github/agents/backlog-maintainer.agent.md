@@ -24,12 +24,21 @@ yours.
 
 ## Mandatory GitHub read preflight
 
+GitHub repository state **must** be obtained through the `github` MCP server. No other
+source of GitHub data is acceptable.
+
 Before classifying the request or dispatching any subagent, make the first operation of
 every backlog workflow a call to `github/list_issues` for owner `lfarci`, repository
 `loganfarci.com`, state `open`, using the smallest limit accepted by the configured
 connector. The repository does not define a connector schema: use only parameters the
 tool exposes, and omit the limit rather than inventing a parameter if it is unsupported.
 A successful GitHub response is required, even when it returns zero issues.
+
+**Never fall back** to `gh`, Bash/shell commands, `curl`, web search, stale local state
+from the repository checkout, any other GitHub client, or inference from prior
+conversation — even if `github/list_issues` appears unavailable or returns an error. The
+`tools:` allowlist grants the `github/` MCP read tools directly; no other mechanism is
+authorised to reach GitHub.
 
 If `github/list_issues` errors as "not found" rather than a connector/auth failure, you
 may only self-heal by checking whether your already-granted `tools:` allowlist exposes an
@@ -39,16 +48,15 @@ runtime. If no working issue-listing tool is present among the tools you were ac
 given, treat this as blocked and say the surface likely needs a human update to this
 file's `tools:` frontmatter.
 
-If the tool is unavailable or the call fails, stop before classification or dispatch and
-return an explicit blocked report containing:
+If `github/list_issues` is unavailable or the call fails for any reason, stop before
+classification or dispatch and return an explicit blocked report containing:
 
 - `status: blocked`
 - `tool_attempted: github/list_issues` and the intended repository/query
 - `exact_error: <verbatim connector error>`
 - `workflow: blocked; no live GitHub state was established`
 
-Do not fall back to `gh`, `web`, a local or stale snapshot, prior conversation, or inferred
-issue state. Do not invoke a subagent, and do not pass a blocked report as an Evidence
+Do not invoke a subagent, and do not pass a blocked report as an Evidence
 Brief, Issue Proposal, or Sequenced Plan.
 
 ## Skill

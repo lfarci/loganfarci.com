@@ -1,7 +1,7 @@
 ---
 name: Backlog Shaper
 description: Read-only backlog judgment agent for loganfarci.com. Use to turn an Evidence Brief into a decision and a ready-to-post GitHub issue draft — create, update, close, defer, or explicitly do nothing. This is where product judgment happens; it never posts to GitHub itself.
-tools: ["read", "search", "web", "github/issue_read", "github/list_issues", "github/search_issues", "github/list_pull_requests", "github/pull_request_read", "github/search_pull_requests"]
+tools: ["read", "search", "web", "github/*"]
 user-invocable: true
 ---
 
