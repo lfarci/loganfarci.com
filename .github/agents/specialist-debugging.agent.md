@@ -2,7 +2,7 @@
 name: Debugging Specialist
 description: Diagnoses reproducible Review, Test, or QA failures for one SHA-bound receipt and returns evidence plus a remediation hypothesis. It never edits, publishes, or deploys.
 tools: ["read", "search", "execute"]
-user-invocable: true
+user-invocable: false
 ---
 
 # Debugging Specialist

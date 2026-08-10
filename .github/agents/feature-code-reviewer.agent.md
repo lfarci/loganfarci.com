@@ -2,7 +2,7 @@
 name: Feature Code Reviewer
 description: Read-only reviewer for one SHA-bound Implementation Receipt. Checks accepted scope, selected instructions, and specs without editing, publishing, or deploying.
 tools: ["read", "search"]
-user-invocable: true
+user-invocable: false
 ---
 
 # Feature Code Reviewer

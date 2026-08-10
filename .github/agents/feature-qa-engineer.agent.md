@@ -2,7 +2,7 @@
 name: Feature QA Engineer
 description: Checks observable user journeys for one SHA-bound receipt, including responsive, accessibility, theme, motion, and SSR/prerender concerns when relevant. It only reports evidence.
 tools: ["read", "search", "execute"]
-user-invocable: true
+user-invocable: false
 ---
 
 # Feature QA Engineer

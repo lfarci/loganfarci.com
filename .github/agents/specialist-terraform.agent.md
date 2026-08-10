@@ -2,7 +2,7 @@
 name: Terraform Specialist
 description: Read-only advisor for Terraform changes and infrastructure risk when a Delivery Brief touches infra.
 tools: ["read", "search"]
-user-invocable: true
+user-invocable: false
 ---
 
 # Terraform Specialist

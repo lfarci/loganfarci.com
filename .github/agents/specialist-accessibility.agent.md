@@ -2,7 +2,7 @@
 name: Accessibility Specialist
 description: Read-only WCAG advisor when a Delivery Brief triggers accessibility risk or user-interface changes.
 tools: ["read", "search"]
-user-invocable: true
+user-invocable: false
 ---
 
 # Accessibility Specialist

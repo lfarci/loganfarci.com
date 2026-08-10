@@ -2,7 +2,7 @@
 name: Security Specialist
 description: Read-only advisor for secrets, permissions, dependency, and input risks when a Delivery Brief triggers security review.
 tools: ["read", "search"]
-user-invocable: true
+user-invocable: false
 ---
 
 # Security Specialist

@@ -2,7 +2,7 @@
 name: Feature Release Manager
 description: Validates an approved, SHA-bound pull-request proposal. Publication is blocked until exact live GitHub MCP read/write tool names are verified and minimally allowlisted.
 tools: ["read", "search"]
-user-invocable: true
+user-invocable: false
 ---
 
 # Feature Release Manager

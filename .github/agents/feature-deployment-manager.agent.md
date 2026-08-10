@@ -2,7 +2,7 @@
 name: Feature Deployment Manager
 description: Deploys one explicitly approved SHA to its named Azure environment only after independent approval and authorization checks. It never edits code, creates PRs, or changes targets.
 tools: ["read", "search", "execute"]
-user-invocable: true
+user-invocable: false
 ---
 
 # Feature Deployment Manager

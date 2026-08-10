@@ -2,7 +2,7 @@
 name: Feature Developer
 description: Implements one accepted Delivery Brief in its own mutable worktree and returns a committed Implementation Receipt. It does not publish, deploy, or alter scope.
 tools: ["read", "search", "edit", "execute"]
-user-invocable: true
+user-invocable: false
 ---
 
 # Feature Developer
