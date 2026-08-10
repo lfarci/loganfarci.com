@@ -95,11 +95,15 @@ GitHub response — including an empty result — is the only valid preflight.
 
 **Orchestrator-supplied snapshot relief.** Because tracked child sessions may be granted
 fewer tools than their frontmatter declares, the orchestrator performs its own live
-preflight and **embeds a fresh, verbatim snapshot of the live GitHub state in each child's
-kickoff prompt**, explicitly labelled as live. A subagent that receives such a snapshot
-MUST treat it as satisfying the preflight — it counts as live state, and the subagent must
-not re-query or block. Without a supplied snapshot, the preflight is mandatory and no
-fallback is permitted.
+preflight (a capability check only, using the smallest accepted limit) and then makes a
+**separate, complete fetch** of the GitHub state each phase actually needs — the full open
+issue list at the largest accepted page size, plus closed issues and/or pull requests when
+the phase must check for duplicates or already-completed work. The orchestrator embeds
+that complete, phase-specific result as a **fresh, verbatim snapshot** in each child's
+kickoff prompt, explicitly labelled as live and complete. A subagent that receives such a
+snapshot MUST treat it as satisfying the preflight — it counts as live state, and the
+subagent must not re-query or block. Without a supplied snapshot, the preflight is
+mandatory and no fallback is permitted.
 
 The preflight is a capability check, not a local repository check. If the tool is
 unavailable or the call fails, the agent MUST stop and return a blocked report with:

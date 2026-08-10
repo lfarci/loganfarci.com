@@ -34,6 +34,16 @@ connector. The repository does not define a connector schema: use only parameter
 tool exposes, and omit the limit rather than inventing a parameter if it is unsupported.
 A successful GitHub response is required, even when it returns zero issues.
 
+This minimal call is a **capability check only** — it proves `github/list_issues` works,
+it is not the data you hand to a child. Once it succeeds, make a second, separate call
+(or set of calls) that fetches the **complete** live state each phase actually needs: all
+open issues at the largest page size the connector accepts (do not cap this to the
+capability-check limit), plus closed issues and/or open pull requests via
+`github/list_issues` / `github/list_pull_requests` when the phase requires them (for
+example, a sweep or grooming pass must also check open PRs and recently closed issues to
+avoid recommending duplicate or already-completed work). This complete fetch, not the
+capability check, is what Step 2 below embeds as the child's snapshot.
+
 **Never fall back** to `gh`, Bash/shell commands, `curl`, web search, stale local state
 from the repository checkout, any other GitHub client, or inference from prior
 conversation — even if `github/list_issues` appears unavailable or returns an error. The
@@ -113,11 +123,12 @@ never reliably "arrives" in your conversation. The proven handoff is: you carry 
 data in, the child ends with the artifact in its final reply, and you pull that reply out
 of the child session's transcript. Do this for every App dispatch:
 
-1. **Embed live GitHub state in the prompt.** Because you completed the mandatory
-   `github/list_issues` preflight above, paste a **fresh, verbatim snapshot** of the live
-   GitHub state relevant to the phase (issue/PR lists, plus any per-phase reads you made)
-   directly into the `kickoff.prompt`. The child then never needs `github/*` at runtime
-   and cannot silently fall back to stale state.
+1. **Embed live GitHub state in the prompt.** Paste a **fresh, verbatim snapshot** of the
+   *complete* phase-specific fetch you made above (not the minimal capability-check
+   response) directly into the `kickoff.prompt`: the full open-issue list at the largest
+   accepted page size, plus closed issues and/or pull requests when the phase needs them
+   to judge duplicates or already-completed work. The child then never needs `github/*` at
+   runtime and cannot silently fall back to stale or truncated state.
 2. **Dispatch with the terminal-reply contract.** Call `create_session` with
    `kickoff.prompt` = the upstream artifact + the snapshot + the phase task + an explicit
    instruction: "Return your complete artifact as your final reply message; the

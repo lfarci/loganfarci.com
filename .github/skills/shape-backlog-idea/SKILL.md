@@ -22,8 +22,9 @@ constraints, and issue structure he should not need to specify himself.
    state `open`, and the smallest supported limit — **unless the invoking agent is a
    subagent of `backlog-maintainer` on a surface that grants fewer GitHub tools than the
    agent file declares, and the orchestrator's kickoff prompt already carries a
-   freshly-verified live GitHub snapshot explicitly labelled as live.** In that case the
-   snapshot satisfies the preflight: use it, do not re-query. If the preflight is
+   freshly-verified live GitHub snapshot explicitly labelled as live and complete for the
+   phase (not merely the orchestrator's minimal capability-check response).** In that case
+   the snapshot satisfies the preflight: use it, do not re-query. If the preflight is
    unavailable or fails (and no such snapshot was supplied), stop with a blocked report
    containing the attempted tool, the exact connector error, and the statement that no
    live GitHub state was established. Do not use `gh`, `web`, local/stale snapshots, prior
