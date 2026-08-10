@@ -124,5 +124,9 @@ Data model shapes for `content/data/*.json` and `src/src/types/` live in
 - Use the provided scripts in `scripts/` for environment management.
 - Keep dependencies up to date and review for security regularly.
 
+## GitHub Operations Preference
+
+For GitHub operations (issues, pull requests, repositories, workflow runs, etc.), prefer MCP tools over the `gh` CLI. MCP tools provide structured output and better integration with the Copilot ecosystem.
+
 ---
 For questions or improvements, open an issue or pull request.
