@@ -32,7 +32,7 @@ design.
 | VS Code-only `handoffs:` list offers user-controlled transitions between agents | VS Code only | No longer the primary write mechanism — superseded by direct orchestrator dispatch (below) — but still available as a manual fallback if Logan wants to trigger the write himself. |
 | Subagent dispatch is **not** supported on plain github.com chat with no session tooling | Not supported | The cycle must degrade to manual sequential invocation only on that surface (see "Surface portability"). |
 | The **Copilot App** (this repo's session-based workspace tooling: `create_session`, `get_session`, `send_session_message`) lets a running session spawn other **tracked, sidebar-visible child sessions** and exchange messages with them | Supported when those tools are present in the agent's own tool list | This is a *stronger* delegation mechanism than the in-process `agent` tool: each phase becomes an inspectable, named session Logan can watch, not an opaque subprocess call. The orchestrator prefers it over `agent` whenever available. |
-| Configured GitHub read tools provide the live backlog read | Required preflight | Every backlog phase that needs live GitHub state must prove this capability before reading or writing; a local file check is not sufficient. Exact tool names are namespaced per-surface — see "GitHub MCP configuration surface" — so a literal-name miss must be resolved against the agent's actual tool list before declaring the capability absent. |
+| Configured GitHub read tools provide the live backlog read | Required preflight | Every backlog phase that needs live GitHub state must prove this capability before reading or writing; a local file check is not sufficient. Exact tool names are namespaced per-surface — see "GitHub MCP configuration surface" — but an agent may only recover to an equivalent name that is already exposed through its own `tools:` allowlist; a genuine rename still requires a human frontmatter update. |
 | Skills are description-triggered and shared by all agents; there is no `skills:` frontmatter field | Confirmed | Agents reference `shape-backlog-idea` in their prose body; the skill stays the single source of backlog judgment. |
 | Subagent invocations are **stateless** — no follow-up messages to a running subagent | Confirmed | All context must be passed in the initial delegation, which forces explicit artifact hand-offs (below). Tracked Copilot App sessions relax this slightly: they can receive follow-up messages, but the design still treats each phase as a single request/response to keep the two dispatch mechanisms interchangeable. |
 
@@ -76,10 +76,12 @@ issues/pull requests. Before assuming a tool name is wrong, check:
 | **Copilot cloud agent / GitHub Copilot app** | Repository → Settings → Copilot → coding agent MCP configuration | The `github` toolset is enabled for this repository, with `issues` and `pull_requests` included. |
 
 If the server is present but a specific literal tool name in an agent's frontmatter still
-does not resolve, agents are instructed (in their own `.agent.md` files) to check their
-actual available tool list for a same-purpose tool under a different name before
-declaring the capability absent — this absorbs minor naming drift between server
-versions without silently expanding what a read-only agent is allowed to do.
+does not resolve, the agent may only check its actual available tool list for a
+same-purpose tool that was already granted in that same `tools:` allowlist. Because
+`tools:` is enforced, a renamed tool that is not listed in frontmatter is
+architecturally invisible to the agent and cannot be self-discovered at runtime. In that
+case, the correct diagnosis is configuration drift in this repo's agent file: a human
+must update the affected `tools:` frontmatter before the agent can use the renamed tool.
 
 ## GitHub read preflight and blocked state
 
@@ -107,6 +109,9 @@ prior conversation, or inferred issue state to continue. The maintainer MUST sto
 classification and subagent dispatch. The explorer, prioritizer, reviewer, and writer
 MUST stop their respective work; the shaper MUST propagate a blocked input without
 shaping it, and MUST run this preflight first if it independently needs live GitHub reads.
+When the failure is a literal-name miss and no already-granted alias resolves, the
+blocked explanation SHOULD say that the affected agent's `tools:` frontmatter needs a
+human update on this repo or surface.
 
 ## Design principles
 

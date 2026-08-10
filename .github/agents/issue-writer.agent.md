@@ -48,12 +48,13 @@ configured connector. The repository does not define a connector schema: use onl
 parameters the tool exposes, and omit the limit rather than inventing a parameter if it
 is unsupported. A successful response is required before continuing, even if it is empty.
 
-If `github/list_issues` itself errors as "not found", first check your actual available
-tool list for a GitHub issue-listing tool under a different name (surface-dependent
-namespacing — see "GitHub MCP configuration surface" in the design doc) and use that
-instead of failing outright. Only return the blocked report below once you have confirmed
-no working GitHub read tool is available at all, not merely that the exact literal name
-`github/list_issues` did not resolve.
+If `github/list_issues` itself errors as "not found", you may only self-heal by checking
+whether your already-granted `tools:` allowlist exposes an equivalent GitHub
+issue-listing read tool under a different name, and using it instead. Because `tools:` is
+enforced, do not assume an unlisted renamed tool can be discovered at runtime. If no
+working issue-listing tool is present among the tools you were actually given, treat this
+as blocked and say the surface likely needs a human update to this file's `tools:`
+frontmatter.
 
 If the tool is unavailable or the call fails, stop without calling any other GitHub tool
 and without writing. Return an explicit blocked report containing `status: blocked`,

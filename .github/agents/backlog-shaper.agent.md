@@ -37,11 +37,14 @@ parameter if it is unsupported. A successful response is required.
 If that preflight is unavailable or fails, return an explicit blocked report containing
 `status: blocked`, the attempted `github/list_issues` operation and repository/query,
 `exact_error: <verbatim connector error>`, and
-`workflow: blocked; no live GitHub state was established`. Before doing so, check whether
-a differently-named GitHub issue-listing tool exists in your available tool list (naming
-varies by surface — see the design doc's "GitHub MCP configuration surface" section) and
-use it instead if one is genuinely available. Do not fall back to `gh`,
-`web`, a local or stale snapshot, prior conversation, or inferred issue state.
+`workflow: blocked; no live GitHub state was established`. Before doing so, you may only
+self-heal by checking whether your already-granted `tools:` allowlist exposes an
+equivalent GitHub issue-listing read tool under a different name, and using it instead.
+Because `tools:` is enforced, do not assume an unlisted renamed tool can be discovered at
+runtime. If no working issue-listing tool is present among the tools you were actually
+given, treat this as blocked and say the surface likely needs a human update to this
+file's `tools:` frontmatter. Do not fall back to `gh`, `web`, a local or stale snapshot,
+prior conversation, or inferred issue state.
 
 ## Inputs
 

@@ -31,11 +31,13 @@ connector. The repository does not define a connector schema: use only parameter
 tool exposes, and omit the limit rather than inventing a parameter if it is unsupported.
 A successful GitHub response is required, even when it returns zero issues.
 
-If `github/list_issues` errors as "not found" rather than a connector/auth failure, check
-your actual available tool list for a GitHub issue-listing tool under a different name —
-namespacing varies by surface (see "GitHub MCP configuration surface" in the design doc)
-— and use that instead of failing outright. Only treat this as blocked once you have
-confirmed no working GitHub read tool exists at all.
+If `github/list_issues` errors as "not found" rather than a connector/auth failure, you
+may only self-heal by checking whether your already-granted `tools:` allowlist exposes an
+equivalent GitHub issue-listing read tool under a different name, and using it instead.
+Because `tools:` is enforced, do not assume an unlisted renamed tool can be discovered at
+runtime. If no working issue-listing tool is present among the tools you were actually
+given, treat this as blocked and say the surface likely needs a human update to this
+file's `tools:` frontmatter.
 
 If the tool is unavailable or the call fails, stop before classification or dispatch and
 return an explicit blocked report containing:
