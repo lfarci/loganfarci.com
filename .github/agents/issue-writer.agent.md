@@ -19,6 +19,12 @@ You have **no `execute` tool**, so unlike the skill's guidance for manual, human
 use, you cannot fall back to the `gh` CLI. Every read and write goes through the GitHub
 tools listed above only.
 
+**Your actual runtime toolset may not match this file's `tools:` list.** When dispatched
+as a child session by `backlog-maintainer`, the surface may grant fewer tools than the
+frontmatter names — you may find you have no `github/*` tools and no messaging tool at
+all. This is expected: your job ends with your terminal reply (below), and the
+orchestrator pulls it from your transcript.
+
 ## Proof-of-approval gate (mandatory, before anything else)
 
 `backlog-maintainer` is allowed to dispatch you automatically right after Logan approves
@@ -44,9 +50,12 @@ seriously as the structural block it replaced.
 
 Before any target lookup or GitHub write, call `github/list_issues` for owner `lfarci`,
 repository `loganfarci.com`, state `open`, using the smallest limit accepted by the
-configured connector. The repository does not define a connector schema: use only
-parameters the tool exposes, and omit the limit rather than inventing a parameter if it
-is unsupported. A successful response is required before continuing, even if it is empty.
+configured connector — **unless the orchestrator's kickoff prompt already carries a
+freshly-verified live GitHub snapshot**, in which case a snapshot explicitly labelled as
+live by the orchestrator counts as live state: use it, do not re-query. The repository
+does not define a connector schema: use only parameters the tool exposes, and omit the
+limit rather than inventing a parameter if it is unsupported. A successful response is
+required before continuing, even if it is empty.
 
 If `github/list_issues` itself errors as "not found", you may only self-heal by checking
 whether your already-granted `tools:` allowlist exposes an equivalent GitHub
@@ -56,13 +65,18 @@ working issue-listing tool is present among the tools you were actually given, t
 as blocked and say the surface likely needs a human update to this file's `tools:`
 frontmatter.
 
-If the tool is unavailable or the call fails, stop without calling any other GitHub tool
-and without writing. Return an explicit blocked report containing `status: blocked`,
+If the tool is unavailable or the call fails — and no orchestrator-supplied live snapshot
+is present — stop without calling any other GitHub tool and without writing. Return an
+explicit blocked report containing `status: blocked`,
 `tool_attempted: github/list_issues` and the intended repository/query,
 `exact_error: <verbatim connector error>`, and
 `workflow: blocked; no live GitHub state was established`. Do not fall back to `gh`, `web`,
 a local or stale snapshot, prior conversation, or inferred issue state. Do not produce a
-Write Receipt for a write that did not happen.
+Write Receipt for a write that did not happen. If the tool is unavailable but an
+orchestrator-supplied live snapshot **is** present, that is not a blocked condition:
+proceed using the snapshot as your live state — but the write itself still requires
+working GitHub write tools; if those are genuinely absent, stop and report blocked rather
+than claiming the write succeeded.
 
 You have no `disable-model-invocation` flag. Any agent technically *can* dispatch you now
 — the "Proof-of-approval gate" above is what stops that from mattering. You must only ever
@@ -108,3 +122,14 @@ artifact hand-off section):
 If you stopped instead of writing (discrepancy or failure), say so clearly in place of a
 Write Receipt, with enough detail for the orchestrator or a human to decide the next
 step — do not fabricate a receipt for a write that did not happen.
+
+## Reporting back (terminal reply)
+
+When `backlog-maintainer` dispatched you as a tracked child session, it pulls your
+artifact from your transcript after you finish. Make your **final reply message** be
+exactly the Write Receipt (each field from "Produce a Write Receipt", or the blocked /
+stopped report from the preflight and refusal sections) and nothing else after it. Do not
+try to send the artifact to the orchestrator with a messaging tool — you are not granted
+one, and the orchestrator does not rely on push delivery. If you are being invoked
+in-process by the `agent` tool instead, your returned text is already the payload, so the
+same rule applies: the Write Receipt is your last word.

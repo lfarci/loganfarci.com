@@ -31,10 +31,10 @@ design.
 | VS Code-only `agents:` list restricts which subagents a coordinator may dispatch, and **overrides** `disable-model-invocation` for that coordinator | VS Code only | No longer a footgun to avoid: `issue-writer` is now deliberately included in the orchestrator's `agents:` list on every surface, and no longer carries `disable-model-invocation`, so there is nothing left to override. |
 | VS Code-only `handoffs:` list offers user-controlled transitions between agents | VS Code only | No longer the primary write mechanism — superseded by direct orchestrator dispatch (below) — but still available as a manual fallback if Logan wants to trigger the write himself. |
 | Subagent dispatch is **not** supported on plain github.com chat with no session tooling | Not supported | The cycle must degrade to manual sequential invocation only on that surface (see "Surface portability"). |
-| The **Copilot App** (this repo's session-based workspace tooling: `create_session`, `get_session`, `send_session_message`) lets a running session spawn other **tracked, sidebar-visible child sessions** and exchange messages with them | Supported when those tools are present in the agent's own tool list | This is a *stronger* delegation mechanism than the in-process `agent` tool: each phase becomes an inspectable, named session Logan can watch, not an opaque subprocess call. The orchestrator prefers it over `agent` whenever available. |
+| The **Copilot App** (this repo's session-based workspace tooling: `create_session`, `get_session`, `send_session_message`) lets a running session spawn other **tracked, sidebar-visible child sessions** | Supported for spawning and observing | Each phase becomes an inspectable, named session Logan can watch. **However, child sessions may be granted fewer tools than their frontmatter declares — including no `github/*` tools and no messaging tool — and `send_session_message` delivery from root to child has proven unreliable.** The design therefore treats the child's **final reply message as the artifact** and has the orchestrator **pull** it from the child's transcript via `session_store_sql` (source `local`) once `get_session` shows the child complete. It is a stronger, observable delegation mechanism than the in-process `agent` tool; the orchestrator prefers it over `agent` whenever available. |
 | Configured GitHub read tools provide the live backlog read | Required preflight | Every backlog phase that needs live GitHub state must prove this capability before reading or writing; a local file check is not sufficient. Exact tool names are namespaced per-surface — see "GitHub MCP configuration surface" — but an agent may only recover to an equivalent name that is already exposed through its own `tools:` allowlist; a genuine rename still requires a human frontmatter update. |
 | Skills are description-triggered and shared by all agents; there is no `skills:` frontmatter field | Confirmed | Agents reference `shape-backlog-idea` in their prose body; the skill stays the single source of backlog judgment. |
-| Subagent invocations are **stateless** — no follow-up messages to a running subagent | Confirmed | All context must be passed in the initial delegation, which forces explicit artifact hand-offs (below). Tracked Copilot App sessions relax this slightly: they can receive follow-up messages, but the design still treats each phase as a single request/response to keep the two dispatch mechanisms interchangeable. |
+| Subagent invocations are **stateless** — no follow-up messages to a running subagent | Confirmed | All context must be passed in the initial delegation, which forces explicit artifact hand-offs (below). Tracked Copilot App child sessions may be **messaging-less** (no `send_session_message` and no reliable delivery to root), so even there the design does not rely on follow-up pushes: the orchestrator embeds everything the child needs in the kickoff prompt, and the child's terminal reply **is** the artifact, retrieved by pull. This keeps the two dispatch mechanisms interchangeable. |
 
 ## GitHub MCP configuration surface
 
@@ -92,6 +92,14 @@ repository `loganfarci.com`, state `open`, with the smallest limit accepted by t
 connector. The repository does not document the connector schema, so agents MUST use only
 parameters exposed by the tool and omit the limit if it is unsupported. A successful
 GitHub response — including an empty result — is the only valid preflight.
+
+**Orchestrator-supplied snapshot relief.** Because tracked child sessions may be granted
+fewer tools than their frontmatter declares, the orchestrator performs its own live
+preflight and **embeds a fresh, verbatim snapshot of the live GitHub state in each child's
+kickoff prompt**, explicitly labelled as live. A subagent that receives such a snapshot
+MUST treat it as satisfying the preflight — it counts as live state, and the subagent must
+not re-query or block. Without a supplied snapshot, the preflight is mandatory and no
+fallback is permitted.
 
 The preflight is a capability check, not a local repository check. If the tool is
 unavailable or the call fails, the agent MUST stop and return a blocked report with:
@@ -151,7 +159,7 @@ Six agents: one orchestrator, five subagents.
 | **Invoked by** | The human. This is the entry point of the system. |
 | **Owns** | Routing the request to the right cycle, sequencing phases, holding the human gate, and producing the final report. |
 | **Reads before acting** | `docs/specs/README.md` (for spec precedence), `docs/specs/non-goals.md`, `AGENTS.md`, `.github/copilot-instructions.md`. |
-| **Tools** | `agent` (delegation), `create_session`/`get_session`/`send_session_message` (tracked-session delegation on the Copilot App), `read`, `search`, plus GitHub **read-only**. |
+| **Tools** | `agent` (delegation), `create_session`/`get_session`/`send_session_message` (tracked-session delegation on the Copilot App), `session_store_sql` (pull child artifacts from their transcripts), `read`, `search`, plus GitHub **read-only**. |
 | **Must NOT have** | Any GitHub write tool, `edit`, or `execute`. It must be incapable of mutating the backlog or the repo directly — it only ever reaches a write by dispatching `issue-writer`. |
 | **Produces** | A phase-by-phase status and a final report: what was found, what was decided, what was written (with links), what was escalated. |
 | **`agents:` list** | `backlog-explorer`, `backlog-shaper`, `backlog-prioritizer`, `issue-writer`, `issue-reviewer` — **includes `issue-writer`**, dispatched only in the same turn as, and strictly after, Logan's per-item approval (see "Human approval gate"). |
@@ -307,6 +315,15 @@ Notes on the flow:
   passing the approved payload plus proof of Logan's approval. `issue-writer` checks for
   that proof before writing anything. The receipt returns to the orchestrator before
   review continues. Logan can still invoke `issue-writer` manually if he prefers.
+- **Child artifacts are retrieved by pull, not delivered by push.** Tracked child sessions
+  return their artifact as their **final reply message**, which the orchestrator pulls
+  from the child's transcript (`session_store_sql`, source `local`, `turns` table, most
+  recent `assistant_response`) after `get_session` reports it complete. The orchestrator
+  embeds a fresh live GitHub snapshot and all context in the kickoff prompt up front,
+  ships the artifact from one phase into the next phase's kickoff prompt, and does not rely
+  on `send_session_message` for delivery — a single nudge may be attempted if a child goes
+  silent, but if no artifact is retrievable the orchestrator escalates to Logan with the
+  child's partial transcript.
 - **Review failures are routed by class, not lumped together.** An *application failure*
   means the approved payload did not land correctly — a transient API error, a field that
   did not take, a partial write. The approved content is still valid, so the writer may be
@@ -322,6 +339,10 @@ Notes on the flow:
 Because subagent invocations are stateless and context-isolated, every hand-off must be
 fully self-contained. These shapes are the interface between phases and should be
 specified once in the shared skill so independently-invoked agents agree on them.
+Delivery is **pull-based**: when a subagent runs as a tracked child session, its final
+reply message is the artifact and the orchestrator retrieves it via `session_store_sql`
+(snapshot-through transcript read); when it runs in-process, the returned text is the
+artifact. Subagents never deliver artifacts with a messaging tool.
 
 **Evidence Brief** (explorer → shaper)
 - `subject` — the idea, gap, or issue under investigation
@@ -339,7 +360,10 @@ specified once in the shared skill so independently-invoked agents agree on them
 - `workflow` — `blocked; no live GitHub state was established`
 
 This is a terminal status for the current workflow, not an Evidence Brief. It MUST NOT be
-passed to the next phase or converted into any other artifact contract.
+passed to the next phase or converted into any other artifact contract. When a subagent is
+dispatched as a tracked child session, a blocked report is returned the same way as any
+other artifact — as the child's final reply message, pulled by the orchestrator — so the
+orchestrator can distinguish a blocked child from a silent one.
 
 **Issue Proposal** (shaper → gate → writer)
 - `recommendation` — create | update | close | defer | **no-op**, with the decisive tradeoff
@@ -372,7 +396,7 @@ passed to the next phase or converted into any other artifact contract.
 | --- | --- |
 | **Copilot CLI** | Full delegation end-to-end, including the write. `backlog-maintainer` dispatches every phase — `backlog-explorer`, `backlog-shaper`, `backlog-prioritizer`, and, immediately after Logan's per-item approval, `issue-writer` — via the in-process `agent` tool, then `issue-reviewer`. Logan can still invoke any subagent manually if he wants to intervene mid-cycle. |
 | **VS Code** | Same full delegation as CLI. `issue-writer` is now included in the orchestrator's `agents:` list (previously omitted); a `handoffs:` transition to `issue-writer` remains available as a manual alternative for Logan, but is no longer the only path. |
-| **Copilot App (this repo's session-based workspace)** | Full delegation, dispatched as **tracked child sessions** rather than in-process subagent calls: `backlog-maintainer` calls `create_session` with `kickoff.agent` set to each phase's exact custom-agent name, including `Issue Writer` right after approval. Logan sees every phase as its own named session in the sidebar and can inspect or message it directly via `get_session`/`send_session_message`. This is the surface where delegation is most observable, which is why it is preferred whenever those tools are present. |
+| **Copilot App (this repo's session-based workspace)** | Full delegation, dispatched as **tracked child sessions** rather than in-process subagent calls: `backlog-maintainer` calls `create_session` with `kickoff.agent` set to each phase's exact custom-agent name, including `Issue Writer` right after approval. Logan sees every phase as its own named session in the sidebar and can inspect it directly. **Because children may lack `github/*` tools and messaging, the orchestrator embeds a fresh live GitHub snapshot (its own verified preflight output) in every kickoff prompt, and retrieves each phase's artifact from the child's transcript (`session_store_sql`, source `local`) after the child completes — pull, not push.** `get_session` is used to poll for completion; `send_session_message` is used only as a single nudge when a child goes silent, and is never assumed to deliver artifacts. This is the surface where delegation is most observable, which is why it is preferred whenever those tools are present. |
 | **Plain github.com chat / any surface with no subagent-dispatch tool at all** | No subagent dispatch. The cycle degrades to the human invoking each agent in order via `/agent`, passing the artifact from the previous phase. This is now the rare exception, not the default path for the App. |
 
 To keep that degradation possible, **every subagent stays `user-invocable: true`.** The
@@ -407,5 +431,12 @@ so agents invoked independently still produce and consume compatible shapes.
    to the orchestrator. This design intentionally keeps the pipeline strictly linear
    (each phase reports to the orchestrator, which dispatches the next) rather than letting
    e.g. `issue-reviewer` message `issue-writer` directly, so failure routing stays
-   auditable through the orchestrator's Step 5 logic. Revisit only if a concrete case
-   shows the orchestrator hop adds real latency without adding safety.
+   auditable through the orchestrator's Step 5 logic.
+   **Resolved (v0.3.x, pull-based handoff):** child sessions cannot be assumed to carry
+   `github/*` tools, a messaging tool, or a working `send_session_message` delivery path.
+   The design therefore does not rely on session-to-session messaging at all: the
+   orchestrator embeds a fresh live GitHub snapshot plus all phase context in each kickoff
+   prompt, children return the artifact as their final reply, and the orchestrator pulls
+   it from the child's transcript via `session_store_sql`. Sibling messaging remains out of
+   scope; revisit only if a concrete case shows the orchestrator hop adds real latency
+   without adding safety.
