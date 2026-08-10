@@ -2,7 +2,7 @@
 name: React Specialist
 description: Read-only advisor for React, routing, SSR, prerender, and state risks when a Delivery Brief triggers React/SSR review.
 tools: ["read", "search"]
-user-invocable: true
+user-invocable: false
 ---
 
 # React Specialist

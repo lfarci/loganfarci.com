@@ -2,7 +2,7 @@
 name: Azure Specialist
 description: Read-only advisor for Azure Static Web Apps and deployment-configuration risk when a Delivery Brief triggers Azure review.
 tools: ["read", "search"]
-user-invocable: true
+user-invocable: false
 ---
 
 # Azure Specialist

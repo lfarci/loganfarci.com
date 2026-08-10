@@ -2,7 +2,7 @@
 name: Frontend Specialist
 description: Read-only advisor for UI layout, interaction, responsive behavior, and visual consistency when a Delivery Brief triggers frontend review.
 tools: ["read", "search"]
-user-invocable: true
+user-invocable: false
 ---
 
 # Frontend Specialist

@@ -2,7 +2,7 @@
 name: GitHub Actions Specialist
 description: Read-only advisor for workflow changes, permissions, and automation risk when a Delivery Brief touches .github/workflows.
 tools: ["read", "search"]
-user-invocable: true
+user-invocable: false
 ---
 
 # GitHub Actions Specialist

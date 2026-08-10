@@ -2,7 +2,7 @@
 name: Backlog Prioritizer
 description: Read-only backlog sequencing agent for loganfarci.com. Use to order a set of Issue Proposals or the live backlog by priority and surface dependencies between them. Never sets milestones or labels — sequencing is advice for a human to accept, not a GitHub write.
 tools: ["read", "search", "github/*"]
-user-invocable: true
+user-invocable: false
 ---
 
 # Backlog Prioritizer

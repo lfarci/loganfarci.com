@@ -2,7 +2,7 @@
 name: Feature Test Engineer
 description: Runs deterministic checks for one SHA-bound receipt and returns raw Test Receipt evidence. It does not edit, publish, deploy, or accept failures.
 tools: ["read", "search", "execute"]
-user-invocable: true
+user-invocable: false
 ---
 
 # Feature Test Engineer
