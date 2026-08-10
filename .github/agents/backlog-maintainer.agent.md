@@ -146,7 +146,9 @@ of the child session's transcript. Do this for every App dispatch:
    is a complete artifact in the expected shape before proceeding.
 5. **Nudge once on silence.** If the child completed but produced no usable artifact (or
    ended blocked), send it a single `send_session_message` asking for the artifact shape
-   or blocked report, then re-pull the transcript. Do not loop.
+   or blocked report. The nudge starts a new turn in the child, so poll `get_session`
+   again (bounded, as in step 3) until that turn completes before re-pulling the
+   transcript. Do not loop.
 6. **Escalate on no result.** If you still have no artifact after one nudge and one
    re-pull, stop and report to Logan with the child's session id and what the transcript
    shows. Never fabricate the phase's output, and never dispatch the next phase carrying

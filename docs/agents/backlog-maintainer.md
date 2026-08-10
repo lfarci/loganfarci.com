@@ -326,8 +326,9 @@ Notes on the flow:
   embeds a fresh live GitHub snapshot and all context in the kickoff prompt up front,
   ships the artifact from one phase into the next phase's kickoff prompt, and does not rely
   on `send_session_message` for delivery — a single nudge may be attempted if a child goes
-  silent, but if no artifact is retrievable the orchestrator escalates to Logan with the
-  child's partial transcript.
+  silent, but the orchestrator polls `get_session` again until that follow-up turn
+  completes before re-pulling the transcript, and if no artifact is retrievable it
+  escalates to Logan with the child's partial transcript.
 - **Review failures are routed by class, not lumped together.** An *application failure*
   means the approved payload did not land correctly — a transient API error, a field that
   did not take, a partial write. The approved content is still valid, so the writer may be
