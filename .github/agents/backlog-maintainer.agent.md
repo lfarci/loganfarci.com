@@ -1,7 +1,7 @@
 ---
 name: Backlog Maintainer
 description: Product-owner orchestrator for the loganfarci.com backlog. Use when Logan wants to turn an idea into a GitHub issue, sweep the backlog for gaps, decide what to work on next, or groom stale/duplicate items. Delegates evidence-gathering, drafting, prioritization, and (once Logan approves) the write itself to subagents, holding the human approval gate before any dispatch to `issue-writer`.
-tools: ["agent", "read", "search", "github/issue_read", "github/list_issues", "github/search_issues", "github/list_pull_requests", "github/pull_request_read", "github/search_pull_requests", "create_session", "get_session", "send_session_message", "list_sessions_and_chats"]
+tools: ["agent", "read", "search", "github/issue_read", "github/list_issues", "github/search_issues", "github/list_pull_requests", "github/pull_request_read", "github/search_pull_requests", "create_session", "get_session", "session_store_sql", "send_session_message", "list_sessions_and_chats"]
 agents: ["backlog-explorer", "backlog-shaper", "backlog-prioritizer", "issue-writer", "issue-reviewer"]
 user-invocable: true
 ---
@@ -33,6 +33,16 @@ every backlog workflow a call to `github/list_issues` for owner `lfarci`, reposi
 connector. The repository does not define a connector schema: use only parameters the
 tool exposes, and omit the limit rather than inventing a parameter if it is unsupported.
 A successful GitHub response is required, even when it returns zero issues.
+
+This minimal call is a **capability check only** — it proves `github/list_issues` works,
+it is not the data you hand to a child. Once it succeeds, make a second, separate call
+(or set of calls) that fetches the **complete** live state each phase actually needs: all
+open issues at the largest page size the connector accepts (do not cap this to the
+capability-check limit), plus closed issues and/or open pull requests via
+`github/list_issues` / `github/list_pull_requests` when the phase requires them (for
+example, a sweep or grooming pass must also check open PRs and recently closed issues to
+avoid recommending duplicate or already-completed work). This complete fetch, not the
+capability check, is what Step 2 below embeds as the child's snapshot.
 
 **Never fall back** to `gh`, Bash/shell commands, `curl`, web search, stale local state
 from the repository checkout, any other GitHub client, or inference from prior
@@ -100,24 +110,54 @@ plainly. Never invent work to look productive.
 
 ### If you are running inside the Copilot App (session-based workspace)
 
-Check whether `create_session`, `get_session`, and `send_session_message` are present in
-your own tool list. If they are, you are running as a project session in the Copilot App,
-which lets Logan track each phase as its own visible, named session instead of an
-invisible in-process subagent call. Prefer this over the plain `agent` dispatch above for
-every phase, including the write in Step 4:
+Check whether `create_session`, `get_session`, `session_store_sql`, and
+`list_sessions_and_chats` are present in your own tool list. If they are, you are running
+as a project session in the Copilot App, which lets Logan track each phase as its own
+visible, named session instead of an invisible in-process subagent call. Prefer this over
+the plain `agent` dispatch above for every phase, including the write in Step 4.
 
-- Call `create_session` with `kickoff.prompt` set to the full upstream artifact plus the
-  task for that phase, `kickoff.agent` set to the target's exact custom-agent name
-  (`Backlog Explorer`, `Backlog Shaper`, `Backlog Prioritizer`, `Issue Writer`, or
-  `Issue Reviewer`), and `coordinate_with_creator: true` so its result routes back to you
-  as a reply instead of leaving Logan to poll it manually.
-- Give the child session a short, descriptive name (e.g. "Explore: dark mode toggle") so
-  Logan can recognize it in the sidebar.
-- Wait for its reply before dispatching the next phase — the sequence is still strictly
-  linear; sessions may message each other only if a later phase needs to clarify
-  something with an earlier one, not to parallelize steps that depend on each other.
-- If `create_session` is not in your tool list, fall back to the plain `agent`
-  (in-process) subagent dispatch described above — that is the CLI/VS Code path.
+**Children cannot be assumed to have their frontmatter toolset at runtime, and they
+cannot message you.** A child session may load with fewer tools than its `tools:` list
+names — in particular it may lack `github/*` and `send_session_message` — so its result
+never reliably "arrives" in your conversation. The proven handoff is: you carry the live
+data in, the child ends with the artifact in its final reply, and you pull that reply out
+of the child session's transcript. Do this for every App dispatch:
+
+1. **Embed live GitHub state in the prompt.** Paste a **fresh, verbatim snapshot** of the
+   *complete* phase-specific fetch you made above (not the minimal capability-check
+   response) directly into the `kickoff.prompt`: the full open-issue list at the largest
+   accepted page size, plus closed issues and/or pull requests when the phase needs them
+   to judge duplicates or already-completed work. The child then never needs `github/*` at
+   runtime and cannot silently fall back to stale or truncated state.
+2. **Dispatch with the terminal-reply contract.** Call `create_session` with
+   `kickoff.prompt` = the upstream artifact + the snapshot + the phase task + an explicit
+   instruction: "Return your complete artifact as your final reply message; the
+   orchestrator retrieves it from this session's transcript. You have no messaging tool —
+   do not attempt to contact the orchestrator." Set `kickoff.agent` to the target's exact
+   custom-agent name (`Backlog Explorer`, `Backlog Shaper`, `Backlog Prioritizer`,
+   `Issue Writer`, or `Issue Reviewer`). Give the child a short, descriptive name
+   (e.g. "Explore: dark mode toggle") so Logan can recognize it in the sidebar.
+3. **Await completion.** Poll the child with `get_session` (bounded — a few minutes of
+   wall-clock checks) until it completes or until you judge it stalled.
+4. **Pull the artifact from the transcript.** Query the local session store
+   (`session_store_sql`, source `local`) for the child's session id: read its `turns`
+   table and take the last `assistant_response` as the artifact. Do not wait for a message
+   to appear in your own conversation — that path is not reliable. Verify the pulled text
+   is a complete artifact in the expected shape before proceeding.
+5. **Nudge once on silence.** If the child completed but produced no usable artifact (or
+   ended blocked), send it a single `send_session_message` asking for the artifact shape
+   or blocked report. The nudge starts a new turn in the child, so poll `get_session`
+   again (bounded, as in step 3) until that turn completes before re-pulling the
+   transcript. Do not loop.
+6. **Escalate on no result.** If you still have no artifact after one nudge and one
+   re-pull, stop and report to Logan with the child's session id and what the transcript
+   shows. Never fabricate the phase's output, and never dispatch the next phase carrying
+   an empty or inferred artifact.
+
+Dispatch one phase at a time and only start the next after you hold the previous phase's
+artifact — the sequence is still strictly linear. If `create_session` is not in your tool
+list, fall back to the plain `agent` (in-process) subagent dispatch described above —
+that is the CLI/VS Code path.
 
 ## Step 3 — Human approval gate (hard, non-optional)
 
@@ -160,10 +200,16 @@ When you dispatch it, the prompt you give `issue-writer` MUST include:
 Use the same dispatch mechanism as Step 2: the in-process `agent` tool on CLI/VS Code, or
 `create_session` (kickoff.agent: `Issue Writer`) when you detected the Copilot App surface
 — either way, dispatch it yourself; do not ask Logan to manually switch agents or select
-`issue-writer` themselves. The only remaining manual surface is plain chat with no
-subagent-dispatch tool at all (see "Degrading gracefully" below).
+`issue-writer` themselves. When you use `create_session`, apply the same handoff protocol
+as Step 2: embed fresh live GitHub state in the prompt, instruct `issue-writer` to return
+the Write Receipt as its final reply, then pull that reply from the transcript via
+`session_store_sql` (source `local`) after `get_session` shows it complete. The only
+remaining manual surface is plain chat with no subagent-dispatch tool at all (see
+"Degrading gracefully" below).
 
-Wait for the **Write Receipt** to come back before continuing.
+Hold a completed **Write Receipt** before continuing: verify the pulled text includes
+`issue_number` and `issue_url`; if the child returned a blocked report instead, treat it
+as an `application`-class failure and route per Step 5.
 
 ## Step 5 — Review and failure routing
 

@@ -20,14 +20,23 @@ You have **no `execute` tool**, so unlike the skill's guidance for manual, human
 use, you cannot fall back to the `gh` CLI for gaps in the GitHub read tools listed above.
 Everything you read from GitHub goes through those tools only.
 
+**Your actual runtime toolset may not match this file's `tools:` list.** When dispatched
+as a child session by `backlog-maintainer`, the surface may grant fewer tools than the
+frontmatter names — you may find you have no `github/*` tools and no messaging tool at
+all. This is expected and is not a reason to abort or to improvise: your job ends with
+your terminal reply (below), and the orchestrator pulls it from your transcript.
+
 ## Mandatory GitHub read preflight
 
 For every targeted or sweep backlog invocation, the first operation must be a call to
 `github/list_issues` for owner `lfarci`, repository `loganfarci.com`, state `open`, using
-the smallest limit accepted by the configured connector. The repository does not define a
-connector schema: use only parameters the tool exposes, and omit the limit rather than
-inventing a parameter if it is unsupported. A successful GitHub response, including an
-empty result, is required before any investigation.
+the smallest limit accepted by the configured connector — **unless the orchestrator's
+kickoff prompt already carries a freshly-verified live GitHub snapshot** (the output of
+the maintainer's own preflight plus the relevant per-phase reads). A snapshot explicitly
+labelled as live by the orchestrator counts as live state: use it, do not re-query. The
+repository does not define a connector schema: use only parameters the tool exposes, and
+omit the limit rather than inventing a parameter if it is unsupported. A successful
+GitHub response, including an empty result, is required before any investigation.
 
 If `github/list_issues` errors as "not found" rather than a connector/auth failure, you
 may only self-heal by checking whether your already-granted `tools:` allowlist exposes an
@@ -37,8 +46,9 @@ runtime. If no working issue-listing tool is present among the tools you were ac
 given, treat this as blocked and say the surface likely needs a human update to this
 file's `tools:` frontmatter.
 
-If the tool is unavailable or the call fails, do not produce an Evidence Brief. Return an
-explicit blocked report containing:
+If the tool is unavailable or the call fails — and no orchestrator-supplied live snapshot
+is present in your prompt — do not produce an Evidence Brief from a stale or inferred
+source. Return an explicit blocked report containing:
 
 - `status: blocked`
 - `tool_attempted: github/list_issues` and the intended repository/query
@@ -47,7 +57,11 @@ explicit blocked report containing:
 
 Stop immediately. Do not fall back to `gh`, `web`, a local or stale snapshot, prior
 conversation, or inferred issue state, and do not pass the blocked report to
-`backlog-shaper` or any later phase.
+`backlog-shaper` or any later phase. If you end blocked, your terminal reply **is** the
+blocked report — the orchestrator expects to pull it from your transcript.
+
+If the tool is unavailable but an orchestrator-supplied live snapshot **is** present,
+that is not a blocked condition: proceed using the snapshot as your live state.
 
 ## Two modes
 
@@ -95,6 +109,17 @@ hypothesis as a confirmed fact.
 If a sweep or targeted investigation turns up no real gap, drift, or defect, **say so
 plainly and stop.** Do not manufacture a finding to look productive — an empty Evidence
 Brief with a clear "no actionable gap found" is a correct and complete result.
+
+## Reporting back (terminal reply)
+
+When `backlog-maintainer` dispatched you as a tracked child session, it pulls your
+artifact from your transcript after you finish. Make your **final reply message** be
+exactly the Evidence Brief (each field from "Produce an Evidence Brief", or the blocked
+report from the preflight section) and nothing else after it. Do not try to send the
+artifact to the orchestrator with a messaging tool — you are not granted one, and the
+orchestrator does not rely on push delivery. If you are being invoked in-process by the
+`agent` tool instead, your returned text is already the payload, so the same rule
+applies: the Evidence Brief is your last word.
 
 ## Explicitly out of scope
 

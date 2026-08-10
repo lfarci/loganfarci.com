@@ -19,13 +19,19 @@ constraints, and issue structure he should not need to specify himself.
    Do not overwrite or mix in unrelated local work.
 5. Before beginning any backlog workflow, verify live GitHub read availability with the
    configured `github/list_issues` tool for owner `lfarci`, repository `loganfarci.com`,
-   state `open`, and the smallest supported limit. If that preflight is unavailable or
-   fails, stop with a blocked report containing the attempted tool, the exact connector
-   error, and the statement that no live GitHub state was established. Do not use `gh`,
-   `web`, local/stale snapshots, prior conversation, or inferred issue state as a
-   fallback. After a successful preflight, use the GitHub connector for issue reads and
-   writes; `gh` is available for gaps only where the invoking agent has an execute tool
-   and the operation is not a fallback for a failed preflight.
+   state `open`, and the smallest supported limit — **unless the invoking agent is a
+   subagent of `backlog-maintainer` on a surface that grants fewer GitHub tools than the
+   agent file declares, and the orchestrator's kickoff prompt already carries a
+   freshly-verified live GitHub snapshot explicitly labelled as live and complete for the
+   phase (not merely the orchestrator's minimal capability-check response).** In that case
+   the snapshot satisfies the preflight: use it, do not re-query. If the preflight is
+   unavailable or fails (and no such snapshot was supplied), stop with a blocked report
+   containing the attempted tool, the exact connector error, and the statement that no
+   live GitHub state was established. Do not use `gh`, `web`, local/stale snapshots, prior
+   conversation, or inferred issue state as a fallback. After a successful preflight, use
+   the GitHub connector for issue reads and writes; `gh` is available for gaps only where
+   the invoking agent has an execute tool and the operation is not a fallback for a failed
+   preflight.
 
 ## Reconstruct the request
 
@@ -147,6 +153,28 @@ These are specified once, here, so independently-invoked agents produce and cons
 compatible shapes without duplicating this skill's decision logic. See
 [`docs/agents/backlog-maintainer.md`](../../../docs/agents/backlog-maintainer.md) for the
 full system design.
+
+**Delivery — terminal-reply contract.** When `backlog-maintainer` dispatches a subagent as
+a tracked session, the subagent's **final reply message is the artifact** — the
+orchestrator pulls it from the transcript afterwards (`session_store_sql`, source
+`local`) and does not rely on push delivery. Subagents must therefore make the artifact
+(in one of the shapes below, or the blocked report shape) their last word and must not
+attempt a messaging tool to deliver it; they are not granted one. When the in-process
+`agent` tool is used instead, the returned text is already the payload, so the same rule
+applies. A subagent that is dispatched with a fresh orchestrator-supplied live GitHub
+snapshot in its prompt satisfies the preflight relief above; without that snapshot, a
+preflight failure means the subagent ends blocked and its terminal reply **is** the
+blocked report.
+
+**Blocked report** (any subagent, when GitHub live state could not be established)
+- `status: blocked`
+- `tool_attempted` — the `github/list_issues` (or self-healed equivalent) operation and
+  repository/query
+- `exact_error` — the verbatim connector error
+- `workflow` — `blocked; no live GitHub state was established`
+- Stop immediately; do not fall back to `gh`, `web`, stale snapshots, prior conversation,
+  or inferred issue state, and do not pass a blocked report downstream as if it were
+  evidence.
 
 **Evidence Brief** (`backlog-explorer` → `backlog-shaper`)
 - `subject` — the idea, gap, or issue under investigation
