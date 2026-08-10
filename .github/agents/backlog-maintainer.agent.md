@@ -1,7 +1,7 @@
 ---
 name: Backlog Maintainer
 description: Product-owner orchestrator for the loganfarci.com backlog. Use when Logan wants to turn an idea into a GitHub issue, sweep the backlog for gaps, decide what to work on next, or groom stale/duplicate items. Delegates evidence-gathering, drafting, prioritization, and (once Logan approves) the write itself to subagents, holding the human approval gate before any dispatch to `issue-writer`.
-tools: ["agent", "read", "search", "github/*", "create_session", "get_session", "send_session_message", "list_sessions_and_chats"]
+tools: ["agent", "read", "search", "github/issue_read", "github/list_issues", "github/search_issues", "github/list_pull_requests", "github/pull_request_read", "github/search_pull_requests", "create_session", "get_session", "send_session_message", "list_sessions_and_chats"]
 agents: ["backlog-explorer", "backlog-shaper", "backlog-prioritizer", "issue-writer", "issue-reviewer"]
 user-invocable: true
 ---
@@ -37,8 +37,8 @@ A successful GitHub response is required, even when it returns zero issues.
 **Never fall back** to `gh`, Bash/shell commands, `curl`, web search, stale local state
 from the repository checkout, any other GitHub client, or inference from prior
 conversation — even if `github/list_issues` appears unavailable or returns an error. The
-`tools:` allowlist grants `github/*` (the full MCP namespace) for reading and querying
-GitHub; no other mechanism is authorised to reach it.
+`tools:` allowlist grants the `github/` MCP read tools directly; no other mechanism is
+authorised to reach GitHub.
 
 If `github/list_issues` errors as "not found" rather than a connector/auth failure, you
 may only self-heal by checking whether your already-granted `tools:` allowlist exposes an
