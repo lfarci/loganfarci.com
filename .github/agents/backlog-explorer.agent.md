@@ -29,6 +29,12 @@ connector schema: use only parameters the tool exposes, and omit the limit rathe
 inventing a parameter if it is unsupported. A successful GitHub response, including an
 empty result, is required before any investigation.
 
+If `github/list_issues` errors as "not found" rather than a connector/auth failure, check
+your actual available tool list for a GitHub issue-listing tool under a different name —
+namespacing varies by surface (see "GitHub MCP configuration surface" in the design doc)
+— and use that instead of failing outright. Only treat this as blocked once you have
+confirmed no working GitHub read tool exists at all.
+
 If the tool is unavailable or the call fails, do not produce an Evidence Brief. Return an
 explicit blocked report containing:
 

@@ -1,16 +1,16 @@
 ---
 spec: backlog-maintainer agent system
-version: 0.2.0
+version: 0.3.0
 status: design
 ---
 
 # Backlog Maintainer Agent System — Design
 
 Design for the **product-owner side** of the agent workflow: a user-invocable
-orchestrator that owns the backlog lifecycle, delegates read-only phases to focused
-subagents, and coordinates the human-controlled writer hand-off. This document is the
-design of record; the `.agent.md` files and the GitHub issues that track their creation
-derive from it.
+orchestrator that owns the backlog lifecycle, delegates every phase — including the
+approved write — to focused subagents, and holds the human approval gate at the point of
+write rather than at the point of dispatch. This document is the design of record; the
+`.agent.md` files and the GitHub issues that track their creation derive from it.
 
 Sibling systems (build/ship, articles) reuse the same structural pattern and are
 designed separately.
@@ -23,17 +23,18 @@ design.
 
 | Capability | Status | Design consequence |
 | --- | --- | --- |
-| `agent` tool alias (aliases: `Task`, `custom-agent`) lets an agent dispatch another custom agent as a subagent | Supported on **Copilot CLI** and **VS Code** | The orchestrator can genuinely delegate read-only phases; gated writes require a user-controlled transition. |
+| `agent` tool alias (aliases: `Task`, `custom-agent`) lets an agent dispatch another custom agent as a subagent | Supported on **Copilot CLI** and **VS Code** | The orchestrator can genuinely delegate every phase, including the gated write, once approval has happened. |
 | Subagents run with their **own isolated context window** | Supported | Each phase gets a clean context; the orchestrator's context stays small and is not polluted by raw research. |
 | `tools:` **filters** the tool set actually exposed to the agent (omit = all, `[]` = none, list = only those) | Enforced, not advisory | "Only one agent may write to GitHub" is a real, enforceable boundary — not a convention. |
-| `disable-model-invocation: true` prevents the model from auto-selecting an agent as a subagent | Supported | The human write-gate can be enforced structurally on `issue-writer`, not just requested in prose. |
+| `disable-model-invocation: true` prevents the model from auto-selecting an agent as a subagent | Supported | No longer used on `issue-writer` (see "Human approval gate" below) — the gate is now enforced by `issue-writer`'s own proof-of-approval check instead. |
 | `user-invocable: false` hides an agent from the picker | Supported | Deliberately **not** used here — see "Surface portability". |
-| VS Code-only `agents:` list restricts which subagents a coordinator may dispatch, and **overrides** `disable-model-invocation` for that coordinator | VS Code only | The orchestrator's `agents:` list must **omit** `issue-writer`, or the write gate is bypassed in VS Code. |
-| VS Code-only `handoffs:` list offers user-controlled transitions between agents | VS Code only | Post-approval writes on VS Code use a handoff button/prompt, not autonomous coordinator dispatch. |
-| Subagent dispatch is **not** supported on the GitHub Copilot app / github.com | Not supported | The cycle must degrade to manual sequential invocation there. |
-| Configured GitHub read tools provide the live backlog read | Required preflight | Every backlog phase that needs live GitHub state must prove this capability before reading or writing; a local file check is not sufficient. |
+| VS Code-only `agents:` list restricts which subagents a coordinator may dispatch, and **overrides** `disable-model-invocation` for that coordinator | VS Code only | No longer a footgun to avoid: `issue-writer` is now deliberately included in the orchestrator's `agents:` list on every surface, and no longer carries `disable-model-invocation`, so there is nothing left to override. |
+| VS Code-only `handoffs:` list offers user-controlled transitions between agents | VS Code only | No longer the primary write mechanism — superseded by direct orchestrator dispatch (below) — but still available as a manual fallback if Logan wants to trigger the write himself. |
+| Subagent dispatch is **not** supported on plain github.com chat with no session tooling | Not supported | The cycle must degrade to manual sequential invocation only on that surface (see "Surface portability"). |
+| The **Copilot App** (this repo's session-based workspace tooling: `create_session`, `get_session`, `send_session_message`) lets a running session spawn other **tracked, sidebar-visible child sessions** and exchange messages with them | Supported when those tools are present in the agent's own tool list | This is a *stronger* delegation mechanism than the in-process `agent` tool: each phase becomes an inspectable, named session Logan can watch, not an opaque subprocess call. The orchestrator prefers it over `agent` whenever available. |
+| Configured GitHub read tools provide the live backlog read | Required preflight | Every backlog phase that needs live GitHub state must prove this capability before reading or writing; a local file check is not sufficient. Exact tool names are namespaced per-surface — see "GitHub MCP configuration surface" — so a literal-name miss must be resolved against the agent's actual tool list before declaring the capability absent. |
 | Skills are description-triggered and shared by all agents; there is no `skills:` frontmatter field | Confirmed | Agents reference `shape-backlog-idea` in their prose body; the skill stays the single source of backlog judgment. |
-| Subagent invocations are **stateless** — no follow-up messages to a running subagent | Confirmed | All context must be passed in the initial delegation, which forces explicit artifact hand-offs (below). |
+| Subagent invocations are **stateless** — no follow-up messages to a running subagent | Confirmed | All context must be passed in the initial delegation, which forces explicit artifact hand-offs (below). Tracked Copilot App sessions relax this slightly: they can receive follow-up messages, but the design still treats each phase as a single request/response to keep the two dispatch mechanisms interchangeable. |
 
 ## GitHub MCP configuration surface
 
@@ -41,17 +42,44 @@ This repository already has the supported VS Code workspace configuration in
 [`.vscode/mcp.json`](../../.vscode/mcp.json), where the remote server is named `github`
 and uses GitHub's OAuth-capable hosted endpoint. Do not add a token or duplicate this
 server in another checked-in MCP file. VS Code forwards this workspace configuration to
-the Agent Host when enabled; Copilot CLI instead provides the GitHub MCP server
-read-only by default and keeps any custom CLI configuration in the user's
-`~/.copilot/mcp-config.json`. Copilot cloud agent also provides its `github` server as an
-out-of-the-box capability, configured in repository settings rather than a committed
-`.mcp.json`.
+the Agent Host when enabled; Copilot CLI instead reads its own, **not checked into this
+repo**, `~/.copilot/mcp-config.json` for the `github` server definition. Copilot cloud
+agent also provides its `github` server as an out-of-the-box capability, configured in
+repository settings rather than a committed `.mcp.json`.
+
+**Correction from an earlier version of this design:** Copilot CLI is *not* guaranteed
+read-only by default — whether the CLI's `github` server exposes write tools depends
+entirely on the user's own `~/.copilot/mcp-config.json` (e.g. a `"tools": ["*"]` entry
+exposes everything, reads and writes alike). The system does **not** rely on the MCP
+server being read-only; the real enforcement is each agent's own `tools:` frontmatter
+allow-list, which VS Code and Copilot CLI both apply regardless of what the underlying
+server offers. A user could optionally scope their CLI config to read-only tools as
+defense in depth, but it is not load-bearing for this design.
 
 The agent frontmatter uses the current GitHub MCP tool names, namespaced as
 `github/<tool>`. In particular, issue reads and writes are the combined
 `github/issue_read` and `github/issue_write` tools, and pull request reads use
 `github/pull_request_read`; obsolete names such as `github/get_issue`,
 `github/create_issue`, and `github/list_milestones` must not be added back.
+
+### If a tool name does not resolve ("tool not available")
+
+The most common cause of an agent reporting a GitHub tool as missing is not a wrong tool
+name in this repo's frontmatter — it is that **the surface running the agent has no
+`github` MCP server configured at all**, or has it configured under toolsets that omit
+issues/pull requests. Before assuming a tool name is wrong, check:
+
+| Surface | Where the `github` server is configured | What to verify |
+| --- | --- | --- |
+| **VS Code** | `.vscode/mcp.json` (committed, shared) | Server named exactly `github`; Agent Host / remote MCP enabled in VS Code settings. |
+| **Copilot CLI** | `~/.copilot/mcp-config.json` (per-user, not in this repo) | A `github` server entry exists and its `tools` list includes (or `*`s) `issue_read`, `issue_write`, `list_issues`, `search_issues`, `pull_request_read`, `list_pull_requests`, `search_pull_requests`, `add_issue_comment`. |
+| **Copilot cloud agent / GitHub Copilot app** | Repository → Settings → Copilot → coding agent MCP configuration | The `github` toolset is enabled for this repository, with `issues` and `pull_requests` included. |
+
+If the server is present but a specific literal tool name in an agent's frontmatter still
+does not resolve, agents are instructed (in their own `.agent.md` files) to check their
+actual available tool list for a same-purpose tool under a different name before
+declaring the capability absent — this absorbs minor naming drift between server
+versions without silently expanding what a read-only agent is allowed to do.
 
 ## GitHub read preflight and blocked state
 
@@ -95,9 +123,15 @@ shaping it, and MUST run this preflight first if it independently needs live Git
 4. **Judgment lives in the skill, not duplicated across agents.** `shape-backlog-idea`
    remains the single source of truth for investigation depth, backlog-action choice,
    issue structure, and prioritization order. Agents reference it; they do not restate it.
-5. **The human gate is structural.** Approval before any GitHub write is enforced by
-   agent configuration (`disable-model-invocation`, omission from `agents:`) plus a
-   user-controlled writer hand-off, not only by instructions the model could rationalize past.
+5. **The human gate is enforced at the point of write, not by blocking dispatch.**
+   Approval before any GitHub write is enforced by requiring Logan's explicit per-item
+   sign-off *and* by `issue-writer` refusing to act without proof that sign-off happened —
+   not by preventing the orchestrator from dispatching `issue-writer` at all. This is a
+   deliberate change from the original structural block (`disable-model-invocation` plus
+   omission from `agents:`), which also made every write require a manual agent switch.
+   The gate still cannot be rationalized past silently: `issue-writer` checks for approval
+   proof itself, so a dispatch without it is refused at the writer, not merely discouraged
+   in prose.
 6. **Degrade gracefully.** The same agents must be runnable one-by-one by a human on a
    surface without delegation.
 
@@ -112,10 +146,10 @@ Six agents: one orchestrator, five subagents.
 | **Invoked by** | The human. This is the entry point of the system. |
 | **Owns** | Routing the request to the right cycle, sequencing phases, holding the human gate, and producing the final report. |
 | **Reads before acting** | `docs/specs/README.md` (for spec precedence), `docs/specs/non-goals.md`, `AGENTS.md`, `.github/copilot-instructions.md`. |
-| **Tools** | `agent` (delegation), `read`, `search`, plus GitHub **read-only**. |
-| **Must NOT have** | Any GitHub write tool, `edit`, or `execute`. It must be incapable of mutating the backlog or the repo directly. |
+| **Tools** | `agent` (delegation), `create_session`/`get_session`/`send_session_message` (tracked-session delegation on the Copilot App), `read`, `search`, plus GitHub **read-only**. |
+| **Must NOT have** | Any GitHub write tool, `edit`, or `execute`. It must be incapable of mutating the backlog or the repo directly — it only ever reaches a write by dispatching `issue-writer`. |
 | **Produces** | A phase-by-phase status and a final report: what was found, what was decided, what was written (with links), what was escalated. |
-| **VS Code `agents:` list** | `backlog-explorer`, `backlog-shaper`, `backlog-prioritizer`, `issue-reviewer`. **Deliberately excludes `issue-writer`** so the write gate cannot be overridden; approved writes use a user-controlled handoff instead. |
+| **`agents:` list** | `backlog-explorer`, `backlog-shaper`, `backlog-prioritizer`, `issue-writer`, `issue-reviewer` — **includes `issue-writer`**, dispatched only in the same turn as, and strictly after, Logan's per-item approval (see "Human approval gate"). |
 | **On failure** | If any phase reports a blocking condition, stop and report. Never skip a phase to reach a write. |
 
 **Routing responsibility.** The orchestrator first classifies the request into one of four
@@ -155,7 +189,8 @@ entry modes, because the phase sequence differs per mode:
 
 ### Human approval gate
 
-Between shaping and writing. **Hard, non-optional, and structurally enforced.**
+Between shaping and writing. **Hard, non-optional — enforced by explicit human sign-off
+plus `issue-writer`'s own proof-of-approval check, not by a structural invocation block.**
 
 - The orchestrator presents each Issue Proposal with the exact repository, action
   (create/update/close), title, type label, milestone, and assignee — matching the rule
@@ -163,12 +198,23 @@ Between shaping and writing. **Hard, non-optional, and structurally enforced.**
 - The human approves, edits, or rejects **per item**.
 - **Any change to proposal content re-enters this gate.** Approval covers a specific payload,
   not an item in general, so a re-shaped proposal is a new proposal and needs fresh approval.
-- Enforcement: `issue-writer` carries `disable-model-invocation: true` so the model cannot
-  auto-dispatch it. In VS Code, it is also omitted from the orchestrator's `agents:` list,
-  because listing it there would override that gate.
-- After approval, the orchestrator prepares the exact `issue-writer` prompt. The human must
-  trigger that writer invocation explicitly: by selecting the agent in CLI, or by clicking a
-  VS Code `handoffs:` transition. The write step is therefore **not** autonomous delegation.
+- Enforcement changed from v0.2.0: `issue-writer` no longer carries
+  `disable-model-invocation`, and is now included in the orchestrator's `agents:` list on
+  every surface. This trade was made deliberately, because the old flag also made it
+  impossible for the orchestrator to invoke the writer *automatically after* a real
+  approval, forcing Logan to manually switch agents every time — the exact friction that
+  prompted this revision. The compensating control moved into `issue-writer` itself: it
+  refuses to write unless its input carries explicit proof that Logan approved this exact
+  payload (a quote or unambiguous restatement of his approval), so an orchestrator that
+  tried to dispatch it without a real approval would be refused by the writer, not merely
+  by convention.
+- After approval, the orchestrator dispatches `issue-writer` itself in the same turn,
+  passing the approved payload plus the approval proof. On the Copilot App surface this
+  dispatch is a tracked child session (`create_session`, `kickoff.agent: "Issue Writer"`)
+  so Logan can watch it run; on CLI/VS Code it is the in-process `agent` subagent call.
+  Logan can still invoke `issue-writer` manually himself at any time (it stays
+  `user-invocable: true`) — the orchestrator's automatic dispatch is an addition, not a
+  replacement for that.
 - Explore, shape, and prioritize need **no** gate — they are read-only, reversible, and
   cheap to re-run.
 
@@ -180,7 +226,7 @@ Between shaping and writing. **Hard, non-optional, and structurally enforced.**
 | **Reads** | The approved Issue Proposal, and the target issue if updating. |
 | **Tools** | GitHub **write** (create issue, update issue, comment, label, milestone) plus GitHub read. |
 | **Must NOT have** | `edit`, `execute`, or `agent`. It must not be able to modify the repository or delegate onward. |
-| **Deliberately constrained** | It does **not** re-investigate, re-decide, or improve the draft. If the proposal seems wrong, it stops and reports rather than "fixing" it. Content authority stays with the shaper and the human. |
+| **Deliberately constrained** | It does **not** re-investigate, re-decide, or improve the draft. If the proposal seems wrong, it stops and reports rather than "fixing" it. Content authority stays with the shaper and the human. It also refuses to act on any input that lacks explicit proof of Logan's per-item approval — see "Human approval gate" above. |
 | **Produces** | A **Write Receipt** (contract below): issue number, URL, action taken, and the fields actually set. |
 | **Granularity** | One approved proposal per invocation, so a rejection or failure never cascades across items. |
 | **On failure** | Reports the failure and stops for that item. Never retries a write silently. |
@@ -235,7 +281,7 @@ flowchart TD
     S -->|Issue Proposal| P[backlog-prioritizer<br/>read-only]
     P -->|Sequenced Plan| G{{HUMAN APPROVAL GATE<br/>per item}}
     G -->|rejected| O
-    G -->|approved: manual writer handoff| W[issue-writer<br/>ONLY writer]
+    G -->|approved: orchestrator dispatches writer directly| W[issue-writer<br/>ONLY writer]
     W -->|Write Receipt| R[issue-reviewer<br/>read-only]
     R -->|pass| O
     R -->|application failure: retry unchanged payload, max 1| W
@@ -250,9 +296,12 @@ Notes on the flow:
   and a prioritization request require it.
 - **The write/review loop runs per item**, not per batch, so one bad item cannot block or
   corrupt the rest.
-- **The writer hop is user-controlled.** On CLI the human selects `issue-writer`; on VS Code
-  the handoff button/prompt switches to it. The receipt returns to the orchestrator before
-  review continues.
+- **The writer hop is orchestrator-dispatched, not user-triggered.** Immediately after
+  Logan's per-item approval, `backlog-maintainer` dispatches `issue-writer` itself — as an
+  in-process subagent on CLI/VS Code, or as a tracked child session on the Copilot App —
+  passing the approved payload plus proof of Logan's approval. `issue-writer` checks for
+  that proof before writing anything. The receipt returns to the orchestrator before
+  review continues. Logan can still invoke `issue-writer` manually if he prefers.
 - **Review failures are routed by class, not lumped together.** An *application failure*
   means the approved payload did not land correctly — a transient API error, a field that
   did not take, a partial write. The approved content is still valid, so the writer may be
@@ -316,9 +365,10 @@ passed to the next phase or converted into any other artifact contract.
 
 | Surface | Behavior |
 | --- | --- |
-| **Copilot CLI** | Delegated read-only phases through the approval gate. The approved write is a manual user-selected `issue-writer` invocation; the human returns the Write Receipt to `backlog-maintainer`, which dispatches `issue-reviewer`. A retry repeats the same explicit writer trigger. |
-| **VS Code** | Delegated read-only phases through the approval gate. The orchestrator's `agents:` list must omit `issue-writer` to preserve the gate; `handoffs:` provide the user-controlled transition to the writer and back to the maintainer. This is intentionally not fully delegated end-to-end. |
-| **Copilot app / github.com** | No subagent dispatch. The cycle degrades to the human invoking each agent in order via `/agent`, passing the artifact from the previous phase. |
+| **Copilot CLI** | Full delegation end-to-end, including the write. `backlog-maintainer` dispatches every phase — `backlog-explorer`, `backlog-shaper`, `backlog-prioritizer`, and, immediately after Logan's per-item approval, `issue-writer` — via the in-process `agent` tool, then `issue-reviewer`. Logan can still invoke any subagent manually if he wants to intervene mid-cycle. |
+| **VS Code** | Same full delegation as CLI. `issue-writer` is now included in the orchestrator's `agents:` list (previously omitted); a `handoffs:` transition to `issue-writer` remains available as a manual alternative for Logan, but is no longer the only path. |
+| **Copilot App (this repo's session-based workspace)** | Full delegation, dispatched as **tracked child sessions** rather than in-process subagent calls: `backlog-maintainer` calls `create_session` with `kickoff.agent` set to each phase's exact custom-agent name, including `Issue Writer` right after approval. Logan sees every phase as its own named session in the sidebar and can inspect or message it directly via `get_session`/`send_session_message`. This is the surface where delegation is most observable, which is why it is preferred whenever those tools are present. |
+| **Plain github.com chat / any surface with no subagent-dispatch tool at all** | No subagent dispatch. The cycle degrades to the human invoking each agent in order via `/agent`, passing the artifact from the previous phase. This is now the rare exception, not the default path for the App. |
 
 To keep that degradation possible, **every subagent stays `user-invocable: true`.** The
 cycle must be runnable by hand; delegation is an accelerant, not a dependency.
@@ -347,3 +397,10 @@ so agents invoked independently still produce and consume compatible shapes.
 3. **Named dispatch.** The CLI documents hinting a specific agent by `@name` in a prompt,
    but there is no structured frontmatter field to force a specific subagent. The
    orchestrator's prose must name subagents explicitly and unambiguously.
+4. **How much to let Copilot App sessions collaborate.** `send_session_message` lets a
+   tracked child session message another sibling session directly, not just report back
+   to the orchestrator. This design intentionally keeps the pipeline strictly linear
+   (each phase reports to the orchestrator, which dispatches the next) rather than letting
+   e.g. `issue-reviewer` message `issue-writer` directly, so failure routing stays
+   auditable through the orchestrator's Step 5 logic. Revisit only if a concrete case
+   shows the orchestrator hop adds real latency without adding safety.

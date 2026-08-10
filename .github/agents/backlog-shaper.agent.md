@@ -37,7 +37,10 @@ parameter if it is unsupported. A successful response is required.
 If that preflight is unavailable or fails, return an explicit blocked report containing
 `status: blocked`, the attempted `github/list_issues` operation and repository/query,
 `exact_error: <verbatim connector error>`, and
-`workflow: blocked; no live GitHub state was established`. Do not fall back to `gh`,
+`workflow: blocked; no live GitHub state was established`. Before doing so, check whether
+a differently-named GitHub issue-listing tool exists in your available tool list (naming
+varies by surface — see the design doc's "GitHub MCP configuration surface" section) and
+use it instead if one is genuinely available. Do not fall back to `gh`,
 `web`, a local or stale snapshot, prior conversation, or inferred issue state.
 
 ## Inputs

@@ -33,7 +33,10 @@ or prior conversation) is context, not current state.
 If the preflight is unavailable or fails, return an explicit blocked report containing
 `status: blocked`, the attempted `github/list_issues` operation and repository/query,
 `exact_error: <verbatim connector error>`, and
-`workflow: blocked; no live GitHub state was established`. Stop. Do not fall back to
+`workflow: blocked; no live GitHub state was established`. Stop. Before doing so, check
+whether a differently-named GitHub issue-listing tool exists in your available tool list
+(naming varies by surface — see the design doc's "GitHub MCP configuration surface"
+section) and use it instead if one is genuinely available. Do not fall back to
 `gh`, `web`, a local or stale snapshot, prior conversation, or inferred issue state, and
 do not produce a Sequenced Plan from the failed read. Ordering already-supplied proposals
 without refreshing live state may proceed only when no live GitHub read is needed.

@@ -30,7 +30,10 @@ parameter if it is unsupported. A successful response is required.
 If the tool is unavailable or the call fails, return an explicit blocked report instead of
 a Review Verdict containing `status: blocked`, the attempted `github/list_issues`
 operation and repository/query, `exact_error: <verbatim connector error>`, and
-`workflow: blocked; no live GitHub state was established`. Stop without auditing. Do not
+`workflow: blocked; no live GitHub state was established`. Stop without auditing. Before
+doing so, check whether a differently-named GitHub issue-listing tool exists in your
+available tool list (naming varies by surface — see the design doc's "GitHub MCP
+configuration surface" section) and use it instead if one is genuinely available. Do not
 fall back to `gh`, `web`, a local or stale snapshot, prior conversation, or inferred issue
 state, and do not route a blocked report as an application or proposal failure.
 
