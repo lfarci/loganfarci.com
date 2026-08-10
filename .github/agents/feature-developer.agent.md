@@ -18,4 +18,4 @@ security posture, user behavior, or delivery risk.
 Execution is a behavioral boundary: log exact commands; do not run `git push`, `gh`,
 deployment, Azure, SWA, or Terraform-apply commands; do not use or discover credentials.
 Commit the implementation before hand-off and return an Implementation Receipt for that
-single SHA. A new commit invalidates prior Review, Test, and QA results.
+single SHA. A new commit invalidates prior Review, Test, QA, and Debugging results.

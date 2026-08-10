@@ -60,16 +60,19 @@ shell access as an undocumented replacement.
 | Code Reviewer | Compare one receipt SHA with the brief, selected instructions, and specs | Read/search only; structural in declared allowlist | Edit, execute, publish, deploy |
 | Test Engineer | Run deterministic checks and return raw evidence for one receipt SHA | Read/search/execute; behavioral execution boundary | Edit, treat a failure as acceptable, publish, deploy |
 | QA Engineer | Check observable journeys, responsive behavior, a11y, themes, reduced motion, and SSR/prerender when relevant | Read/search/execute/browser; behavioral execution boundary | Edit, downgrade defects, publish, deploy |
+| Debugging Specialist | Diagnose a reproducible Review, Test, or QA failure on one receipt SHA and return evidence and a remediation hypothesis | Read/search/execute; behavioral execution boundary | Edit, publish, deploy, or choose a scope-changing fix |
 | Release Manager | Create or update an exact approved PR after independent Approval Record validation | Read/search only until exact GitHub MCP names are verified; publication automation is blocked | Edit code, merge, change PR payload, or use an unverified GitHub tool |
 | Deployment Manager | Execute the exact approved SHA, environment, and named mechanism | Execute only after independent Approval Record validation; behavioral boundary | Edit code, create or merge a PR, substitute a SHA, target, or mechanism |
 
-The seven on-demand specialists are **React**, **Frontend**, **Accessibility**,
-**GitHub Actions**, **Terraform**, **Azure**, and **Security**. They are read-only
-advisors, not mandatory pipeline phases. The Delivery Brief selects one only when its
-trigger matches: React/SSR, UI/layout, WCAG, `.github/workflows/**`, `infra/**`,
-SWA/deployment configuration, or secrets/permissions/dependencies/input
-respectively. Their guidance is advisory; a disagreement affecting scope, security,
-user behavior, or delivery risk becomes a Decision Request for the human.
+The eight on-demand specialists are **React**, **Frontend**, **Accessibility**,
+**GitHub Actions**, **Terraform**, **Azure**, **Security**, and **Debugging**. They
+are not mandatory pipeline phases. The Delivery Brief selects the first seven only
+when their trigger matches: React/SSR, UI/layout, WCAG, `.github/workflows/**`,
+`infra/**`, SWA/deployment configuration, or secrets/permissions/dependencies/input
+respectively. It selects Debugging only for a reproducible Review, Test, or QA failure
+that needs diagnosis beyond the original evidence. Its guidance is evidence and a
+remediation hypothesis, not a fix or scope decision. A disagreement affecting scope,
+security, user behavior, or delivery risk becomes a Decision Request for the human.
 
 ## Scoped instruction map and selection
 
@@ -113,14 +116,14 @@ host behavior rather than merely the fixture's glob interpretation.
    a human-created branch at that SHA. The Developer is its sole mutable owner.
 2. The Developer commits before hand-off and returns an Implementation Receipt. Its
    branch and SHA, never uncommitted files, are the input to later work.
-3. Every Review, Test, and QA phase needs a fresh distinct child branch/worktree whose
-   `HEAD` equals the receipt SHA before the phase starts. The manager records that
-   equality.
+3. Every Review, Test, QA, and Debugging phase needs a fresh distinct child
+   branch/worktree whose `HEAD` equals the receipt SHA before the phase starts. The
+   manager records that equality.
 4. The current App cannot create that exact SHA snapshot automatically. It must stop
    and request the documented manual snapshot instead of checking out the live branch
    or assuming detached-SHA support.
-5. A Developer commit invalidates every Review, Test, and QA artifact for an older SHA.
-   Recreate snapshots and receipts from the new receipt.
+5. A Developer commit invalidates every Review, Test, QA, and Debugging artifact for an
+   older SHA. Recreate snapshots and receipts from the new receipt.
 6. The manager alone creates and tracks sessions. Children do not route siblings,
    create replacements, or rely on shared memory. A terminal artifact is pulled from
    its transcript.
@@ -165,6 +168,8 @@ flowchart TD
     I --> V{Exact SHA snapshot available?}
     V -->|yes| R[Reviewer then Test then QA]
     V -->|no| F[Manual snapshot fallback]
+    R -->|reproducible failure needing diagnosis| B[Debugging Specialist]
+    B --> D
     R -->|finding or failure| D
     R -->|same-SHA passes| P{Human PR decision}
     P -->|approved record| L[Release Manager]
