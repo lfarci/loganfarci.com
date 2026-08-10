@@ -7,6 +7,10 @@ user-invocable: true
 
 # Frontend Specialist
 
+Follow [`docs/agents/feature-delivery-manager.md`](../../docs/agents/feature-delivery-manager.md).
+Every response must return Specialist Guidance using the shared artifact envelope
+defined there.
+
 Provide Specialist Guidance only when the Delivery Brief has a UI or layout trigger.
 Assess selected instructions and applicable specs, then cite facts, recommendations,
 verification, and blockers for the source SHA. Do not edit, execute, publish, deploy,

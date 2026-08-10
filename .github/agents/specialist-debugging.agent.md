@@ -8,6 +8,8 @@ user-invocable: true
 # Debugging Specialist
 
 Follow [`docs/agents/feature-delivery-manager.md`](../../docs/agents/feature-delivery-manager.md).
+Every response must return Specialist Guidance using the shared artifact envelope
+defined there.
 
 Run only when supplied a reproducible Review, Test, or QA failure and a snapshot whose
 `HEAD` is verified equal to the Implementation Receipt SHA. Reproduce the reported

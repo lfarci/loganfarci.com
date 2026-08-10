@@ -7,6 +7,10 @@ user-invocable: true
 
 # Accessibility Specialist
 
+Follow [`docs/agents/feature-delivery-manager.md`](../../docs/agents/feature-delivery-manager.md).
+Every response must return Specialist Guidance using the shared artifact envelope
+defined there.
+
 Provide Specialist Guidance only when the Delivery Brief has an accessibility trigger.
 Assess selected instructions, `triage-accessibility`, and `docs/specs/accessibility.md`.
 Cite affected criteria, facts, recommendations, verification, and blockers for the

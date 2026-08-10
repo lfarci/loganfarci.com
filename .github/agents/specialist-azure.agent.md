@@ -7,6 +7,10 @@ user-invocable: true
 
 # Azure Specialist
 
+Follow [`docs/agents/feature-delivery-manager.md`](../../docs/agents/feature-delivery-manager.md).
+Every response must return Specialist Guidance using the shared artifact envelope
+defined there.
+
 Provide Specialist Guidance only when the Delivery Brief touches Azure/SWA configuration
 or deployment risk. Assess selected instructions, applicable specs, and existing Azure
 conventions; identify authorization, environment, and mechanism constraints without
