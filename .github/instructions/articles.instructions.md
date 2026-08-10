@@ -4,6 +4,9 @@ applyTo: "content/articles/*.md"
 
 # Custom Instructions for Personal Website Articles
 
+Follow the root guidance and `docs/specs/content-style-guide.md` and
+`docs/specs/markdown-rendering.md`; those documents remain authoritative.
+
 ## Content Guidelines
 
 ### Writing Style
