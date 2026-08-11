@@ -1,6 +1,6 @@
 ---
 spec: feature-delivery-manager agent system
-version: 0.3.0
+version: 0.4.0
 status: design
 verified: 2026-08-11
 ---
@@ -28,8 +28,8 @@ implication.
 | Path instructions under `.github/instructions/*.instructions.md` | Documented by [repository custom instructions](https://docs.github.com/en/copilot/how-tos/configure-custom-instructions-in-your-ide/add-repository-instructions-in-your-ide); existing files use YAML `applyTo`. | `applyTo` accepts comma-separated glob patterns. It is verified for VS Code, Copilot cloud agent, and code review; this task does **not** assert it for the Copilot App session runtime. The App fallback is to attach the selected files to each child prompt and record that in the Delivery Brief. |
 | Copilot App tracked child sessions | Observed: `create_session`, `get_session`, `list_sessions_and_chats`, `send_session_message`, and `session_store_sql` are available. | Create a named child with `coordinate_with_creator: true`; its final response is the hand-off artifact. Pull it from the local transcript. A message is a best-effort nudge only, never an artifact transport. |
 | Child worktree isolation | Observed: each created local project session is a separate worktree and branch. | The Developer alone owns its mutable worktree. Do not share or check out that live branch in another worktree. |
-| Create a child from an existing branch | Observed: `create_session` accepts `base_branch` and creates a new local child worktree/branch from it. | After a Developer commit, freeze the source branch and create each phase session with `base_branch` set to the receipt branch. The phase must verify `HEAD` equals the receipt SHA before work. |
-| Start a child worktree from an arbitrary receipt SHA | **Not verified.** The current surface does not expose a branch-at-SHA creation tool. | The normal hand-off uses the frozen Developer branch, whose tip is the receipt SHA. If the branch cannot be resolved, has moved, or the child starts at another `HEAD`, stop and use the documented manual snapshot fallback. Never substitute a detached checkout or a live Developer branch. |
+| Start and verify a child worktree from an exact receipt SHA | **Conditional, not verified in this maintenance session.** `create_session` accepts an existing `base_branch`, not an arbitrary commit SHA. A receipt branch may be used only when the host accepts it as the base, immediately returns a distinct session/worktree identity, reports the returned branch/path and child startup through `get_session`, and the child reports `HEAD`, `parent_sha`, and `base_sha` equal to the receipt SHA before work. | During the normal path, automatically create the named child phase from the receipt branch and pull its terminal artifact; do not pause or ask the human to create a worktree. If any handshake proof is unavailable or fails, stop with the Implementation Receipt and use the exceptional manual branch-at-SHA fallback. Never substitute a detached checkout, an unverified child, or a live Developer branch. |
+| Idempotent phase-session retry | **Not verified.** `session_store_sql` is observed, but atomic idempotency reservation and durable create outcomes are not verified in this maintenance session. | Reserve `delivery_id:phase:source_sha` before `create_session`; reuse and revalidate an existing attempt, or create a numbered retry only after recording the prior failure (including an ambiguous timeout). Never blindly call `create_session` twice. |
 | Session messages | Observed, but child delivery and child tool inheritance are not guaranteed. | Include all inputs in a kickoff prompt. Retrieve the terminal artifact from the transcript. Use one message only to request a missing artifact. |
 | In-process subagents | Documented for VS Code/CLI (`agent` plus an `agents` list); not verified in this App session. | App sessions are the primary route. On a surface without tracked sessions, use a documented in-process subagent only if it can preserve the phase boundary; otherwise stop and name the next manual role. |
 | Live GitHub MCP read/write names | **Configuration mismatch.** `.github/mcp.json` configures a `github` server with `tools: ["*"]`, but this session exposes GitHub-oriented built-ins and `gh`, not a discoverable `github/*` MCP toolset. | Do not add `github/*` to new frontmatter. Use no GitHub tools for read-only roles. Release Manager is a human-invocable, approval-refusing placeholder until a human verifies exact PR read/write MCP names and replaces wildcard access with its minimal allowlist. |
@@ -117,27 +117,48 @@ host behavior rather than merely the fixture's glob interpretation.
    equality with the Delivery Brief's base SHA. A mismatch blocks the cycle and requires
    a human-created branch at that SHA. The Developer is its sole mutable owner.
 2. The Developer commits before hand-off and returns an Implementation Receipt containing
-   the local branch, exact SHA, parent/base SHA, changed paths, and session ID. The manager
-   freezes that source branch for downstream hand-off. The commit is the input to later
-   work; uncommitted files are never an artifact.
+   the local branch, exact SHA, parent/base SHA, changed paths, and session ID. The commit
+   is the input to later work; uncommitted files are never an artifact.
 3. Every Review, Test, QA, and Debugging phase needs a fresh distinct child
-   branch/worktree. The manager creates and dispatches it automatically with
-   `create_session`, using the Implementation Receipt's frozen source branch as
-   `base_branch`, and includes the receipt SHA plus all phase inputs in the kickoff prompt.
-   The phase verifies its `HEAD` equals the receipt SHA before doing work; the manager
-   records the phase session ID, branch, and equality evidence. The manager must not pause
-   for, or ask the human to create, this worktree during the normal path.
-4. If `create_session` cannot resolve the receipt branch, the source branch moved after the
-   receipt, or the child reports a different `HEAD`, stop the phase and use the manual
-   snapshot fallback. The fallback record includes branch, SHA, session ID, and `HEAD`
-   command output; a live Developer branch or detached checkout is not a substitute. This
-   fallback is exceptional failure handling, not a normal approval or user hand-off gate.
-5. A Developer commit invalidates every Review, Test, QA, and Debugging artifact for an
+   branch/worktree whose `HEAD` equals the receipt SHA before the phase starts. The
+   manager uses this explicit session handoff handshake:
+   * reserve the idempotency key `delivery_id:phase:source_sha` in the session ledger;
+   * call `create_session` once with the receipt's `source_branch` as `base_branch`,
+     the exact phase agent in `kickoff.agent`, and `coordinate_with_creator: true`;
+   * immediately call `get_session` for the returned child ID, before sending another
+     message or creating any other phase, and verify the child session ID, worktree ID,
+     worktree path, returned branch, accepted base branch, exact phase agent, and
+     startup state are present, with distinct child branch/worktree isolation evidence,
+     and distinct from the manager, Developer, and every prior phase;
+   * require the child startup receipt before it reads or changes files. It must report
+     its session ID, worktree ID/path, branch, `HEAD`, `parent_sha`, and `base_sha`.
+     `HEAD == parent_sha == base_sha == source_sha`, the branch must equal the returned
+     branch, and the returned base branch must equal the receipt branch; and
+   * record the startup receipt before accepting the phase. A missing identity, reused
+     branch/path, missing startup, base-branch mismatch, or any SHA mismatch rejects
+     the handoff.
+   The source branch is a starting ref, not permission to reuse the Developer worktree.
+4. The manager polls `get_session`, pulls the child's final response from the local
+   transcript, and validates a complete terminal receipt (including the startup
+   receipt, phase, session identity, source SHA, branch/path, status, and evidence)
+   before creating the next phase. `send_session_message` is at most one nudge and
+   never transports an artifact. A failed or incomplete child is recorded against the
+   idempotency key and blocks the next phase. On retry, first look up and revalidate
+   that key; an unknown or ambiguous create outcome is a failure that must be recorded
+   before a numbered replacement attempt can be created. Never create duplicate phase
+   sessions on an unrecorded retry.
+5. Handoff is automatic only when the platform accepts that receipt branch and supplies
+   every proof above. If any API, base-branch acceptance, identity, startup,
+   distinct-worktree, or SHA-equality proof is unavailable, stop with the Implementation
+   Receipt and ask a human to create a distinct branch at that SHA. The fallback record
+   includes branch, SHA, session ID, and `HEAD` command output; a live Developer branch
+   or detached checkout is not a substitute.
+6. A Developer commit invalidates every Review, Test, QA, and Debugging artifact for an
    older SHA. Recreate snapshots and receipts from the new receipt.
-6. The manager alone creates and tracks sessions. Children do not route siblings,
+7. The manager alone creates and tracks sessions. Children do not route siblings,
    create replacements, or rely on shared memory. A terminal artifact is pulled from
    its transcript and its provenance is recorded.
-7. Before release, the Release Manager verifies that the exact local branch contains the
+8. Before release, the Release Manager verifies that the exact local branch contains the
    receipt SHA and that the approved source branch is not already mapped to a different
    remote SHA. Publication is push the exact branch/ref, verify the remote ref resolves
    to the receipt SHA, then create/update the PR. A local commit is never treated as
@@ -228,9 +249,9 @@ flowchart TD
     M --> S[Triggered read-only specialists]
     S --> D[Developer mutable worktree]
     D --> I[Committed Implementation Receipt]
-    I --> V{Automatic branch handoff succeeds?}
-    V -->|yes| R[Fresh Reviewer/Test/QA worktrees]
-    V -->|no| F[Manual snapshot fallback]
+    I --> V{Exact SHA snapshot available?}
+    V -->|verified session handoff handshake| R[One phase child at a time]
+    V -->|not verified| F[Manual snapshot fallback]
     R -->|reproducible failure needing diagnosis| B[Debugging Specialist]
     B --> D
     R -->|finding or failure| D
@@ -279,8 +300,9 @@ Before enabling automated release work, a human must verify the exact live GitHu
 read/write names, replace `.github/mcp.json` wildcard access with only the required
 release tools, and update this capability table and the Release Manager frontmatter.
 Until then, the named human fallback owns the approved release sequence; the wildcard
-configuration is not evidence that a child agent can use GitHub publication tools. Automated
-phase hand-off is limited to `create_session(base_branch=<frozen receipt branch>)` plus
-child-reported `HEAD` equality; any branch-resolution or equality failure follows the
-manual snapshot fallback. Before enabling automated deployment, a human must verify the
-executing identity and named mechanism without exposing credentials.
+configuration is not evidence that a child agent can use GitHub publication tools. Before enabling
+automated snapshot phases, a human must verify a supported branch-at-SHA worktree
+creation path, the `get_session` identity/branch/path/startup fields, and a durable
+idempotency reservation or equivalent create-outcome lookup. Before enabling automated
+deployment, a human must verify the executing identity and named mechanism without
+exposing credentials.
