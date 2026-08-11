@@ -1,6 +1,6 @@
 ---
 spec: accessibility
-version: 0.2.1
+version: 0.2.2
 status: current-state
 ---
 
@@ -30,11 +30,22 @@ Verified in the code today:
   are skipped by assistive tech.
 - **Headings.** One `h1` per page; visually hidden headings (`sr-only`) are used where a
   landmark needs a name without a visible title.
+- **Skip-to-content link.**
+  [`LayoutWrapper`](../../src/src/components/layout/LayoutWrapper.tsx) renders "Skip to
+  content" as the first focusable element and targets the programmatically focusable
+  `<main id="main-content">`. Its
+  [unit tests](../../src/src/components/layout/LayoutWrapper.test.tsx) verify the DOM
+  order, target, and `tabindex`; its
+  [Playwright coverage](../../src/src/components/layout/NavigationBar.spec.ts) verifies
+  keyboard focus and activation.
 - **Theme support.** A light/dark theme (`ThemeContext` + `ThemeToggle`, Tailwind
   `darkMode: "class"`) with an accessible toggle. The first visit follows
   `prefers-color-scheme`, live system changes remain in sync until the visitor makes
   an explicit choice, and a saved choice takes precedence; contrast comes from
   semantic tokens (see [themes and contrast](#themes-and-contrast)).
+- **Reduced motion.**
+  [`PageTransition`](../../src/src/components/motion/PageTransition.tsx) honors
+  `prefers-reduced-motion` for the site's Framer Motion page transitions.
 - **Images.** The `Image` type requires `alt`; all `content/data/*.json` images provide
   it.
 - **Automated CI checks.** Lighthouse CI audits `/`, `/about`, `/articles`, and an
@@ -100,10 +111,8 @@ crawlers and LLM/agent readers to parse.
 Targets to grow toward, guided by [vision.md](./vision.md). Prefer platform features and
 established, lightweight helpers over bespoke a11y machinery:
 
-- **Skip-to-content link** as the first focusable element.
 - **Screen-reader passes** on the home, about, and article-reading flows, documented and
   repeated as the site grows.
-- **`prefers-reduced-motion`** honored across all framer-motion animations.
 - **Per-locale `lang`** and correct document language once multilanguage lands
   ([i18n.md](./i18n.md)).
 
