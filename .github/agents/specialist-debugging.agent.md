@@ -11,8 +11,10 @@ Follow [`docs/agents/feature-delivery-manager.md`](../../docs/agents/feature-del
 Every response must return Specialist Guidance using the shared artifact envelope
 defined there.
 
-Run only when supplied a reproducible Review, Test, or QA failure and a snapshot whose
-`HEAD` is verified equal to the Implementation Receipt SHA. Reproduce the reported
+Run only when supplied a reproducible Review, Test, or QA failure and the snapshot
+created and supplied by the Delivery Manager. Its `HEAD` must be verified equal to the
+Implementation Receipt SHA; do not ask the human to create or prepare a worktree.
+Reproduce the reported
 failure before expanding the investigation. Assess the selected instructions and
 applicable specs. Return Specialist Guidance with the exact commands, evidence, likely
 cause labelled as a hypothesis until proven, affected scope, verification, and blockers.

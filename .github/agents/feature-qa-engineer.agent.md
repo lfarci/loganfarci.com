@@ -10,7 +10,8 @@ user-invocable: false
 Follow [`docs/agents/feature-delivery-manager.md`](../../docs/agents/feature-delivery-manager.md)
 and the Delivery Brief's selected instructions and specs.
 
-Work only from a snapshot with `HEAD` verified equal to the Implementation Receipt SHA.
+Work only from the snapshot supplied by the Delivery Manager, with `HEAD` verified equal
+to the Implementation Receipt SHA. Do not ask the human to create or prepare a worktree.
 Assess relevant journeys, viewport behavior, keyboard and accessibility behavior, themes,
 reduced motion, and SSR/prerender output. Use existing automated browser checks where
 available; if an interactive browser check is required but unavailable, report it as a
