@@ -6,11 +6,13 @@ const repositoryRoot = fileURLToPath(new URL("..", import.meta.url));
 const designPath = join(repositoryRoot, "docs", "agents", "feature-delivery-manager.md");
 const releaseAgentPath = join(repositoryRoot, ".github", "agents", "feature-release-manager.agent.md");
 const managerAgentPath = join(repositoryRoot, ".github", "agents", "feature-delivery-manager.agent.md");
+const reviewerAgentPath = join(repositoryRoot, ".github", "agents", "feature-code-reviewer.agent.md");
 const maintainerAgentPath = join(repositoryRoot, ".github", "agents", "feature-orchestration-maintainer.agent.md");
 
 const design = await readFile(designPath, "utf8");
 const releaseAgent = await readFile(releaseAgentPath, "utf8");
 const managerAgent = await readFile(managerAgentPath, "utf8");
+const reviewerAgent = await readFile(reviewerAgentPath, "utf8");
 const maintainerAgent = await readFile(maintainerAgentPath, "utf8");
 
 const failures = [];
@@ -61,6 +63,7 @@ const handoffFixture = {
         baseBranch: "lfarci-reflect-skip-link-spec",
         phaseAgent: "feature-code-reviewer",
         startup: "started",
+        initialHead: "07e89aa83c16d285ba43ac8b262e5f17a7354367",
     },
     startupReceipt: {
         sessionId: "review-373",
@@ -70,6 +73,7 @@ const handoffFixture = {
         headSha: "07e89aa83c16d285ba43ac8b262e5f17a7354367",
         parentSha: "07e89aa83c16d285ba43ac8b262e5f17a7354367",
         baseSha: "07e89aa83c16d285ba43ac8b262e5f17a7354367",
+        headShaSource: "host-session-metadata",
         status: "ready-before-work",
     },
     terminalReceipt: {
@@ -133,6 +137,7 @@ function supportsAutomatedHandoff(fixture) {
         && returned.baseBranch === fixture.sourceBranch
         && returned.phaseAgent === fixture.phaseAgent
         && returned.startup === "started"
+        && returned.initialHead === fixture.sourceSha
         && startup.sessionId === returned.sessionId
         && startup.worktreeId === returned.worktreeId
         && startup.worktreePath === returned.worktreePath
@@ -140,6 +145,7 @@ function supportsAutomatedHandoff(fixture) {
         && startup.headSha === fixture.sourceSha
         && startup.parentSha === fixture.sourceSha
         && startup.baseSha === fixture.sourceSha
+        && startup.headShaSource === "host-session-metadata"
         && startup.status === "ready-before-work"
         && terminal.complete
         && terminal.sessionId === returned.sessionId
@@ -164,6 +170,10 @@ assert(!failedDeliveryFixture.remoteRef, "failed-delivery fixture must model an 
 assert(failedDeliveryFixture.prAttempted, "fixture must preserve the failed PR attempt");
 assert(!failedDeliveryFixture.prCreated, "fixture validation must not claim a PR was created");
 assert(supportsAutomatedHandoff(handoffFixture), "safe fixture must model a verified exact-SHA child handoff");
+assert(reviewerAgent.includes('tools: ["read", "search"]'), "code reviewer must remain read-only");
+assert(reviewerAgent.includes("trusted startup receipt") && reviewerAgent.includes("initial_head"), "code reviewer must use trusted startup metadata");
+assert(design.includes("Trusted child startup `HEAD` metadata"), "design must define trusted startup HEAD metadata");
+assert(design.includes("must not claim command-derived evidence"), "design must forbid unverifiable reviewer HEAD evidence");
 assert(supportsRecordedRetry(handoffFixture), "safe fixture must model a recorded idempotent retry");
 assert(!supportsAutomatedHandoff({
     ...handoffFixture,

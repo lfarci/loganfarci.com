@@ -24,12 +24,16 @@ the receipt `source_branch` as `base_branch`, the exact phase agent in `kickoff.
 `coordinate_with_creator: true`. Immediately call `get_session` for that child and
 verify distinct session/worktree identity, returned branch/path, accepted base branch,
 phase agent, and child startup before any other phase is created. Require the child to
-report `HEAD`, `parent_sha`, and `base_sha` before it reads or changes files; all three
-must equal the receipt SHA. Reject missing identity, branch/path reuse, base mismatch,
-SHA mismatch, or missing startup. Pull and validate the complete terminal receipt
-before creating the next phase. On retry, revalidate the idempotency key and record a
-failure (including an ambiguous create outcome) before creating a numbered replacement;
-never create an unrecorded duplicate. When the handshake is verified, automatically create named Review, Test, and QA child sessions in sequence. The orchestrator must not pause or ask the human to create a worktree during this normal path. The API accepts a branch,
+report or receive a trusted startup receipt before it reads or changes files. For the
+read-only Code Reviewer, `initial_head` must come from host session metadata supplied
+by the orchestrator; the child echoes it and does not claim command-derived evidence.
+Include that startup receipt in the phase kickoff. For every phase, `initial_head`,
+`parent_sha`, and `base_sha` must equal the receipt SHA.
+Reject missing trusted metadata, identity, branch/path reuse, base mismatch, SHA
+mismatch, or missing startup. Pull and validate the complete terminal receipt before
+creating the next phase. On retry, revalidate the idempotency key and record a failure
+(including an ambiguous create outcome) before creating a numbered replacement; never
+create an unrecorded duplicate. When the handshake is verified, automatically create named Review, Test, and QA child sessions in sequence. The orchestrator must not pause or ask the human to create a worktree during this normal path. The API accepts a branch,
 not an arbitrary SHA:
 if it cannot prove this handshake, stop for the documented manual snapshot fallback
 instead of reusing the Developer branch or inventing an exact-SHA capability.

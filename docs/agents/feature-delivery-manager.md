@@ -1,6 +1,6 @@
 ---
 spec: feature-delivery-manager agent system
-version: 0.4.0
+version: 0.5.0
 status: design
 verified: 2026-08-11
 ---
@@ -28,7 +28,8 @@ implication.
 | Path instructions under `.github/instructions/*.instructions.md` | Documented by [repository custom instructions](https://docs.github.com/en/copilot/how-tos/configure-custom-instructions-in-your-ide/add-repository-instructions-in-your-ide); existing files use YAML `applyTo`. | `applyTo` accepts comma-separated glob patterns. It is verified for VS Code, Copilot cloud agent, and code review; this task does **not** assert it for the Copilot App session runtime. The App fallback is to attach the selected files to each child prompt and record that in the Delivery Brief. |
 | Copilot App tracked child sessions | Observed: `create_session`, `get_session`, `list_sessions_and_chats`, `send_session_message`, and `session_store_sql` are available. | Create a named child with `coordinate_with_creator: true`; its final response is the hand-off artifact. Pull it from the local transcript. A message is a best-effort nudge only, never an artifact transport. |
 | Child worktree isolation | Observed: each created local project session is a separate worktree and branch. | The Developer alone owns its mutable worktree. Do not share or check out that live branch in another worktree. |
-| Start and verify a child worktree from an exact receipt SHA | **Conditional, not verified in this maintenance session.** `create_session` accepts an existing `base_branch`, not an arbitrary commit SHA. A receipt branch may be used only when the host accepts it as the base, immediately returns a distinct session/worktree identity, reports the returned branch/path and child startup through `get_session`, and the child reports `HEAD`, `parent_sha`, and `base_sha` equal to the receipt SHA before work. | During the normal path, automatically create the named child phase from the receipt branch and pull its terminal artifact; do not pause or ask the human to create a worktree. If any handshake proof is unavailable or fails, stop with the Implementation Receipt and use the exceptional manual branch-at-SHA fallback. Never substitute a detached checkout, an unverified child, or a live Developer branch. |
+| Trusted child startup `HEAD` metadata | **Not verified.** The observed `get_session` surface reports session/worktree identity and branch/path, but does not expose an immutable initial `HEAD` field. | Automated phases are allowed only when the host supplies `initial_head` as trusted session metadata before child work starts. The manager records it and includes it in the startup receipt; a read-only child may echo it but must not claim command-derived evidence. If absent, use the manual branch-at-SHA fallback. Never infer a SHA from a branch name or transcript text. |
+| Start and verify a child worktree from an exact receipt SHA | **Conditional, not verified in this maintenance session.** `create_session` accepts an existing `base_branch`, not an arbitrary commit SHA. A receipt branch may be used only when the host accepts it as the base, immediately returns a distinct session/worktree identity, reports the returned branch/path and startup through `get_session`, and supplies trusted `initial_head` metadata equal to the receipt SHA before work. | During the normal path, automatically create the named child phase from the receipt branch and pull its terminal artifact; do not pause or ask the human to create a worktree. If any handshake proof is unavailable or fails, stop with the Implementation Receipt and use the exceptional manual branch-at-SHA fallback. Never substitute a detached checkout, an unverified child, or a live Developer branch. |
 | Idempotent phase-session retry | **Not verified.** `session_store_sql` is observed, but atomic idempotency reservation and durable create outcomes are not verified in this maintenance session. | Reserve `delivery_id:phase:source_sha` before `create_session`; reuse and revalidate an existing attempt, or create a numbered retry only after recording the prior failure (including an ambiguous timeout). Never blindly call `create_session` twice. |
 | Session messages | Observed, but child delivery and child tool inheritance are not guaranteed. | Include all inputs in a kickoff prompt. Retrieve the terminal artifact from the transcript. Use one message only to request a missing artifact. |
 | In-process subagents | Documented for VS Code/CLI (`agent` plus an `agents` list); not verified in this App session. | App sessions are the primary route. On a surface without tracked sessions, use a documented in-process subagent only if it can preserve the phase boundary; otherwise stop and name the next manual role. |
@@ -130,13 +131,16 @@ host behavior rather than merely the fixture's glob interpretation.
      worktree path, returned branch, accepted base branch, exact phase agent, and
      startup state are present, with distinct child branch/worktree isolation evidence,
      and distinct from the manager, Developer, and every prior phase;
-   * require the child startup receipt before it reads or changes files. It must report
-     its session ID, worktree ID/path, branch, `HEAD`, `parent_sha`, and `base_sha`.
-     `HEAD == parent_sha == base_sha == source_sha`, the branch must equal the returned
-     branch, and the returned base branch must equal the receipt branch; and
+   * require trusted host session metadata containing `initial_head` before the child
+     reads or changes files. The manager records a startup receipt with its session ID,
+     worktree ID/path, branch, `initial_head`, `parent_sha`, and `base_sha`.
+     `initial_head == parent_sha == base_sha == source_sha`, the branch must equal the
+     returned branch, and the returned base branch must equal the receipt branch. The
+     Code Reviewer receives and echoes this trusted metadata; it must not claim to
+     obtain `HEAD` by command because it has no execution tool; and
    * record the startup receipt before accepting the phase. A missing identity, reused
-     branch/path, missing startup, base-branch mismatch, or any SHA mismatch rejects
-     the handoff.
+     branch/path, missing startup or trusted `initial_head`, base-branch mismatch, or
+     any SHA mismatch rejects the handoff.
    The source branch is a starting ref, not permission to reuse the Developer worktree.
 4. The manager polls `get_session`, pulls the child's final response from the local
    transcript, and validates a complete terminal receipt (including the startup
