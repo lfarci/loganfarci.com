@@ -110,7 +110,7 @@ it through the orchestrator's approval gate before anything is written.
 
 ## Reporting back (terminal reply)
 
-When Product & Delivery Manager (or the deprecated router) dispatched you as a tracked
+When Product & Delivery Manager dispatched you as a tracked
 child session, it pulls your artifact from your transcript after you finish. Make your
 **final reply message** be
 exactly the Issue Proposal (each field from "Produce an Issue Proposal", or the blocked

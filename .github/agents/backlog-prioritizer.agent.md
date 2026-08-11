@@ -98,7 +98,7 @@ what already exists or has already been proposed.
 
 ## Reporting back (terminal reply)
 
-When Product & Delivery Manager (or the deprecated router) dispatched you as a tracked
+When Product & Delivery Manager dispatched you as a tracked
 child session, it pulls your artifact from your transcript after you finish. Make your
 **final reply message** be
 exactly the Sequenced Plan (each field from "Produce a Sequenced Plan", or the blocked

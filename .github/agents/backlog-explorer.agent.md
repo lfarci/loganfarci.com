@@ -33,7 +33,7 @@ For every targeted or sweep backlog invocation, the first operation must be a ca
 `github/list_issues` for owner `lfarci`, repository `loganfarci.com`, state `open`, using
 the smallest limit accepted by the configured connector — **unless the orchestrator's
 kickoff prompt already carries a freshly-verified live GitHub snapshot** (the output of
-the maintainer's own preflight plus the relevant per-phase reads). A snapshot explicitly
+the orchestrator's own preflight plus the relevant per-phase reads). A snapshot explicitly
 labelled as live by the orchestrator counts as live state: use it, do not re-query. The
 repository does not define a connector schema: use only parameters the tool exposes, and
 omit the limit rather than inventing a parameter if it is unsupported. A successful
@@ -113,7 +113,7 @@ Brief with a clear "no actionable gap found" is a correct and complete result.
 
 ## Reporting back (terminal reply)
 
-When Product & Delivery Manager (or the deprecated router) dispatched you as a tracked
+When Product & Delivery Manager dispatched you as a tracked
 child session, it pulls your artifact from your transcript after you finish. Make your
 **final reply message** be
 exactly the Evidence Brief (each field from "Produce an Evidence Brief", or the blocked

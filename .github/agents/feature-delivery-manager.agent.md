@@ -2,7 +2,7 @@
 name: Product & Delivery Manager
 description: Single top-level coordinator for backlog intake, issue shaping/prioritization, accepted-scope Delivery Briefs, delivery sequencing, artifacts, and approval gates. It has no edit, execute, GitHub write, publication, or deployment authority.
 tools: ["agent", "read", "search", "create_session", "get_session", "session_store_sql", "send_session_message", "list_sessions_and_chats"]
-agents: ["backlog-explorer", "backlog-shaper", "backlog-prioritizer", "issue-writer", "issue-reviewer", "feature-developer", "feature-review-validation", "feature-release-manager", "feature-deployment-manager", "specialist-debugging", "specialist-react", "specialist-frontend", "specialist-accessibility", "specialist-github-actions", "specialist-terraform", "specialist-azure", "specialist-security"]
+agents: ["backlog-explorer", "backlog-shaper", "backlog-prioritizer", "issue-writer", "issue-reviewer", "feature-developer", "feature-review-validation", "feature-release-manager", "feature-deployment-manager", "feature-orchestration-maintainer", "specialist-debugging", "specialist-react", "specialist-frontend", "specialist-accessibility", "specialist-github-actions", "specialist-terraform", "specialist-azure", "specialist-security"]
 user-invocable: true
 ---
 

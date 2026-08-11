@@ -1,4 +1,4 @@
-import { readFile } from "node:fs/promises";
+import { readFile, readdir } from "node:fs/promises";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -232,6 +232,24 @@ assert(files.developer.includes("retrieval surface/provenance"), "Developer rece
 assert(files.developer.includes("Review & Validation"), "Developer must reference the simplified downstream phase");
 
 assert(!files.design.includes("compatibility shims"), "design must not retain compatibility agents");
+
+const agentsDirectory = join(repositoryRoot, ".github", "agents");
+const agentFiles = (await readdir(agentsDirectory)).filter((file) => file.endsWith(".agent.md"));
+const agentIds = agentFiles.map((file) => file.replace(/\.agent\.md$/, ""));
+const removedAgents = ["backlog-maintainer", "feature-code-reviewer", "feature-test-engineer", "feature-qa-engineer"];
+const agentContents = await Promise.all(agentFiles.map((file) => readFile(join(agentsDirectory, file), "utf8")));
+
+for (const removed of removedAgents) {
+    assert(!agentIds.includes(removed), `removed agent ${removed} must not exist`);
+    assert(!files.design.includes(removed), `design must not reference removed agent ${removed}`);
+    agentContents.forEach((content, index) => {
+        assert(!content.includes(removed), `${agentFiles[index]} must not reference removed agent ${removed}`);
+    });
+}
+
+for (const delegate of frontmatterValue(files.manager, "agents").replaceAll("'", '"').match(/"[^"]+"/g).map((value) => value.slice(1, -1))) {
+    assert(agentIds.includes(delegate), `manager delegates to missing agent ${delegate}`);
+}
 assert(issueWriterTools.join(",") === "read,search,github/*", "Issue Writer permissions must remain unchanged");
 assert(files.issueWriter.includes("Proof-of-approval gate"), "Issue Writer approval gate must remain documented");
 

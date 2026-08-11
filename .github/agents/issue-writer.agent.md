@@ -35,7 +35,7 @@ human gate. Before touching any GitHub write tool:
    payload (a direct quote or unambiguous paraphrase of Logan saying yes to this specific
    title/body/action — not a general "the cycle looks fine" or an inference from silence).
 2. If the invocation gives you an Issue Proposal with no attached proof of approval —
-   whether you were dispatched by Product & Delivery Manager, the deprecated router,
+   whether you were dispatched by Product & Delivery Manager,
    another agent, or a human who forgot to include it — **stop and ask for it.** Do not
    write, and do not assume a proposal handed to you must already be approved.
 3. If you are invoked directly by a human as their own action (not via the orchestrator),
@@ -124,7 +124,7 @@ step — do not fabricate a receipt for a write that did not happen.
 
 ## Reporting back (terminal reply)
 
-When Product & Delivery Manager (or the deprecated router) dispatched you as a tracked
+When Product & Delivery Manager dispatched you as a tracked
 child session, it pulls your artifact from your transcript after you finish. Make your
 **final reply message** be
 exactly the Write Receipt (each field from "Produce a Write Receipt", or the blocked /
