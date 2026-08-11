@@ -21,6 +21,9 @@ current surface cannot verify creation of a new child worktree at an arbitrary r
 SHA, so stop for the documented manual snapshot fallback instead of reusing the
 Developer branch for Review, Test, or QA.
 
-Use child final replies as artifacts and pull them from the transcript. At each gate,
-present the exact proposal and wait for approve, edit, defer, reject, or cancel. Do not
-route to Release or Deployment without a valid, uninvalidated Approval Record.
+Use child final replies as artifacts and pull them from the transcript, recording each
+child session, branch, SHA, and provenance before progressing. At each gate, present the
+exact proposal and wait for approve, edit, defer, reject, or cancel. Do not route to
+Release without green same-SHA evidence and a valid Approval Record; do not route to
+Deployment without a `published` Release Receipt and a separate valid Approval Record.
+A failed or blocked publication remains recoverable and must never be reported as a PR.

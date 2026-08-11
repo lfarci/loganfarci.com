@@ -1,8 +1,8 @@
 ---
 spec: feature-delivery-manager agent system
-version: 0.1.0
+version: 0.2.0
 status: design
-verified: 2026-08-10
+verified: 2026-08-11
 ---
 
 # Feature Delivery Manager - Design
@@ -32,7 +32,7 @@ implication.
 | Session messages | Observed, but child delivery and child tool inheritance are not guaranteed. | Include all inputs in a kickoff prompt. Retrieve the terminal artifact from the transcript. Use one message only to request a missing artifact. |
 | In-process subagents | Documented for VS Code/CLI (`agent` plus an `agents` list); not verified in this App session. | App sessions are the primary route. On a surface without tracked sessions, use a documented in-process subagent only if it can preserve the phase boundary; otherwise stop and name the next manual role. |
 | Live GitHub MCP read/write names | **Configuration mismatch.** `.github/mcp.json` configures a `github` server with `tools: ["*"]`, but this session exposes GitHub-oriented built-ins and `gh`, not a discoverable `github/*` MCP toolset. | Do not add `github/*` to new frontmatter. Use no GitHub tools for read-only roles. Release Manager is a human-invocable, approval-refusing placeholder until a human verifies exact PR read/write MCP names and replaces wildcard access with its minimal allowlist. |
-| Pull-request write operation | Observed only as the App's `create_pull_request` and `update_pull_request` built-ins, not as a configurable custom-agent tool name. | Do not claim an agent-file allowlist can expose it. A human performs the approved action manually until a verified MCP name is available. |
+| Pull-request write operation | Observed as the App's `create_pull_request` and `update_pull_request` built-ins; no verified configurable custom-agent name is exposed in this App session. | The Release Manager owns publication. Until a verified agent-accessible write mechanism exists, the human performs the approved release operation as the named manual fallback and records its receipt; never attribute a built-in action to a child agent. |
 | Generic command execution | Available on Developer, Test Engineer, QA Engineer, and Deployment Manager target roles; it can run arbitrary Git, GitHub, or deployment commands. No scoped sandbox or isolated credentials was verified. | Boundaries for execution-bearing roles are behavioral, not structural: use isolated worktrees, no credential injection, exact-command logging, and no `git push`, `gh`, `swa deploy`, Azure, or Terraform-apply command outside the approved role and gate. Residual risk remains. |
 | Credentials | `gh` is available in the environment, but token scope, Azure/SWA credentials, executing identity, and session credential isolation are unverified. | Never add tokens to files, prompts, or artifacts. Do not attempt credential discovery. Approval is not authorization: deployment remains blocked until a human either performs it in an authorized surface or verifies the executing identity and named mechanism out of band. |
 
@@ -61,7 +61,7 @@ shell access as an undocumented replacement.
 | Test Engineer | Run deterministic checks and return raw evidence for one receipt SHA | Read/search/execute; behavioral execution boundary | Edit, treat a failure as acceptable, publish, deploy |
 | QA Engineer | Check observable journeys, responsive behavior, a11y, themes, reduced motion, and SSR/prerender when relevant | Read/search/execute/browser; behavioral execution boundary | Edit, downgrade defects, publish, deploy |
 | Debugging Specialist | Diagnose a reproducible Review, Test, or QA failure on one receipt SHA and return evidence and a remediation hypothesis | Read/search/execute; behavioral execution boundary | Edit, publish, deploy, or choose a scope-changing fix |
-| Release Manager | Create or update an exact approved PR after independent Approval Record validation | Read/search only until exact GitHub MCP names are verified; publication automation is blocked | Edit code, merge, change PR payload, or use an unverified GitHub tool |
+| Release Manager | Publish the exact approved source SHA and create or update its PR after independent Approval Record validation | Owns release preflight and push → remote-SHA verification → PR sequencing. Uses only a verified release mechanism; otherwise emits a blocked receipt with the named human fallback | Edit code, merge, change payload, substitute refs, or silently retry |
 | Deployment Manager | Execute the exact approved SHA, environment, and named mechanism | Execute only after independent Approval Record validation; behavioral boundary | Edit code, create or merge a PR, substitute a SHA, target, or mechanism |
 
 The eight on-demand specialists are **React**, **Frontend**, **Accessibility**,
@@ -114,25 +114,34 @@ host behavior rather than merely the fixture's glob interpretation.
    Before implementation, the Developer reports its initial `HEAD`; the manager records
    equality with the Delivery Brief's base SHA. A mismatch blocks the cycle and requires
    a human-created branch at that SHA. The Developer is its sole mutable owner.
-2. The Developer commits before hand-off and returns an Implementation Receipt. Its
-   branch and SHA, never uncommitted files, are the input to later work.
+2. The Developer commits before hand-off and returns an Implementation Receipt containing
+   the local branch, exact SHA, parent/base SHA, changed paths, and session ID. The commit
+   is the input to later work; uncommitted files are never an artifact.
 3. Every Review, Test, QA, and Debugging phase needs a fresh distinct child
    branch/worktree whose `HEAD` equals the receipt SHA before the phase starts. The
-   manager records that equality.
-4. The current App cannot create that exact SHA snapshot automatically. It must stop
-   and request the documented manual snapshot instead of checking out the live branch
-   or assuming detached-SHA support.
+   manager records the phase session ID, branch, and equality evidence.
+4. The current App cannot create that exact SHA snapshot automatically. The manager must
+   stop and request a human-created branch at the receipt SHA, then a fresh named session
+   on that branch. The fallback record includes branch, SHA, session ID, and `HEAD`
+   command output; a live Developer branch or detached checkout is not a substitute.
 5. A Developer commit invalidates every Review, Test, QA, and Debugging artifact for an
    older SHA. Recreate snapshots and receipts from the new receipt.
 6. The manager alone creates and tracks sessions. Children do not route siblings,
    create replacements, or rely on shared memory. A terminal artifact is pulled from
-   its transcript.
+   its transcript and its provenance is recorded.
+7. Before release, the Release Manager verifies that the exact local branch contains the
+   receipt SHA and that the approved source branch is not already mapped to a different
+   remote SHA. Publication is push the exact branch/ref, verify the remote ref resolves
+   to the receipt SHA, then create/update the PR. A local commit is never treated as
+   published.
 
 ## Artifacts and gates
 
 Every artifact includes `delivery_id`, issue number/URL, source branch, source commit
-SHA, input references, status (`pass`, `fail`, `blocked`, or `needs-approval`),
-timestamp, and session ID where applicable.
+SHA, input references, status (`pass`, `fail`, `blocked`, `needs-approval`,
+`awaiting-publication`, `publication-failed`, or `published`), timestamp, and session ID
+where applicable. Release artifacts also include remote name/ref, remote-SHA status,
+operation attempt number, exact command/tool outcome, and a recovery reference.
 
 | Artifact | Required contents |
 | --- | --- |
@@ -142,20 +151,34 @@ timestamp, and session ID where applicable.
 | Implementation Receipt | Changed paths, committed branch/SHA, commands/results, limits, and referenced brief/guidance |
 | Review Verdict / Test Receipt / QA Verdict | Source SHA, status, selected instructions/specs assessed, evidence, and actionable remediation |
 | Approval Record | Exact action; repository; source branch/SHA; exact PR payload or environment/mechanism; invalidation rules; and a verbatim human approval quote or unambiguous approval-message reference |
-| Release or Deployment Proposal/Receipt | Approval Record reference, one SHA, approved payload/environment/mechanism, and resulting PR or deployment URL/status |
+| Release Proposal/Receipt | Approval Record reference, one SHA, approved repository/base/head/title/body, local and remote ref evidence, push/PR attempt outcome, and resulting PR URL/status or a durable failure plus named recovery action |
+| Deployment Proposal/Receipt | Approval Record reference, one SHA, approved environment/mechanism, authorization evidence, and resulting deployment URL/status or a durable failure plus named recovery action |
 
 After green Review, Test, and QA receipts for the same SHA, the manager presents a PR
 proposal with repository, source branch/SHA, base, exact title, and exact body. The
 human may approve, edit, defer, reject, or cancel. Edit invalidates the proposal;
-defer pauses; reject/cancel ends it. PR approval never authorizes deployment.
+defer pauses; reject/cancel ends it. PR approval never authorizes deployment. Approval
+moves the delivery to `awaiting-publication`; it does not imply that a local branch is
+visible on GitHub.
 
-A separate Deployment Proposal names the repository, SHA, `preview` or `production`
-environment, and mechanism. The same five human actions apply. A new commit, changed
-PR title/body/base/head, changed environment/mechanism, or scope change invalidates the
-relevant Approval Record. Release and Deployment Managers independently refuse to act
-without a valid record. Deployment also requires independently verified authorization
-for its executing identity and named mechanism. Neither role retries, merges,
-substitutes targets, or injects tokens.
+The Release Manager validates the record and performs the exact release mechanism. The
+required order is: local SHA/branch preflight, push exact source ref, remote SHA
+verification, PR create/update, and release receipt. If any step fails, the manager
+records `publication-failed` with the verbatim error, preserved Implementation Receipt,
+attempt number, current remote-ref evidence, and one safe recovery action. A retry is a
+new release attempt against the same still-valid Approval Record only after preflight;
+changed SHA, payload, base/head, or target requires new approval. If no verified release
+mechanism is available, the Release Manager emits the same blocked receipt and names
+the human operator as the manual owner of the exact push/remote-verification/PR
+sequence.
+
+A separate Deployment Proposal names the repository, published SHA, `preview` or
+`production` environment, and mechanism. The same five human actions apply. A new
+commit, changed PR title/body/base/head, changed environment/mechanism, or scope change
+invalidates the relevant Approval Record. Deployment requires a published release
+receipt, independent authorization for its executing identity and named mechanism, and
+its own receipt. Neither role merges, substitutes targets, or injects tokens; retries
+must be explicit and recorded.
 
 ## Flow and failure routing
 
@@ -172,28 +195,51 @@ flowchart TD
     B --> D
     R -->|finding or failure| D
     R -->|same-SHA passes| P{Human PR decision}
-    P -->|approved record| L[Release Manager]
-    L --> Q{Human deployment decision}
+    P -->|approved record| L[Release Manager: preflight]
+    L --> U{Verified release mechanism?}
+    U -->|no| H[Named human push + remote verify + PR fallback]
+    U -->|yes| W[Push exact ref + verify remote SHA]
+    H --> Z{Release receipt?}
+    W --> Z{PR create/update}
+    Z -->|published| Q{Human deployment decision}
+    Z -->|failed| F2[publication-failed receipt + recovery]
     Q -->|approved record| X[Deployment Manager]
 ```
 
 Any failed required check, unresolved high-confidence finding, missing exact-SHA
-snapshot, missing tool, or invalid approval blocks publication. The manager reports
-the blocker and next manual role; it never skips a phase or changes scope to force a
-green result.
+snapshot, missing tool, invalid approval, missing remote ref, or remote SHA mismatch
+blocks publication. The manager reports the blocker and next manual role; it never skips
+a phase or changes scope to force a green result. A failed PR attempt is not a published
+state and never authorizes deployment.
+
+## Failed delivery fixture: issue #373
+
+This is preserved evidence for orchestration testing, not an active delivery. The
+Developer committed `176778cd5e0a12396ca1b98da956360f5aab1a32` on local branch
+`lfarci-super-robot`, but the branch was never pushed to GitHub. The subsequent
+`gh pr create --repo lfarci/loganfarci.com --base main --head lfarci-super-robot ...`
+failed because GitHub had no head ref: `Head sha can't be blank, Base sha can't be
+blank, No commits between main and lfarci-super-robot, Head ref must be a branch`.
+The root cause was not the commit or issue content; it was an incomplete publication
+handoff and an unowned push/remote-verification step. Recovery must retain the
+Implementation Receipt, verify the local SHA, publish the exact branch through the
+Release Manager or its named human fallback, verify the remote SHA, and only then
+retry PR creation under the same or a newly validated Approval Record.
 
 ## Residual risk and release conditions
 
 Tool allowlists do not structurally prevent arbitrary shell-based mutation on roles
 with `execute`. Until the host provides scoped execution and isolated credentials,
-every execution-bearing role must log exact commands, use a fresh isolated worktree,
-avoid credentials, and follow its no-publish/no-deploy behavioral rule. This residual
-risk is explicit and does not weaken approval gates.
+execution-bearing roles must log exact commands, use a fresh isolated worktree, avoid
+credentials, and follow their role-specific boundary. Release publication is limited to
+the exact approved push/remote-verification/PR sequence; deployment remains separately
+gated. This residual risk is explicit and does not weaken approval gates.
 
 Before enabling automated release work, a human must verify the exact live GitHub MCP
 read/write names, replace `.github/mcp.json` wildcard access with only the required
-tools, and update this capability table and the affected agent frontmatter. Before
-enabling automated snapshot phases, a human must verify a supported branch-at-SHA
-worktree creation path. Before enabling automated deployment, a human must verify the
-executing identity and named mechanism without exposing credentials. Until then, manual
-fallback is the only safe path for those phases.
+release tools, and update this capability table and the Release Manager frontmatter.
+Until then, the named human fallback owns the approved release sequence; the wildcard
+configuration is not evidence that a child agent can use GitHub publication tools. Before enabling
+automated snapshot phases, a human must verify a supported branch-at-SHA worktree
+creation path. Before enabling automated deployment, a human must verify the executing
+identity and named mechanism without exposing credentials.
