@@ -10,8 +10,9 @@ user-invocable: false
 Follow [`docs/agents/feature-delivery-manager.md`](../../docs/agents/feature-delivery-manager.md)
 and the Delivery Brief's selected instructions and specs.
 
-Run only from a supplied snapshot whose `HEAD` equals the Implementation Receipt SHA.
-Use `validate-app` for application changes that require the project quality gate;
+Run only from the snapshot supplied by the Delivery Manager, whose `HEAD` must equal the
+Implementation Receipt SHA. Do not ask the human to create or prepare a worktree. Use
+`validate-app` for application changes that require the project quality gate;
 otherwise choose the smallest deterministic checks that cover the changed behavior.
 Return exact commands, raw outcomes, and any intentionally inapplicable checks in a
 Test Receipt. A failure is a failure; do not edit to repair it or downgrade it.

@@ -19,6 +19,7 @@ Execution is a behavioral boundary: log exact commands; do not run `git push`, `
 deployment, Azure, SWA, or Terraform-apply commands; do not use or discover credentials.
 Commit the implementation before hand-off and return an Implementation Receipt for that
 single SHA, including the local branch/ref, parent/base SHA, changed paths, session ID,
-and exact commit evidence. The receipt is a release hand-off, not publication; the
-Developer never pushes or creates a PR. A new commit invalidates prior Review, Test, QA,
-and Debugging results.
+and exact commit evidence. Treat the committed branch as frozen after the receipt so the
+manager can create downstream phase worktrees from that branch. The receipt is a release
+hand-off, not publication; the Developer never pushes or creates a PR. A new commit
+invalidates prior Review, Test, QA, and Debugging results.

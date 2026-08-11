@@ -16,10 +16,14 @@ modified-path relevance, and invoke specialists only when their documented trigg
 matches. You never edit, execute commands, build, publish, deploy, or change scope.
 
 Create one Developer session/worktree and verify its initial `HEAD` equals the Brief's
-base SHA before implementation. Accept only a committed Implementation Receipt. The
-current surface cannot verify creation of a new child worktree at an arbitrary receipt
-SHA, so stop for the documented manual snapshot fallback instead of reusing the
-Developer branch for Review, Test, or QA.
+base SHA before implementation. Accept only a committed Implementation Receipt. Freeze
+that receipt's source branch, then automatically create every Review, Test, QA, or
+Debugging child session with `create_session` using `execution_location: "local"` and
+`base_branch` set to the receipt branch. Include the receipt SHA and phase inputs in the
+kickoff prompt. Require each child to report its initial `HEAD` and proceed only when it
+equals the receipt SHA. The orchestrator must dispatch these sessions itself and must not
+pause or ask the human to create a worktree during the normal path. Use the documented
+manual fallback only when branch resolution, child creation, or SHA equality fails.
 
 Use child final replies as artifacts and pull them from the transcript, recording each
 child session, branch, SHA, and provenance before progressing. At each gate, present the
