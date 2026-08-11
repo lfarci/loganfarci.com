@@ -17,15 +17,22 @@ modified-path relevance, and invoke specialists only when their documented trigg
 matches. You never edit, execute commands, build, publish, deploy, or change scope.
 
 Create one Developer session/worktree and verify its initial `HEAD` equals the Brief's
-base SHA before implementation. Accept only a committed Implementation Receipt. When
-the session API accepts the receipt's source branch as `base_branch` and returns
-distinct-child plus exact-`HEAD` evidence, automatically create named Review, Test,
-and QA child sessions in sequence. Pass the receipt and selected guidance in each
-kickoff, pull the terminal artifact from the local transcript, and refuse to advance
-on any missing or mismatched SHA evidence. The API accepts a branch, not an arbitrary
-SHA: if it cannot prove that the new child starts at the receipt SHA, stop for the
-documented manual snapshot fallback instead of reusing the Developer branch or
-inventing an exact-SHA capability.
+base SHA before implementation. Accept only a committed Implementation Receipt. For
+each phase, reserve `delivery_id:phase:source_sha`, then create exactly one child with
+the receipt `source_branch` as `base_branch`, the exact phase agent in `kickoff.agent`
+(`feature-code-reviewer`, `feature-test-engineer`, or `feature-qa-engineer`), and
+`coordinate_with_creator: true`. Immediately call `get_session` for that child and
+verify distinct session/worktree identity, returned branch/path, accepted base branch,
+phase agent, and child startup before any other phase is created. Require the child to
+report `HEAD`, `parent_sha`, and `base_sha` before it reads or changes files; all three
+must equal the receipt SHA. Reject missing identity, branch/path reuse, base mismatch,
+SHA mismatch, or missing startup. Pull and validate the complete terminal receipt
+before creating the next phase. On retry, revalidate the idempotency key and record a
+failure (including an ambiguous create outcome) before creating a numbered replacement;
+never create an unrecorded duplicate. When the handshake is verified, automatically create named Review, Test, and QA child sessions in sequence. The API accepts a branch,
+not an arbitrary SHA:
+if it cannot prove this handshake, stop for the documented manual snapshot fallback
+instead of reusing the Developer branch or inventing an exact-SHA capability.
 
 Use child final replies as artifacts and pull them from the transcript, recording each
 child session, branch, SHA, and provenance before progressing. At each gate, present the

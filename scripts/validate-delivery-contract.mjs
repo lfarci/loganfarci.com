@@ -29,37 +29,214 @@ const failedDeliveryFixture = {
 };
 
 const handoffFixture = {
-    deliveryId: "issue-373-automated-handoff",
+    deliveryId: "issue-373-safe-session-handoff",
     sourceBranch: "lfarci-reflect-skip-link-spec",
     sourceSha: "07e89aa83c16d285ba43ac8b262e5f17a7354367",
     requiredApis: ["create_session", "get_session", "session_store_sql"],
     availableApis: ["create_session", "get_session", "session_store_sql"],
-    receiptBranchAccepted: true,
-    childWorktreeDistinct: true,
-    childHeadSha: "07e89aa83c16d285ba43ac8b262e5f17a7354367",
+    managerSessionId: "manager-373",
+    developerSessionId: "developer-373",
+    developerWorktreeId: "worktree-developer-373",
+    developerWorktreePath: "C:/worktrees/developer-373",
+    developerBranch: "lfarci-reflect-skip-link-spec",
+    previousPhaseSessionIds: [],
+    previousWorktreeIds: [],
+    previousWorktreePaths: [],
+    previousPhaseBranches: [],
+    phase: "Review",
+    phaseAgent: "feature-code-reviewer",
+    idempotencyKey: "issue-373-safe-session-handoff:Review:07e89aa83c16d285ba43ac8b262e5f17a7354367",
+    createSession: {
+        calls: 1,
+        baseBranch: "lfarci-reflect-skip-link-spec",
+        kickoffAgent: "feature-code-reviewer",
+        coordinateWithCreator: true,
+        returnedSessionId: "review-373",
+    },
+    getSession: {
+        sessionId: "review-373",
+        worktreeId: "worktree-review-373",
+        worktreePath: "C:/worktrees/review-373",
+        branch: "review/issue-373",
+        baseBranch: "lfarci-reflect-skip-link-spec",
+        phaseAgent: "feature-code-reviewer",
+        startup: "started",
+    },
+    startupReceipt: {
+        sessionId: "review-373",
+        worktreeId: "worktree-review-373",
+        worktreePath: "C:/worktrees/review-373",
+        branch: "review/issue-373",
+        headSha: "07e89aa83c16d285ba43ac8b262e5f17a7354367",
+        parentSha: "07e89aa83c16d285ba43ac8b262e5f17a7354367",
+        baseSha: "07e89aa83c16d285ba43ac8b262e5f17a7354367",
+        status: "ready-before-work",
+    },
+    terminalReceipt: {
+        complete: true,
+        sessionId: "review-373",
+        sourceSha: "07e89aa83c16d285ba43ac8b262e5f17a7354367",
+        status: "pass",
+    },
+    retry: {
+        calls: 2,
+        retryOf: "review-373",
+        attempt: 2,
+        failureRecorded: true,
+        ambiguousOutcomeHandled: true,
+        failure: {
+            status: "fail",
+            error: "create_session timeout after reservation",
+        },
+    },
 };
 
 function supportsAutomatedHandoff(fixture) {
+    const created = fixture.createSession;
+    const returned = fixture.getSession;
+    const startup = fixture.startupReceipt;
+    const terminal = fixture.terminalReceipt;
+    const identities = [
+        fixture.managerSessionId,
+        fixture.developerSessionId,
+        ...((fixture.previousPhaseSessionIds) || []),
+    ];
+    const worktreePaths = [
+        fixture.developerWorktreePath,
+        ...((fixture.previousWorktreePaths) || []),
+    ];
+    const worktreeIds = [
+        fixture.developerWorktreeId,
+        ...((fixture.previousWorktreeIds) || []),
+    ];
+    const branches = [
+        fixture.developerBranch,
+        ...((fixture.previousPhaseBranches) || []),
+    ];
     return fixture.sourceBranch.length > 0
         && fixture.requiredApis.every((api) => fixture.availableApis.includes(api))
-        && fixture.receiptBranchAccepted
-        && fixture.childWorktreeDistinct
-        && fixture.childHeadSha === fixture.sourceSha;
+        && typeof fixture.idempotencyKey === "string"
+        && created.calls === 1
+        && created.baseBranch === fixture.sourceBranch
+        && created.kickoffAgent === fixture.phaseAgent
+        && created.coordinateWithCreator === true
+        && typeof created.returnedSessionId === "string"
+        && returned.sessionId === created.returnedSessionId
+        && !identities.includes(returned.sessionId)
+        && typeof returned.worktreeId === "string"
+        && !worktreeIds.includes(returned.worktreeId)
+        && typeof returned.worktreePath === "string"
+        && returned.worktreePath.length > 0
+        && !worktreePaths.includes(returned.worktreePath)
+        && typeof returned.branch === "string"
+        && !branches.includes(returned.branch)
+        && returned.baseBranch === fixture.sourceBranch
+        && returned.phaseAgent === fixture.phaseAgent
+        && returned.startup === "started"
+        && startup.sessionId === returned.sessionId
+        && startup.worktreeId === returned.worktreeId
+        && startup.worktreePath === returned.worktreePath
+        && startup.branch === returned.branch
+        && startup.headSha === fixture.sourceSha
+        && startup.parentSha === fixture.sourceSha
+        && startup.baseSha === fixture.sourceSha
+        && startup.status === "ready-before-work"
+        && terminal.complete
+        && terminal.sessionId === returned.sessionId
+        && terminal.sourceSha === fixture.sourceSha
+        && terminal.status === "pass";
+}
+
+function supportsRecordedRetry(fixture) {
+    return fixture.idempotencyKey
+        && fixture.retry
+        && fixture.retry.calls === 2
+        && fixture.retry.retryOf === fixture.createSession.returnedSessionId
+        && fixture.retry.attempt === 2
+        && fixture.retry.failureRecorded === true
+        && fixture.retry.ambiguousOutcomeHandled === true
+        && fixture.retry.failure.status === "fail"
+        && fixture.retry.failure.error.length > 0;
 }
 
 assert(failedDeliveryFixture.localCommit, "failed-delivery fixture must preserve the local commit");
 assert(!failedDeliveryFixture.remoteRef, "failed-delivery fixture must model an absent remote ref");
 assert(failedDeliveryFixture.prAttempted, "fixture must preserve the failed PR attempt");
 assert(!failedDeliveryFixture.prCreated, "fixture validation must not claim a PR was created");
-assert(supportsAutomatedHandoff(handoffFixture), "issue #373 fixture must model a verified exact-SHA child handoff");
+assert(supportsAutomatedHandoff(handoffFixture), "safe fixture must model a verified exact-SHA child handoff");
+assert(supportsRecordedRetry(handoffFixture), "safe fixture must model a recorded idempotent retry");
 assert(!supportsAutomatedHandoff({
     ...handoffFixture,
     availableApis: ["create_session", "get_session"],
 }), "a missing transcript API must select the manual fallback");
 assert(!supportsAutomatedHandoff({
     ...handoffFixture,
-    childHeadSha: "unverified",
+    startupReceipt: {
+        ...handoffFixture.startupReceipt,
+        headSha: "unverified",
+    },
 }), "a child SHA mismatch must select the manual fallback");
+assert(!supportsAutomatedHandoff({
+    ...handoffFixture,
+    getSession: {
+        ...handoffFixture.getSession,
+        sessionId: handoffFixture.developerSessionId,
+    },
+}), "a reused session identity must select the manual fallback");
+assert(!supportsAutomatedHandoff({
+    ...handoffFixture,
+    getSession: {
+        ...handoffFixture.getSession,
+        worktreeId: "",
+    },
+}), "a missing worktree identity must select the manual fallback");
+assert(!supportsAutomatedHandoff({
+    ...handoffFixture,
+    getSession: {
+        ...handoffFixture.getSession,
+        branch: handoffFixture.sourceBranch,
+    },
+}), "a reused branch must select the manual fallback");
+assert(!supportsAutomatedHandoff({
+    ...handoffFixture,
+    getSession: {
+        ...handoffFixture.getSession,
+        worktreePath: "C:/worktrees/developer-373",
+    },
+    developerWorktreePath: "C:/worktrees/developer-373",
+}), "a reused worktree path must select the manual fallback");
+assert(!supportsAutomatedHandoff({
+    ...handoffFixture,
+    getSession: {
+        ...handoffFixture.getSession,
+        baseBranch: "main",
+    },
+}), "a returned base-branch mismatch must select the manual fallback");
+assert(!supportsAutomatedHandoff({
+    ...handoffFixture,
+    getSession: {
+        ...handoffFixture.getSession,
+        startup: "unknown",
+    },
+}), "missing child startup must select the manual fallback");
+assert(!supportsAutomatedHandoff({
+    ...handoffFixture,
+    terminalReceipt: {
+        ...handoffFixture.terminalReceipt,
+        complete: false,
+    },
+}), "an incomplete terminal receipt must block the next phase");
+assert(!supportsRecordedRetry({
+    ...handoffFixture,
+    retry: {
+        calls: 2,
+        retryOf: handoffFixture.createSession.returnedSessionId,
+        attempt: 2,
+        failureRecorded: false,
+        ambiguousOutcomeHandled: false,
+        failure: null,
+    },
+}), "an unrecorded retry must not create a duplicate phase session");
 assert(design.includes("base_branch"), "design must name the supported branch-based session input");
 assert(design.includes("distinct child branch/worktree"), "design must require child-worktree isolation evidence");
 assert(design.includes("terminal artifact"), "design must define pull-based child artifact handoff");
