@@ -5,14 +5,9 @@ import { fileURLToPath } from "node:url";
 const repositoryRoot = fileURLToPath(new URL("..", import.meta.url));
 const paths = {
     design: join(repositoryRoot, "docs", "agents", "feature-delivery-manager.md"),
-    backlogDesign: join(repositoryRoot, "docs", "agents", "backlog-maintainer.md"),
     manager: join(repositoryRoot, ".github", "agents", "feature-delivery-manager.agent.md"),
     reviewValidation: join(repositoryRoot, ".github", "agents", "feature-review-validation.agent.md"),
     developer: join(repositoryRoot, ".github", "agents", "feature-developer.agent.md"),
-    legacyReviewer: join(repositoryRoot, ".github", "agents", "feature-code-reviewer.agent.md"),
-    legacyTest: join(repositoryRoot, ".github", "agents", "feature-test-engineer.agent.md"),
-    legacyQa: join(repositoryRoot, ".github", "agents", "feature-qa-engineer.agent.md"),
-    backlogMaintainer: join(repositoryRoot, ".github", "agents", "backlog-maintainer.agent.md"),
     issueWriter: join(repositoryRoot, ".github", "agents", "issue-writer.agent.md"),
     issueReviewer: join(repositoryRoot, ".github", "agents", "issue-reviewer.agent.md"),
     release: join(repositoryRoot, ".github", "agents", "feature-release-manager.agent.md"),
@@ -236,14 +231,7 @@ assert(files.developer.includes("not an `IMPLEMENTATION RECEIPT`"), "Developer m
 assert(files.developer.includes("retrieval surface/provenance"), "Developer receipt must include retrieval provenance");
 assert(files.developer.includes("Review & Validation"), "Developer must reference the simplified downstream phase");
 
-assert(files.legacyReviewer.includes("deprecated compatibility shim"), "legacy code reviewer must be marked as a compatibility shim");
-assert(files.legacyTest.includes("deprecated compatibility shim"), "legacy test engineer must be marked as a compatibility shim");
-assert(files.legacyQa.includes("deprecated compatibility shim"), "legacy QA engineer must be marked as a compatibility shim");
-
-assert(frontmatterValue(files.backlogMaintainer, "description").includes("Deprecated compatibility router"), "backlog maintainer agent must be deprecated router");
-assert(files.backlogDesign.includes("status: deprecated-router"), "backlog maintainer design must be deprecated router status");
-assert(files.backlogDesign.includes("Product & Delivery Manager"), "backlog maintainer docs must point to Product & Delivery Manager");
-assert(files.backlogDesign.includes("`issue-writer` remains the only backlog write role"), "backlog docs must preserve single Issue Writer boundary");
+assert(!files.design.includes("compatibility shims"), "design must not retain compatibility agents");
 assert(issueWriterTools.join(",") === "read,search,github/*", "Issue Writer permissions must remain unchanged");
 assert(files.issueWriter.includes("Proof-of-approval gate"), "Issue Writer approval gate must remain documented");
 
@@ -255,7 +243,7 @@ assert(deploymentTools.includes("execute") && !deploymentTools.includes("edit") 
 assert(files.deployment.includes("published Release Receipt") && /Approval is\s+not authorization/.test(files.deployment), "Deployment Manager must require published release and authorization");
 
 assert(files.design.includes("version: 0.6.0") && files.design.includes("status: current-design"), "design version/status must be updated");
-assert(files.design.includes("Migration note"), "design must include migration note");
+assert(files.design.includes("Active role set"), "design must define the active role set");
 assert(files.design.includes("Two lanes") && files.design.includes("Backlog lane") && files.design.includes("Delivery lane"), "design must define backlog and delivery lanes");
 assert(files.design.includes("Product & Delivery Manager + Developer + Review & Validation Agent"), "design must name target architecture");
 assert(files.design.includes("Trusted child startup `HEAD` metadata"), "design must define trusted startup HEAD metadata");

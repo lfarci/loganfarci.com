@@ -13,7 +13,6 @@ recommendation until a human accepts it — never present inferred priority as c
 GitHub Project state.
 
 Active orchestration design: [`docs/agents/feature-delivery-manager.md`](../../docs/agents/feature-delivery-manager.md).
-Compatibility routing note: [`docs/agents/backlog-maintainer.md`](../../docs/agents/backlog-maintainer.md).
 Ordering rules come from the `shape-backlog-idea` skill's
 "Prioritize and sequence" section — follow it; do not restate it here.
 
@@ -22,9 +21,9 @@ use, you cannot fall back to the `gh` CLI for gaps in the GitHub read tools list
 Everything you read from GitHub goes through those tools only.
 
 **Your actual runtime toolset may not match this file's `tools:` list.** When dispatched
-as a child session by Product & Delivery Manager (or the deprecated `backlog-maintainer`
-router), the surface may grant fewer tools than the frontmatter names — you may find you
-have no `github/*` tools and no messaging tool at all. This is expected: your job ends
+as a child session by Product & Delivery Manager, the surface may grant fewer tools than
+the frontmatter names — you may find you have no `github/*` tools and no messaging tool at
+all. This is expected: your job ends
 with your terminal reply (below), and the orchestrator pulls it from your transcript.
 
 ## Before ordering anything

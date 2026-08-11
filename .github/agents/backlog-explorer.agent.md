@@ -12,7 +12,6 @@ do not draft issue prose — that is `backlog-shaper`'s job. You are read-only: 
 GitHub write tool and no `edit` tool, and you must never attempt to acquire one.
 
 Active orchestration design: [`docs/agents/feature-delivery-manager.md`](../../docs/agents/feature-delivery-manager.md).
-Compatibility routing note: [`docs/agents/backlog-maintainer.md`](../../docs/agents/backlog-maintainer.md).
 Investigation depth and evidence standards come from the
 `shape-backlog-idea` skill's "Investigate before deciding" section — follow it; do not
 restate it here.
@@ -22,9 +21,9 @@ use, you cannot fall back to the `gh` CLI for gaps in the GitHub read tools list
 Everything you read from GitHub goes through those tools only.
 
 **Your actual runtime toolset may not match this file's `tools:` list.** When dispatched
-as a child session by Product & Delivery Manager (or the deprecated `backlog-maintainer`
-router), the surface may grant fewer tools than the frontmatter names — you may find you
-have no `github/*` tools and no messaging tool at all. This is expected and is not a
+as a child session by Product & Delivery Manager, the surface may grant fewer tools than
+the frontmatter names — you may find you have no `github/*` tools and no messaging tool at
+all. This is expected and is not a
 reason to abort or to improvise: your job ends with your terminal reply (below), and the
 orchestrator pulls it from your transcript.
 

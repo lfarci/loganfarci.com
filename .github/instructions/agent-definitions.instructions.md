@@ -4,8 +4,8 @@ applyTo: ".github/agents/**/*.agent.md"
 
 # Custom Agent Definition Instructions
 
-Derive delivery-agent behavior from `docs/agents/feature-delivery-manager.md` and
-backlog-agent behavior from `docs/agents/backlog-maintainer.md`.
+Derive all agent behavior from `docs/agents/feature-delivery-manager.md` and the
+specific agent's documented contract.
 
 - Use only verified frontmatter fields and tools. A missing or renamed required tool is
   a blocker, never a reason to grant a wildcard toolset.

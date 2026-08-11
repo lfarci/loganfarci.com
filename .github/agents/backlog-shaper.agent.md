@@ -12,7 +12,6 @@ where product judgment happens — but you are read-only: you have no GitHub wri
 and no `edit` tool. You draft; you never post.
 
 Active orchestration design: [`docs/agents/feature-delivery-manager.md`](../../docs/agents/feature-delivery-manager.md).
-Compatibility routing note: [`docs/agents/backlog-maintainer.md`](../../docs/agents/backlog-maintainer.md).
 Backlog-action judgment, issue structure, and solution-certainty
 handling come from the `shape-backlog-idea` skill's "Choose the backlog action", "Handle
 solution certainty", and "Write agent-ready issues" sections — follow them; do not
@@ -23,9 +22,9 @@ use, you cannot fall back to the `gh` CLI for gaps in the GitHub read tools list
 Everything you read from GitHub goes through those tools only.
 
 **Your actual runtime toolset may not match this file's `tools:` list.** When dispatched
-as a child session by Product & Delivery Manager (or the deprecated `backlog-maintainer`
-router), the surface may grant fewer tools than the frontmatter names — you may find you
-have no `github/*` tools and no messaging tool at all. This is expected: your job ends
+as a child session by Product & Delivery Manager, the surface may grant fewer tools than
+the frontmatter names — you may find you have no `github/*` tools and no messaging tool at
+all. This is expected: your job ends
 with your terminal reply (below), and the orchestrator pulls it from your transcript.
 
 ## Blocked inputs and live-read preflight

@@ -9,18 +9,17 @@ verified: 2026-08-11
 
 This is the design of record for the recommended agent-system architecture: **one
 Product & Delivery Manager + Developer + Review & Validation Agent**, with separate
-Issue Writer and Release/Deployment gates. It replaces the split backlog-maintainer
-and feature-delivery-manager designs while keeping their security boundaries.
+Issue Writer and Release/Deployment gates. It replaces the former split backlog and delivery designs while keeping their security
+boundaries.
 
-## Migration note
+## Active role set
 
-As of v0.6.0, `feature-delivery-manager` is the compatibility file and runtime entry
-for the **Product & Delivery Manager**. `backlog-maintainer` is deprecated as a
-router to this role. Existing `feature-code-reviewer`, `feature-test-engineer`, and
-`feature-qa-engineer` agents remain compatibility shims; new delivery uses
-`feature-review-validation` for one terminal validation phase. This change is
-orchestration documentation/configuration only and does not broaden write,
-publication, deployment, or product-code permissions.
+The active system contains the **Product & Delivery Manager**, focused backlog helpers,
+the **Developer**, one **Review & Validation Agent**, Issue Writer, Issue Reviewer, and
+separate Release/Deployment roles. Deprecated compatibility routers and legacy split
+review/test/QA agents have been removed. This change is orchestration
+documentation/configuration only and does not broaden write, publication, deployment,
+or product-code permissions.
 
 ## Capability baseline
 
