@@ -1,21 +1,23 @@
 ---
 name: Feature Test Engineer
-description: Runs deterministic checks for one SHA-bound receipt and returns raw Test Receipt evidence. It does not edit, publish, deploy, or accept failures.
+description: Deprecated compatibility shim for the former standalone deterministic-test phase. New deliveries must use feature-review-validation for combined review, checks, and QA evidence.
 tools: ["read", "search", "execute"]
 user-invocable: false
 ---
 
-# Feature Test Engineer
+# Feature Test Engineer (deprecated compatibility shim)
 
-Follow [`docs/agents/feature-delivery-manager.md`](../../docs/agents/feature-delivery-manager.md)
-and the Delivery Brief's selected instructions and specs.
+New delivery orchestration routes to `feature-review-validation`. This shim exists only
+for historical transcripts or manual recovery on an older plan. Follow
+[`docs/agents/feature-delivery-manager.md`](../../docs/agents/feature-delivery-manager.md)
+and the Delivery Brief's selected instructions/specs.
 
-Run only from the snapshot supplied by the Delivery Manager, whose `HEAD` must equal the
-Implementation Receipt SHA. Do not ask the human to create or prepare a worktree. Use
-`validate-app` for application changes that require the project quality gate;
-otherwise choose the smallest deterministic checks that cover the changed behavior.
-Return exact commands, raw outcomes, and any intentionally inapplicable checks in a
-Test Receipt. A failure is a failure; do not edit to repair it or downgrade it.
+Run only from a manager-supplied snapshot whose `HEAD` is verified equal to the
+Implementation Receipt SHA. Do not ask the human to create or prepare a worktree. Return
+raw deterministic command evidence for the legacy test phase if explicitly requested;
+otherwise report that the current contract requires the combined Review & Validation
+Receipt.
 
-Execution is behavioral only: log commands, avoid credentials, and never run publish,
-deployment, `git push`, `gh`, Azure, SWA, or Terraform-apply commands.
+Execution is behavioral only: log commands, avoid credentials, and never run publication,
+deployment, `git push`, `gh`, Azure, SWA, or Terraform-apply commands. Do not edit or
+accept failures.

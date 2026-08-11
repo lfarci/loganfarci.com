@@ -3,22 +3,51 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const repositoryRoot = fileURLToPath(new URL("..", import.meta.url));
-const designPath = join(repositoryRoot, "docs", "agents", "feature-delivery-manager.md");
-const releaseAgentPath = join(repositoryRoot, ".github", "agents", "feature-release-manager.agent.md");
-const managerAgentPath = join(repositoryRoot, ".github", "agents", "feature-delivery-manager.agent.md");
-const reviewerAgentPath = join(repositoryRoot, ".github", "agents", "feature-code-reviewer.agent.md");
-const maintainerAgentPath = join(repositoryRoot, ".github", "agents", "feature-orchestration-maintainer.agent.md");
+const paths = {
+    design: join(repositoryRoot, "docs", "agents", "feature-delivery-manager.md"),
+    backlogDesign: join(repositoryRoot, "docs", "agents", "backlog-maintainer.md"),
+    manager: join(repositoryRoot, ".github", "agents", "feature-delivery-manager.agent.md"),
+    reviewValidation: join(repositoryRoot, ".github", "agents", "feature-review-validation.agent.md"),
+    developer: join(repositoryRoot, ".github", "agents", "feature-developer.agent.md"),
+    legacyReviewer: join(repositoryRoot, ".github", "agents", "feature-code-reviewer.agent.md"),
+    legacyTest: join(repositoryRoot, ".github", "agents", "feature-test-engineer.agent.md"),
+    legacyQa: join(repositoryRoot, ".github", "agents", "feature-qa-engineer.agent.md"),
+    backlogMaintainer: join(repositoryRoot, ".github", "agents", "backlog-maintainer.agent.md"),
+    issueWriter: join(repositoryRoot, ".github", "agents", "issue-writer.agent.md"),
+    issueReviewer: join(repositoryRoot, ".github", "agents", "issue-reviewer.agent.md"),
+    release: join(repositoryRoot, ".github", "agents", "feature-release-manager.agent.md"),
+    deployment: join(repositoryRoot, ".github", "agents", "feature-deployment-manager.agent.md"),
+    maintainer: join(repositoryRoot, ".github", "agents", "feature-orchestration-maintainer.agent.md"),
+};
 
-const design = await readFile(designPath, "utf8");
-const releaseAgent = await readFile(releaseAgentPath, "utf8");
-const managerAgent = await readFile(managerAgentPath, "utf8");
-const reviewerAgent = await readFile(reviewerAgentPath, "utf8");
-const maintainerAgent = await readFile(maintainerAgentPath, "utf8");
-
+const entries = await Promise.all(Object.entries(paths).map(async ([key, file]) => [key, await readFile(file, "utf8")]));
+const files = Object.fromEntries(entries);
 const failures = [];
 function assert(condition, message) {
     if (!condition) failures.push(message);
 }
+
+function frontmatterValue(text, key) {
+    const match = text.match(new RegExp(`^${key}:\\s*(.+)$`, "m"));
+    return match ? match[1].trim() : "";
+}
+
+function tools(text) {
+    const raw = frontmatterValue(text, "tools");
+    const json = raw.replaceAll("'", '"');
+    try {
+        return JSON.parse(json);
+    } catch {
+        failures.push(`could not parse tools frontmatter: ${raw}`);
+        return [];
+    }
+}
+
+const managerTools = tools(files.manager);
+const issueWriterTools = tools(files.issueWriter);
+const releaseTools = tools(files.release);
+const deploymentTools = tools(files.deployment);
+const reviewValidationTools = tools(files.reviewValidation);
 
 const failedDeliveryFixture = {
     deliveryId: "issue-373-failed-publication",
@@ -30,64 +59,77 @@ const failedDeliveryFixture = {
     prCreated: false,
 };
 
-const handoffFixture = {
-    deliveryId: "issue-373-safe-session-handoff",
+const implementationReceiptFixture = {
+    complete: true,
+    heading: "IMPLEMENTATION RECEIPT",
     sourceBranch: "lfarci-reflect-skip-link-spec",
     sourceSha: "07e89aa83c16d285ba43ac8b262e5f17a7354367",
+    parentSha: "07e89aa83c16d285ba43ac8b262e5f17a7354367",
+    baseSha: "07e89aa83c16d285ba43ac8b262e5f17a7354367",
+    retrievalSurface: "durable-final-response",
+    provenance: "host-session-store",
+};
+
+const handoffFixture = {
+    deliveryId: "issue-373-safe-session-handoff",
+    sourceBranch: implementationReceiptFixture.sourceBranch,
+    sourceSha: implementationReceiptFixture.sourceSha,
     requiredApis: ["create_session", "get_session", "session_store_sql"],
     availableApis: ["create_session", "get_session", "session_store_sql"],
     managerSessionId: "manager-373",
     developerSessionId: "developer-373",
     developerWorktreeId: "worktree-developer-373",
     developerWorktreePath: "C:/worktrees/developer-373",
-    developerBranch: "lfarci-reflect-skip-link-spec",
+    developerBranch: implementationReceiptFixture.sourceBranch,
     previousPhaseSessionIds: [],
     previousWorktreeIds: [],
     previousWorktreePaths: [],
     previousPhaseBranches: [],
-    phase: "Review",
-    phaseAgent: "feature-code-reviewer",
-    idempotencyKey: "issue-373-safe-session-handoff:Review:07e89aa83c16d285ba43ac8b262e5f17a7354367",
+    phase: "Review & Validation",
+    phaseAgent: "feature-review-validation",
+    idempotencyKey: "issue-373-safe-session-handoff:review-validation:07e89aa83c16d285ba43ac8b262e5f17a7354367",
     createSession: {
         calls: 1,
-        baseBranch: "lfarci-reflect-skip-link-spec",
-        kickoffAgent: "feature-code-reviewer",
+        baseBranch: implementationReceiptFixture.sourceBranch,
+        kickoffAgent: "feature-review-validation",
         coordinateWithCreator: true,
-        returnedSessionId: "review-373",
+        returnedSessionId: "review-validation-373",
     },
     getSession: {
-        sessionId: "review-373",
-        worktreeId: "worktree-review-373",
-        worktreePath: "C:/worktrees/review-373",
-        branch: "review/issue-373",
-        baseBranch: "lfarci-reflect-skip-link-spec",
-        phaseAgent: "feature-code-reviewer",
+        sessionId: "review-validation-373",
+        worktreeId: "worktree-review-validation-373",
+        worktreePath: "C:/worktrees/review-validation-373",
+        branch: "review-validation/issue-373",
+        baseBranch: implementationReceiptFixture.sourceBranch,
+        phaseAgent: "feature-review-validation",
         startup: "started",
-        initialHead: "07e89aa83c16d285ba43ac8b262e5f17a7354367",
+        initialHead: implementationReceiptFixture.sourceSha,
     },
     startupReceipt: {
-        sessionId: "review-373",
-        worktreeId: "worktree-review-373",
-        worktreePath: "C:/worktrees/review-373",
-        branch: "review/issue-373",
-        headSha: "07e89aa83c16d285ba43ac8b262e5f17a7354367",
-        parentSha: "07e89aa83c16d285ba43ac8b262e5f17a7354367",
-        baseSha: "07e89aa83c16d285ba43ac8b262e5f17a7354367",
+        sessionId: "review-validation-373",
+        worktreeId: "worktree-review-validation-373",
+        worktreePath: "C:/worktrees/review-validation-373",
+        branch: "review-validation/issue-373",
+        headSha: implementationReceiptFixture.sourceSha,
+        parentSha: implementationReceiptFixture.sourceSha,
+        baseSha: implementationReceiptFixture.sourceSha,
         headShaSource: "host-session-metadata",
         status: "ready-before-work",
     },
     terminalReceipt: {
         complete: true,
-        sessionId: "review-373",
-        sourceSha: "07e89aa83c16d285ba43ac8b262e5f17a7354367",
+        sessionId: "review-validation-373",
+        sourceSha: implementationReceiptFixture.sourceSha,
         status: "pass",
-        heading: "IMPLEMENTATION RECEIPT",
+        heading: "REVIEW & VALIDATION RECEIPT",
         retrievalSurface: "durable-final-response",
         provenance: "host-session-store",
+        independentReviewComplete: true,
+        targetedChecksComplete: true,
     },
     retry: {
         calls: 2,
-        retryOf: "review-373",
+        retryOf: "review-validation-373",
         attempt: 2,
         failureRecorded: true,
         ambiguousOutcomeHandled: true,
@@ -98,28 +140,27 @@ const handoffFixture = {
     },
 };
 
+function supportsImplementationReceipt(receipt) {
+    return receipt.complete
+        && receipt.heading === "IMPLEMENTATION RECEIPT"
+        && typeof receipt.sourceBranch === "string"
+        && receipt.sourceBranch.length > 0
+        && receipt.sourceSha === receipt.parentSha
+        && receipt.sourceSha === receipt.baseSha
+        && ["transcript", "durable-final-response", "artifact-file"].includes(receipt.retrievalSurface)
+        && typeof receipt.provenance === "string"
+        && receipt.provenance.length > 0;
+}
+
 function supportsAutomatedHandoff(fixture) {
     const created = fixture.createSession;
     const returned = fixture.getSession;
     const startup = fixture.startupReceipt;
     const terminal = fixture.terminalReceipt;
-    const identities = [
-        fixture.managerSessionId,
-        fixture.developerSessionId,
-        ...((fixture.previousPhaseSessionIds) || []),
-    ];
-    const worktreePaths = [
-        fixture.developerWorktreePath,
-        ...((fixture.previousWorktreePaths) || []),
-    ];
-    const worktreeIds = [
-        fixture.developerWorktreeId,
-        ...((fixture.previousWorktreeIds) || []),
-    ];
-    const branches = [
-        fixture.developerBranch,
-        ...((fixture.previousPhaseBranches) || []),
-    ];
+    const identities = [fixture.managerSessionId, fixture.developerSessionId, ...((fixture.previousPhaseSessionIds) || [])];
+    const worktreePaths = [fixture.developerWorktreePath, ...((fixture.previousWorktreePaths) || [])];
+    const worktreeIds = [fixture.developerWorktreeId, ...((fixture.previousWorktreeIds) || [])];
+    const branches = [fixture.developerBranch, ...((fixture.previousPhaseBranches) || [])];
     return fixture.sourceBranch.length > 0
         && fixture.requiredApis.every((api) => fixture.availableApis.includes(api))
         && typeof fixture.idempotencyKey === "string"
@@ -154,7 +195,9 @@ function supportsAutomatedHandoff(fixture) {
         && terminal.sessionId === returned.sessionId
         && terminal.sourceSha === fixture.sourceSha
         && terminal.status === "pass"
-        && terminal.heading === "IMPLEMENTATION RECEIPT"
+        && terminal.heading === "REVIEW & VALIDATION RECEIPT"
+        && terminal.independentReviewComplete === true
+        && terminal.targetedChecksComplete === true
         && ["transcript", "durable-final-response", "artifact-file"].includes(terminal.retrievalSurface)
         && typeof terminal.provenance === "string"
         && terminal.provenance.length > 0;
@@ -172,140 +215,98 @@ function supportsRecordedRetry(fixture) {
         && fixture.retry.failure.error.length > 0;
 }
 
+assert(frontmatterValue(files.manager, "name") === "Product & Delivery Manager", "manager agent must be renamed to Product & Delivery Manager");
+assert(!managerTools.includes("edit"), "manager must not have edit permission");
+assert(!managerTools.includes("execute"), "manager must not have execute permission");
+assert(!managerTools.includes("github/*"), "manager must not have wildcard GitHub access");
+assert(!managerTools.filter((tool) => tool.startsWith("github/")).some((tool) => /write|create|update|delete|merge|comment/i.test(tool)), "manager must not have GitHub write-like tools");
+assert(files.manager.includes("feature-review-validation"), "manager must route to combined Review & Validation role");
+assert(files.manager.includes("IMPLEMENTATION RECEIPT") && files.manager.includes("REVIEW & VALIDATION RECEIPT"), "manager must require explicit receipt headings");
+assert(files.manager.includes("artifact-unavailable"), "manager must stop on unavailable artifacts");
+assert(files.manager.includes("Feature Orchestration Maintainer session"), "manager must retain critical incident maintainer routing");
+
+assert(reviewValidationTools.join(",") === "read,search,execute", "Review & Validation tools must be read/search/execute only");
+assert(files.reviewValidation.includes("Independent review") && files.reviewValidation.includes("Targeted validation"), "Review & Validation must require independent review plus targeted checks");
+assert(files.reviewValidation.includes("REVIEW & VALIDATION RECEIPT"), "Review & Validation must define one terminal receipt heading");
+assert(files.reviewValidation.includes("never run\n`git push`, `gh`, deployment"), "Review & Validation must forbid publication/deployment commands");
+assert(!files.reviewValidation.includes("tools: [\"read\", \"search\", \"edit"), "Review & Validation must not edit");
+
+assert(files.developer.includes("DEVELOPER STARTUP ACK"), "Developer must emit startup ACK");
+assert(files.developer.includes("not an `IMPLEMENTATION RECEIPT`"), "Developer must distinguish ACK from receipt");
+assert(files.developer.includes("retrieval surface/provenance"), "Developer receipt must include retrieval provenance");
+assert(files.developer.includes("Review & Validation"), "Developer must reference the simplified downstream phase");
+
+assert(files.legacyReviewer.includes("deprecated compatibility shim"), "legacy code reviewer must be marked as a compatibility shim");
+assert(files.legacyTest.includes("deprecated compatibility shim"), "legacy test engineer must be marked as a compatibility shim");
+assert(files.legacyQa.includes("deprecated compatibility shim"), "legacy QA engineer must be marked as a compatibility shim");
+
+assert(frontmatterValue(files.backlogMaintainer, "description").includes("Deprecated compatibility router"), "backlog maintainer agent must be deprecated router");
+assert(files.backlogDesign.includes("status: deprecated-router"), "backlog maintainer design must be deprecated router status");
+assert(files.backlogDesign.includes("Product & Delivery Manager"), "backlog maintainer docs must point to Product & Delivery Manager");
+assert(files.backlogDesign.includes("`issue-writer` remains the only backlog write role"), "backlog docs must preserve single Issue Writer boundary");
+assert(issueWriterTools.join(",") === "read,search,github/*", "Issue Writer permissions must remain unchanged");
+assert(files.issueWriter.includes("Proof-of-approval gate"), "Issue Writer approval gate must remain documented");
+
+assert(releaseTools.join(",") === "read,search", "Release Manager must remain blocked/read-only until verified release mechanism exists");
+assert(files.release.includes("blocked") && /push the\s+approved source branch\/ref/.test(files.release), "Release Manager must retain manual publication fallback");
+assert(files.release.includes("publication-failed"), "Release Manager must retain publication-failed state");
+assert(files.release.includes("local commit or a failed PR command is publication"), "Release Manager must reject false publication claims");
+assert(deploymentTools.includes("execute") && !deploymentTools.includes("edit") && !deploymentTools.includes("github/*"), "Deployment Manager boundary must remain execute-only without edit/GitHub wildcard");
+assert(files.deployment.includes("published Release Receipt") && /Approval is\s+not authorization/.test(files.deployment), "Deployment Manager must require published release and authorization");
+
+assert(files.design.includes("version: 0.6.0") && files.design.includes("status: current-design"), "design version/status must be updated");
+assert(files.design.includes("Migration note"), "design must include migration note");
+assert(files.design.includes("Two lanes") && files.design.includes("Backlog lane") && files.design.includes("Delivery lane"), "design must define backlog and delivery lanes");
+assert(files.design.includes("Product & Delivery Manager + Developer + Review & Validation Agent"), "design must name target architecture");
+assert(files.design.includes("Trusted child startup `HEAD` metadata"), "design must define trusted startup HEAD metadata");
+assert(files.design.includes("must not claim command-derived evidence"), "design must forbid unverifiable reviewer HEAD evidence");
+assert(files.design.includes("base_branch"), "design must name the supported branch-based session input");
+assert(files.design.includes("distinct child branch/worktree"), "design must require child-worktree isolation evidence");
+assert(files.design.includes("terminal artifact"), "design must define pull-based child artifact handoff");
+assert(files.design.includes("artifact-unavailable"), "design must define unavailable-artifact stop state");
+assert(files.design.includes("send_session_message") && files.design.includes("never transports"), "design must not treat messages as artifact transport");
+assert(files.design.includes("A local commit is never treated as"), "design must distinguish local commits from publication");
+assert(files.design.includes("push exact source\nref") || files.design.includes("push exact source ref"), "design must require pushing the exact source ref");
+assert(files.design.includes("remote SHA verification"), "design must require remote SHA verification");
+assert(files.design.includes("publication-failed"), "design must define durable publication-failed state");
+assert(files.design.includes("preserved Implementation Receipt"), "failed publication must preserve the implementation receipt");
+assert(files.design.indexOf("push exact source") < files.design.indexOf("PR create/update"), "PR creation must follow push");
+assert(files.design.indexOf("remote SHA verification") < files.design.indexOf("PR create/update"), "PR creation must follow remote verification");
+assert(/Deployment requires a published release receipt/.test(files.design), "deployment must require a published release receipt");
+assert(files.design.includes("Post-delivery critical-incident self-improvement"), "design must define post-delivery retrospective");
+assert(files.design.includes("Critical Orchestration Incident Record"), "design must define a structured critical incident record");
+assert(files.design.includes("Remediation Receipt"), "design must define remediation evidence");
+assert(files.design.includes("One incident ID gets one remediation attempt"), "self-improvement must be idempotent");
+
 assert(failedDeliveryFixture.localCommit, "failed-delivery fixture must preserve the local commit");
 assert(!failedDeliveryFixture.remoteRef, "failed-delivery fixture must model an absent remote ref");
 assert(failedDeliveryFixture.prAttempted, "fixture must preserve the failed PR attempt");
 assert(!failedDeliveryFixture.prCreated, "fixture validation must not claim a PR was created");
-assert(supportsAutomatedHandoff(handoffFixture), "safe fixture must model a verified exact-SHA child handoff");
-assert(reviewerAgent.includes('tools: ["read", "search"]'), "code reviewer must remain read-only");
-assert(reviewerAgent.includes("trusted startup receipt") && reviewerAgent.includes("initial_head"), "code reviewer must use trusted startup metadata");
-assert(design.includes("Trusted child startup `HEAD` metadata"), "design must define trusted startup HEAD metadata");
-assert(design.includes("must not claim command-derived evidence"), "design must forbid unverifiable reviewer HEAD evidence");
+assert(supportsImplementationReceipt(implementationReceiptFixture), "implementation fixture must model explicit heading and provenance");
+assert(supportsAutomatedHandoff(handoffFixture), "safe fixture must model a verified exact-SHA Review & Validation handoff");
 assert(supportsRecordedRetry(handoffFixture), "safe fixture must model a recorded idempotent retry");
-assert(!supportsAutomatedHandoff({
-    ...handoffFixture,
-    availableApis: ["create_session", "get_session"],
-}), "a missing transcript API must select the manual fallback");
-assert(!supportsAutomatedHandoff({
-    ...handoffFixture,
-    startupReceipt: {
-        ...handoffFixture.startupReceipt,
-        headSha: "unverified",
-    },
-}), "a child SHA mismatch must select the manual fallback");
-assert(!supportsAutomatedHandoff({
-    ...handoffFixture,
-    getSession: {
-        ...handoffFixture.getSession,
-        sessionId: handoffFixture.developerSessionId,
-    },
-}), "a reused session identity must select the manual fallback");
-assert(!supportsAutomatedHandoff({
-    ...handoffFixture,
-    getSession: {
-        ...handoffFixture.getSession,
-        worktreeId: "",
-    },
-}), "a missing worktree identity must select the manual fallback");
-assert(!supportsAutomatedHandoff({
-    ...handoffFixture,
-    getSession: {
-        ...handoffFixture.getSession,
-        branch: handoffFixture.sourceBranch,
-    },
-}), "a reused branch must select the manual fallback");
-assert(!supportsAutomatedHandoff({
-    ...handoffFixture,
-    getSession: {
-        ...handoffFixture.getSession,
-        worktreePath: "C:/worktrees/developer-373",
-    },
-    developerWorktreePath: "C:/worktrees/developer-373",
-}), "a reused worktree path must select the manual fallback");
-assert(!supportsAutomatedHandoff({
-    ...handoffFixture,
-    getSession: {
-        ...handoffFixture.getSession,
-        baseBranch: "main",
-    },
-}), "a returned base-branch mismatch must select the manual fallback");
-assert(!supportsAutomatedHandoff({
-    ...handoffFixture,
-    getSession: {
-        ...handoffFixture.getSession,
-        startup: "unknown",
-    },
-}), "missing child startup must select the manual fallback");
-assert(!supportsAutomatedHandoff({
-    ...handoffFixture,
-    terminalReceipt: {
-        ...handoffFixture.terminalReceipt,
-        complete: false,
-    },
-}), "an incomplete terminal receipt must block the next phase");
-assert(!supportsAutomatedHandoff({
-    ...handoffFixture,
-    terminalReceipt: {
-        ...handoffFixture.terminalReceipt,
-        heading: "",
-    },
-}), "a missing receipt heading must block the next phase");
-assert(!supportsAutomatedHandoff({
-    ...handoffFixture,
-    terminalReceipt: {
-        ...handoffFixture.terminalReceipt,
-        provenance: "",
-    },
-}), "missing receipt provenance must block the next phase");
-assert(!supportsRecordedRetry({
-    ...handoffFixture,
-    retry: {
-        calls: 2,
-        retryOf: handoffFixture.createSession.returnedSessionId,
-        attempt: 2,
-        failureRecorded: false,
-        ambiguousOutcomeHandled: false,
-        failure: null,
-    },
-}), "an unrecorded retry must not create a duplicate phase session");
-assert(design.includes("base_branch"), "design must name the supported branch-based session input");
-assert(design.includes("distinct child branch/worktree"), "design must require child-worktree isolation evidence");
-assert(design.includes("terminal artifact"), "design must define pull-based child artifact handoff");
-assert(design.includes("artifact-unavailable"), "design must define the unavailable-artifact stop state");
-assert(design.includes("send_session_message") && design.includes("never transports"), "design must not treat messages as artifact transport");
-assert(managerAgent.includes("automatically create named Review, Test"), "manager must route supported phase handoffs automatically");
-assert(managerAgent.includes("artifact-unavailable"), "manager must stop when terminal artifact retrieval is unavailable");
-assert(managerAgent.includes("IMPLEMENTATION RECEIPT"), "manager must require an explicit receipt heading");
-assert(managerAgent.includes("manual snapshot fallback"), "manager must retain the exact-SHA manual fallback");
-assert(managerAgent.includes('agents: ["feature-developer", "feature-code-reviewer", "feature-test-engineer", "feature-qa-engineer", "specialist-debugging"]'), "manager must allowlist delivery child agents");
-assert(design.includes("A local commit is never treated as"), "design must distinguish local commits from publication");
-assert(design.includes("push exact source ref"), "design must require pushing the exact source ref");
-assert(design.includes("remote-SHA verification") || design.includes("verify the remote ref resolves"), "design must require remote SHA verification");
-assert(design.includes("publication-failed"), "design must define a durable publication-failed state");
-assert(design.includes("preserved Implementation Receipt"), "failed publication must preserve the implementation receipt");
-assert(design.indexOf("push exact source ref") < design.indexOf("PR create/update"), "PR creation must follow push");
-assert(design.indexOf("remote SHA verification") < design.indexOf("PR create/update"), "PR creation must follow remote verification");
-assert(/Deployment requires a published release\s+receipt/.test(design), "deployment must require a published release receipt");
-assert(releaseAgent.includes("blocked"), "current release agent must expose its blocked capability state");
-assert(/push the\s+approved source branch\/ref/.test(releaseAgent), "manual fallback must own branch publication");
-assert(releaseAgent.includes("publication-failed"), "release agent must return recoverable failure evidence");
-assert(releaseAgent.includes("local commit or a failed PR command is publication"), "release agent must reject false publication claims");
+assert(!supportsAutomatedHandoff({ ...handoffFixture, availableApis: ["create_session", "get_session"] }), "a missing transcript API must select the manual fallback");
+assert(!supportsAutomatedHandoff({ ...handoffFixture, startupReceipt: { ...handoffFixture.startupReceipt, headSha: "unverified" } }), "a child SHA mismatch must select the manual fallback");
+assert(!supportsAutomatedHandoff({ ...handoffFixture, getSession: { ...handoffFixture.getSession, sessionId: handoffFixture.developerSessionId } }), "a reused session identity must select the manual fallback");
+assert(!supportsAutomatedHandoff({ ...handoffFixture, getSession: { ...handoffFixture.getSession, worktreeId: "" } }), "a missing worktree identity must select the manual fallback");
+assert(!supportsAutomatedHandoff({ ...handoffFixture, getSession: { ...handoffFixture.getSession, branch: handoffFixture.sourceBranch } }), "a reused branch must select the manual fallback");
+assert(!supportsAutomatedHandoff({ ...handoffFixture, getSession: { ...handoffFixture.getSession, worktreePath: "C:/worktrees/developer-373" }, developerWorktreePath: "C:/worktrees/developer-373" }), "a reused worktree path must select the manual fallback");
+assert(!supportsAutomatedHandoff({ ...handoffFixture, getSession: { ...handoffFixture.getSession, baseBranch: "main" } }), "a returned base-branch mismatch must select the manual fallback");
+assert(!supportsAutomatedHandoff({ ...handoffFixture, getSession: { ...handoffFixture.getSession, startup: "unknown" } }), "missing child startup must select the manual fallback");
+assert(!supportsAutomatedHandoff({ ...handoffFixture, terminalReceipt: { ...handoffFixture.terminalReceipt, complete: false } }), "an incomplete terminal receipt must block the next phase");
+assert(!supportsAutomatedHandoff({ ...handoffFixture, terminalReceipt: { ...handoffFixture.terminalReceipt, heading: "" } }), "a missing receipt heading must block the next phase");
+assert(!supportsAutomatedHandoff({ ...handoffFixture, terminalReceipt: { ...handoffFixture.terminalReceipt, provenance: "" } }), "missing receipt provenance must block the next phase");
+assert(!supportsAutomatedHandoff({ ...handoffFixture, terminalReceipt: { ...handoffFixture.terminalReceipt, independentReviewComplete: false } }), "missing independent review must block the next phase");
+assert(!supportsAutomatedHandoff({ ...handoffFixture, terminalReceipt: { ...handoffFixture.terminalReceipt, targetedChecksComplete: false } }), "missing targeted checks must block the next phase");
+assert(!supportsRecordedRetry({ ...handoffFixture, retry: { calls: 2, retryOf: handoffFixture.createSession.returnedSessionId, attempt: 2, failureRecorded: false, ambiguousOutcomeHandled: false, failure: null } }), "an unrecorded retry must not create a duplicate phase session");
 
-// Self-improvement contract: critical incidents are investigated after every terminal delivery,
-// while fixes remain isolated, receipt-preserving, and unable to publish or deploy themselves.
-assert(design.includes("Post-delivery critical-incident self-improvement"), "design must define a post-delivery retrospective");
-assert(design.includes("Critical Orchestration Incident Record"), "design must define a structured critical incident record");
-assert(design.includes("Remediation Receipt"), "design must define a remediation receipt");
-assert(design.includes("one incident ID gets one remediation attempt"), "self-improvement must be idempotent");
-assert(managerAgent.includes("After every delivery reaches a terminal state"), "manager must run the retrospective after every delivery");
-assert(managerAgent.includes("Feature Orchestration Maintainer session"), "manager must route critical incidents to the maintainer");
-assert(maintainerAgent.includes("user-invocable: false"), "maintainer must be an orchestrated role");
-assert(/Do not change product\s+source/.test(maintainerAgent), "maintainer must not alter product scope/code");
-assert(maintainerAgent.includes("not publication or deployment"), "maintainer must not publish or deploy");
-assert(maintainerAgent.includes("Remediation Receipt"), "maintainer must return remediation evidence");
+assert(files.maintainer.includes("user-invocable: false"), "orchestration maintainer must remain orchestrated");
+assert(/Do not change product\s+source/.test(files.maintainer), "orchestration maintainer must not alter product scope/code");
+assert(files.maintainer.includes("not publication or deployment"), "orchestration maintainer must not publish or deploy");
+assert(files.maintainer.includes("Remediation Receipt"), "orchestration maintainer must return remediation evidence");
 
 if (failures.length > 0) {
     throw new Error(`Delivery contract validation failed:\n${failures.join("\n")}`);
 }
 
-console.log(`Validated delivery contract and ${failedDeliveryFixture.deliveryId} plus ${handoffFixture.deliveryId} fixtures.`);
+console.log(`Validated Product & Delivery Manager contract, combined Review & Validation role, and ${failedDeliveryFixture.deliveryId} plus ${handoffFixture.deliveryId} fixtures.`);
