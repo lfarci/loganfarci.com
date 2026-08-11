@@ -31,7 +31,8 @@ implication.
 | Trusted child startup `HEAD` metadata | **Not verified.** The observed `get_session` surface reports session/worktree identity and branch/path, but does not expose an immutable initial `HEAD` field. | Automated phases are allowed only when the host supplies `initial_head` as trusted session metadata before child work starts. The manager records it and includes it in the startup receipt; a read-only child may echo it but must not claim command-derived evidence. If absent, use the manual branch-at-SHA fallback. Never infer a SHA from a branch name or transcript text. |
 | Start and verify a child worktree from an exact receipt SHA | **Conditional, not verified in this maintenance session.** `create_session` accepts an existing `base_branch`, not an arbitrary commit SHA. A receipt branch may be used only when the host accepts it as the base, immediately returns a distinct session/worktree identity, reports the returned branch/path and startup through `get_session`, and supplies trusted `initial_head` metadata equal to the receipt SHA before work. | During the normal path, automatically create the named child phase from the receipt branch and pull its terminal artifact; do not pause or ask the human to create a worktree. If any handshake proof is unavailable or fails, stop with the Implementation Receipt and use the exceptional manual branch-at-SHA fallback. Never substitute a detached checkout, an unverified child, or a live Developer branch. |
 | Idempotent phase-session retry | **Not verified.** `session_store_sql` is observed, but atomic idempotency reservation and durable create outcomes are not verified in this maintenance session. | Reserve `delivery_id:phase:source_sha` before `create_session`; reuse and revalidate an existing attempt, or create a numbered retry only after recording the prior failure (including an ambiguous timeout). Never blindly call `create_session` twice. |
-| Session messages | Observed, but child delivery and child tool inheritance are not guaranteed. | Include all inputs in a kickoff prompt. Retrieve the terminal artifact from the transcript. Use one message only to request a missing artifact. |
+| Terminal artifact retrieval | **Not verified.** A child identity or branch can be visible while its final response is unavailable. | Automated handoff requires a verified host retrieval surface for the complete terminal response and its provenance. A Developer MUST also write the receipt to any host-provided artifact surface before going idle. If retrieval is unavailable or ambiguous, record `blocked` with reason `artifact-unavailable`, preserve the last trusted receipt, and stop. Never infer completion from branch, SHA, diff, or commit metadata alone. |
+| Session messages | Observed, but child delivery and child tool inheritance are not guaranteed. | Include all inputs in a kickoff prompt. Retrieve the terminal artifact only through a verified host surface and record its provenance. Use one message only to request a missing artifact; it is never artifact transport. |
 | In-process subagents | Documented for VS Code/CLI (`agent` plus an `agents` list); not verified in this App session. | App sessions are the primary route. On a surface without tracked sessions, use a documented in-process subagent only if it can preserve the phase boundary; otherwise stop and name the next manual role. |
 | Live GitHub MCP read/write names | **Configuration mismatch.** `.github/mcp.json` configures a `github` server with `tools: ["*"]`, but this session exposes GitHub-oriented built-ins and `gh`, not a discoverable `github/*` MCP toolset. | Do not add `github/*` to new frontmatter. Use no GitHub tools for read-only roles. Release Manager is a human-invocable, approval-refusing placeholder until a human verifies exact PR read/write MCP names and replaces wildcard access with its minimal allowlist. |
 | Pull-request write operation | Observed as the App's `create_pull_request` and `update_pull_request` built-ins; no verified configurable custom-agent name is exposed in this App session. | The Release Manager owns publication. Until a verified agent-accessible write mechanism exists, the human performs the approved release operation as the named manual fallback and records its receipt; never attribute a built-in action to a child agent. |
@@ -117,9 +118,12 @@ host behavior rather than merely the fixture's glob interpretation.
    Before implementation, the Developer reports its initial `HEAD`; the manager records
    equality with the Delivery Brief's base SHA. A mismatch blocks the cycle and requires
    a human-created branch at that SHA. The Developer is its sole mutable owner.
-2. The Developer commits before hand-off and returns an Implementation Receipt containing
-   the local branch, exact SHA, parent/base SHA, changed paths, and session ID. The commit
-   is the input to later work; uncommitted files are never an artifact.
+2. The Developer commits before hand-off and emits an `IMPLEMENTATION RECEIPT` containing
+   the local branch/ref, worktree path, exact SHA, startup `HEAD`, parent/base SHA, changed
+   paths, validation commands/results, status, and session ID. The Developer also writes
+   the receipt to a host-provided artifact surface when available. The commit is the input
+   to later work; uncommitted files are never an artifact. A message requesting the receipt
+   is not receipt transport.
 3. Every Review, Test, QA, and Debugging phase needs a fresh distinct child
    branch/worktree whose `HEAD` equals the receipt SHA before the phase starts. The
    manager uses this explicit session handoff handshake:
@@ -142,12 +146,15 @@ host behavior rather than merely the fixture's glob interpretation.
      branch/path, missing startup or trusted `initial_head`, base-branch mismatch, or
      any SHA mismatch rejects the handoff.
    The source branch is a starting ref, not permission to reuse the Developer worktree.
-4. The manager polls `get_session`, pulls the child's final response from the local
-   transcript, and validates a complete terminal receipt (including the startup
-   receipt, phase, session identity, source SHA, branch/path, status, and evidence)
-   before creating the next phase. `send_session_message` is at most one nudge and
-   never transports an artifact. A failed or incomplete child is recorded against the
-   idempotency key and blocks the next phase. On retry, first look up and revalidate
+4. The manager polls `get_session`, then retrieves the child's final response through a
+   verified host surface and records its provenance. The response must be a complete
+   terminal receipt (including the startup receipt, phase, session identity, source SHA,
+   branch/path, status, and evidence) before creating the next phase. `send_session_message`
+   is at most one nudge and never transports or substitutes for an artifact. If retrieval
+   is unavailable or ambiguous, record a `blocked` receipt with reason `artifact-unavailable`,
+   preserve the last trusted receipt, and stop; do not infer completion from `get_session`,
+   branch, SHA, diff, or commit metadata. A failed or incomplete child is recorded against
+   the idempotency key and blocks the next phase. On retry, first look up and revalidate
    that key; an unknown or ambiguous create outcome is a failure that must be recorded
    before a numbered replacement attempt can be created. Never create duplicate phase
    sessions on an unrecorded retry.

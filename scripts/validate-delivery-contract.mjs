@@ -81,6 +81,9 @@ const handoffFixture = {
         sessionId: "review-373",
         sourceSha: "07e89aa83c16d285ba43ac8b262e5f17a7354367",
         status: "pass",
+        heading: "IMPLEMENTATION RECEIPT",
+        retrievalSurface: "durable-final-response",
+        provenance: "host-session-store",
     },
     retry: {
         calls: 2,
@@ -150,7 +153,11 @@ function supportsAutomatedHandoff(fixture) {
         && terminal.complete
         && terminal.sessionId === returned.sessionId
         && terminal.sourceSha === fixture.sourceSha
-        && terminal.status === "pass";
+        && terminal.status === "pass"
+        && terminal.heading === "IMPLEMENTATION RECEIPT"
+        && ["transcript", "durable-final-response", "artifact-file"].includes(terminal.retrievalSurface)
+        && typeof terminal.provenance === "string"
+        && terminal.provenance.length > 0;
 }
 
 function supportsRecordedRetry(fixture) {
@@ -236,6 +243,20 @@ assert(!supportsAutomatedHandoff({
         complete: false,
     },
 }), "an incomplete terminal receipt must block the next phase");
+assert(!supportsAutomatedHandoff({
+    ...handoffFixture,
+    terminalReceipt: {
+        ...handoffFixture.terminalReceipt,
+        heading: "",
+    },
+}), "a missing receipt heading must block the next phase");
+assert(!supportsAutomatedHandoff({
+    ...handoffFixture,
+    terminalReceipt: {
+        ...handoffFixture.terminalReceipt,
+        provenance: "",
+    },
+}), "missing receipt provenance must block the next phase");
 assert(!supportsRecordedRetry({
     ...handoffFixture,
     retry: {
@@ -250,7 +271,11 @@ assert(!supportsRecordedRetry({
 assert(design.includes("base_branch"), "design must name the supported branch-based session input");
 assert(design.includes("distinct child branch/worktree"), "design must require child-worktree isolation evidence");
 assert(design.includes("terminal artifact"), "design must define pull-based child artifact handoff");
+assert(design.includes("artifact-unavailable"), "design must define the unavailable-artifact stop state");
+assert(design.includes("send_session_message") && design.includes("never transports"), "design must not treat messages as artifact transport");
 assert(managerAgent.includes("automatically create named Review, Test"), "manager must route supported phase handoffs automatically");
+assert(managerAgent.includes("artifact-unavailable"), "manager must stop when terminal artifact retrieval is unavailable");
+assert(managerAgent.includes("IMPLEMENTATION RECEIPT"), "manager must require an explicit receipt heading");
 assert(managerAgent.includes("manual snapshot fallback"), "manager must retain the exact-SHA manual fallback");
 assert(managerAgent.includes('agents: ["feature-developer", "feature-code-reviewer", "feature-test-engineer", "feature-qa-engineer", "specialist-debugging"]'), "manager must allowlist delivery child agents");
 assert(design.includes("A local commit is never treated as"), "design must distinguish local commits from publication");

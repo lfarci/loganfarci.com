@@ -38,9 +38,14 @@ not an arbitrary SHA:
 if it cannot prove this handshake, stop for the documented manual snapshot fallback
 instead of reusing the Developer branch or inventing an exact-SHA capability.
 
-Use child final replies as artifacts and pull them from the transcript, recording each
-child session, branch, SHA, and provenance before progressing. At each gate, present the
-exact proposal and wait for approve, edit, defer, reject, or cancel. Do not route to
+Use child final replies as artifacts only when a verified host retrieval surface exposes
+and preserves the complete response with provenance. Require the `IMPLEMENTATION RECEIPT`
+or phase-specific terminal receipt heading and validate its required fields before
+progressing. A session identity, branch, SHA, diff, or commit is not a receipt. If
+retrieval is unavailable or ambiguous, record a `blocked` receipt with reason
+`artifact-unavailable`, preserve the last trusted receipt, and stop; `send_session_message`
+is only one nudge and never artifact transport. At each gate, present the exact proposal
+and wait for approve, edit, defer, reject, or cancel. Do not route to
 Release without green same-SHA evidence and a valid Approval Record; do not route to
 Deployment without a `published` Release Receipt and a separate valid Approval Record.
 A failed or blocked publication remains recoverable and must never be reported as a PR.

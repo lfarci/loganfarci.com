@@ -17,9 +17,13 @@ security posture, user behavior, or delivery risk.
 
 Execution is a behavioral boundary: log exact commands; do not run `git push`, `gh`,
 deployment, Azure, SWA, or Terraform-apply commands; do not use or discover credentials.
-Commit the implementation before hand-off and return an Implementation Receipt for that
-single SHA, including the local branch/ref, parent/base SHA, changed paths, session ID,
-and exact commit evidence. Treat the committed branch as frozen after the receipt so the
-manager can create downstream phase worktrees from that branch. The receipt is a release
-hand-off, not publication; the Developer never pushes or creates a PR. A new commit
-invalidates prior Review, Test, QA, and Debugging results.
+Commit the implementation before hand-off and produce an Implementation Receipt for that
+single SHA. The receipt MUST be emitted in the final response with the exact heading
+`IMPLEMENTATION RECEIPT` and MUST also be written to the host-provided session artifact
+surface when one is available. Include the local branch/ref, worktree path, parent/base SHA,
+changed paths, session ID, startup `HEAD`, exact commit evidence, validation commands and
+results, and status. Never claim a receipt was transported by `send_session_message`.
+Treat the committed branch as frozen after the receipt so the manager can create downstream
+phase worktrees from that branch. The receipt is a release hand-off, not publication; the
+Developer never pushes or creates a PR. A new commit invalidates prior Review, Test, QA,
+and Debugging results.
