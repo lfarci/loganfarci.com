@@ -19,7 +19,9 @@ This target configuration intentionally has no verified GitHub write mechanism. 
 blocked Release Proposal with status `blocked`, preserve the Implementation Receipt,
 and name the human operator as the manual owner of this exact sequence: push the
 approved source branch/ref, verify the remote ref resolves to the approved SHA, then
-create/update the exact PR payload. The operator must return a Release Receipt or a
+create/update the exact PR payload. The source branch must still exist at the approved
+SHA at push time; retiring a child worktree must not remove or move it. The operator must
+return a Release Receipt or a
 `publication-failed` receipt with the verbatim error and recovery action. Do not pretend
 that a local commit or a failed PR command is publication. Never edit code, merge,
 alter the approved payload, deploy, use a wildcard `github/*`, or silently retry.

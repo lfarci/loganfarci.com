@@ -1,312 +1,194 @@
 ---
-spec: feature-delivery-manager agent system
-version: 0.5.0
-status: design
+spec: product-delivery-manager agent system
+version: 0.6.0
+status: current-design
 verified: 2026-08-11
 ---
 
-# Feature Delivery Manager - Design
+# Product & Delivery Manager - Design
 
-This is the design of record for delivering one already-accepted GitHub issue. It
-is intentionally separate from the backlog-maintainer system: the backlog system
-decides and approves issue changes; this system implements accepted scope, gathers
-evidence, and pauses for human publication and deployment decisions.
+This is the design of record for the recommended agent-system architecture: **one
+Product & Delivery Manager + Developer + Review & Validation Agent**, with separate
+Issue Writer and Release/Deployment gates. It replaces the former split backlog and delivery designs while keeping their security
+boundaries.
 
-Agent files under `.github/agents/` derive from this document. They must reference
-the existing skills and specs rather than repeat their guidance.
+## Active role set
 
-## Evidence and capability baseline
+The active system contains the **Product & Delivery Manager**, focused backlog helpers,
+the **Developer**, one **Review & Validation Agent**, Issue Writer, Issue Reviewer, and
+separate Release/Deployment roles. Deprecated compatibility routers and legacy split
+review/test/QA agents have been removed. This change is orchestration
+documentation/configuration only and does not broaden write, publication, deployment,
+or product-code permissions.
 
-The table distinguishes a verified capability from a desired one. "Observed" means
-it was available in the Copilot App session that created this design on 2026-08-10;
-"documented" links to the platform documentation. No row grants a permission by
-implication.
+## Capability baseline
 
-| Capability | Status and evidence | Safe use or fallback |
-| --- | --- | --- |
-| Custom-agent files in `.github/agents/*.agent.md` with `name`, `description`, `tools`, `agents`, and `user-invocable` frontmatter | Documented for VS Code and Copilot cloud agent in [custom-agent configuration](https://code.visualstudio.com/docs/agent-customization/custom-agents) and [GitHub custom agents](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/coding-agent/create-custom-agents). Existing agents use this format. | Use only the documented fields. A missing tool is ignored by the host, so an agent must report a blocker rather than assume a named tool exists. |
-| Path instructions under `.github/instructions/*.instructions.md` | Documented by [repository custom instructions](https://docs.github.com/en/copilot/how-tos/configure-custom-instructions-in-your-ide/add-repository-instructions-in-your-ide); existing files use YAML `applyTo`. | `applyTo` accepts comma-separated glob patterns. It is verified for VS Code, Copilot cloud agent, and code review; this task does **not** assert it for the Copilot App session runtime. The App fallback is to attach the selected files to each child prompt and record that in the Delivery Brief. |
-| Copilot App tracked child sessions | Observed: `create_session`, `get_session`, `list_sessions_and_chats`, `send_session_message`, and `session_store_sql` are available. | Create a named child with `coordinate_with_creator: true`; its final response is the hand-off artifact. Pull it from the local transcript. A message is a best-effort nudge only, never an artifact transport. |
-| Child worktree isolation | Observed: each created local project session is a separate worktree and branch. | The Developer alone owns its mutable worktree. Do not share or check out that live branch in another worktree. |
-| Trusted child startup `HEAD` metadata | **Not verified.** The observed `get_session` surface reports session/worktree identity and branch/path, but does not expose an immutable initial `HEAD` field. | Automated phases are allowed only when the host supplies `initial_head` as trusted session metadata before child work starts. The manager records it and includes it in the startup receipt; a read-only child may echo it but must not claim command-derived evidence. If absent, use the manual branch-at-SHA fallback. Never infer a SHA from a branch name or transcript text. |
-| Start and verify a child worktree from an exact receipt SHA | **Conditional, not verified in this maintenance session.** `create_session` accepts an existing `base_branch`, not an arbitrary commit SHA. A receipt branch may be used only when the host accepts it as the base, immediately returns a distinct session/worktree identity, reports the returned branch/path and startup through `get_session`, and supplies trusted `initial_head` metadata equal to the receipt SHA before work. | During the normal path, automatically create the named child phase from the receipt branch and pull its terminal artifact; do not pause or ask the human to create a worktree. If any handshake proof is unavailable or fails, stop with the Implementation Receipt and use the exceptional manual branch-at-SHA fallback. Never substitute a detached checkout, an unverified child, or a live Developer branch. |
-| Idempotent phase-session retry | **Not verified.** `session_store_sql` is observed, but atomic idempotency reservation and durable create outcomes are not verified in this maintenance session. | Reserve `delivery_id:phase:source_sha` before `create_session`; reuse and revalidate an existing attempt, or create a numbered retry only after recording the prior failure (including an ambiguous timeout). Never blindly call `create_session` twice. |
-| Session messages | Observed, but child delivery and child tool inheritance are not guaranteed. | Include all inputs in a kickoff prompt. Retrieve the terminal artifact from the transcript. Use one message only to request a missing artifact. |
-| In-process subagents | Documented for VS Code/CLI (`agent` plus an `agents` list); not verified in this App session. | App sessions are the primary route. On a surface without tracked sessions, use a documented in-process subagent only if it can preserve the phase boundary; otherwise stop and name the next manual role. |
-| Live GitHub MCP read/write names | **Configuration mismatch.** `.github/mcp.json` configures a `github` server with `tools: ["*"]`, but this session exposes GitHub-oriented built-ins and `gh`, not a discoverable `github/*` MCP toolset. | Do not add `github/*` to new frontmatter. Use no GitHub tools for read-only roles. Release Manager is a human-invocable, approval-refusing placeholder until a human verifies exact PR read/write MCP names and replaces wildcard access with its minimal allowlist. |
-| Pull-request write operation | Observed as the App's `create_pull_request` and `update_pull_request` built-ins; no verified configurable custom-agent name is exposed in this App session. | The Release Manager owns publication. Until a verified agent-accessible write mechanism exists, the human performs the approved release operation as the named manual fallback and records its receipt; never attribute a built-in action to a child agent. |
-| Generic command execution | Available on Developer, Test Engineer, QA Engineer, and Deployment Manager target roles; it can run arbitrary Git, GitHub, or deployment commands. No scoped sandbox or isolated credentials was verified. | Boundaries for execution-bearing roles are behavioral, not structural: use isolated worktrees, no credential injection, exact-command logging, and no `git push`, `gh`, `swa deploy`, Azure, or Terraform-apply command outside the approved role and gate. Residual risk remains. |
-| Credentials | `gh` is available in the environment, but token scope, Azure/SWA credentials, executing identity, and session credential isolation are unverified. | Never add tokens to files, prompts, or artifacts. Do not attempt credential discovery. Approval is not authorization: deployment remains blocked until a human either performs it in an authorized surface or verifies the executing identity and named mechanism out of band. |
+| Capability | Status and safe use |
+| --- | --- |
+| Custom-agent frontmatter | Use only documented `name`, `description`, `tools`, `agents`, and `user-invocable` fields. A missing tool is a blocker, not a reason to grant wildcard tools. |
+| Copilot App child sessions | `create_session`, `get_session`, `list_sessions_and_chats`, `send_session_message`, and `session_store_sql` were observed. Child final replies are terminal artifacts only when a verified retrieval surface preserves the full response and provenance. `send_session_message` is one nudge and never transports or substitutes for an artifact. |
+| Trusted child startup `HEAD` metadata | Not structurally guaranteed. Automated handoff requires host-provided `initial_head` before work. A read-only child may echo it but must not claim command-derived evidence. If absent, use the manual snapshot fallback. |
+| Branch-based child creation | `create_session` accepts `base_branch`, not arbitrary SHAs. A receipt branch may be used only when the host accepts it and returns distinct child branch/worktree identity plus trusted startup metadata equal to the receipt SHA. |
+| Terminal artifact retrieval | A child identity, branch, diff, SHA, or commit is not a receipt. If a complete terminal artifact with provenance is unavailable or ambiguous, record `blocked` with reason `artifact-unavailable`, preserve the last trusted receipt, and stop. |
+| GitHub access | Product & Delivery Manager has no GitHub tools and must not fabricate backlog state. Backlog helpers and Issue Writer/Reviewer own their `github/*` preflight; if unavailable, they return blocked. Issue Writer remains the only backlog writer. Release publication is blocked/manual until a verified exact write mechanism is allowlisted. |
+| Execution | Product & Delivery Manager has no `execute`. Developer and Review & Validation use execution only as a behavioral boundary: no credentials, no `git push`, no `gh`, no deployment, no Azure/SWA/Terraform apply unless inside the separately approved role. |
 
-The required GitHub MCP capability is therefore not available for structural
-publication enforcement. This blocks only the Release Manager's automated write
-configuration; it never authorizes adding `github/*`, broadening execution, or using
-shell access as an undocumented replacement.
+## Two lanes
 
-## Current inventory
+### Backlog lane
 
-| Surface | Current inventory | Delivery use |
-| --- | --- | --- |
-| Agents | Six backlog agents: `backlog-maintainer`, `backlog-explorer`, `backlog-shaper`, `backlog-prioritizer`, `issue-writer`, and `issue-reviewer` | A separate backlog lifecycle. Do not reuse its GitHub permissions for delivery. |
-| Skills | `react-app`, `validate-app`, `run-app-locally`, `triage-accessibility`, `swa-deploy`, `azure-static-web-apps`, `shape-backlog-idea` | Select only when the Delivery Brief's modified paths and risks trigger them. |
-| Shared guidance | Root `AGENTS.md`; `src/AGENTS.md`; `content/AGENTS.md`; `.github/copilot-instructions.md`; `docs/specs/`; and the existing article, component, and test instructions | Apply root guidance, then the nearest subtree `AGENTS.md`, selected path instructions, and applicable specs. The Brief records all that apply. |
-| Source scopes | `src/src/pages`, `src/src/components`, `src/src/core`, `src/plugins`, `content`, `.github/workflows`, `infra`, and `src/public/staticwebapp.config.json` | The scoped instruction map below maps these paths without a catch-all rule. |
-| GitHub configuration | `.github/mcp.json` configures `github` with wildcard `tools: ["*"]`; existing backlog agents also name `github/*`. Neither proves a live named tool in this App session. | Delivery agents do not inherit wildcard permissions or depend on those names. A future verified Release Manager allowlist must replace, never inherit, wildcard access. |
+The Product & Delivery Manager owns intake, evidence sequencing, issue shaping,
+prioritization, and the human gate before any GitHub issue write. It may dispatch
+`backlog-explorer`, `backlog-shaper`, and `backlog-prioritizer` for focused read-only
+work, or use their existing contracts as compatibility helpers. Helper agents establish
+live GitHub state themselves through their documented preflight; if their runtime has no
+working GitHub read surface, their blocked report stops the phase. The manager records
+that state instead of fabricating or supplying a live snapshot. It presents each Issue
+Proposal exactly and waits for explicit per-item approval before dispatching
+`issue-writer`. Approval covers one exact payload; edits re-enter the gate. No other
+role writes backlog state. `issue-reviewer` may be retained as a read-only post-write
+audit.
 
-## Roles and boundaries
+### Delivery lane
+
+For an accepted issue, the Product & Delivery Manager creates a Delivery Brief,
+selects applicable repository instructions/specs and optional specialists by path/risk
+trigger, creates one Developer session, then validates the committed Implementation
+Receipt through one `feature-review-validation` phase. Green same-SHA evidence is
+required before a PR approval proposal. PR approval never authorizes deployment.
+Release and Deployment remain separate approval-gated roles.
+
+## Role matrix
 
 | Role | Owns | Tools/boundary | Must not do |
 | --- | --- | --- | --- |
-| Feature Delivery Manager | Route accepted scope, select specialists and instructions, track SHA-bound artifacts, request approvals | Read/search/session coordination only; structural for file mutation in its declared allowlist | Edit, execute, build, publish, deploy, or decide backlog scope |
-| Developer | Implement the accepted Delivery Brief in one mutable branch/worktree | Read/search/edit/execute; execution boundary is behavioral | Publish, deploy, change scope, or waive findings |
-| Code Reviewer | Compare one receipt SHA with the brief, selected instructions, and specs | Read/search only; structural in declared allowlist | Edit, execute, publish, deploy |
-| Test Engineer | Run deterministic checks and return raw evidence for one receipt SHA | Read/search/execute; behavioral execution boundary | Edit, treat a failure as acceptable, publish, deploy |
-| QA Engineer | Check observable journeys, responsive behavior, a11y, themes, reduced motion, and SSR/prerender when relevant | Read/search/execute/browser; behavioral execution boundary | Edit, downgrade defects, publish, deploy |
-| Debugging Specialist | Diagnose a reproducible Review, Test, or QA failure on one receipt SHA and return evidence and a remediation hypothesis | Read/search/execute; behavioral execution boundary | Edit, publish, deploy, or choose a scope-changing fix |
-| Orchestration Maintainer | Investigate and fix a confirmed critical delivery-orchestration defect after a completed process | Owns only orchestration docs, agent definitions, validation fixtures, and tests in an isolated maintenance session; returns a commit-bound remediation receipt | Change product scope/code, bypass approvals, publish, deploy, or silently alter policy |
-| Release Manager | Publish the exact approved source SHA and create or update its PR after independent Approval Record validation | Owns release preflight and push → remote-SHA verification → PR sequencing. Uses only a verified release mechanism; otherwise emits a blocked receipt with the named human fallback | Edit code, merge, change payload, substitute refs, or silently retry |
-| Deployment Manager | Execute the exact approved SHA, environment, and named mechanism | Execute only after independent Approval Record validation; behavioral boundary | Edit code, create or merge a PR, substitute a SHA, target, or mechanism |
+| Product & Delivery Manager | Backlog intake, evidence routing, issue shaping/prioritization orchestration, Delivery Briefs, sequencing, gates, artifact/provenance ledger | Read/search and session coordination only; no GitHub tools | Edit, execute, write GitHub issues directly, publish, deploy, merge, or self-accept |
+| Issue Writer | Execute exactly one approved Issue Proposal | Only role with backlog GitHub write permission; proof-of-approval gate unchanged | Decide, rewrite, batch, investigate, execute shell commands, or write without approval proof |
+| Issue Reviewer | Optional post-write audit | Read-only | Edit or repair GitHub state |
+| Developer | Implement one accepted Delivery Brief in one mutable worktree | Read/search/edit/execute; must commit before handoff | Publish, deploy, change scope, waive findings, or use credentials |
+| Review & Validation Agent | Independent diff/spec review plus targeted deterministic checks and QA for one receipt SHA | Read/search/execute; no edit/write tools | Edit, publish, deploy, self-accept, downgrade failures, or change scope |
+| Release Manager | Publication preflight and PR proposal/receipt for one approved SHA | Currently blocked/manual fallback; future writes require verified minimal allowlist | Edit, merge, deploy, substitute refs/payload, or treat local commit/failed PR as publication |
+| Deployment Manager | Deploy one separately approved published SHA to one named environment/mechanism | Execute only after independent approval and authorization checks | Edit, create PRs, merge, substitute target/SHA/mechanism, inject credentials |
+| Debugging Specialist | Exception-only diagnosis of reproducible Review & Validation failures | Read/search/execute evidence only | Edit, publish, deploy, or choose a scope-changing fix |
+| Orchestration Maintainer | Exception-only fix for confirmed critical delivery-system incidents | Orchestration docs/config/fixtures only, commit-bound Remediation Receipt | Product/source changes, permission broadening, publishing, deploying, or silent policy changes |
+| Domain specialists | Optional advisory guidance selected by path/risk triggers | Read-only advisory unless their agent file states stricter limits | Mandatory pipeline work, scope decisions, publication, or deployment |
 
-The eight on-demand specialists are **React**, **Frontend**, **Accessibility**,
-**GitHub Actions**, **Terraform**, **Azure**, **Security**, and **Debugging**. They
-are not mandatory pipeline phases. The Delivery Brief selects the first seven only
-when their trigger matches: React/SSR, UI/layout, WCAG, `.github/workflows/**`,
-`infra/**`, SWA/deployment configuration, or secrets/permissions/dependencies/input
-respectively. It selects Debugging only for a reproducible Review, Test, or QA failure
-that needs diagnosis beyond the original evidence. Its guidance is evidence and a
-remediation hypothesis, not a fix or scope decision. A disagreement affecting scope,
-security, user behavior, or delivery risk becomes a Decision Request for the human.
+Path/risk triggers select specialists only when relevant: React/SSR, UI/layout,
+WCAG, `.github/workflows/**`, `infra/**`, Static Web Apps/deployment configuration,
+secrets/permissions/dependencies/input handling, or another documented risk.
 
-## Scoped instruction map and selection
+## Artifact and approval boundaries
 
-The intended instruction files are narrow and additive. Existing article and
-component scopes are retained; test coverage expands from `*.test.tsx` to all
-TypeScript test conventions. Each applies together with the root instructions and
-the applicable specs.
+Every artifact includes `delivery_id`, issue number/URL when applicable, source branch,
+source commit SHA, input references, status, timestamp, session ID, retrieval surface,
+and provenance.
 
-| File | Verified `applyTo` | Excludes by construction |
-| --- | --- | --- |
-| `articles.instructions.md` | `content/articles/*.md` | Data JSON and application code |
-| `components.instructions.md` | `src/src/components/**/*` | Pages, core, and tests outside components |
-| `tests.instructions.md` | `**/*.test.ts,**/*.test.tsx,**/*.spec.ts,**/*.spec.tsx` | Production TypeScript |
-| `react-pages.instructions.md` | `src/src/pages/**/*,src/src/routes.tsx,src/src/App.tsx,src/src/entry-server.tsx,src/src/main.tsx` | Components and build tooling |
-| `build-tooling.instructions.md` | `src/vite.config.ts,src/tailwind.config.ts,src/plugins/**/*,src/scripts/**/*` | Runtime page code |
-| `content-data.instructions.md` | `content/data/**/*.json,src/src/core/data.ts,src/src/core/articles.ts,src/src/types/**/*` | Markdown articles |
-| `github-actions.instructions.md` | `.github/workflows/**/*,.github/actions/**/*` | Agent/skill definitions |
-| `terraform.instructions.md` | `infra/**/*.tf` | Azure application configuration |
-| `azure-static-web-apps.instructions.md` | `src/public/staticwebapp.config.json,.github/workflows/deploy-app.yml,.github/workflows/reusable-deploy-static-web-app.yml` | Other workflow and Terraform paths |
-| `agent-definitions.instructions.md` | `.github/agents/**/*.agent.md` | Skills and general documentation |
-| `agent-system-docs.instructions.md` | `docs/agents/**/*.md,.github/skills/**/*.md` | Product and source documentation |
-
-For each Delivery Brief, the manager lists matching files and explicit exclusions.
-For example, a route change selects the React-page scope and any test scope, not
-Terraform, Azure, or workflow rules. A source-to-deploy change may select multiple
-matching scopes but never an unrelated specialist.
-
-The source platform can show loaded instruction references in VS Code, but the
-Copilot App session has no equivalent observable assertion. A Node validation fixture
-will verify the repository's intended positive and negative path matches. Before
-release, a human must also complete this manual verification: record the surface and
-version, each representative path, the loaded instruction references, negative
-non-matches, date, and outcome in the PR. This is release-blocking because it verifies
-host behavior rather than merely the fixture's glob interpretation.
-
-## Session and SHA contract
-
-1. The manager creates one Developer child session/worktree for the accepted issue.
-   Before implementation, the Developer reports its initial `HEAD`; the manager records
-   equality with the Delivery Brief's base SHA. A mismatch blocks the cycle and requires
-   a human-created branch at that SHA. The Developer is its sole mutable owner.
-2. The Developer commits before hand-off and returns an Implementation Receipt containing
-   the local branch, exact SHA, parent/base SHA, changed paths, and session ID. The commit
-   is the input to later work; uncommitted files are never an artifact.
-3. Every Review, Test, QA, and Debugging phase needs a fresh distinct child
-   branch/worktree whose `HEAD` equals the receipt SHA before the phase starts. The
-   manager uses this explicit session handoff handshake:
-   * reserve the idempotency key `delivery_id:phase:source_sha` in the session ledger;
-   * call `create_session` once with the receipt's `source_branch` as `base_branch`,
-     the exact phase agent in `kickoff.agent`, and `coordinate_with_creator: true`;
-   * immediately call `get_session` for the returned child ID, before sending another
-     message or creating any other phase, and verify the child session ID, worktree ID,
-     worktree path, returned branch, accepted base branch, exact phase agent, and
-     startup state are present, with distinct child branch/worktree isolation evidence,
-     and distinct from the manager, Developer, and every prior phase;
-   * require trusted host session metadata containing `initial_head` before the child
-     reads or changes files. The manager records a startup receipt with its session ID,
-     worktree ID/path, branch, `initial_head`, `parent_sha`, and `base_sha`.
-     `initial_head == parent_sha == base_sha == source_sha`, the branch must equal the
-     returned branch, and the returned base branch must equal the receipt branch. The
-     Code Reviewer receives and echoes this trusted metadata; it must not claim to
-     obtain `HEAD` by command because it has no execution tool; and
-   * record the startup receipt before accepting the phase. A missing identity, reused
-     branch/path, missing startup or trusted `initial_head`, base-branch mismatch, or
-     any SHA mismatch rejects the handoff.
-   The source branch is a starting ref, not permission to reuse the Developer worktree.
-4. The manager polls `get_session`, pulls the child's final response from the local
-   transcript, and validates a complete terminal receipt (including the startup
-   receipt, phase, session identity, source SHA, branch/path, status, and evidence)
-   before creating the next phase. `send_session_message` is at most one nudge and
-   never transports an artifact. A failed or incomplete child is recorded against the
-   idempotency key and blocks the next phase. On retry, first look up and revalidate
-   that key; an unknown or ambiguous create outcome is a failure that must be recorded
-   before a numbered replacement attempt can be created. Never create duplicate phase
-   sessions on an unrecorded retry.
-5. Handoff is automatic only when the platform accepts that receipt branch and supplies
-   every proof above. If any API, base-branch acceptance, identity, startup,
-   distinct-worktree, or SHA-equality proof is unavailable, stop with the Implementation
-   Receipt and ask a human to create a distinct branch at that SHA. The fallback record
-   includes branch, SHA, session ID, and `HEAD` command output; a live Developer branch
-   or detached checkout is not a substitute.
-6. A Developer commit invalidates every Review, Test, QA, and Debugging artifact for an
-   older SHA. Recreate snapshots and receipts from the new receipt.
-7. The manager alone creates and tracks sessions. Children do not route siblings,
-   create replacements, or rely on shared memory. A terminal artifact is pulled from
-   its transcript and its provenance is recorded.
-8. Before release, the Release Manager verifies that the exact local branch contains the
-   receipt SHA and that the approved source branch is not already mapped to a different
-   remote SHA. Publication is push the exact branch/ref, verify the remote ref resolves
-   to the receipt SHA, then create/update the PR. A local commit is never treated as
-   published.
-
-## Artifacts and gates
-
-Every artifact includes `delivery_id`, issue number/URL, source branch, source commit
-SHA, input references, status (`pass`, `fail`, `blocked`, `needs-approval`,
-`awaiting-publication`, `publication-failed`, or `published`), timestamp, and session ID
-where applicable. Release artifacts also include remote name/ref, remote-SHA status,
-operation attempt number, exact command/tool outcome, and a recovery reference.
-
-| Artifact | Required contents |
+| Artifact | Boundary |
 | --- | --- |
-| Delivery Brief | Accepted issue, objective, constraints, in/out scope, base branch/SHA, modified-path assessment, selected and excluded instructions, specialist triggers, checks, publication/deployment intent |
-| Specialist Guidance | Role, source SHA, facts/citations, selected guidance/specs considered, recommendations, verification, blockers |
-| Decision Request | Conflict, impact on scope/security/user behavior/delivery risk, options, and exact human decision needed |
-| Implementation Receipt | Changed paths, committed branch/SHA, commands/results, limits, and referenced brief/guidance |
-| Review Verdict / Test Receipt / QA Verdict | Source SHA, status, selected instructions/specs assessed, evidence, and actionable remediation |
-| Approval Record | Exact action; repository; source branch/SHA; exact PR payload or environment/mechanism; invalidation rules; and a verbatim human approval quote or unambiguous approval-message reference |
-| Release Proposal/Receipt | Approval Record reference, one SHA, approved repository/base/head/title/body, local and remote ref evidence, push/PR attempt outcome, and resulting PR URL/status or a durable failure plus named recovery action |
-| Deployment Proposal/Receipt | Approval Record reference, one SHA, approved environment/mechanism, authorization evidence, and resulting deployment URL/status or a durable failure plus named recovery action |
+| Evidence Brief / Issue Proposal / Sequenced Plan | Backlog evidence and judgment; never a write. |
+| Approval Record | Exact action, target repository/environment, branch/SHA, payload/mechanism, invalidation rules, and verbatim human approval quote or unambiguous approval-message reference. |
+| Delivery Brief | Accepted issue, objective, constraints, in/out scope, base branch/SHA, selected/excluded instructions, specialist triggers, required checks, release/deployment intent. |
+| Startup ACK | Child readiness signal only. It records session/worktree/branch and trusted `initial_head`; it is not a terminal receipt and never advances a gate by itself. |
+| `IMPLEMENTATION RECEIPT` | Developer's final committed handoff. It must use this exact heading and include changed paths, branch/ref, exact SHA, parent/base SHA, startup `HEAD`, commands/results, limits, session ID, retrieval surface, provenance, and status. |
+| `REVIEW & VALIDATION RECEIPT` | Combined terminal evidence from independent review, deterministic checks, targeted QA, commands/results, findings, unavailable checks, source SHA, retrieval surface, provenance, and status. |
+| Release Proposal/Receipt | Approval Record reference, one SHA, approved repository/base/head/title/body, local and remote ref evidence, push exact source ref, remote SHA verification, PR create/update outcome, and resulting PR URL/status or durable failure. |
+| Deployment Proposal/Receipt | Approval Record reference, one SHA, published Release Receipt reference, approved environment/mechanism, authorization evidence, execution evidence, URL/status, or durable failure. Deployment requires a published release receipt. |
 
-After green Review, Test, and QA receipts for the same SHA, the manager presents a PR
-proposal with repository, source branch/SHA, base, exact title, and exact body. The
-human may approve, edit, defer, reject, or cancel. Edit invalidates the proposal;
-defer pauses; reject/cancel ends it. PR approval never authorizes deployment. Approval
-moves the delivery to `awaiting-publication`; it does not imply that a local branch is
-visible on GitHub.
+A local commit is never treated as publication. Publication requires push exact source
+ref, remote SHA verification, then PR create/update, in that order. If any step fails,
+record `publication-failed` with the verbatim error, remote-ref evidence, attempt
+number, preserved Implementation Receipt, and one recovery action.
 
-The Release Manager validates the record and performs the exact release mechanism. The
-required order is: local SHA/branch preflight, push exact source ref, remote SHA
-verification, PR create/update, and release receipt. If any step fails, the manager
-records `publication-failed` with the verbatim error, preserved Implementation Receipt,
-attempt number, current remote-ref evidence, and one safe recovery action. A retry is a
-new release attempt against the same still-valid Approval Record only after preflight;
-changed SHA, payload, base/head, or target requires new approval. If no verified release
-mechanism is available, the Release Manager emits the same blocked receipt and names
-the human operator as the manual owner of the exact push/remote-verification/PR
-sequence.
+## Receipt protocol and handoff rules
 
-A separate Deployment Proposal names the repository, published SHA, `preview` or
-`production` environment, and mechanism. The same five human actions apply. A new
-commit, changed PR title/body/base/head, changed environment/mechanism, or scope change
-invalidates the relevant Approval Record. Deployment requires a published release
-receipt, independent authorization for its executing identity and named mechanism, and
-its own receipt. Neither role merges, substitutes targets, or injects tokens; retries
-must be explicit and recorded.
+1. The manager creates one Developer child for the accepted Delivery Brief. Before
+   editing, Developer emits a Startup ACK; the manager records equality with the Brief
+   base SHA or blocks for manual branch-at-SHA recovery.
+2. Developer commits and returns a final `IMPLEMENTATION RECEIPT`. Uncommitted files,
+   branch names, diffs, SHAs, and messages are not receipts.
+3. For Review & Validation, the manager reserves `delivery_id:review-validation:source_sha`,
+   calls `create_session` once with the receipt branch as `base_branch`,
+   `kickoff.agent: feature-review-validation`, and `coordinate_with_creator: true`.
+   It immediately calls `get_session` and verifies distinct child branch/worktree
+   identity, accepted base branch, startup state, and trusted `initial_head == parent_sha
+   == base_sha == source_sha` before the child proceeds.
+4. The manager retrieves the terminal artifact through a verified host surface and records
+   provenance. If retrieval is unavailable or ambiguous, record `blocked` / `artifact-unavailable`,
+   preserve the last trusted receipt, and stop. On retry, revalidate the idempotency key
+   and record any previous failure or ambiguous create outcome before creating a numbered
+   replacement.
+5. Before advancing any gate on a terminal receipt, the manager re-verifies that the
+   source branch tip still equals `source_sha`. A moved tip invalidates every Review &
+   Validation, Debugging, Release, and Deployment artifact for older SHAs and requires a
+   new cycle at the new SHA.
+6. The manager alone routes child sessions. Children do not create siblings, replacements,
+   releases, or deployments.
 
-## Post-delivery critical-incident self-improvement
+## Worktree lifecycle
 
-After every completed delivery, the manager performs a short retrospective over the
-Delivery Brief, all phase artifacts, release/deployment receipts, and failure records.
-This is mandatory even when the delivery succeeds. A **critical orchestration issue** is
-any defect that can lose an artifact, misidentify a SHA/branch, skip a required gate,
-misrepresent publication/deployment, route work to an unauthorized role, or make a
-failure unrecoverable. Product defects and ordinary implementation failures remain in
-their normal delivery path and do not trigger policy self-modification.
+Each role runs in its own worktree. The following rules keep worktree handoffs
+unambiguous.
 
-When a critical issue is found, the manager MUST:
+| Rule | Requirement |
+| --- | --- |
+| One worktree per role instance | Every child gets its own session, worktree path, and branch. A worktree is never reused for a second phase, a second SHA, or a retry. |
+| No shared checkout | A branch checked out in one worktree cannot be checked out in another, so each child must branch from the source ref rather than adopt it. A child that reports the Developer's branch, worktree ID, or worktree path is a failed handoff. |
+| Read-only phases stay read-only | Review & Validation and Debugging work in their own worktree at `source_sha` and must not commit, switch branches, reset, stash, or clean. |
+| Frozen source branch | After the Implementation Receipt, the Developer must not add commits unless the manager opens a new cycle. Because the manager cannot execute commands, tip evidence must come from the child receipt: each execution-bearing child reports the observed source branch tip, and the manager re-verifies the tip before each gate against `source_sha`. |
+| Preserved until publication | The source branch must survive worktree retirement. Retiring a child session removes its worktree only; the manager must never delete or re-point the source branch before publication completes or the delivery is abandoned. |
+| Retirement after recording | Once a terminal receipt is recorded with provenance, the manager may retire that child. Retirement never substitutes for a receipt, and a retired session's state is never re-read as new evidence. |
+| Deployment checkout | Deployment executes only from a checkout whose verified `HEAD` equals the published, approved SHA. |
 
-1. freeze the affected delivery state and preserve the original receipts and exact error;
-2. produce a Critical Orchestration Incident Record with delivery ID, phase, evidence,
-   impact, root-cause hypothesis, confidence, affected rules/files, and a safe recovery;
-3. investigate the orchestration definitions and validation fixtures before proposing a
-   fix; never infer a platform capability or silently widen permissions;
-4. create an isolated Orchestration Maintainer session to implement only the smallest
-   documentation/configuration/fixture fix, run targeted validation, and return a
-   commit-bound Remediation Receipt;
-5. re-run the failed gate against the corrected contract when possible, or record why it
-   cannot be reproduced; and
-6. report the remediation commit and residual risk to the human. The manager MUST NOT
-   merge, publish, deploy, change the accepted product scope, or mark the original
-   delivery successful because the orchestration fix landed.
-
-The self-improvement loop is idempotent: one incident ID gets one remediation attempt
-until a human explicitly requests another iteration. A fix that changes role tools,
-approval policy, publication/deployment ownership, or artifact schemas is itself
-release-blocking documentation/configuration work and requires the normal review and
-human publication gates.
-
-## Flow and failure routing
+## Simplified flow
 
 ```mermaid
 flowchart TD
-    A[Accepted issue] --> M[Feature Delivery Manager]
-    M --> S[Triggered read-only specialists]
-    S --> D[Developer mutable worktree]
-    D --> I[Committed Implementation Receipt]
-    I --> V{Exact SHA snapshot available?}
-    V -->|verified session handoff handshake| R[One phase child at a time]
-    V -->|not verified| F[Manual snapshot fallback]
-    R -->|reproducible failure needing diagnosis| B[Debugging Specialist]
-    B --> D
-    R -->|finding or failure| D
-    R -->|same-SHA passes| P{Human PR decision}
-    P -->|approved record| L[Release Manager: preflight]
-    L --> U{Verified release mechanism?}
-    U -->|no| H[Named human push + remote verify + PR fallback]
-    U -->|yes| W[Push exact ref + verify remote SHA]
-    H --> Z{Release receipt?}
-    W --> Z{PR create/update}
-    Z -->|published| Q{Human deployment decision}
-    Z -->|failed| F2[publication-failed receipt + recovery]
-    Q -->|approved record| X[Deployment Manager]
+    U[User request] --> PDM[Product & Delivery Manager]
+    PDM --> BL{Backlog lane?}
+    BL -->|idea/sweep/groom/order| E[Evidence + shaping + prioritization]
+    E --> G{Human issue approval?}
+    G -->|approved exact payload| IW[Issue Writer]
+    IW --> IR[Issue Reviewer optional]
+    BL -->|accepted issue| DB[Delivery Brief]
+    DB --> DEV[Developer mutable worktree]
+    DEV --> IMP[IMPLEMENTATION RECEIPT]
+    IMP --> RV[Review & Validation Agent]
+    RV -->|fail| DBG[Debugging Specialist exception]
+    DBG --> DEV
+    RV -->|pass same SHA| PRG{Human PR approval?}
+    PRG -->|approved| REL[Release Manager / manual publication fallback]
+    REL -->|published| DG{Human deployment approval?}
+    REL -->|blocked or publication-failed| STOP[Recoverable stop]
+    DG -->|approved + authorized| DEP[Deployment Manager]
 ```
 
-Any failed required check, unresolved high-confidence finding, missing exact-SHA
-snapshot, missing tool, invalid approval, missing remote ref, or remote SHA mismatch
-blocks publication. The manager reports the blocker and next manual role; it never skips
-a phase or changes scope to force a green result. A failed PR attempt is not a published
-state and never authorizes deployment.
+Any missing tool, failed check, unresolved finding, invalid approval, missing receipt,
+missing remote ref, remote SHA mismatch, artifact-unavailable state, or authorization gap
+blocks the next gate. The manager reports the next safe role or manual fallback; it never
+changes scope to force a green result.
 
-## Failed delivery fixture: issue #373
+## Post-delivery critical-incident self-improvement
 
-This is preserved evidence for orchestration testing, not an active delivery. The
-Developer committed `176778cd5e0a12396ca1b98da956360f5aab1a32` on local branch
-`lfarci-super-robot`, but the branch was never pushed to GitHub. The subsequent
-`gh pr create --repo lfarci/loganfarci.com --base main --head lfarci-super-robot ...`
-failed because GitHub had no head ref: `Head sha can't be blank, Base sha can't be
-blank, No commits between main and lfarci-super-robot, Head ref must be a branch`.
-The root cause was not the commit or issue content; it was an incomplete publication
-handoff and an unowned push/remote-verification step. Recovery must retain the
-Implementation Receipt, verify the local SHA, publish the exact branch through the
-Release Manager or its named human fallback, verify the remote SHA, and only then
-retry PR creation under the same or a newly validated Approval Record.
+After every delivery reaches a terminal state, the manager reviews the Delivery Brief,
+all receipts, release/deployment records, and failure records. A critical orchestration
+issue is any defect that can lose an artifact, misidentify a SHA/branch, skip a required
+gate, misrepresent publication/deployment, route work to an unauthorized role, or make a
+failure unrecoverable.
+
+For a critical incident, the manager records a **Critical Orchestration Incident Record**
+with delivery ID, phase, evidence, impact, root-cause hypothesis, confidence, affected
+rules/files, and safe recovery. It freezes the affected state, preserves original
+receipts, and creates one isolated Orchestration Maintainer session. The maintainer may
+change only orchestration guidance/configuration/validation fixtures and returns a
+commit-bound **Remediation Receipt**. One incident ID gets one remediation attempt until
+a human explicitly requests another. A remediation commit is not publication, deployment,
+or acceptance of the original delivery.
 
 ## Residual risk and release conditions
 
-Tool allowlists do not structurally prevent arbitrary shell-based mutation on roles
-with `execute`. Until the host provides scoped execution and isolated credentials,
-execution-bearing roles must log exact commands, use a fresh isolated worktree, avoid
-credentials, and follow their role-specific boundary. Release publication is limited to
-the exact approved push/remote-verification/PR sequence; deployment remains separately
-gated. This residual risk is explicit and does not weaken approval gates.
-
-Before enabling automated release work, a human must verify the exact live GitHub MCP
-read/write names, replace `.github/mcp.json` wildcard access with only the required
-release tools, and update this capability table and the Release Manager frontmatter.
-Until then, the named human fallback owns the approved release sequence; the wildcard
-configuration is not evidence that a child agent can use GitHub publication tools. Before enabling
-automated snapshot phases, a human must verify a supported branch-at-SHA worktree
-creation path, the `get_session` identity/branch/path/startup fields, and a durable
-idempotency reservation or equivalent create-outcome lookup. Before enabling automated
-deployment, a human must verify the executing identity and named mechanism without
-exposing credentials.
+Execution-bearing roles still rely on behavioral limits until the host exposes scoped
+execution and isolated credentials. Release publication remains blocked/manual until a
+human verifies exact live GitHub write names and replaces wildcard access with a minimal
+allowlist. Deployment remains blocked until the executing identity and named mechanism
+are independently authorized without exposing credentials. These risks are explicit and
+do not weaken the human approval gates.

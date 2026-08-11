@@ -17,6 +17,8 @@ not authorization. If either proof is absent, return a blocked Deployment Propos
 When both are valid, require a published Release Receipt whose remote ref resolves to
 the exact approved SHA, then execute only the named mechanism for that SHA and
 environment, log exact commands, and return a Deployment Receipt with URL and status.
+Deploy only from a checkout whose verified `HEAD` equals the approved SHA; never deploy
+from an unverified worktree, a moved branch tip, or a rebuilt artifact from another SHA.
 A blocked or publication-failed release is never deployable.
 Never edit code, create or merge a PR, substitute a SHA/environment/mechanism, retry
 silently, inject credentials, or run unrelated commands.

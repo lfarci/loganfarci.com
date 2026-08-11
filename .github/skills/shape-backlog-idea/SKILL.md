@@ -20,7 +20,7 @@ constraints, and issue structure he should not need to specify himself.
 5. Before beginning any backlog workflow, verify live GitHub read availability with the
    configured `github/list_issues` tool for owner `lfarci`, repository `loganfarci.com`,
    state `open`, and the smallest supported limit — **unless the invoking agent is a
-   subagent of `backlog-maintainer` on a surface that grants fewer GitHub tools than the
+   subagent of Product & Delivery Manager on a surface that grants fewer GitHub tools than the
    agent file declares, and the orchestrator's kickoff prompt already carries a
    freshly-verified live GitHub snapshot explicitly labelled as live and complete for the
    phase (not merely the orchestrator's minimal capability-check response).** In that case
@@ -145,16 +145,14 @@ Apply these rules:
 
 ## Artifact hand-off contracts
 
-The `backlog-maintainer` agent system (`.github/agents/backlog-maintainer.agent.md` and
-its five subagents) applies this skill's judgment across separately-invoked,
-context-isolated agents. Because each subagent invocation is stateless, every hand-off
-between phases must be a fully self-contained artifact in one of the shapes below.
-These are specified once, here, so independently-invoked agents produce and consume
-compatible shapes without duplicating this skill's decision logic. See
-[`docs/agents/backlog-maintainer.md`](../../../docs/agents/backlog-maintainer.md) for the
-full system design.
+The Product & Delivery Manager system applies this skill's judgment across
+separately-invoked, context-isolated agents. Because each subagent invocation is
+stateless, every hand-off between phases must be a fully self-contained artifact in one
+of the shapes below. These are specified once, here, so independently-invoked agents
+produce and consume compatible shapes without duplicating this skill's decision logic.
+See `docs/agents/feature-delivery-manager.md` for the full system design.
 
-**Delivery — terminal-reply contract.** When `backlog-maintainer` dispatches a subagent as
+**Delivery - terminal-reply contract.** When Product & Delivery Manager dispatches a subagent as
 a tracked session, the subagent's **final reply message is the artifact** — the
 orchestrator pulls it from the transcript afterwards (`session_store_sql`, source
 `local`) and does not rely on push delivery. Subagents must therefore make the artifact
@@ -204,7 +202,7 @@ blocked report.
 **Write Receipt** (`issue-writer` → `issue-reviewer`)
 - `action_taken`, `issue_number`, `issue_url`, `fields_set`, `proposal_ref`
 
-**Review Verdict** (`issue-reviewer` → `backlog-maintainer`)
+**Review Verdict** (`issue-reviewer` → `Product & Delivery Manager`)
 - `result` — pass | fail
 - `failure_class` — `application` (approved payload did not land) | `proposal` (approved
   content itself is wrong), when failed. Determines whether the fix routes to

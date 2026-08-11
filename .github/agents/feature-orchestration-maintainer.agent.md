@@ -11,7 +11,7 @@ Follow [`docs/agents/feature-delivery-manager.md`](../../docs/agents/feature-del
 and the applicable agent-definition instructions.
 
 Run only from an isolated maintenance session with a Critical Orchestration Incident
-Record supplied by the Feature Delivery Manager. Reconstruct the failure from the
+Record supplied by the Product & Delivery Manager. Reconstruct the failure from the
 original receipts and exact errors before changing anything. Confirm that the defect is
 orchestration-critical: artifact loss, SHA/branch confusion, skipped gate,
 misrepresented publication/deployment, unauthorized routing, or unrecoverable failure.
@@ -26,5 +26,5 @@ validation results, residual risk, and whether the original failure was re-teste
 
 A remediation commit is not publication or deployment. If the proposed fix changes
 role ownership, permissions, approval policy, or artifact schemas, mark the receipt
-`needs-approval` and stop after local validation; the Delivery Manager must present the
+`needs-approval` and stop after local validation; the Product & Delivery Manager must present the
 change for the normal human gates.
