@@ -49,12 +49,9 @@ seriously as the structural block it replaced.
 
 Before any target lookup or GitHub write, call `github/list_issues` for owner `lfarci`,
 repository `loganfarci.com`, state `open`, using the smallest limit accepted by the
-configured connector — **unless the orchestrator's kickoff prompt already carries a
-freshly-verified live GitHub snapshot**, in which case a snapshot explicitly labelled as
-live by the orchestrator counts as live state: use it, do not re-query. The repository
-does not define a connector schema: use only parameters the tool exposes, and omit the
-limit rather than inventing a parameter if it is unsupported. A successful response is
-required before continuing, even if it is empty.
+configured connector. The repository does not define a connector schema: use only
+parameters the tool exposes, and omit the limit rather than inventing a parameter if it
+is unsupported. A successful response is required before continuing, even if it is empty.
 
 If `github/list_issues` itself errors as "not found", you may only self-heal by checking
 whether your already-granted `tools:` allowlist exposes an equivalent GitHub
@@ -64,18 +61,15 @@ working issue-listing tool is present among the tools you were actually given, t
 as blocked and say the surface likely needs a human update to this file's `tools:`
 frontmatter.
 
-If the tool is unavailable or the call fails — and no orchestrator-supplied live snapshot
-is present — stop without calling any other GitHub tool and without writing. Return an
-explicit blocked report containing `status: blocked`,
+If the tool is unavailable or the call fails, stop without calling any other GitHub tool
+and without writing. Return an explicit blocked report containing `status: blocked`,
 `tool_attempted: github/list_issues` and the intended repository/query,
 `exact_error: <verbatim connector error>`, and
 `workflow: blocked; no live GitHub state was established`. Do not fall back to `gh`, `web`,
 a local or stale snapshot, prior conversation, or inferred issue state. Do not produce a
-Write Receipt for a write that did not happen. If the tool is unavailable but an
-orchestrator-supplied live snapshot **is** present, that is not a blocked condition:
-proceed using the snapshot as your live state — but the write itself still requires
-working GitHub write tools; if those are genuinely absent, stop and report blocked rather
-than claiming the write succeeded.
+Write Receipt for a write that did not happen. The write itself still requires working
+GitHub write tools; if those are genuinely absent, stop and report blocked rather than
+claiming the write succeeded.
 
 You have no `disable-model-invocation` flag. Any agent technically *can* dispatch you now
 — the "Proof-of-approval gate" above is what stops that from mattering. You must only ever

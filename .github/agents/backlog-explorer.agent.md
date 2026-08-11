@@ -31,13 +31,10 @@ orchestrator pulls it from your transcript.
 
 For every targeted or sweep backlog invocation, the first operation must be a call to
 `github/list_issues` for owner `lfarci`, repository `loganfarci.com`, state `open`, using
-the smallest limit accepted by the configured connector — **unless the orchestrator's
-kickoff prompt already carries a freshly-verified live GitHub snapshot** (the output of
-the orchestrator's own preflight plus the relevant per-phase reads). A snapshot explicitly
-labelled as live by the orchestrator counts as live state: use it, do not re-query. The
-repository does not define a connector schema: use only parameters the tool exposes, and
-omit the limit rather than inventing a parameter if it is unsupported. A successful
-GitHub response, including an empty result, is required before any investigation.
+the smallest limit accepted by the configured connector. The repository does not define a
+connector schema: use only parameters the tool exposes, and omit the limit rather than
+inventing a parameter if it is unsupported. A successful GitHub response, including an
+empty result, is required before any investigation.
 
 If `github/list_issues` errors as "not found" rather than a connector/auth failure, you
 may only self-heal by checking whether your already-granted `tools:` allowlist exposes an
@@ -47,9 +44,8 @@ runtime. If no working issue-listing tool is present among the tools you were ac
 given, treat this as blocked and say the surface likely needs a human update to this
 file's `tools:` frontmatter.
 
-If the tool is unavailable or the call fails — and no orchestrator-supplied live snapshot
-is present in your prompt — do not produce an Evidence Brief from a stale or inferred
-source. Return an explicit blocked report containing:
+If the tool is unavailable or the call fails, do not produce an Evidence Brief from a
+stale or inferred source. Return an explicit blocked report containing:
 
 - `status: blocked`
 - `tool_attempted: github/list_issues` and the intended repository/query
@@ -60,9 +56,6 @@ Stop immediately. Do not fall back to `gh`, `web`, a local or stale snapshot, pr
 conversation, or inferred issue state, and do not pass the blocked report to
 `backlog-shaper` or any later phase. If you end blocked, your terminal reply **is** the
 blocked report — the orchestrator expects to pull it from your transcript.
-
-If the tool is unavailable but an orchestrator-supplied live snapshot **is** present,
-that is not a blocked condition: proceed using the snapshot as your live state.
 
 ## Two modes
 

@@ -6,6 +6,9 @@ const repositoryRoot = fileURLToPath(new URL("..", import.meta.url));
 const paths = {
     design: join(repositoryRoot, "docs", "agents", "feature-delivery-manager.md"),
     manager: join(repositoryRoot, ".github", "agents", "feature-delivery-manager.agent.md"),
+    backlogExplorer: join(repositoryRoot, ".github", "agents", "backlog-explorer.agent.md"),
+    backlogShaper: join(repositoryRoot, ".github", "agents", "backlog-shaper.agent.md"),
+    backlogPrioritizer: join(repositoryRoot, ".github", "agents", "backlog-prioritizer.agent.md"),
     reviewValidation: join(repositoryRoot, ".github", "agents", "feature-review-validation.agent.md"),
     developer: join(repositoryRoot, ".github", "agents", "feature-developer.agent.md"),
     issueWriter: join(repositoryRoot, ".github", "agents", "issue-writer.agent.md"),
@@ -230,7 +233,10 @@ assert(frontmatterValue(files.manager, "name") === "Product & Delivery Manager",
 assert(!managerTools.includes("edit"), "manager must not have edit permission");
 assert(!managerTools.includes("execute"), "manager must not have execute permission");
 assert(!managerTools.includes("github/*"), "manager must not have wildcard GitHub access");
-assert(!managerTools.filter((tool) => tool.startsWith("github/")).some((tool) => /write|create|update|delete|merge|comment/i.test(tool)), "manager must not have GitHub write-like tools");
+assert(!managerTools.some((tool) => tool.startsWith("github/")), "manager must not have GitHub tools until verified");
+assert(!/GitHub access is\s+read-only/i.test(files.manager), "manager must not claim direct GitHub read access");
+assert(/backlog helpers establish live GitHub state/i.test(files.manager), "manager must route live backlog reads to helper preflight");
+assert(/Helper agents establish\s+live GitHub state themselves/i.test(files.design), "design must document helper-established live backlog state");
 assert(files.manager.includes("feature-review-validation"), "manager must route to combined Review & Validation role");
 assert(files.manager.includes("IMPLEMENTATION RECEIPT") && files.manager.includes("REVIEW & VALIDATION RECEIPT"), "manager must require explicit receipt headings");
 assert(files.manager.includes("artifact-unavailable"), "manager must stop on unavailable artifacts");
@@ -266,6 +272,17 @@ for (const removed of removedAgents) {
 for (const delegate of frontmatterValue(files.manager, "agents").replaceAll("'", '"').match(/"[^"]+"/g).map((value) => value.slice(1, -1))) {
     assert(agentIds.includes(delegate), `manager delegates to missing agent ${delegate}`);
 }
+const backlogLiveReadFiles = {
+    backlogExplorer: files.backlogExplorer,
+    backlogShaper: files.backlogShaper,
+    backlogPrioritizer: files.backlogPrioritizer,
+    issueWriter: files.issueWriter,
+    issueReviewer: files.issueReviewer,
+};
+for (const [name, content] of Object.entries(backlogLiveReadFiles)) {
+    assert(!/orchestrator-supplied live snapshot|orchestrator's kickoff prompt already carries|orchestrator's own preflight|snapshot explicitly\s+labelled as live by the orchestrator/i.test(content), `${name} must not depend on manager-supplied live GitHub snapshots`);
+}
+
 assert(issueWriterTools.join(",") === "read,search,github/*", "Issue Writer permissions must remain unchanged");
 assert(files.issueWriter.includes("Proof-of-approval gate"), "Issue Writer approval gate must remain documented");
 

@@ -30,17 +30,13 @@ with your terminal reply (below), and the orchestrator pulls it from your transc
 
 When refreshing or ordering the live GitHub backlog, the first operation must be a call to
 `github/list_issues` for owner `lfarci`, repository `loganfarci.com`, state `open`, using
-the smallest limit accepted by the configured connector — **unless the orchestrator's
-kickoff prompt already carries a freshly-verified live GitHub snapshot**, in which case a
-snapshot explicitly labelled as live by the orchestrator counts as live state: use it, do
-not re-query. The repository does not define a connector schema: use only parameters the
-tool exposes, and omit the limit rather than inventing a parameter if it is unsupported.
-A successful response is required. GitHub is the source of truth; anything cached or
-summarized elsewhere (including an Evidence Brief or prior conversation) is context, not
-current state.
+the smallest limit accepted by the configured connector. The repository does not define a
+connector schema: use only parameters the tool exposes, and omit the limit rather than
+inventing a parameter if it is unsupported. A successful response is required. GitHub is
+the source of truth; anything cached or summarized elsewhere (including an Evidence Brief
+or prior conversation) is context, not current state.
 
-If the preflight is unavailable or fails — and no orchestrator-supplied live snapshot is
-present — return an explicit blocked report containing
+If the preflight is unavailable or fails, return an explicit blocked report containing
 `status: blocked`, the attempted `github/list_issues` operation and repository/query,
 `exact_error: <verbatim connector error>`, and
 `workflow: blocked; no live GitHub state was established`. Stop. Before doing so, you may
@@ -52,9 +48,7 @@ given, treat this as blocked and say the surface likely needs a human update to 
 file's `tools:` frontmatter. Do not fall back to `gh`, `web`, a local or stale snapshot,
 prior conversation, or inferred issue state, and do not produce a Sequenced Plan from
 the failed read. Ordering already-supplied proposals without refreshing live state may
-proceed only when no live GitHub read is needed. If the tool is unavailable but an
-orchestrator-supplied live snapshot **is** present, that is not a blocked condition:
-proceed using the snapshot as your live state.
+proceed only when no live GitHub read is needed.
 
 ## Order
 

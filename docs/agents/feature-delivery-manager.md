@@ -30,7 +30,7 @@ or product-code permissions.
 | Trusted child startup `HEAD` metadata | Not structurally guaranteed. Automated handoff requires host-provided `initial_head` before work. A read-only child may echo it but must not claim command-derived evidence. If absent, use the manual snapshot fallback. |
 | Branch-based child creation | `create_session` accepts `base_branch`, not arbitrary SHAs. A receipt branch may be used only when the host accepts it and returns distinct child branch/worktree identity plus trusted startup metadata equal to the receipt SHA. |
 | Terminal artifact retrieval | A child identity, branch, diff, SHA, or commit is not a receipt. If a complete terminal artifact with provenance is unavailable or ambiguous, record `blocked` with reason `artifact-unavailable`, preserve the last trusted receipt, and stop. |
-| GitHub writes | Product & Delivery Manager and all read/evidence roles hold no GitHub write tools. Issue Writer remains the only backlog writer. Release publication is blocked/manual until a verified exact write mechanism is allowlisted. |
+| GitHub access | Product & Delivery Manager has no GitHub tools and must not fabricate backlog state. Backlog helpers and Issue Writer/Reviewer own their `github/*` preflight; if unavailable, they return blocked. Issue Writer remains the only backlog writer. Release publication is blocked/manual until a verified exact write mechanism is allowlisted. |
 | Execution | Product & Delivery Manager has no `execute`. Developer and Review & Validation use execution only as a behavioral boundary: no credentials, no `git push`, no `gh`, no deployment, no Azure/SWA/Terraform apply unless inside the separately approved role. |
 
 ## Two lanes
@@ -40,8 +40,11 @@ or product-code permissions.
 The Product & Delivery Manager owns intake, evidence sequencing, issue shaping,
 prioritization, and the human gate before any GitHub issue write. It may dispatch
 `backlog-explorer`, `backlog-shaper`, and `backlog-prioritizer` for focused read-only
-work, or use their existing contracts as compatibility helpers. It presents each
-Issue Proposal exactly and waits for explicit per-item approval before dispatching
+work, or use their existing contracts as compatibility helpers. Helper agents establish
+live GitHub state themselves through their documented preflight; if their runtime has no
+working GitHub read surface, their blocked report stops the phase. The manager records
+that state instead of fabricating or supplying a live snapshot. It presents each Issue
+Proposal exactly and waits for explicit per-item approval before dispatching
 `issue-writer`. Approval covers one exact payload; edits re-enter the gate. No other
 role writes backlog state. `issue-reviewer` may be retained as a read-only post-write
 audit.
@@ -59,7 +62,7 @@ Release and Deployment remain separate approval-gated roles.
 
 | Role | Owns | Tools/boundary | Must not do |
 | --- | --- | --- | --- |
-| Product & Delivery Manager | Backlog intake, evidence routing, issue shaping/prioritization orchestration, Delivery Briefs, sequencing, gates, artifact/provenance ledger | Read/search, GitHub read-only, and session coordination only | Edit, execute, write GitHub issues directly, publish, deploy, merge, or self-accept |
+| Product & Delivery Manager | Backlog intake, evidence routing, issue shaping/prioritization orchestration, Delivery Briefs, sequencing, gates, artifact/provenance ledger | Read/search and session coordination only; no GitHub tools | Edit, execute, write GitHub issues directly, publish, deploy, merge, or self-accept |
 | Issue Writer | Execute exactly one approved Issue Proposal | Only role with backlog GitHub write permission; proof-of-approval gate unchanged | Decide, rewrite, batch, investigate, execute shell commands, or write without approval proof |
 | Issue Reviewer | Optional post-write audit | Read-only | Edit or repair GitHub state |
 | Developer | Implement one accepted Delivery Brief in one mutable worktree | Read/search/edit/execute; must commit before handoff | Publish, deploy, change scope, waive findings, or use credentials |

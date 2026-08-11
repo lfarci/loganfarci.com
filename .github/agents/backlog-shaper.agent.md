@@ -36,26 +36,21 @@ later phase. A blocked report is not evidence and does not authorize an inferred
 When invoked independently, or when a decision requires fresh live GitHub reads beyond a
 valid Evidence Brief, make the first such operation a call to `github/list_issues` for
 owner `lfarci`, repository `loganfarci.com`, state `open`, using the smallest limit
-accepted by the configured connector — **unless the orchestrator's kickoff prompt already
-carries a freshly-verified live GitHub snapshot**, in which case a snapshot explicitly
-labelled as live by the orchestrator counts as live state: use it, do not re-query. The
-repository does not define a connector schema: use only parameters the tool exposes, and
-omit the limit rather than inventing a parameter if it is unsupported. A successful
-response is required.
+accepted by the configured connector. The repository does not define a connector schema:
+use only parameters the tool exposes, and omit the limit rather than inventing a
+parameter if it is unsupported. A successful response is required.
 
-If that preflight is unavailable or fails — and no orchestrator-supplied live snapshot is
-present — return an explicit blocked report containing `status: blocked`, the attempted
-`github/list_issues` operation and repository/query, `exact_error: <verbatim connector
-error>`, and `workflow: blocked; no live GitHub state was established`. Before doing so,
+If that preflight is unavailable or fails, return an explicit blocked report containing
+`status: blocked`, the attempted `github/list_issues` operation and repository/query,
+`exact_error: <verbatim connector error>`, and `workflow: blocked; no live GitHub state
+was established`. Before doing so,
 you may only self-heal by checking whether your already-granted `tools:` allowlist
 exposes an equivalent GitHub issue-listing read tool under a different name, and using it
 instead. Because `tools:` is enforced, do not assume an unlisted renamed tool can be
 discovered at runtime. If no working issue-listing tool is present among the tools you
 were actually given, treat this as blocked and say the surface likely needs a human
 update to this file's `tools:` frontmatter. Do not fall back to `gh`, `web`, a local or
-stale snapshot, prior conversation, or inferred issue state. If the tool is unavailable
-but an orchestrator-supplied live snapshot **is** present, that is not a blocked
-condition: proceed using the snapshot as your live state.
+stale snapshot, prior conversation, or inferred issue state.
 
 ## Inputs
 
