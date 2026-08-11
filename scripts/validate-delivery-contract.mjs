@@ -115,6 +115,7 @@ const handoffFixture = {
         complete: true,
         sessionId: "review-validation-373",
         sourceSha: implementationReceiptFixture.sourceSha,
+        sourceBranchTip: implementationReceiptFixture.sourceSha,
         status: "pass",
         heading: "REVIEW & VALIDATION RECEIPT",
         retrievalSurface: "durable-final-response",
@@ -133,7 +134,21 @@ const handoffFixture = {
             error: "create_session timeout after reservation",
         },
     },
+    gate: {
+        tipShaAtGate: implementationReceiptFixture.sourceSha,
+        sourceBranchPreserved: true,
+        retiredAfterReceiptRecorded: true,
+        reusedWorktree: false,
+    },
 };
+
+function supportsWorktreeLifecycle(fixture) {
+    const gate = fixture.gate;
+    return gate.tipShaAtGate === fixture.sourceSha
+        && gate.sourceBranchPreserved === true
+        && gate.retiredAfterReceiptRecorded === true
+        && gate.reusedWorktree === false;
+}
 
 function supportsImplementationReceipt(receipt) {
     return receipt.complete
@@ -189,6 +204,7 @@ function supportsAutomatedHandoff(fixture) {
         && terminal.complete
         && terminal.sessionId === returned.sessionId
         && terminal.sourceSha === fixture.sourceSha
+        && terminal.sourceBranchTip === fixture.sourceSha
         && terminal.status === "pass"
         && terminal.heading === "REVIEW & VALIDATION RECEIPT"
         && terminal.independentReviewComplete === true
@@ -301,10 +317,32 @@ assert(!supportsAutomatedHandoff({ ...handoffFixture, getSession: { ...handoffFi
 assert(!supportsAutomatedHandoff({ ...handoffFixture, getSession: { ...handoffFixture.getSession, startup: "unknown" } }), "missing child startup must select the manual fallback");
 assert(!supportsAutomatedHandoff({ ...handoffFixture, terminalReceipt: { ...handoffFixture.terminalReceipt, complete: false } }), "an incomplete terminal receipt must block the next phase");
 assert(!supportsAutomatedHandoff({ ...handoffFixture, terminalReceipt: { ...handoffFixture.terminalReceipt, heading: "" } }), "a missing receipt heading must block the next phase");
+assert(!supportsAutomatedHandoff({ ...handoffFixture, terminalReceipt: { ...handoffFixture.terminalReceipt, sourceBranchTip: "9f0a1b2c3d4e5f60718293a4b5c6d7e8f9012345" } }), "a receipt reporting a moved source tip must block the next phase");
 assert(!supportsAutomatedHandoff({ ...handoffFixture, terminalReceipt: { ...handoffFixture.terminalReceipt, provenance: "" } }), "missing receipt provenance must block the next phase");
 assert(!supportsAutomatedHandoff({ ...handoffFixture, terminalReceipt: { ...handoffFixture.terminalReceipt, independentReviewComplete: false } }), "missing independent review must block the next phase");
 assert(!supportsAutomatedHandoff({ ...handoffFixture, terminalReceipt: { ...handoffFixture.terminalReceipt, targetedChecksComplete: false } }), "missing targeted checks must block the next phase");
 assert(!supportsRecordedRetry({ ...handoffFixture, retry: { calls: 2, retryOf: handoffFixture.createSession.returnedSessionId, attempt: 2, failureRecorded: false, ambiguousOutcomeHandled: false, failure: null } }), "an unrecorded retry must not create a duplicate phase session");
+assert(supportsWorktreeLifecycle(handoffFixture), "safe fixture must model a preserved, non-reused worktree lifecycle");
+assert(!supportsWorktreeLifecycle({ ...handoffFixture, gate: { ...handoffFixture.gate, tipShaAtGate: "9f0a1b2c3d4e5f60718293a4b5c6d7e8f9012345" } }), "a moved source branch tip must block the gate");
+assert(!supportsWorktreeLifecycle({ ...handoffFixture, gate: { ...handoffFixture.gate, sourceBranchPreserved: false } }), "a deleted source branch must block publication");
+assert(!supportsWorktreeLifecycle({ ...handoffFixture, gate: { ...handoffFixture.gate, retiredAfterReceiptRecorded: false } }), "retirement before a recorded receipt must block the gate");
+assert(!supportsWorktreeLifecycle({ ...handoffFixture, gate: { ...handoffFixture.gate, reusedWorktree: true } }), "a reused worktree must block the gate");
+
+assert(files.design.includes("## Worktree lifecycle"), "design must define the worktree lifecycle");
+assert(files.design.includes("never reused for a second phase"), "design must forbid worktree reuse");
+assert(files.design.includes("re-verifies the tip before each gate"), "design must require source-tip re-verification");
+assert(files.design.includes("must survive worktree retirement"), "design must preserve the source branch through retirement");
+assert(files.design.includes("verified `HEAD` equals the published, approved SHA"), "design must bind deployment to a verified checkout");
+assert(files.manager.includes("Never reuse a worktree"), "manager must forbid worktree reuse");
+assert(files.design.includes("tip evidence must come from the child receipt"), "design must source tip evidence from child receipts");
+assert(/[Rr]e-verify that the\s+source branch tip/.test(files.manager), "manager must re-verify the source tip before gates");
+assert(files.reviewValidation.includes("source_branch_tip"), "Review & Validation must report the source branch tip");
+assert(files.developer.includes("source_branch_tip"), "Developer receipt must report the resulting source branch tip");
+assert(files.developer.includes("Do not add commits, amend, rebase, reset,"), "Developer must freeze the branch after the receipt");
+assert(files.reviewValidation.includes("differ from the Developer's"), "Review & Validation must verify worktree isolation");
+assert(files.reviewValidation.includes("Never commit, push,"), "Review & Validation must not mutate the source branch");
+assert(files.deployment.includes("verified `HEAD` equals the approved SHA"), "Deployment must verify its checkout");
+assert(files.release.includes("must still exist at the approved"), "Release must require a preserved source branch");
 
 assert(files.maintainer.includes("user-invocable: false"), "orchestration maintainer must remain orchestrated");
 assert(/Do not change product\s+source/.test(files.maintainer), "orchestration maintainer must not alter product scope/code");

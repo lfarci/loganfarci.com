@@ -114,10 +114,27 @@ number, preserved Implementation Receipt, and one recovery action.
    preserve the last trusted receipt, and stop. On retry, revalidate the idempotency key
    and record any previous failure or ambiguous create outcome before creating a numbered
    replacement.
-5. A new Developer commit invalidates every Review & Validation, Debugging, Release, and
-   Deployment artifact for older SHAs.
+5. Before advancing any gate on a terminal receipt, the manager re-verifies that the
+   source branch tip still equals `source_sha`. A moved tip invalidates every Review &
+   Validation, Debugging, Release, and Deployment artifact for older SHAs and requires a
+   new cycle at the new SHA.
 6. The manager alone routes child sessions. Children do not create siblings, replacements,
    releases, or deployments.
+
+## Worktree lifecycle
+
+Each role runs in its own worktree. The following rules keep worktree handoffs
+unambiguous.
+
+| Rule | Requirement |
+| --- | --- |
+| One worktree per role instance | Every child gets its own session, worktree path, and branch. A worktree is never reused for a second phase, a second SHA, or a retry. |
+| No shared checkout | A branch checked out in one worktree cannot be checked out in another, so each child must branch from the source ref rather than adopt it. A child that reports the Developer's branch, worktree ID, or worktree path is a failed handoff. |
+| Read-only phases stay read-only | Review & Validation and Debugging work in their own worktree at `source_sha` and must not commit, switch branches, reset, stash, or clean. |
+| Frozen source branch | After the Implementation Receipt, the Developer must not add commits unless the manager opens a new cycle. Because the manager cannot execute commands, tip evidence must come from the child receipt: each execution-bearing child reports the observed source branch tip, and the manager re-verifies the tip before each gate against `source_sha`. |
+| Preserved until publication | The source branch must survive worktree retirement. Retiring a child session removes its worktree only; the manager must never delete or re-point the source branch before publication completes or the delivery is abandoned. |
+| Retirement after recording | Once a terminal receipt is recorded with provenance, the manager may retire that child. Retirement never substitutes for a receipt, and a retired session's state is never re-read as new evidence. |
+| Deployment checkout | Deployment executes only from a checkout whose verified `HEAD` equals the published, approved SHA. |
 
 ## Simplified flow
 

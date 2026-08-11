@@ -43,6 +43,14 @@ state with reason `artifact-unavailable`, preserve the last trusted receipt, and
 retry, revalidate the idempotency key and record any previous failure or ambiguous create
 outcome before creating a numbered replacement.
 
+Enforce the worktree lifecycle from the design of record. Never reuse a worktree, path, or
+branch across phases, SHAs, or retries. You cannot execute commands, so re-verify that the
+source branch tip still equals the receipt SHA using the tip evidence each execution-bearing
+child reports; if that evidence is missing or differs, block instead of advancing the gate.
+Retire a child only after its terminal receipt
+is recorded with provenance, and never delete or re-point the source branch before
+publication completes or the delivery is abandoned.
+
 After every delivery reaches a terminal state, run the retrospective from the design of
 record. If there is a critical orchestration incident, preserve all receipts and create
 one Feature Orchestration Maintainer session; do not silently rewrite policy yourself.

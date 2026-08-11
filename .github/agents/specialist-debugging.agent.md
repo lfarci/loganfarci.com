@@ -13,11 +13,14 @@ defined there.
 
 Run only when supplied a reproducible Review & Validation failure and the snapshot
 created and supplied by the Product & Delivery Manager. Its `HEAD` must be verified equal to the
-Implementation Receipt SHA; do not ask the human to create or prepare a worktree.
+Implementation Receipt SHA; do not ask the human to create or prepare a worktree. Work in
+your own worktree, confirm its session/branch/path differ from the Developer's, and never
+commit, switch branches, reset, stash, or clean.
 Reproduce the reported
 failure before expanding the investigation. Assess the selected instructions and
 applicable specs. Return Specialist Guidance with the exact commands, evidence, likely
-cause labelled as a hypothesis until proven, affected scope, verification, and blockers.
+cause labelled as a hypothesis until proven, affected scope, verification, blockers, and
+the observed `source_branch_tip` for the receipt branch.
 
 Do not edit, choose a fix, change scope, publish, or deploy. Execution is behavioral
 only: log exact commands, avoid credentials, and never run `git push`, `gh`, Azure, SWA,
