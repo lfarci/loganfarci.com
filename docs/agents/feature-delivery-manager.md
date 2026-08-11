@@ -1,6 +1,6 @@
 ---
 spec: feature-delivery-manager agent system
-version: 0.2.0
+version: 0.3.0
 status: design
 verified: 2026-08-11
 ---
@@ -28,7 +28,7 @@ implication.
 | Path instructions under `.github/instructions/*.instructions.md` | Documented by [repository custom instructions](https://docs.github.com/en/copilot/how-tos/configure-custom-instructions-in-your-ide/add-repository-instructions-in-your-ide); existing files use YAML `applyTo`. | `applyTo` accepts comma-separated glob patterns. It is verified for VS Code, Copilot cloud agent, and code review; this task does **not** assert it for the Copilot App session runtime. The App fallback is to attach the selected files to each child prompt and record that in the Delivery Brief. |
 | Copilot App tracked child sessions | Observed: `create_session`, `get_session`, `list_sessions_and_chats`, `send_session_message`, and `session_store_sql` are available. | Create a named child with `coordinate_with_creator: true`; its final response is the hand-off artifact. Pull it from the local transcript. A message is a best-effort nudge only, never an artifact transport. |
 | Child worktree isolation | Observed: each created local project session is a separate worktree and branch. | The Developer alone owns its mutable worktree. Do not share or check out that live branch in another worktree. |
-| Start a child worktree from an exact receipt SHA | **Not verified.** `create_session` accepts an existing `base_branch`, not an arbitrary commit SHA, and the current surface does not expose a branch-at-SHA creation tool. | Do not automate Review, Test, or QA snapshots. Stop with the Implementation Receipt and ask a human to create a distinct branch at that SHA, then start the named phase there. Never substitute a detached checkout or a live Developer branch. |
+| Start a child worktree from an exact receipt SHA | **Conditional, not verified in this maintenance session.** `create_session` accepts an existing `base_branch`, not an arbitrary commit SHA. A receipt branch may be used only when the host accepts it as the base, creates a distinct child branch/worktree, and exposes evidence that the child `HEAD` equals the receipt SHA. | When all three proofs are available, automate the named child phase from the receipt branch and pull its terminal artifact. Otherwise stop with the Implementation Receipt and ask a human to create a distinct branch at that SHA. Never substitute a detached checkout, an unverified child, or a live Developer branch. |
 | Session messages | Observed, but child delivery and child tool inheritance are not guaranteed. | Include all inputs in a kickoff prompt. Retrieve the terminal artifact from the transcript. Use one message only to request a missing artifact. |
 | In-process subagents | Documented for VS Code/CLI (`agent` plus an `agents` list); not verified in this App session. | App sessions are the primary route. On a surface without tracked sessions, use a documented in-process subagent only if it can preserve the phase boundary; otherwise stop and name the next manual role. |
 | Live GitHub MCP read/write names | **Configuration mismatch.** `.github/mcp.json` configures a `github` server with `tools: ["*"]`, but this session exposes GitHub-oriented built-ins and `gh`, not a discoverable `github/*` MCP toolset. | Do not add `github/*` to new frontmatter. Use no GitHub tools for read-only roles. Release Manager is a human-invocable, approval-refusing placeholder until a human verifies exact PR read/write MCP names and replaces wildcard access with its minimal allowlist. |
@@ -119,12 +119,23 @@ host behavior rather than merely the fixture's glob interpretation.
    the local branch, exact SHA, parent/base SHA, changed paths, and session ID. The commit
    is the input to later work; uncommitted files are never an artifact.
 3. Every Review, Test, QA, and Debugging phase needs a fresh distinct child
-   branch/worktree whose `HEAD` equals the receipt SHA before the phase starts. The
-   manager records the phase session ID, branch, and equality evidence.
-4. The current App cannot create that exact SHA snapshot automatically. The manager must
-   stop and request a human-created branch at the receipt SHA, then a fresh named session
-   on that branch. The fallback record includes branch, SHA, session ID, and `HEAD`
-   command output; a live Developer branch or detached checkout is not a substitute.
+   branch/worktree whose `HEAD` equals the receipt SHA before the phase starts. When
+   the session surface exposes `create_session`, `get_session`, and local transcript
+   access, the manager first attempts the supported handoff: pass the receipt's
+   `source_branch` as `base_branch`, set the exact phase agent in `kickoff.agent`, and
+   set `coordinate_with_creator: true`. The manager must obtain host or terminal
+   evidence for a distinct child branch/worktree and `HEAD == source_sha` before
+   accepting the phase. The source branch is a starting ref, not permission to reuse
+   the Developer worktree.
+4. Handoff is automatic only when the platform accepts that receipt branch and
+   supplies both proofs above. The manager polls `get_session`, pulls the child's
+   final response from the local transcript, and starts the next phase only after
+   validating the complete artifact. `send_session_message` is at most one nudge and
+   never transports an artifact. If any API, base-branch acceptance, distinct-worktree
+   proof, or SHA-equality proof is unavailable, stop with the Implementation Receipt
+   and ask a human to create a distinct branch at that SHA. The fallback record includes
+   branch, SHA, session ID, and `HEAD` command output; a live Developer branch or
+   detached checkout is not a substitute.
 5. A Developer commit invalidates every Review, Test, QA, and Debugging artifact for an
    older SHA. Recreate snapshots and receipts from the new receipt.
 6. The manager alone creates and tracks sessions. Children do not route siblings,
@@ -222,8 +233,8 @@ flowchart TD
     S --> D[Developer mutable worktree]
     D --> I[Committed Implementation Receipt]
     I --> V{Exact SHA snapshot available?}
-    V -->|yes| R[Reviewer then Test then QA]
-    V -->|no| F[Manual snapshot fallback]
+    V -->|verified receipt-branch handoff| R[Automated Reviewer then Test then QA children]
+    V -->|not verified| F[Manual snapshot fallback]
     R -->|reproducible failure needing diagnosis| B[Debugging Specialist]
     B --> D
     R -->|finding or failure| D

@@ -28,10 +28,44 @@ const failedDeliveryFixture = {
     prCreated: false,
 };
 
+const handoffFixture = {
+    deliveryId: "issue-373-automated-handoff",
+    sourceBranch: "lfarci-reflect-skip-link-spec",
+    sourceSha: "07e89aa83c16d285ba43ac8b262e5f17a7354367",
+    requiredApis: ["create_session", "get_session", "session_store_sql"],
+    availableApis: ["create_session", "get_session", "session_store_sql"],
+    receiptBranchAccepted: true,
+    childWorktreeDistinct: true,
+    childHeadSha: "07e89aa83c16d285ba43ac8b262e5f17a7354367",
+};
+
+function supportsAutomatedHandoff(fixture) {
+    return fixture.sourceBranch.length > 0
+        && fixture.requiredApis.every((api) => fixture.availableApis.includes(api))
+        && fixture.receiptBranchAccepted
+        && fixture.childWorktreeDistinct
+        && fixture.childHeadSha === fixture.sourceSha;
+}
+
 assert(failedDeliveryFixture.localCommit, "failed-delivery fixture must preserve the local commit");
 assert(!failedDeliveryFixture.remoteRef, "failed-delivery fixture must model an absent remote ref");
 assert(failedDeliveryFixture.prAttempted, "fixture must preserve the failed PR attempt");
 assert(!failedDeliveryFixture.prCreated, "fixture validation must not claim a PR was created");
+assert(supportsAutomatedHandoff(handoffFixture), "issue #373 fixture must model a verified exact-SHA child handoff");
+assert(!supportsAutomatedHandoff({
+    ...handoffFixture,
+    availableApis: ["create_session", "get_session"],
+}), "a missing transcript API must select the manual fallback");
+assert(!supportsAutomatedHandoff({
+    ...handoffFixture,
+    childHeadSha: "unverified",
+}), "a child SHA mismatch must select the manual fallback");
+assert(design.includes("base_branch"), "design must name the supported branch-based session input");
+assert(design.includes("distinct child branch/worktree"), "design must require child-worktree isolation evidence");
+assert(design.includes("terminal artifact"), "design must define pull-based child artifact handoff");
+assert(managerAgent.includes("automatically create named Review, Test"), "manager must route supported phase handoffs automatically");
+assert(managerAgent.includes("manual snapshot fallback"), "manager must retain the exact-SHA manual fallback");
+assert(managerAgent.includes('agents: ["feature-developer", "feature-code-reviewer", "feature-test-engineer", "feature-qa-engineer", "specialist-debugging"]'), "manager must allowlist delivery child agents");
 assert(design.includes("A local commit is never treated as"), "design must distinguish local commits from publication");
 assert(design.includes("push exact source ref"), "design must require pushing the exact source ref");
 assert(design.includes("remote-SHA verification") || design.includes("verify the remote ref resolves"), "design must require remote SHA verification");
@@ -62,4 +96,4 @@ if (failures.length > 0) {
     throw new Error(`Delivery contract validation failed:\n${failures.join("\n")}`);
 }
 
-console.log(`Validated delivery contract and ${failedDeliveryFixture.deliveryId} fixture.`);
+console.log(`Validated delivery contract and ${failedDeliveryFixture.deliveryId} plus ${handoffFixture.deliveryId} fixtures.`);
