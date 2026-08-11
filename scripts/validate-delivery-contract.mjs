@@ -5,9 +5,13 @@ import { fileURLToPath } from "node:url";
 const repositoryRoot = fileURLToPath(new URL("..", import.meta.url));
 const designPath = join(repositoryRoot, "docs", "agents", "feature-delivery-manager.md");
 const releaseAgentPath = join(repositoryRoot, ".github", "agents", "feature-release-manager.agent.md");
+const managerAgentPath = join(repositoryRoot, ".github", "agents", "feature-delivery-manager.agent.md");
+const maintainerAgentPath = join(repositoryRoot, ".github", "agents", "feature-orchestration-maintainer.agent.md");
 
 const design = await readFile(designPath, "utf8");
 const releaseAgent = await readFile(releaseAgentPath, "utf8");
+const managerAgent = await readFile(managerAgentPath, "utf8");
+const maintainerAgent = await readFile(maintainerAgentPath, "utf8");
 
 const failures = [];
 function assert(condition, message) {
@@ -40,6 +44,19 @@ assert(releaseAgent.includes("blocked"), "current release agent must expose its 
 assert(/push the\s+approved source branch\/ref/.test(releaseAgent), "manual fallback must own branch publication");
 assert(releaseAgent.includes("publication-failed"), "release agent must return recoverable failure evidence");
 assert(releaseAgent.includes("local commit or a failed PR command is publication"), "release agent must reject false publication claims");
+
+// Self-improvement contract: critical incidents are investigated after every terminal delivery,
+// while fixes remain isolated, receipt-preserving, and unable to publish or deploy themselves.
+assert(design.includes("Post-delivery critical-incident self-improvement"), "design must define a post-delivery retrospective");
+assert(design.includes("Critical Orchestration Incident Record"), "design must define a structured critical incident record");
+assert(design.includes("Remediation Receipt"), "design must define a remediation receipt");
+assert(design.includes("one incident ID gets one remediation attempt"), "self-improvement must be idempotent");
+assert(managerAgent.includes("After every delivery reaches a terminal state"), "manager must run the retrospective after every delivery");
+assert(managerAgent.includes("Feature Orchestration Maintainer session"), "manager must route critical incidents to the maintainer");
+assert(maintainerAgent.includes("user-invocable: false"), "maintainer must be an orchestrated role");
+assert(/Do not change product\s+source/.test(maintainerAgent), "maintainer must not alter product scope/code");
+assert(maintainerAgent.includes("not publication or deployment"), "maintainer must not publish or deploy");
+assert(maintainerAgent.includes("Remediation Receipt"), "maintainer must return remediation evidence");
 
 if (failures.length > 0) {
     throw new Error(`Delivery contract validation failed:\n${failures.join("\n")}`);

@@ -61,6 +61,7 @@ shell access as an undocumented replacement.
 | Test Engineer | Run deterministic checks and return raw evidence for one receipt SHA | Read/search/execute; behavioral execution boundary | Edit, treat a failure as acceptable, publish, deploy |
 | QA Engineer | Check observable journeys, responsive behavior, a11y, themes, reduced motion, and SSR/prerender when relevant | Read/search/execute/browser; behavioral execution boundary | Edit, downgrade defects, publish, deploy |
 | Debugging Specialist | Diagnose a reproducible Review, Test, or QA failure on one receipt SHA and return evidence and a remediation hypothesis | Read/search/execute; behavioral execution boundary | Edit, publish, deploy, or choose a scope-changing fix |
+| Orchestration Maintainer | Investigate and fix a confirmed critical delivery-orchestration defect after a completed process | Owns only orchestration docs, agent definitions, validation fixtures, and tests in an isolated maintenance session; returns a commit-bound remediation receipt | Change product scope/code, bypass approvals, publish, deploy, or silently alter policy |
 | Release Manager | Publish the exact approved source SHA and create or update its PR after independent Approval Record validation | Owns release preflight and push → remote-SHA verification → PR sequencing. Uses only a verified release mechanism; otherwise emits a blocked receipt with the named human fallback | Edit code, merge, change payload, substitute refs, or silently retry |
 | Deployment Manager | Execute the exact approved SHA, environment, and named mechanism | Execute only after independent Approval Record validation; behavioral boundary | Edit code, create or merge a PR, substitute a SHA, target, or mechanism |
 
@@ -179,6 +180,38 @@ invalidates the relevant Approval Record. Deployment requires a published releas
 receipt, independent authorization for its executing identity and named mechanism, and
 its own receipt. Neither role merges, substitutes targets, or injects tokens; retries
 must be explicit and recorded.
+
+## Post-delivery critical-incident self-improvement
+
+After every completed delivery, the manager performs a short retrospective over the
+Delivery Brief, all phase artifacts, release/deployment receipts, and failure records.
+This is mandatory even when the delivery succeeds. A **critical orchestration issue** is
+any defect that can lose an artifact, misidentify a SHA/branch, skip a required gate,
+misrepresent publication/deployment, route work to an unauthorized role, or make a
+failure unrecoverable. Product defects and ordinary implementation failures remain in
+their normal delivery path and do not trigger policy self-modification.
+
+When a critical issue is found, the manager MUST:
+
+1. freeze the affected delivery state and preserve the original receipts and exact error;
+2. produce a Critical Orchestration Incident Record with delivery ID, phase, evidence,
+   impact, root-cause hypothesis, confidence, affected rules/files, and a safe recovery;
+3. investigate the orchestration definitions and validation fixtures before proposing a
+   fix; never infer a platform capability or silently widen permissions;
+4. create an isolated Orchestration Maintainer session to implement only the smallest
+   documentation/configuration/fixture fix, run targeted validation, and return a
+   commit-bound Remediation Receipt;
+5. re-run the failed gate against the corrected contract when possible, or record why it
+   cannot be reproduced; and
+6. report the remediation commit and residual risk to the human. The manager MUST NOT
+   merge, publish, deploy, change the accepted product scope, or mark the original
+   delivery successful because the orchestration fix landed.
+
+The self-improvement loop is idempotent: one incident ID gets one remediation attempt
+until a human explicitly requests another iteration. A fix that changes role tools,
+approval policy, publication/deployment ownership, or artifact schemas is itself
+release-blocking documentation/configuration work and requires the normal review and
+human publication gates.
 
 ## Flow and failure routing
 
