@@ -4,8 +4,8 @@ applyTo: ".github/agents/**/*.agent.md"
 
 # Custom Agent Definition Instructions
 
-Derive all agent behavior from `docs/agents/feature-delivery-manager.md` and the
-specific agent's documented contract.
+Derive all agent behavior from `docs/agents/simple-delivery.md` and the specific
+agent's documented contract.
 
 - Use only verified frontmatter fields and tools. A missing or renamed required tool is
   a blocker, never a reason to grant a wildcard toolset.
