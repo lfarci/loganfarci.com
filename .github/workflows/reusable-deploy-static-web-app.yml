@@ -88,6 +88,7 @@ jobs:
           VITE_GITHUB_REPOSITORY_URL: "${{ inputs.repository_url }}"
           VITE_COMMIT_HASH: "${{ inputs.commit_hash }}"
           VITE_APPINSIGHTS_CONNECTION_STRING: "${{ steps.get-secrets.outputs.application_insights_connection_string }}"
+          VITE_DEPLOYMENT_ENVIRONMENT: "${{ inputs.github_environment_name }}"
 
       - name: Deploy to Azure Static Web Apps
         id: deploy
