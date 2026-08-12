@@ -1,6 +1,6 @@
 ---
 spec: simple delivery workflow
-version: 1.0.4
+version: 1.0.5
 status: current-design
 verified: 2026-08-12
 ---
@@ -42,17 +42,23 @@ flowchart LR
    unavailable, it reports the blockage; it does not invent or use a stale backlog.
 2. It selects one item only and returns an **Execution Plan** with: target, objective,
    in-scope work, out-of-scope work, likely paths, and existing checks to run.
-3. The Orchestrator invokes Developer only after the user requests implementation or
+3. When a requested step needs a capability that Orchestrator does not have, it delegates
+   only to the subagent whose documented contract owns that step: Developer for approved
+   implementation and its bounded draft-PR path, or Reviewer for independent assessment of
+   a Developer Result. Orchestrator does not attempt the step, expand a role's tools, or
+   use an unavailable credential as a substitute. If neither subagent can own the step,
+   Orchestrator reports it as blocked.
+4. The Orchestrator invokes Developer only after the user requests implementation or
    explicitly approves the plan. The entire plan is included in the invocation.
-4. During approved implementation, Developer may autonomously use its existing `execute`
+5. During approved implementation, Developer may autonomously use its existing `execute`
    capability for the `git push` and `gh pr create` workflow to push the completed branch
    and create exactly one draft pull request. This occurs before Reviewer runs: the draft
    PR is explicitly pre-review, not contingent on a later Reviewer pass, and does not alter
    Reviewer's independent review. Developer records the PR URL and outcome in its Developer
    Result. This path is subject to the publication capability gate below.
-5. Developer's final response is a **Developer Result**. The Orchestrator passes that
+6. Developer's final response is a **Developer Result**. The Orchestrator passes that
    result verbatim with the plan to Reviewer in the next in-process invocation.
-6. Reviewer's final response is a **Review Result**. The Orchestrator reports it and
+7. Reviewer's final response is a **Review Result**. The Orchestrator reports it and
    stops. A `needs-changes` result never triggers an automatic repair loop. No agent
    changes the draft PR after review in this simple workflow.
 

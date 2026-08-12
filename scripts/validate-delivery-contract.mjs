@@ -55,6 +55,11 @@ assert(
     "orchestrator must prohibit execution, push/PR creation, publication, deployment, and review repair",
 );
 assert(!files.orchestrator.includes("git push") && !files.orchestrator.includes("gh pr create"), "orchestrator must not own the PR workflow");
+assert(
+    files.orchestrator.includes("delegate it to\nDeveloper or Reviewer only when it is within that role's documented contract")
+        && files.orchestrator.includes("Report the request as blocked when neither subagent can own it."),
+    "orchestrator must delegate unavailable capabilities only to the owning subagent or report a block",
+);
 
 assert(frontmatterValue(files.developer, "name") === "Developer", "developer name must be Developer");
 assert(developerTools.join(",") === "read,search,edit,execute", "developer must have the minimal implementation toolset");
@@ -100,6 +105,12 @@ assert(
     files.design.includes("Orchestrator | Choose one backlog item")
         && files.design.includes("execute commands, create sessions, write GitHub state, push, create a PR"),
     "design must keep the Orchestrator read/delegate/report-only",
+);
+assert(
+    files.design.includes("When a requested step needs a capability that Orchestrator does not have")
+        && files.design.includes("only to the subagent whose documented contract owns that step")
+        && files.design.includes("If neither subagent can own the step,\n   Orchestrator reports it as blocked."),
+    "design must route unavailable Orchestrator capabilities to the owning subagent or report a block",
 );
 assert(
     files.design.includes("Developer | Implement one approved execution plan and autonomously create one pre-review draft PR")
