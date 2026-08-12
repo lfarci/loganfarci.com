@@ -62,8 +62,9 @@ assert(
     "orchestrator must be triage/dispatch-only and never own an issue's delivery",
 );
 assert(
-    files.orchestrator.includes("the\nhost owns dispatch via `create_session`"),
-    "orchestrator must leave dispatch to the host's create_session",
+    files.orchestrator.includes("the\nhost (the root session that invoked you, not any file in this repository) owns dispatch\nvia its native `create_session` capability, which you do not have")
+        && files.orchestrator.includes("Never create a child session"),
+    "orchestrator must leave dispatch to the host's create_session and clarify the host is external",
 );
 
 assert(frontmatterValue(files.developer, "name") === "Developer", "developer name must be Developer");
@@ -119,6 +120,12 @@ assert(
     files.design.includes("host dispatches one isolated subsession per shortlisted issue")
         && files.design.includes("`create_session` invocation is the sole handoff"),
     "design must use host create_session as the sole dispatch handoff",
+);
+assert(
+    files.design.includes("the host is the root Copilot CLI/agent session that invoked the\nOrchestrator")
+        && files.design.includes("not a component defined by\nany file in this repository")
+        && files.design.includes("That external dependency is intentional, not a missing piece of this workflow."),
+    "design must clarify the host is an external runtime, not an in-repo automation gap",
 );
 assert(
     files.design.includes("Developer | Implement one approved Execution Plan; after review passes, finalize and create exactly one PR")

@@ -18,6 +18,14 @@ acknowledgements, or cross-session artifacts between the Orchestrator and a subs
 The Orchestrator never researches, plans, builds, reviews, or publishes, and never follows
 up on a subsession it dispatched.
 
+**What "the host" is:** the host is the root Copilot CLI/agent session that invoked the
+Orchestrator (a user's interactive session or a workflow run), not a component defined by
+any file in this repository. `create_session` is a native capability of that host runtime,
+unavailable to the Orchestrator, Developer, and Reviewer themselves. This repository
+therefore does not, and cannot, implement or automate the dispatch step: after reading the
+Orchestrator's shortlist, the host manually invokes `create_session` once per shortlisted
+issue. That external dependency is intentional, not a missing piece of this workflow.
+
 ## Why this is small
 
 Triaging the backlog and delivering one issue are different concerns. The Orchestrator
@@ -83,9 +91,12 @@ flowchart LR
 ## Handoff contracts
 
 The host's `create_session` invocation is the sole handoff from the Orchestrator layer to
-a subsession. Inside a subsession, the terminal response is the sole artifact for each
-delegated-agent handoff (Developer Result, Review Result). The only post-review
-publication artifact is the single pull request Developer creates in step 9.
+a subsession. That invocation is made manually by the host runtime after it reads the
+Orchestrator's shortlist; it is not, and cannot be, triggered by an in-repo automation or
+by any `.agent.md` file, because custom agents have no access to `create_session`. Inside a
+subsession, the terminal response is the sole artifact for each delegated-agent handoff
+(Developer Result, Review Result). The only post-review publication artifact is the single
+pull request Developer creates in step 9.
 
 ## Review gate and repair loop
 

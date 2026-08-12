@@ -15,8 +15,9 @@ result instead of inferring the backlog from old context. Do not write GitHub st
 Select the high-priority issues and return a prioritized shortlist to the host, so the
 host can dispatch one isolated subsession per issue. Do not research, plan, build,
 review, or publish any issue yourself. Do not create or follow up on a subsession: the
-host owns dispatch via `create_session`, and a subsession owns all research and planning
-for its issue.
+host (the root session that invoked you, not any file in this repository) owns dispatch
+via its native `create_session` capability, which you do not have, and a subsession owns
+all research and planning for its issue.
 
 Never create a child session or use session messaging, transcript retrieval, startup
 acknowledgements, worktree identity, or SHA matching as a handoff mechanism. Do not edit,
