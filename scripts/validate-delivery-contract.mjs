@@ -46,9 +46,10 @@ const developerTools = tools(files.developer);
 const reviewerTools = tools(files.reviewer);
 
 assert(frontmatterValue(files.orchestrator, "name") === "Orchestrator", "orchestrator name must be Orchestrator");
-assert(orchestratorTools.join(",") === "read,search,agent,github/*", "orchestrator must use only read/search/agent/GitHub tools");
+assert(orchestratorTools.join(",") === "read,search,github/*", "orchestrator must use only read/search/GitHub tools");
 assert(!orchestratorTools.includes("edit") && !orchestratorTools.includes("execute"), "orchestrator must not edit or execute");
-assert(frontmatterValue(files.orchestrator, "agents") === "[\"developer\", \"reviewer\"]", "orchestrator must delegate only to Developer and Reviewer");
+assert(!orchestratorTools.includes("agent"), "orchestrator must not invoke in-process agents");
+assert(frontmatterValue(files.orchestrator, "agents") === "", "orchestrator must not delegate to in-process agents");
 assert(files.orchestrator.includes("Do not write GitHub state."), "orchestrator must prohibit GitHub state writes");
 assert(
     files.orchestrator.includes("Do not edit,\nexecute, push, create a pull request, publish, deploy, or repair review findings."),
@@ -56,30 +57,34 @@ assert(
 );
 assert(!files.orchestrator.includes("git push") && !files.orchestrator.includes("gh pr create"), "orchestrator must not own the PR workflow");
 assert(
-    files.orchestrator.includes("delegate it to\nDeveloper or Reviewer only when it is within that role's documented contract")
-        && files.orchestrator.includes("Report the request as blocked when neither subagent can own it."),
-    "orchestrator must delegate unavailable capabilities only to the owning subagent or report a block",
+    files.orchestrator.includes("Do not research, plan, build,\nreview, or publish any issue yourself.")
+        && files.orchestrator.includes("Do not create or follow up on a subsession: the"),
+    "orchestrator must be triage/dispatch-only and never own an issue's delivery",
+);
+assert(
+    files.orchestrator.includes("the\nhost owns dispatch via `create_session`"),
+    "orchestrator must leave dispatch to the host's create_session",
 );
 
 assert(frontmatterValue(files.developer, "name") === "Developer", "developer name must be Developer");
 assert(developerTools.join(",") === "read,search,edit,execute", "developer must have the minimal implementation toolset");
 assert(files.developer.includes("Developer Result"), "developer must return a Developer Result");
 assert(
-    files.developer.includes("During the approved implementation, Developer may")
-        && files.developer.includes("autonomously use the existing `git push` and `gh pr"),
-    "developer PR path must be autonomous during approved implementation",
+    files.developer.includes("Do not create a pull request before review")
+        && files.developer.includes("the review\ngate is mandatory"),
+    "developer must never create a pre-review PR",
 );
 assert(
-    files.developer.includes("`git push` and `gh pr create` workflow")
-        && files.developer.includes("exactly one draft pull request")
-        && files.developer.includes("before Reviewer runs"),
-    "developer PR path must be limited to one pre-review draft PR through the existing workflow",
+    files.developer.includes("When the\nsubsession directs you to finalize")
+        && files.developer.includes("`git push` and `gh pr create` workflow")
+        && files.developer.includes("exactly one pull request"),
+    "developer PR path must be one post-review PR through the existing workflow",
 );
 assert(
     files.developer.includes("generic `execute` alone is not a publication capability")
-        && files.developer.includes("`gh auth status`")
+        && files.developer.includes("`gh auth\nstatus`")
         && files.developer.includes("`git push --dry-run origin HEAD`")
-        && files.developer.includes("manual\nfallback in the Developer Result"),
+        && files.developer.includes("manual fallback in the\nDeveloper Result"),
     "developer PR path must verify publication credentials and provide the manual fallback",
 );
 assert(
@@ -97,35 +102,35 @@ assert(
     agentIds.length === 3 && ["orchestrator", "developer", "reviewer"].every((agent) => agentIds.includes(agent)),
     "only the three simple-workflow agents may exist",
 );
-assert(files.design.includes("Orchestrator -> Developer -> Reviewer"), "design must define the three-role workflow");
-assert(files.design.includes("does not use child sessions"), "design must reject child-session handoffs");
-assert(files.design.includes("returned response is the handoff"), "design must define direct result handoff");
-assert(files.design.includes("needs-changes") && files.design.includes("automatic repair loop"), "design must stop instead of auto-repairing review findings");
+assert(files.design.includes("triage/dispatch -> per-issue delivery"), "design must define the dispatch + per-issue workflow");
+assert(files.design.includes("dispatches one isolated subsession per shortlisted issue"), "design must dispatch one subsession per issue");
+assert(files.design.includes("The Orchestrator never researches, plans, builds, reviews, or publishes"), "design must keep Orchestrator triage-only");
 assert(
-    files.design.includes("Orchestrator | Choose one backlog item")
-        && files.design.includes("execute commands, create sessions, write GitHub state, push, create a PR"),
-    "design must keep the Orchestrator read/delegate/report-only",
+    files.design.includes("Subsession | Research its issue, produce one Execution Plan"),
+    "design must give the subsession research and planning",
+);
+assert(files.design.includes("needs-changes") && files.design.includes("bounded"), "design must bound the repair loop");
+assert(
+    files.design.includes("Orchestrator | Read the backlog, select the high-priority issues")
+        && files.design.includes("execute commands, create sessions itself, write GitHub state, push, create a PR"),
+    "design must keep the Orchestrator read/report-only",
 );
 assert(
-    files.design.includes("When a requested step needs a capability that Orchestrator does not have")
-        && files.design.includes("only to the subagent whose documented contract owns that step")
-        && files.design.includes("If neither subagent can own the step,\n   Orchestrator reports it as blocked."),
-    "design must route unavailable Orchestrator capabilities to the owning subagent or report a block",
+    files.design.includes("host dispatches one isolated subsession per shortlisted issue")
+        && files.design.includes("`create_session` invocation is the sole handoff"),
+    "design must use host create_session as the sole dispatch handoff",
 );
 assert(
-    files.design.includes("Developer | Implement one approved execution plan and autonomously create one pre-review draft PR")
-        && files.design.includes("During approved implementation, Developer may autonomously")
-        && files.design.includes("exactly one draft PR"),
-    "design must allocate the bounded autonomous draft PR path to Developer",
+    files.design.includes("Developer | Implement one approved Execution Plan; after review passes, finalize and create exactly one PR")
+        && files.design.includes("create a PR before review"),
+    "design must allocate the post-review PR to Developer",
 );
 assert(
-    files.design.includes("This occurs before Reviewer runs: the draft")
-        && files.design.includes("PR is explicitly pre-review")
-        && files.design.includes("does not alter")
-        && files.design.includes("Reviewer's independent review")
-        && files.design.includes("No agent")
-        && files.design.includes("changes the draft PR after review"),
-    "design must preserve the pre-review draft PR and independent Reviewer flow",
+    files.design.includes("Developer does not create a pull request before review")
+        && files.design.includes("review gate is mandatory")
+        && files.design.includes("**exactly one** pull")
+        && files.design.includes("Developer records the PR URL and outcome in its Developer Result"),
+    "design must require the review gate before the single PR",
 );
 assert(
     files.design.includes("## Publication capability")
@@ -140,4 +145,4 @@ if (failures.length > 0) {
     throw new Error(`Delivery contract validation failed:\n${failures.join("\n")}`);
 }
 
-console.log("Validated the Orchestrator -> Developer -> Reviewer workflow.");
+console.log("Validated the dispatch + per-issue delivery workflow.");

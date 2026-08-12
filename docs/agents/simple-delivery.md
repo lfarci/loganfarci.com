@@ -1,72 +1,101 @@
 ---
 spec: simple delivery workflow
-version: 1.0.5
+version: 1.1.0
 status: current-design
 verified: 2026-08-12
 ---
 
 # Simple Delivery Workflow
 
-This is the entire active agent workflow: **Orchestrator -> Developer -> Reviewer**.
-It deliberately does not use child sessions, `create_session`, `get_session`,
-`send_session_message`, transcript queries, shared worktrees, startup acknowledgements,
-or cross-session artifacts.
+The active agent workflow is **triage/dispatch -> per-issue delivery**. The Orchestrator
+reads the live backlog, selects the high-priority issues, and reports a shortlist to the
+host. The host then dispatches one isolated subsession per shortlisted issue; that
+subsession owns all research and planning for its issue and drives the build -> review ->
+finalize -> PR pipeline.
+
+This deliberately does not use transcript queries, shared worktrees, startup
+acknowledgements, or cross-session artifacts between the Orchestrator and a subsession.
+The Orchestrator never researches, plans, builds, reviews, or publishes, and never follows
+up on a subsession it dispatched.
 
 ## Why this is small
 
-The host's in-process `agent` invocation returns the delegated agent's final response
-to the caller. That returned response is the handoff. The Orchestrator MUST stop if it
-cannot obtain a complete returned response; it MUST NOT create a session or infer the
-result from a branch, diff, status message, or partial output.
+Triaging the backlog and delivering one issue are different concerns. The Orchestrator
+only needs read access to the repository and the live backlog to produce a prioritized
+shortlist. Each issue's research, planning, and implementation belong to an isolated
+subsession, so work scales to many issues without one agent carrying every context. The
+host's `create_session` invocation is the handoff: the dispatcher stops after reporting
+the shortlist, and a subsession finishes with a pull request or a blocked report.
 
 ## Roles
 
-| Role | Owns | May do | Must not do |
-| --- | --- | --- | --- |
-| Orchestrator | Choose one backlog item, create one execution plan, route the two calls, and report the result | Read/search the repository and live backlog; invoke Developer and Reviewer in-process | Edit code, execute commands, create sessions, write GitHub state, push, create a PR, publish, deploy, or fix review findings |
-| Developer | Implement one approved execution plan and autonomously create one pre-review draft PR | Read/search/edit/execute and commit local code; during approved implementation, use the existing `git push` and `gh pr create` workflow to push the completed branch and create exactly one draft PR | Expand scope, create sessions, publish, deploy, invoke Reviewer, or create more than one draft PR |
-| Reviewer | Independently assess the Developer's result | Read/search/execute scoped checks | Edit, commit, push, create sessions, publish, deploy, or invoke Developer |
+| Layer | Role | Owns | May do | Must not do |
+| --- | --- | --- | --- | --- |
+| Dispatch | Orchestrator | Read the backlog, select the high-priority issues, and report the shortlist | Read/search the repository and live backlog; read GitHub issues; produce a prioritized shortlist for the host to dispatch | Edit code, execute commands, create sessions itself, write GitHub state, push, create a PR, publish, deploy, research or plan an issue, or fix review findings |
+| Delivery | Subsession | Research its issue, produce one Execution Plan, and coordinate build -> review -> finalize -> PR | Read/search the repository; invoke Developer and Reviewer in-process; direct Developer to create the PR after review passes | Expand scope, create sessions, publish, deploy, or skip the review gate |
+| Delivery | Developer | Implement one approved Execution Plan; after review passes, finalize and create exactly one PR | Read/search/edit/execute and commit local code; use the existing `git push` and `gh pr create` workflow to push the completed branch and create exactly one PR after Reviewer passes it | Expand scope, create sessions, publish, deploy, invoke Reviewer, or create a PR before review |
+| Delivery | Reviewer | Independently assess the Developer's result | Read/search/execute scoped checks | Edit, commit, push, create sessions, publish, deploy, or invoke Developer |
 
 ## Flow
 
 ```mermaid
 flowchart LR
-    B[Read backlog] --> P[Execution Plan]
-    P -->|User requests implementation| D[Developer]
-    D -->|Optional autonomous draft PR| R[Developer Result]
+    B[Read backlog] --> O[Orchestrator]
+    O -->|shortlist| H[Host]
+    H -->|create_session per issue| S[Subsession]
+    S -->|research + plan| P[Execution Plan]
+    P -->|build| D[Developer]
+    D --> R[Developer Result]
     R --> V[Reviewer]
-    V --> O[Review Result]
+    V -->|pass| S
+    S -->|finalize| F[Finalized result]
+    F -->|post-review PR| PR[Pull Request]
 ```
 
 1. The Orchestrator reads the live backlog when the request needs it. If that read is
    unavailable, it reports the blockage; it does not invent or use a stale backlog.
-2. It selects one item only and returns an **Execution Plan** with: target, objective,
-   in-scope work, out-of-scope work, likely paths, and existing checks to run.
-3. When a requested step needs a capability that Orchestrator does not have, it delegates
-   only to the subagent whose documented contract owns that step: Developer for approved
-   implementation and its bounded draft-PR path, or Reviewer for independent assessment of
-   a Developer Result. Orchestrator does not attempt the step, expand a role's tools, or
-   use an unavailable credential as a substitute. If neither subagent can own the step,
-   Orchestrator reports it as blocked.
-4. The Orchestrator invokes Developer only after the user requests implementation or
-   explicitly approves the plan. The entire plan is included in the invocation.
-5. During approved implementation, Developer may autonomously use its existing `execute`
-   capability for the `git push` and `gh pr create` workflow to push the completed branch
-   and create exactly one draft pull request. This occurs before Reviewer runs: the draft
-   PR is explicitly pre-review, not contingent on a later Reviewer pass, and does not alter
-   Reviewer's independent review. Developer records the PR URL and outcome in its Developer
-   Result. This path is subject to the publication capability gate below.
-6. Developer's final response is a **Developer Result**. The Orchestrator passes that
-   result verbatim with the plan to Reviewer in the next in-process invocation.
-7. Reviewer's final response is a **Review Result**. The Orchestrator reports it and
-   stops. A `needs-changes` result never triggers an automatic repair loop. No agent
-   changes the draft PR after review in this simple workflow.
+2. It selects the high-priority issues and returns a prioritized shortlist to the host.
+   It does not research, plan, build, review, or publish, and it does not create or follow
+   up on a subsession.
+3. The host dispatches one isolated subsession per shortlisted issue, passing the issue
+   and the path to this contract.
+4. The subsession researches the repository and returns an **Execution Plan** with:
+   target, objective, in-scope work, out-of-scope work, likely paths, and existing checks
+   to run.
+5. The subsession invokes Developer in-process with the complete plan. Developer implements
+   it, commits the completed local change, and returns a **Developer Result**.
+6. Developer does not create a pull request before review. The review gate is mandatory.
+7. The subsession invokes Reviewer in-process with the Developer Result and the plan.
+   Reviewer runs the smallest existing checks that cover the change and returns a
+   **Review Result**.
+8. If the Review Result is `needs-changes`, the subsession routes the actionable findings
+   back to Developer once for a bounded repair pass, then re-invokes Reviewer. This repair
+   loop is bounded: it never exceeds one additional Developer + Reviewer pass. If the result
+   is still `needs-changes` or is `blocked`, the subsession stops and reports a blocked
+   outcome with no pull request.
+9. If the Review Result is `pass`, the subsession directs Developer to finalize: refine
+   details and run the existing quality gates, then use the existing `git push` and
+   `gh pr create` workflow to push the completed branch and create **exactly one** pull
+   request. Developer records the PR URL and outcome in its Developer Result.
+10. The subsession finishes with a pull request or a blocked report. It does not report back
+    to the Orchestrator through any cross-session mechanism.
 
 ## Handoff contracts
 
-The terminal response is the sole artifact for each delegated-agent handoff. The optional
-pre-review draft PR is performed by Developer before its terminal response; it creates no
-further agent handoff or session.
+The host's `create_session` invocation is the sole handoff from the Orchestrator layer to
+a subsession. Inside a subsession, the terminal response is the sole artifact for each
+delegated-agent handoff (Developer Result, Review Result). The only post-review
+publication artifact is the single pull request Developer creates in step 9.
+
+## Review gate and repair loop
+
+- The subsession does not direct Developer to finalize or create a PR until Reviewer
+  returns `pass`.
+- A `needs-changes` result triggers at most one bounded Developer + Reviewer repair pass
+  (step 8). A second `needs-changes` or a `blocked` result stops the subsession with no
+  pull request. This is not an unbounded automatic repair loop.
+- Reviewer independently verifies the quality gates named in the plan and reports only
+  real, actionable findings with file/path evidence.
 
 ## Publication capability
 
@@ -78,7 +107,7 @@ further agent handoff or session.
 - **Failure routing and manual fallback:** If either check is unavailable or fails, Developer
   does not attempt `git push` or `gh pr create`. Its Developer Result records publication as
   blocked and directs the user to authenticate, push the committed branch, and create the
-  draft PR manually. Developer does not substitute another tool or role.
+  pull request manually. Developer does not substitute another tool or role.
 
 ### Developer Result
 
@@ -87,7 +116,7 @@ further agent handoff or session.
 - changed paths
 - local commit SHA, if committed
 - commands run and outcomes
-- PR URL and outcome, if the autonomous draft PR was attempted
+- PR URL and outcome, if the post-review pull request was attempted
 - limitations or blockers
 
 ### Review Result
@@ -98,11 +127,11 @@ further agent handoff or session.
 - commands run and outcomes
 - limitations or blockers
 
-If either response is missing a status or the required fields, the Orchestrator reports
+If either response is missing a status or the required fields, the subsession reports
 `blocked: incomplete delegated result` and stops.
 
 ## Manual fallback
 
-If in-process delegation is unavailable, the user runs Developer and Reviewer directly
-with the same Execution Plan and Developer Result. The Orchestrator does not substitute
-sessions or a different transport mechanism.
+If in-process delegation or a subsession is unavailable, the user runs the subsession
+phases directly against the same Execution Plan and Developer Result. The Orchestrator
+does not substitute sessions or a different transport mechanism.
