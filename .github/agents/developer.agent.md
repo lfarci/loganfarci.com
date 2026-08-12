@@ -16,6 +16,12 @@ autonomously use the existing `git push` and `gh pr create` workflow to push the
 branch and create exactly one draft pull request before Reviewer runs. This draft pull
 request is pre-review and is not contingent on a later Reviewer pass.
 
+Publication gate: generic `execute` alone is not a publication capability. Before attempting
+this workflow, verify scoped GitHub authentication with `gh auth status` and remote write
+access with `git push --dry-run origin HEAD`. If either check cannot be verified, do not
+attempt `git push` or `gh pr create`; report the blocked publication outcome and the manual
+fallback in the Developer Result.
+
 Do not create a session, publish, deploy, expand scope, or invoke Reviewer or any other
 agent. If the permitted draft pull request is attempted, record its URL and outcome in the
 Developer Result.

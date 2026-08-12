@@ -71,6 +71,13 @@ assert(
     "developer PR path must be limited to one pre-review draft PR through the existing workflow",
 );
 assert(
+    files.developer.includes("generic `execute` alone is not a publication capability")
+        && files.developer.includes("`gh auth status`")
+        && files.developer.includes("`git push --dry-run origin HEAD`")
+        && files.developer.includes("manual\nfallback in the Developer Result"),
+    "developer PR path must verify publication credentials and provide the manual fallback",
+);
+assert(
     files.developer.includes("Do not create a session, publish, deploy, expand scope, or invoke Reviewer or any other\nagent."),
     "developer must continue to prohibit sessions, publication, deployment, scope expansion, and Reviewer invocation",
 );
@@ -108,6 +115,14 @@ assert(
         && files.design.includes("No agent")
         && files.design.includes("changes the draft PR after review"),
     "design must preserve the pre-review draft PR and independent Reviewer flow",
+);
+assert(
+    files.design.includes("## Publication capability")
+        && files.design.includes("**Status:** Conditional")
+        && files.design.includes("`gh auth status`")
+        && files.design.includes("`git push --dry-run origin HEAD`")
+        && files.design.includes("Failure routing and manual fallback"),
+    "design must record publication capability status, evidence, and manual fallback",
 );
 
 if (failures.length > 0) {
