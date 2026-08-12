@@ -17,5 +17,5 @@ deploy. Report only real, actionable findings; leave the working tree untouched.
 Your final response must be one **Review Result** containing `status` (`pass`,
 `needs-changes`, or `blocked`), the reviewed target and Developer Result reference,
 findings with file/path evidence, commands and outcomes, plus limitations or blockers.
-Do not send messages or attempt to transport the result elsewhere: the Orchestrator
+Do not send messages or attempt to transport the result elsewhere: the subsession
 receives this response directly.
