@@ -1,8 +1,8 @@
 ---
 spec: simple delivery workflow
-version: 1.0.1
+version: 1.0.2
 status: current-design
-verified: 2026-08-11
+verified: 2026-08-12
 ---
 
 # Simple Delivery Workflow
@@ -23,8 +23,8 @@ result from a branch, diff, status message, or partial output.
 
 | Role | Owns | May do | Must not do |
 | --- | --- | --- | --- |
-| Orchestrator | Choose one backlog item, create one execution plan, route the two calls, and report the result | Read/search the repository and live backlog; invoke Developer and Reviewer in-process; only after a `pass` Review Result and an explicit user request, use scoped execution for the existing `git push` and `gh pr create` workflow to push the reviewed branch and create one PR | Edit code, execute commands other than that limited post-review workflow, create sessions, write GitHub state other than that push/PR, publish, deploy, or fix review findings |
-| Developer | Implement one approved execution plan | Read/search/edit/execute and commit local code | Expand scope, create sessions, push, create a PR, publish, deploy, or invoke Reviewer |
+| Orchestrator | Choose one backlog item, create one execution plan, route the two calls, and report the result | Read/search the repository and live backlog; invoke Developer and Reviewer in-process | Edit code, execute commands, create sessions, write GitHub state, push, create a PR, publish, deploy, or fix review findings |
+| Developer | Implement one approved execution plan and, when authorized, create one pre-review draft PR | Read/search/edit/execute and commit local code; only when the user expressly requests a pull request and the approved Execution Plan includes it, use the existing `git push` and `gh pr create` workflow to push the completed branch and create exactly one draft PR | Expand scope, create sessions, publish, deploy, invoke Reviewer, or create any PR other than that explicitly requested, plan-authorized draft PR |
 | Reviewer | Independently assess the Developer's result | Read/search/execute scoped checks | Edit, commit, push, create sessions, publish, deploy, or invoke Developer |
 
 ## Flow
@@ -33,10 +33,9 @@ result from a branch, diff, status message, or partial output.
 flowchart LR
     B[Read backlog] --> P[Execution Plan]
     P -->|User requests implementation| D[Developer]
-    D --> R[Developer Result]
+    D -->|Optional explicit-request, plan-authorized draft PR| R[Developer Result]
     R --> V[Reviewer]
     V --> O[Review Result]
-    O -->|Review pass + explicit user request| G[Push reviewed branch and create PR]
 ```
 
 1. The Orchestrator reads the live backlog when the request needs it. If that read is
@@ -45,22 +44,25 @@ flowchart LR
    in-scope work, out-of-scope work, likely paths, and existing checks to run.
 3. The Orchestrator invokes Developer only after the user requests implementation or
    explicitly approves the plan. The entire plan is included in the invocation.
-4. Developer's final response is a **Developer Result**. The Orchestrator passes that
+4. Only when the user expressly requests a pull request and the approved Execution Plan
+   includes it, Developer may use its existing `execute` capability for the `git push` and
+   `gh pr create` workflow to push the completed branch and create exactly one draft pull
+   request. This occurs before Reviewer runs: the draft PR is explicitly pre-review, not
+   contingent on a later Reviewer pass, and does not alter Reviewer's independent review.
+   Developer records the PR URL and outcome in its Developer Result. Otherwise, Developer
+   does not push or create a PR. If the authorized command attempt fails, Developer records
+   the outcome and does not substitute another tool or role.
+5. Developer's final response is a **Developer Result**. The Orchestrator passes that
    result verbatim with the plan to Reviewer in the next in-process invocation.
-5. Reviewer's final response is a **Review Result**. Unless that result has `status:
-   pass` and the user explicitly requests a pull request, the Orchestrator reports it and
-   stops. A `needs-changes` result never triggers an automatic repair loop.
-6. Only with both conditions in step 5 may the Orchestrator use scoped execution solely
-   for the existing `git push` and `gh pr create` workflow to push the reviewed branch and
-   create one pull request. It does not edit or repair the change, make any other GitHub
-   state change, or invoke another agent. It then reports the Review Result and push/PR
-   outcome in its terminal response and stops.
+6. Reviewer's final response is a **Review Result**. The Orchestrator reports it and
+   stops. A `needs-changes` result never triggers an automatic repair loop. No agent
+   changes the draft PR after review in this simple workflow.
 
 ## Handoff contracts
 
 The terminal response is the sole artifact for each delegated-agent handoff. The optional
-post-review push/PR step uses the returned Review Result directly; it creates no further
-agent handoff or session.
+pre-review draft PR is performed by Developer before its terminal response; it creates no
+further agent handoff or session.
 
 ### Developer Result
 
@@ -69,6 +71,7 @@ agent handoff or session.
 - changed paths
 - local commit SHA, if committed
 - commands run and outcomes
+- PR URL and outcome, if the permitted draft PR was attempted
 - limitations or blockers
 
 ### Review Result

@@ -13,7 +13,9 @@ const paths = {
 const entries = await Promise.all(
     Object.entries(paths).map(async ([key, file]) => [key, await readFile(file, "utf8")]),
 );
-const files = Object.fromEntries(entries);
+const files = Object.fromEntries(
+    entries.map(([key, text]) => [key, text.replaceAll("\r\n", "\n")]),
+);
 const failures = [];
 
 function assert(condition, message) {
@@ -47,10 +49,32 @@ assert(frontmatterValue(files.orchestrator, "name") === "Orchestrator", "orchest
 assert(orchestratorTools.join(",") === "read,search,agent,github/*", "orchestrator must use only read/search/agent/GitHub tools");
 assert(!orchestratorTools.includes("edit") && !orchestratorTools.includes("execute"), "orchestrator must not edit or execute");
 assert(frontmatterValue(files.orchestrator, "agents") === "[\"developer\", \"reviewer\"]", "orchestrator must delegate only to Developer and Reviewer");
+assert(files.orchestrator.includes("Do not write GitHub state."), "orchestrator must prohibit GitHub state writes");
+assert(
+    files.orchestrator.includes("Do not edit,\nexecute, push, create a pull request, publish, deploy, or repair review findings."),
+    "orchestrator must prohibit execution, push/PR creation, publication, deployment, and review repair",
+);
+assert(!files.orchestrator.includes("git push") && !files.orchestrator.includes("gh pr create"), "orchestrator must not own the PR workflow");
 
 assert(frontmatterValue(files.developer, "name") === "Developer", "developer name must be Developer");
 assert(developerTools.join(",") === "read,search,edit,execute", "developer must have the minimal implementation toolset");
 assert(files.developer.includes("Developer Result"), "developer must return a Developer Result");
+assert(
+    files.developer.includes("user expressly requests a pull request")
+        && files.developer.includes("approved Execution Plan includes it"),
+    "developer PR path must require an explicit user request and plan authorization",
+);
+assert(
+    files.developer.includes("`git push` and `gh pr\ncreate` workflow")
+        && files.developer.includes("exactly one draft pull request")
+        && files.developer.includes("before Reviewer runs"),
+    "developer PR path must be limited to one pre-review draft PR through the existing workflow",
+);
+assert(
+    files.developer.includes("Do not create a session, publish, deploy, expand scope, or invoke Reviewer or any other\nagent."),
+    "developer must continue to prohibit sessions, publication, deployment, scope expansion, and Reviewer invocation",
+);
+assert(files.developer.includes("record its URL and outcome in the\nDeveloper Result"), "developer must report a permitted PR outcome");
 
 assert(frontmatterValue(files.reviewer, "name") === "Reviewer", "reviewer name must be Reviewer");
 assert(reviewerTools.join(",") === "read,search,execute", "reviewer must have the minimal read-only validation toolset");
@@ -65,6 +89,23 @@ assert(files.design.includes("Orchestrator -> Developer -> Reviewer"), "design m
 assert(files.design.includes("does not use child sessions"), "design must reject child-session handoffs");
 assert(files.design.includes("returned response is the handoff"), "design must define direct result handoff");
 assert(files.design.includes("needs-changes") && files.design.includes("automatic repair loop"), "design must stop instead of auto-repairing review findings");
+assert(
+    files.design.includes("Orchestrator | Choose one backlog item")
+        && files.design.includes("execute commands, create sessions, write GitHub state, push, create a PR"),
+    "design must keep the Orchestrator read/delegate/report-only",
+);
+assert(
+    files.design.includes("Developer | Implement one approved execution plan and, when authorized, create one pre-review draft PR")
+        && files.design.includes("user expressly requests a pull request and the approved Execution Plan includes it")
+        && files.design.includes("exactly one draft PR"),
+    "design must allocate the bounded explicit-request, plan-authorized draft PR path to Developer",
+);
+assert(
+    files.design.includes("This occurs before Reviewer runs: the draft PR is explicitly pre-review")
+        && files.design.includes("does not alter Reviewer's independent review")
+        && files.design.includes("No agent\n   changes the draft PR after review"),
+    "design must preserve the pre-review draft PR and independent Reviewer flow",
+);
 
 if (failures.length > 0) {
     throw new Error(`Delivery contract validation failed:\n${failures.join("\n")}`);
