@@ -14,6 +14,12 @@ Implement only that plan. Use existing repository commands for focused validatio
 commit the completed local change. Do not create a pull request before review: the review
 gate is mandatory, and the PR is created only after Reviewer passes the change.
 
+Finalization gate: once Reviewer passes, finalize by running the existing quality gates
+and preparing PR metadata only; do not edit the reviewed code. Push the exact commit
+Reviewer assessed. If finalization surfaces a code change that is still needed, report
+`blocked` instead of editing and pushing: the subsession must route it back through the
+bounded repair pass and a fresh Reviewer pass before any push.
+
 Publication gate: generic `execute` alone is not a publication capability. When the
 subsession directs you to finalize, verify scoped GitHub authentication with `gh auth
 status` and remote write access with `git push --dry-run origin HEAD`, then use the

@@ -81,10 +81,13 @@ flowchart LR
    loop is bounded: it never exceeds one additional Developer + Reviewer pass. If the result
    is still `needs-changes` or is `blocked`, the subsession stops and reports a blocked
    outcome with no pull request.
-9. If the Review Result is `pass`, the subsession directs Developer to finalize: refine
-   details and run the existing quality gates, then use the existing `git push` and
-   `gh pr create` workflow to push the completed branch and create **exactly one** pull
-   request. Developer records the PR URL and outcome in its Developer Result.
+9. If the Review Result is `pass`, the subsession directs Developer to finalize: run the
+   existing quality gates and prepare PR metadata (title, description) without changing the
+   reviewed code, then use the existing `git push` and `gh pr create` workflow to push that
+   exact reviewed commit and create **exactly one** pull request. Finalization never edits
+   code: if a code change still turns out to be needed, Developer reports `blocked` instead
+   of pushing, and the subsession routes it back through the bounded repair pass (step 8)
+   and a fresh Reviewer pass. Developer records the PR URL and outcome in its Developer Result.
 10. The subsession finishes with a pull request or a blocked report. It does not report back
     to the Orchestrator through any cross-session mechanism.
 
@@ -107,6 +110,10 @@ pull request Developer creates in step 9.
   pull request. This is not an unbounded automatic repair loop.
 - Reviewer independently verifies the quality gates named in the plan and reports only
   real, actionable findings with file/path evidence.
+- Finalization (step 9) never changes the reviewed code: it pushes the exact commit
+  Reviewer assessed and only adds quality-gate runs or PR metadata. A code change
+  discovered while finalizing goes back through the bounded repair pass (step 8) and a
+  fresh Reviewer pass; it never ships straight to `git push`.
 
 ## Publication capability
 

@@ -82,6 +82,12 @@ assert(
     "developer PR path must be one post-review PR through the existing workflow",
 );
 assert(
+    files.developer.includes("Finalization gate: once Reviewer passes, finalize by running the existing quality gates")
+        && files.developer.includes("do not edit the reviewed code. Push the exact commit")
+        && files.developer.includes("the subsession must route it back through the\nbounded repair pass and a fresh Reviewer pass before any push."),
+    "developer finalization must not edit reviewed code and must route needed code changes back through repair + re-review",
+);
+assert(
     files.developer.includes("generic `execute` alone is not a publication capability")
         && files.developer.includes("`gh auth\nstatus`")
         && files.developer.includes("`git push --dry-run origin HEAD`")
@@ -138,6 +144,11 @@ assert(
         && files.design.includes("**exactly one** pull")
         && files.design.includes("Developer records the PR URL and outcome in its Developer Result"),
     "design must require the review gate before the single PR",
+);
+assert(
+    files.design.includes("Finalization never edits\n   code: if a code change still turns out to be needed, Developer reports `blocked` instead")
+        && files.design.includes("Finalization (step 9) never changes the reviewed code: it pushes the exact commit"),
+    "design must freeze finalization to the reviewed commit and route needed code changes back through repair + re-review",
 );
 assert(
     files.design.includes("## Publication capability")
