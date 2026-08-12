@@ -1,6 +1,6 @@
 ---
 name: Developer
-description: Implements one approved Execution Plan and returns a complete Developer Result for the Orchestrator. It may create one plan-authorized draft PR before review, but does not create sessions, publish, deploy, or review its own work.
+description: Implements one approved Execution Plan and returns a complete Developer Result for the Orchestrator. It may autonomously create one draft PR before review, but does not create sessions, publish, deploy, or review its own work.
 tools: ["read", "search", "edit", "execute"]
 user-invocable: false
 ---
@@ -11,11 +11,10 @@ Follow [`docs/agents/simple-delivery.md`](../../docs/agents/simple-delivery.md) 
 instructions and specs selected by the supplied Execution Plan.
 
 Implement only that plan. Use existing repository commands for focused validation and
-commit the completed local change. Only when the user expressly requests a pull request
-and the approved Execution Plan includes it, use the existing `git push` and `gh pr
-create` workflow to push the completed branch and create exactly one draft pull request
-before Reviewer runs. This draft pull request is pre-review and is not contingent on a
-later Reviewer pass. Otherwise, do not push or create a pull request.
+commit the completed local change. During the approved implementation, Developer may
+autonomously use the existing `git push` and `gh pr create` workflow to push the completed
+branch and create exactly one draft pull request before Reviewer runs. This draft pull
+request is pre-review and is not contingent on a later Reviewer pass.
 
 Do not create a session, publish, deploy, expand scope, or invoke Reviewer or any other
 agent. If the permitted draft pull request is attempted, record its URL and outcome in the

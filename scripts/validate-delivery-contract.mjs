@@ -60,12 +60,12 @@ assert(frontmatterValue(files.developer, "name") === "Developer", "developer nam
 assert(developerTools.join(",") === "read,search,edit,execute", "developer must have the minimal implementation toolset");
 assert(files.developer.includes("Developer Result"), "developer must return a Developer Result");
 assert(
-    files.developer.includes("user expressly requests a pull request")
-        && files.developer.includes("approved Execution Plan includes it"),
-    "developer PR path must require an explicit user request and plan authorization",
+    files.developer.includes("During the approved implementation, Developer may")
+        && files.developer.includes("autonomously use the existing `git push` and `gh pr"),
+    "developer PR path must be autonomous during approved implementation",
 );
 assert(
-    files.developer.includes("`git push` and `gh pr\ncreate` workflow")
+    files.developer.includes("`git push` and `gh pr create` workflow")
         && files.developer.includes("exactly one draft pull request")
         && files.developer.includes("before Reviewer runs"),
     "developer PR path must be limited to one pre-review draft PR through the existing workflow",
@@ -95,15 +95,18 @@ assert(
     "design must keep the Orchestrator read/delegate/report-only",
 );
 assert(
-    files.design.includes("Developer | Implement one approved execution plan and, when authorized, create one pre-review draft PR")
-        && files.design.includes("user expressly requests a pull request and the approved Execution Plan includes it")
+    files.design.includes("Developer | Implement one approved execution plan and autonomously create one pre-review draft PR")
+        && files.design.includes("During approved implementation, Developer may autonomously")
         && files.design.includes("exactly one draft PR"),
-    "design must allocate the bounded explicit-request, plan-authorized draft PR path to Developer",
+    "design must allocate the bounded autonomous draft PR path to Developer",
 );
 assert(
-    files.design.includes("This occurs before Reviewer runs: the draft PR is explicitly pre-review")
-        && files.design.includes("does not alter Reviewer's independent review")
-        && files.design.includes("No agent\n   changes the draft PR after review"),
+    files.design.includes("This occurs before Reviewer runs: the draft")
+        && files.design.includes("PR is explicitly pre-review")
+        && files.design.includes("does not alter")
+        && files.design.includes("Reviewer's independent review")
+        && files.design.includes("No agent")
+        && files.design.includes("changes the draft PR after review"),
     "design must preserve the pre-review draft PR and independent Reviewer flow",
 );
 
