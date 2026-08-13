@@ -1,15 +1,15 @@
 ---
 spec: simple delivery workflow
-version: 1.1.0
+version: 2.0.0
 status: current-design
-verified: 2026-08-12
+verified: 2026-08-13
 ---
 
 # Simple Delivery Workflow
 
 The active agent workflow is **triage/dispatch -> per-issue delivery**. The Orchestrator
-reads the live backlog, selects the high-priority issues, and reports a shortlist to the
-host. The host then dispatches one isolated subsession per shortlisted issue; that
+reads the live backlog, selects the high-priority issues, and dispatches one isolated
+subsession per shortlisted issue via its native `create_session` capability; that
 subsession owns all research and planning for its issue and drives the build -> review ->
 finalize -> PR pipeline.
 
@@ -18,28 +18,26 @@ acknowledgements, or cross-session artifacts between the Orchestrator and a subs
 The Orchestrator never researches, plans, builds, reviews, or publishes, and never follows
 up on a subsession it dispatched.
 
-**What "the host" is:** the host is the root Copilot CLI/agent session that invoked the
-Orchestrator (a user's interactive session or a workflow run), not a component defined by
-any file in this repository. `create_session` is a native capability of that host runtime,
-unavailable to the Orchestrator, Developer, and Reviewer themselves. This repository
-therefore does not, and cannot, implement or automate the dispatch step: after reading the
-Orchestrator's shortlist, the host manually invokes `create_session` once per shortlisted
-issue. That external dependency is intentional, not a missing piece of this workflow.
+**Who dispatches:** the Orchestrator owns dispatch. `create_session` is a verified
+capability of this runtime, and the Orchestrator invokes it once per shortlisted issue,
+passing the issue and the path to this contract. Dispatch is implemented by this
+workflow, not delegated to an external runtime.
 
 ## Why this is small
 
 Triaging the backlog and delivering one issue are different concerns. The Orchestrator
-only needs read access to the repository and the live backlog to produce a prioritized
-shortlist. Each issue's research, planning, and implementation belong to an isolated
-subsession, so work scales to many issues without one agent carrying every context. The
-host's `create_session` invocation is the handoff: the dispatcher stops after reporting
-the shortlist, and a subsession finishes with a pull request or a blocked report.
+only needs read access to the repository, the live backlog, and the `create_session`
+capability to produce and dispatch a prioritized shortlist. Each issue's research,
+planning, and implementation belong to an isolated subsession, so work scales to many
+issues without one agent carrying every context. The Orchestrator's `create_session`
+invocation is the handoff: it stops after dispatching the shortlist, and a subsession
+finishes with a pull request or a blocked report.
 
 ## Roles
 
 | Layer | Role | Owns | May do | Must not do |
 | --- | --- | --- | --- | --- |
-| Dispatch | Orchestrator | Read the backlog, select the high-priority issues, and report the shortlist | Read/search the repository and live backlog; read GitHub issues; produce a prioritized shortlist for the host to dispatch | Edit code, execute commands, create sessions itself, write GitHub state, push, create a PR, publish, deploy, research or plan an issue, or fix review findings |
+| Dispatch | Orchestrator | Read the backlog, select the high-priority issues, dispatch one isolated subsession per issue, and report the shortlist | Read/search the repository and live backlog; read GitHub issues; invoke `create_session` once per shortlisted issue, passing the issue and this contract | Edit code, execute commands, write GitHub state, push, create a PR, publish, deploy, research or plan an issue, or fix review findings |
 | Delivery | Subsession | Research its issue, produce one Execution Plan, and coordinate build -> review -> finalize -> PR | Read/search the repository; invoke Developer and Reviewer in-process; direct Developer to create the PR after review passes | Expand scope, create sessions, publish, deploy, or skip the review gate |
 | Delivery | Developer | Implement one approved Execution Plan; after review passes, finalize and create exactly one PR | Read/search/edit/execute and commit local code; use the existing `git push` and `gh pr create` workflow to push the completed branch and create exactly one PR after Reviewer passes it | Expand scope, create sessions, publish, deploy, invoke Reviewer, or create a PR before review |
 | Delivery | Reviewer | Independently assess the Developer's result | Read/search/execute scoped checks | Edit, commit, push, create sessions, publish, deploy, or invoke Developer |
@@ -49,8 +47,7 @@ the shortlist, and a subsession finishes with a pull request or a blocked report
 ```mermaid
 flowchart LR
     B[Read backlog] --> O[Orchestrator]
-    O -->|shortlist| H[Host]
-    H -->|create_session per issue| S[Subsession]
+        O -->|create_session per issue| S[Subsession]
     S -->|research + plan| P[Execution Plan]
     P -->|build| D[Developer]
     D --> R[Developer Result]
@@ -62,11 +59,10 @@ flowchart LR
 
 1. The Orchestrator reads the live backlog when the request needs it. If that read is
    unavailable, it reports the blockage; it does not invent or use a stale backlog.
-2. It selects the high-priority issues and returns a prioritized shortlist to the host.
-   It does not research, plan, build, review, or publish, and it does not create or follow
-   up on a subsession.
-3. The host dispatches one isolated subsession per shortlisted issue, passing the issue
-   and the path to this contract.
+2. It selects the high-priority issues and returns a prioritized shortlist. It never
+   researches, plans, builds, reviews, or publishes an issue itself.
+3. It dispatches one isolated subsession per shortlisted issue via `create_session`,
+   passing the issue and the path to this contract.
 4. The subsession researches the repository and returns an **Execution Plan** with:
    target, objective, in-scope work, out-of-scope work, likely paths, and existing checks
    to run.
@@ -93,13 +89,11 @@ flowchart LR
 
 ## Handoff contracts
 
-The host's `create_session` invocation is the sole handoff from the Orchestrator layer to
-a subsession. That invocation is made manually by the host runtime after it reads the
-Orchestrator's shortlist; it is not, and cannot be, triggered by an in-repo automation or
-by any `.agent.md` file, because custom agents have no access to `create_session`. Inside a
-subsession, the terminal response is the sole artifact for each delegated-agent handoff
-(Developer Result, Review Result). The only post-review publication artifact is the single
-pull request Developer creates in step 9.
+The Orchestrator's `create_session` invocation is the sole handoff from the Dispatch layer
+to a subsession; the Orchestrator makes it once per shortlisted issue after it reports the
+shortlist. Inside a subsession, the terminal response is the sole artifact for each
+delegated-agent handoff (Developer Result, Review Result). The only post-review
+publication artifact is the single pull request Developer creates in step 9.
 
 ## Review gate and repair loop
 
@@ -150,6 +144,6 @@ If either response is missing a status or the required fields, the subsession re
 
 ## Manual fallback
 
-If in-process delegation or a subsession is unavailable, the user runs the subsession
-phases directly against the same Execution Plan and Developer Result. The Orchestrator
-does not substitute sessions or a different transport mechanism.
+If `create_session` or in-process delegation is unavailable, the user runs the
+subsession phases directly against the same Execution Plan and Developer Result. The
+Orchestrator does not substitute a different transport mechanism.
