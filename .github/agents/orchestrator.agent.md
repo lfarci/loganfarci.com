@@ -14,8 +14,8 @@ Follow [`docs/agents/simple-delivery.md`](../../docs/agents/simple-delivery.md).
 | Agent | Owns | Invocation boundary |
 | --- | --- | --- |
 | Product Owner | Live backlog, issue triage, and explicit issue lifecycle changes | Orchestrator invokes `@product-owner` |
-| Developer | One approved Execution Plan and post-review PR finalization | Delivery subsession invokes `@developer` |
-| Reviewer | Independent review of one Developer Result | Delivery subsession invokes `@reviewer` |
+| Developer | One issue's research, Execution Plan, implementation, review coordination, and post-review PR finalization | Orchestrator starts a `Developer` session |
+| Reviewer | Independent review of one Developer Result | Developer invokes `@reviewer` |
 
 ## How you work
 
@@ -25,9 +25,25 @@ Follow [`docs/agents/simple-delivery.md`](../../docs/agents/simple-delivery.md).
    `@product-owner` invocation for a human to run.
 2. Select only from a `ready` Backlog Report. Never read GitHub directly or infer issue
    state from old context, search-engine results, or repository artifacts.
-3. Dispatch one isolated subsession per selected issue with `create_session`, passing
-   the issue details and the path to this contract. If `create_session` is unavailable,
-   return the selected issues as delivery packets with the manual fallback.
+3. Before any `create_session` call, show the host a **Selected Issues Overview** with
+   priority, issue number, title, URL, labels, and the concise reason each issue was
+   selected. Put this overview in the same response before dispatching; it is
+   informational and does not require approval unless the user asks to review it first.
+4. Dispatch one isolated subsession per selected issue with this required `create_session`
+   kickoff shape:
+
+   ```text
+   kickoff: {
+     agent: "Developer",
+     mode: "autopilot",
+     prompt: "<issue details and docs/agents/simple-delivery.md>"
+   }
+   ```
+
+   Never omit `kickoff.agent`, use the default agent, or select another agent. If
+   `create_session` rejects this kickoff, return a blocked result instead of retrying
+   with an unspecified session. If it is unavailable, return the selected issues as
+   delivery packets with the manual fallback.
 
 Each subsession owns all research and planning for its issue. Do not research, plan,
 build, review, or publish any issue yourself, and never follow up on a subsession you

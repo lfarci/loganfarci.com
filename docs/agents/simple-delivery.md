@@ -9,9 +9,9 @@ verified: 2026-08-13
 
 The active agent workflow is **product-owner triage -> dispatch -> per-issue delivery**.
 The Product Owner reads the live backlog and returns the authoritative ranked shortlist.
-The Orchestrator dispatches one isolated subsession per selected issue via its native
-`create_session` capability; that subsession owns all research and planning for its
-issue and drives the build -> review -> finalize -> PR pipeline.
+The Orchestrator dispatches one isolated **Developer** session per selected issue via
+its native `create_session` capability; that agent owns research, planning,
+implementation, review coordination, and the build -> review -> finalize -> PR pipeline.
 
 This deliberately does not use transcript queries, shared worktrees, startup
 acknowledgements, or cross-session artifacts between the Orchestrator and a subsession.
@@ -40,9 +40,8 @@ and a subsession finishes with a pull request or a blocked report.
 | Layer | Role | Owns | May do | Must not do |
 | --- | --- | --- | --- | --- |
 | Product management | Product Owner | Read the live GitHub backlog, recommend ranked delivery candidates, and create or update issues only when explicitly directed | Read GitHub issues through MCP, falling back to the documented read-only `gh issue list` command; use configured GitHub write tools or the documented `gh issue create` and `gh issue edit` fallback after authentication verification; return one Backlog Report | Edit code, commit, push, create a PR, create sessions, publish, deploy, research or plan delivery work, or change issue state without an explicit user directive |
-| Dispatch | Orchestrator | Invoke Product Owner, select from its Backlog Report, dispatch one isolated subsession per issue, and report the shortlist | Read/search the repository; invoke Product Owner through `agent`; invoke `create_session` once per shortlisted issue, passing the issue and this contract | Read GitHub directly, edit code, execute commands, write GitHub state, push, create a PR, publish, deploy, research or plan an issue, or fix review findings |
-| Delivery | Subsession | Research its issue, produce one Execution Plan, and coordinate build -> review -> finalize -> PR | Read/search the repository; invoke Developer and Reviewer in-process; direct Developer to create the PR after review passes | Expand scope, create sessions, publish, deploy, or skip the review gate |
-| Delivery | Developer | Implement one approved Execution Plan; after review passes, finalize and create exactly one PR | Read/search/edit/execute and commit local code; use the existing `git push` and `gh pr create` workflow to push the completed branch and create exactly one PR after Reviewer passes it | Expand scope, create sessions, publish, deploy, invoke Reviewer, or create a PR before review |
+| Dispatch | Orchestrator | Invoke Product Owner, select from its Backlog Report, dispatch one isolated Developer session per issue, and report the shortlist | Read/search the repository; invoke Product Owner through `agent`; invoke `create_session` once per shortlisted issue with the exact `kickoff.agent: "Developer"`, `kickoff.mode: "autopilot"`, and the issue plus this contract in the prompt; block instead of retrying with a default agent if the kickoff is rejected | Read GitHub directly, edit code, execute commands, write GitHub state, push, create a PR, publish, deploy, research or plan an issue, or fix review findings |
+| Delivery | Developer | Research one issue, prepare its Execution Plan, implement it, coordinate independent review, and finalize exactly one PR after review passes | Read/search/edit/execute, invoke Reviewer, commit local code, and use the existing `git push` and `gh pr create` workflow after Reviewer passes | Expand scope, create sessions, publish, deploy, invoke agents other than Reviewer, or create a PR before review |
 | Delivery | Reviewer | Independently assess the Developer's result | Read/search/execute scoped checks | Edit, commit, push, create sessions, publish, deploy, or invoke Developer |
 
 ## Flow
@@ -51,9 +50,9 @@ and a subsession finishes with a pull request or a blocked report.
 flowchart LR
     B[Read backlog] --> PO[Product Owner]
     PO -->|Backlog Report| O[Orchestrator]
-        O -->|create_session per issue| S[Subsession]
-    S -->|research + plan| P[Execution Plan]
-    P -->|build| D[Developer]
+        O -->|create_session: Developer per issue| D[Developer]
+    D -->|research + plan| P[Execution Plan]
+    P -->|implement| D
     D --> R[Developer Result]
     R --> V[Reviewer]
     V -->|pass| S
@@ -76,53 +75,58 @@ flowchart LR
 4. The Orchestrator accepts only a `ready` Backlog Report, selects the high-priority
     issues from it, and returns a prioritized shortlist. It never accesses GitHub,
     researches, plans, builds, reviews, or publishes an issue itself.
-5. It dispatches one isolated subsession per shortlisted issue via `create_session`,
-    passing the issue and the path to this contract.
-6. The subsession researches the repository and returns an **Execution Plan** with:
+5. Before dispatching, the Orchestrator shows the host a **Selected Issues Overview**
+    containing priority, issue number, title, URL, labels, and the concise selection
+    rationale for every shortlisted issue. The overview is informational and does not
+    require approval unless the user explicitly asks to review it first.
+6. It dispatches one isolated Developer session per shortlisted issue via
+    `create_session` with this exact kickoff: `agent: "Developer"`, `mode: "autopilot"`,
+    and a complete prompt with the issue and path to this contract. It never omits the
+    agent or relies on the default. If the kickoff is rejected, the Orchestrator reports
+    a blocked outcome instead of retrying with an unspecified agent.
+7. Developer researches the repository and prepares an **Execution Plan** with:
     target, objective, in-scope work, out-of-scope work, likely paths, and existing checks
     to run.
-7. The subsession invokes Developer in-process with the complete plan. Developer implements
-    it, commits the completed local change, and returns a **Developer Result**.
-8. Developer does not create a pull request before review. The review gate is mandatory.
-9. The subsession invokes Reviewer in-process with the Developer Result and the plan.
+8. Developer implements the plan, commits the completed local change, and returns a
+    **Developer Result**.
+9. Developer does not create a pull request before review. The review gate is mandatory.
+10. Developer invokes Reviewer in-process with the Developer Result and the plan.
     Reviewer runs the smallest existing checks that cover the change and returns a
     **Review Result**.
-10. If the Review Result is `needs-changes`, the subsession routes the actionable findings
-    back to Developer once for a bounded repair pass, then re-invokes Reviewer. This repair
-    loop is bounded: it never exceeds one additional Developer + Reviewer pass. If the result
-    is still `needs-changes` or is `blocked`, the subsession stops and reports a blocked
-    outcome with no pull request.
-11. If the Review Result is `pass`, the subsession directs Developer to finalize: run the
+11. If the Review Result is `needs-changes`, Developer repairs its actionable findings
+    once, then re-invokes Reviewer. This repair loop is bounded: it never exceeds one
+    additional Developer + Reviewer pass. If the result is still `needs-changes` or is
+    `blocked`, the session stops and reports a blocked outcome with no pull request.
+12. If the Review Result is `pass`, Developer finalizes: run the
     existing quality gates and prepare PR metadata (title, description) without changing the
     reviewed code, then use the existing `git push` and `gh pr create` workflow to push that
     exact reviewed commit and create **exactly one** pull request. Finalization never edits
     code: if a code change still turns out to be needed, Developer reports `blocked` instead
-    of pushing, and the subsession routes it back through the bounded repair pass (step 10)
+    of pushing, and the session routes it back through the bounded repair pass (step 11)
     and a fresh Reviewer pass. Developer records the PR URL and outcome in its Developer Result.
-12. The subsession finishes with a pull request or a blocked report. It does not report back
+13. Developer finishes with a pull request or a blocked report. It does not report back
     to the Orchestrator through any cross-session mechanism.
 
 ## Handoff contracts
 
 The Product Owner's Backlog Report is the sole handoff to Dispatch. The Orchestrator's
-`create_session` invocation is the sole handoff from Dispatch to a subsession; the
+`create_session` invocation is the sole handoff from Dispatch to a Developer session; the
 Orchestrator makes it once per shortlisted issue after it reports the shortlist. Inside
-a subsession, the terminal response is the sole artifact for each delegated-agent
+a Developer session, the terminal response is the sole artifact for each delegated-agent
 handoff (Developer Result, Review Result). The only post-review publication artifact is
-the single pull request Developer creates in step 11.
+the single pull request Developer creates in step 12.
 
 ## Review gate and repair loop
 
-- The subsession does not direct Developer to finalize or create a PR until Reviewer
-  returns `pass`.
+- Developer does not finalize or create a PR until Reviewer returns `pass`.
 - A `needs-changes` result triggers at most one bounded Developer + Reviewer repair pass
-  (step 10). A second `needs-changes` or a `blocked` result stops the subsession with no
+  (step 11). A second `needs-changes` or a `blocked` result stops the Developer session with no
   pull request. This is not an unbounded automatic repair loop.
 - Reviewer independently verifies the quality gates named in the plan and reports only
   real, actionable findings with file/path evidence.
-- Finalization (step 11) never changes the reviewed code: it pushes the exact commit
+- Finalization (step 12) never changes the reviewed code: it pushes the exact commit
   Reviewer assessed and only adds quality-gate runs or PR metadata. A code change
-  discovered while finalizing goes back through the bounded repair pass (step 10) and a
+  discovered while finalizing goes back through the bounded repair pass (step 11) and a
   fresh Reviewer pass; it never ships straight to `git push`.
 
 ## Backlog capability
@@ -179,7 +183,7 @@ the single pull request Developer creates in step 11.
 - commands run and outcomes
 - limitations or blockers
 
-If either response is missing a status or the required fields, the subsession reports
+If either response is missing a status or the required fields, the Developer session reports
 `blocked: incomplete delegated result` and stops.
 
 ## Manual fallback
@@ -187,5 +191,5 @@ If either response is missing a status or the required fields, the subsession re
 If Product Owner or the `agent` tool is unavailable, the Orchestrator returns a blocked
 outcome with the exact `@product-owner` invocation for a human to run; it does not query
 GitHub itself. If `create_session` or in-process delivery delegation is unavailable, the
-user runs the subsession phases directly against the same Execution Plan and Developer
+user runs the Developer session phases directly against the same Execution Plan and Developer
 Result. The Orchestrator does not substitute a different transport mechanism.
