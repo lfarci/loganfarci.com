@@ -5,6 +5,7 @@ import HomePage from "@/pages/HomePage";
 import AboutPage from "@/pages/AboutPage";
 import ArticlesPage from "@/pages/ArticlesPage";
 import ArticlePage from "@/pages/ArticlePage";
+import ResumePage from "@/pages/ResumePage";
 import NotFoundPage from "@/pages/NotFoundPage";
 
 export const markdownCalloutsShowcasePath = "/_dev/markdown-callouts";
@@ -31,6 +32,7 @@ export function createRoutes(includeDevelopmentRoutes: boolean): RouteObject[] {
     return [
         { path: "/", element: <HomePage /> },
         { path: "/about", element: <AboutPage /> },
+        { path: "/resume", element: <ResumePage /> },
         { path: "/articles", element: <ArticlesPage /> },
         { path: "/articles/:slug", element: <ArticlePage /> },
         ...developmentRoutes,
@@ -43,6 +45,7 @@ export const routes = createRoutes(import.meta.env.DEV);
 export const getStaticRoutes = (): string[] => [
     "/",
     "/about",
+    "/resume",
     "/articles",
     ...getArticleSlugs().map((slug) => `/articles/${slug}`),
 ];

@@ -4,6 +4,7 @@ export type PageExpectation = { path: string; heading: string | RegExp };
 
 export const HOME_PAGE: PageExpectation = { path: "/", heading: /Hi.*I'm Logan/u };
 export const ABOUT_PAGE: PageExpectation = { path: "/about", heading: "About Me" };
+export const RESUME_PAGE: PageExpectation = { path: "/resume", heading: "Résumé" };
 export const ARTICLES_PAGE: PageExpectation = { path: "/articles", heading: "Articles" };
 
 function pathPattern(path: string): RegExp {
