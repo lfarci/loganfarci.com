@@ -4,7 +4,6 @@ import MarkdownContent from "@/components/shared/MarkdownContent";
 import { Card, CardBody, CardHeader, CardSubtitle, CardTitle } from "@/components/cards";
 import InfoCard from "@/components/cards/InfoCard";
 import { Certification, SkillCategory } from "@/types";
-import { MarkdownPreview } from "@/components/shared/preview";
 import { getCertifications, getDiploma, getExperiences, getProfile, getSkillCategories } from "@/core/data";
 import { formatExperiencePeriod } from "@/core/date";
 import IconTag from "@/components/shared/IconTag";
@@ -83,7 +82,7 @@ export default function AboutPage() {
                                 align="start"
                                 showTitleTooltip
                             >
-                                <MarkdownPreview>{experience.description}</MarkdownPreview>
+                                <MarkdownContent content={experience.description ?? ""} />
                             </InfoCard>
                         ))}
                     </ColumnContainer>
@@ -99,7 +98,7 @@ export default function AboutPage() {
                         align="start"
                         showTitleTooltip
                     >
-                        <MarkdownPreview>{diploma.description}</MarkdownPreview>
+                        <MarkdownContent content={diploma.description} />
                     </InfoCard>
                 </Section>
                 <ThumbnailGridSection heading="Certifications" items={certifications} columns={2} size="small" />
