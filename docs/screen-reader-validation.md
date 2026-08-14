@@ -76,15 +76,16 @@ cursor (Browse mode) on.
     contentinfo, and the "In this article" navigation landmarks.
 13. **Table of contents.** Use the "In this article" link list to jump to a section.
     Confirm the destination heading is announced and focus/hash updates correctly.
-14. **Focus order (mobile article).** Use the "Back to top" link and confirm focus
-    returns to `#main-content`.
+14. **Focus order (mobile article).** Resize the browser below 1024px width (the `lg`
+    breakpoint) and scroll past the "In this article" navigation. Use the "Back to top"
+    link and confirm focus returns to `#main-content`.
 
 ## Read: verify accessible names on interactive elements
 
 During the keyboard and links passes above, confirm every icon-only control is
 announced by its accessible name rather than "unlabeled" or "graphic":
-theme toggle, mobile menu toggle, and any icon-only links. Decorative icons must be
-skipped entirely.
+theme toggle, mobile menu toggle (resize below 768px, the `md` breakpoint, to reveal
+it), and any icon-only links. Decorative icons must be skipped entirely.
 
 ## Result template
 
