@@ -49,49 +49,50 @@ const breadcrumbJsonLd = createBreadcrumbJsonLd([
     { name: "Résumé", path: "/resume" },
 ]);
 
-function createResumeJsonLd(): JsonLdObject {
-    const totalExperience = experiences
-        .filter((exp) => exp.type !== "Internship")
-        .reduce((total, exp) => {
-            const start = new Date(exp.start).getTime();
-            const end = exp.end ? new Date(exp.end).getTime() : Date.now();
-            return total + (end - start);
-        }, 0);
-    const yearsOfExperience = Math.round(totalExperience / (1000 * 60 * 60 * 24 * 365));
+function createPersonJsonLd(): JsonLdObject {
+    const skillNames = [...new Set(skillCategories.flatMap((cat) => cat.skills.map((s) => s.name)))].sort();
 
-    return {
+    const knowsAbout = [
+        ...new Set(
+            skillCategories.flatMap((cat) => cat.skills.map((skill) => ({ "@type": "Thing", name: skill.name }))),
+        ),
+    ];
+
+    const alumniOf: JsonLdObject = { "@type": "EducationalOrganization", name: diploma.University };
+
+    const person: JsonLdObject = {
         "@context": "https://schema.org",
-        "@type": "Resume",
-        name: `Résumé of ${siteName}`,
-        description: `Professional experience of ${pageDescription.toLowerCase()}`,
-        url: pageUrl,
-        inLanguage: "en-US",
-        about: {
-            "@type": "Person",
-            "@id": `${siteUrl}/#person`,
-            name: siteName,
-            jobTitle: "Software Engineer",
-            description: profile.introduction,
-            knowsAbout: [
-                ...new Set(
-                    skillCategories.flatMap((cat) =>
-                        cat.skills.map((skill) => ({
-                            "@type": "Thing",
-                            name: skill.name,
-                            description: cat.description ?? undefined,
-                        })),
-                    ),
-                ),
-            ],
-        },
-        dateCreated: experiences.length > 0 ? experiences[experiences.length - 1]?.start : undefined,
-        estimatedSalary: undefined,
-        experienceInPlace: false,
-        totalExperienceYears: yearsOfExperience,
+        "@type": "Person",
+        "@id": `${siteUrl}/#person`,
+        name: siteName,
+        url: siteUrl,
+        image: createCanonicalUrl(profile.avatar.src),
+        jobTitle: "Software Engineer",
+        description: profile.introduction,
+        knowsAbout,
+        alumniOf,
+        skills: skillNames.join(", "),
+        hasOccupation: [
+            ...experiences.map((exp) => ({
+                "@type": "Occupation",
+                name: exp.name,
+                description: exp.description ?? undefined,
+                startDate: exp.start,
+                endDate: exp.end ?? undefined,
+                employer: { "@type": "Organization", name: exp.company.name, location: exp.company.location },
+            })),
+        ],
     };
+
+    const contactsUrls = contacts.map((c) => c.url).filter((url) => url.startsWith("http"));
+    if (contactsUrls.length > 0) {
+        person.sameAs = contactsUrls;
+    }
+
+    return person;
 }
 
-const resumeJsonLd = createResumeJsonLd();
+const personJsonLd = createPersonJsonLd();
 
 export default function ResumePage() {
     return (
@@ -105,7 +106,7 @@ export default function ResumePage() {
             <meta property="og:url" content={pageUrl} />
             <meta name="twitter:title" content={pageTitle} />
             <meta name="twitter:description" content={pageDescription} />
-            <JsonLd data={[breadcrumbJsonLd, resumeJsonLd]} />
+            <JsonLd data={[breadcrumbJsonLd, personJsonLd]} />
 
             <article className="py-8 md:py-10">
                 {/* Header: name, role, contacts */}

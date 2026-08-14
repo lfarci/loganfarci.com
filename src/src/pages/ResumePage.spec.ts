@@ -43,4 +43,19 @@ test.describe("Resume page", () => {
         await expect(page).toHaveURL(/\/resume\/?#skills$/u);
         await expect(page.getByRole("heading", { level: 2, name: "Skills" })).toBeVisible();
     });
+
+    test("contains ATS-relevant content in plain text", async ({ page }) => {
+        await page.goto("/resume");
+        const body = page.locator("body");
+
+        // ATS systems look for plain text keywords in the HTML body
+        await expect(body).toContainText("Logan Farci");
+        await expect(body).toContainText(".NET");
+        await expect(body).toContainText("Azure");
+        await expect(body).toContainText("C#");
+        await expect(body).toContainText("GitHub");
+        await expect(body).toContainText("Avanade");
+        await expect(body).toContainText("Bachelor in Computer Science");
+        await expect(body).toContainText("Microsoft");
+    });
 });
