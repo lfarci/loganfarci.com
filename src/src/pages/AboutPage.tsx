@@ -3,7 +3,7 @@ import React from "react";
 import MarkdownContent from "@/components/shared/MarkdownContent";
 import { Card, CardBody, CardHeader, CardSubtitle, CardTitle } from "@/components/cards";
 import InfoCard from "@/components/cards/InfoCard";
-import { Certification, SkillCategory } from "@/types";
+import { Certification, ISODateString, SkillCategory } from "@/types";
 import { MarkdownPreview } from "@/components/shared/preview";
 import { getCertifications, getDiploma, getExperiences, getProfile, getSkillCategories } from "@/core/data";
 import IconTag from "@/components/shared/IconTag";
@@ -15,12 +15,12 @@ import JsonLd from "@/components/shared/JsonLd";
 import { Heading1 } from "@/components/shared/typography";
 import { createBreadcrumbJsonLd, createCanonicalUrl } from "@/core/seo";
 
-const formatMonthYear = (date: Date | string) => {
-    const d = typeof date === "string" ? new Date(date) : date;
+const formatMonthYear = (date: ISODateString) => {
+    const d = new Date(date);
     return d.toLocaleDateString(undefined, { year: "numeric", month: "long" });
 };
 
-const formatExperiencePeriod = (start: Date, end?: Date) => {
+const formatExperiencePeriod = (start: ISODateString, end?: ISODateString) => {
     const startDate = formatMonthYear(start);
     const endDate = end ? formatMonthYear(end) : "Present";
     return `${startDate} - ${endDate}`;
