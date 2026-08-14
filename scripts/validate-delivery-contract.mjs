@@ -131,6 +131,11 @@ assertIncludes(
     "Make at most two such repair cycles.",
     "developer: quality-gate repair loop must cap repairs at two cycles",
 );
+assertMatches(
+    files.developer,
+    /If a gate fails for an actionable, change-related reason, repair the issue and rerun the\s+failed gate plus the full planned gate set\./,
+    "developer: quality-gate repair loop must repair actionable failures and rerun the full gate set",
+);
 assertIncludes(
     files.developer,
     "Do not\nopen a pull request with a known failing local quality gate.",
@@ -143,8 +148,28 @@ assertIncludes(
 );
 assertIncludes(
     files.developer,
+    "Do not create a pull request before Reviewer passes the change.",
+    "developer: must prohibit pull requests before Reviewer passes",
+);
+assertIncludes(
+    files.developer,
+    "`gh auth status`",
+    "developer: must verify GitHub authentication before publication",
+);
+assertIncludes(
+    files.developer,
     "git ls-remote --exit-code --heads origin <PR base>",
     "developer: must verify the remote PR base before publication",
+);
+assertIncludes(
+    files.developer,
+    "`git push --dry-run origin HEAD`",
+    "developer: must verify remote write access before publication",
+);
+assertMatches(
+    files.developer,
+    /report the blocked publication outcome and the manual\s+fallback in the Developer Result/,
+    "developer: must document the blocked-publication manual fallback",
 );
 assertIncludes(
     files.developer,
