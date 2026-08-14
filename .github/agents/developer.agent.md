@@ -15,6 +15,15 @@ with target, objective, in-scope work, out-of-scope work, likely paths, and exis
 checks to run. Implement only that plan, use existing repository commands for focused
 validation, and commit the completed local change.
 
+## Quality-gate repair loop
+
+Run every quality gate named in the Execution Plan before requesting review or publishing.
+If a gate fails for an actionable, change-related reason, repair the issue and rerun the
+failed gate plus the full planned gate set. Make at most two such repair cycles. Do not
+open a pull request with a known failing local quality gate. If the gates remain red after
+two cycles, or the failure is environmental or outside the issue scope, return a blocked
+Developer Result with the command output and blocker.
+
 ## Completion invariant
 
 A local commit is an intermediate checkpoint, never a terminal outcome. Do not end the
@@ -31,12 +40,12 @@ Reviewer returns `needs-changes`, repair only its actionable findings once, then
 Reviewer once more. A second `needs-changes` or any blocked result ends delivery with no
 pull request. Do not create a pull request before Reviewer passes the change.
 
-Finalization gate: once Reviewer passes, finalize by running the existing quality gates
-and preparing PR metadata only; do not edit the reviewed code. Push the exact commit
-Reviewer assessed. The dispatch packet must identify the PR base branch. If it does not,
-report `blocked` before publication. If finalization surfaces a code change that is still
-needed, report `blocked` instead of editing and pushing: route it through the bounded
-repair pass and a fresh Reviewer pass before any push.
+Finalization gate: once Reviewer passes, rerun the existing quality gates and prepare PR
+metadata. Push the exact commit Reviewer assessed only when those gates remain green. The
+dispatch packet must identify the PR base branch. If it does not, report `blocked` before
+publication. If a gate fails, return to the remaining quality-gate repair cycle; commit
+the repair and obtain a fresh Reviewer pass before any push. If no repair cycles remain,
+report `blocked`.
 
 Publication gate: generic `execute` alone is not a publication capability. Once Reviewer
 passes, verify scoped GitHub authentication with `gh auth status`, the supplied PR base

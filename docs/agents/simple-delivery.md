@@ -1,6 +1,6 @@
 ---
 spec: simple delivery workflow
-version: 2.3.0
+version: 2.4.0
 status: current-design
 verified: 2026-08-14
 ---
@@ -101,10 +101,12 @@ flowchart LR
 7. Developer researches the repository and prepares an **Execution Plan** with:
     target, objective, in-scope work, out-of-scope work, likely paths, and existing checks
     to run.
-8. Developer implements the plan and commits the completed local change. A commit is an
-    intermediate checkpoint, not a terminal result: Developer continues in the same active
-    run through review and finalization until it produces a pull request URL or a blocked
-    Developer Result.
+8. Developer implements the plan, runs every quality gate named in its Execution Plan,
+    and commits the completed local change. A commit is an intermediate checkpoint, not a
+    terminal result: Developer continues in the same active run through review and
+    finalization until it produces a pull request URL or a blocked Developer Result. A
+    failed actionable, change-related quality gate triggers the quality-gate repair loop
+    before review; a known failing local quality gate never proceeds to a pull request.
 9. Developer does not create a pull request before review. The review gate is mandatory.
 10. Developer invokes the user-invocable Reviewer custom agent in-process with the
     Developer Result and the plan. If Reviewer cannot be selected or the App reports a
@@ -114,13 +116,13 @@ flowchart LR
     once, then re-invokes Reviewer. This repair loop is bounded: it never exceeds one
     additional Developer + Reviewer pass. If the result is still `needs-changes` or is
     `blocked`, the session stops and reports a blocked outcome with no pull request.
-12. If the Review Result is `pass`, Developer finalizes: run the
+12. If the Review Result is `pass`, Developer finalizes: rerun the
     existing quality gates and prepare PR metadata (title, description) without changing the
     reviewed code, then use the existing `git push` and `gh pr create` workflow to push that
-    exact reviewed commit and create **exactly one** pull request. Finalization never edits
-    code: if a code change still turns out to be needed, Developer reports `blocked` instead
-    of pushing, and the session routes it back through the bounded repair pass (step 11)
-    and a fresh Reviewer pass. Before pushing, it runs `gh auth status`,
+    exact reviewed commit and create **exactly one** pull request. If a quality gate fails,
+    Developer returns to the remaining quality-gate repair cycle, then obtains a fresh
+    Reviewer pass for the repaired commit; it does not publish while a known local check is
+    red. Before pushing, it runs `gh auth status`,
     `git ls-remote --exit-code --heads origin <PR base>`, and `git push --dry-run origin HEAD`.
     If any check fails, Developer reports a blocked publication result without pushing.
     After the checks pass, Developer runs `git push origin HEAD` and the noninteractive
@@ -148,10 +150,21 @@ the single pull request Developer creates in step 12.
   pull request. This is not an unbounded automatic repair loop.
 - Reviewer independently verifies the quality gates named in the plan and reports only
   real, actionable findings with file/path evidence.
-- Finalization (step 12) never changes the reviewed code: it pushes the exact commit
-  Reviewer assessed and only adds quality-gate runs or PR metadata. A code change
-  discovered while finalizing goes back through the bounded repair pass (step 11) and a
-  fresh Reviewer pass; it never ships straight to `git push`.
+- Finalization (step 12) pushes only the exact commit Reviewer assessed. A quality-gate
+  failure discovered while finalizing goes through the remaining quality-gate repair loop
+  and a fresh Reviewer pass; it never ships straight to `git push`.
+
+## Quality-gate repair loop
+
+- Developer runs the quality gates selected in its Execution Plan before requesting
+  Reviewer and reruns them after Reviewer passes.
+- A failed gate with an actionable, change-related cause triggers a repair and rerun of the
+  failed gate plus the complete planned gate set.
+- The loop allows at most two repair cycles across delivery. Any repair after review
+  requires a fresh Reviewer pass for the new commit.
+- Developer returns a blocked result, without a PR, when a gate remains red after two
+  cycles or has an environmental or out-of-scope cause. It records the command output and
+  blocker rather than publishing a knowingly failing change.
 
 ## Backlog capability
 
