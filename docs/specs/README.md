@@ -81,7 +81,6 @@ Specs link to — and must stay consistent with — these existing documents:
 - [`.github/copilot-instructions.md`](../../.github/copilot-instructions.md) — project overview, workflows, conventions.
 - [`.github/instructions/articles.instructions.md`](../../.github/instructions/articles.instructions.md) — article content guidelines and front matter.
 - [`.github/instructions/components.instructions.md`](../../.github/instructions/components.instructions.md) — component conventions.
-- [`.github/instructions/issues.instructions.md`](../../.github/instructions/issues.instructions.md) — issue-management conventions.
 - [`README.md`](../../README.md) — onboarding, prerequisites, tech stack.
 - [`docs/analytics.md`](../analytics.md) — Application Insights setup and cost guardrails.
 - `src/src/types/` — TypeScript types that define every data contract.

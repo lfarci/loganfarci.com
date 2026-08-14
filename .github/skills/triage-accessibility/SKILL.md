@@ -13,8 +13,8 @@ authoritative; audit results are evidence, not requirements by themselves.
 
 ## Prepare
 
-1. Read `AGENTS.md`, `.github/copilot-instructions.md`,
-   `.github/instructions/issues.instructions.md`, and `docs/specs/README.md`.
+1. Read `AGENTS.md`, `.github/copilot-instructions.md`, and
+   `docs/specs/README.md`.
 2. Read the specs relevant to the audit, normally:
     - `docs/specs/quality-bars.md`
     - `docs/specs/accessibility.md`
@@ -135,8 +135,6 @@ Use these project-specific lessons:
 - Do not treat a local-preview fallback artifact as an application defect.
 
 ## Normalize the backlog
-
-Follow `.github/instructions/issues.instructions.md`.
 
 1. Map a finding to an existing issue whenever its desired outcome is already covered.
    Add concrete audit evidence and verification criteria instead of creating a
