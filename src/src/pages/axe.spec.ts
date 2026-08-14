@@ -4,7 +4,7 @@ import {
     ABOUT_PAGE,
     ARTICLES_PAGE,
     expectPage,
-    getFirstArticlePage,
+    getAllArticlePages,
     HOME_PAGE,
     markHydratedPage,
 } from "@/test/playwright/pages";
@@ -34,13 +34,17 @@ test.describe("axe automated accessibility checks", () => {
         await expectNoSeriousOrCriticalViolations(page);
     });
 
-    test("an article has no serious or critical violations", async ({ page }) => {
+    test("every article has no serious or critical violations", async ({ page }) => {
         await page.goto("/articles");
-        const articlePage = await getFirstArticlePage(page);
-        await page.goto(articlePage.path);
-        await expectPage(page, articlePage);
-        await markHydratedPage(page);
+        await expectPage(page, ARTICLES_PAGE);
+        const articlePages = await getAllArticlePages(page);
 
-        await expectNoSeriousOrCriticalViolations(page);
+        for (const articlePage of articlePages) {
+            await page.goto(articlePage.path);
+            await expectPage(page, articlePage);
+            await markHydratedPage(page);
+
+            await expectNoSeriousOrCriticalViolations(page);
+        }
     });
 });
