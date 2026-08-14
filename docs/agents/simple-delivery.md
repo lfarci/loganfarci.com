@@ -1,8 +1,8 @@
 ---
 spec: simple delivery workflow
-version: 2.1.0
+version: 2.2.0
 status: current-design
-verified: 2026-08-13
+verified: 2026-08-14
 ---
 
 # Simple Delivery Workflow
@@ -41,8 +41,8 @@ and a subsession finishes with a pull request or a blocked report.
 | Layer | Role | Owns | May do | Must not do |
 | --- | --- | --- | --- | --- |
 | Product management | Product Owner | Read the live GitHub backlog, recommend ranked delivery candidates with evidence-based selection reasoning, and create or update issues only when explicitly directed | Read GitHub issues through MCP, falling back to the documented read-only `gh issue list` command; read full details for recommended issues; use configured GitHub write tools or the documented `gh issue create` and `gh issue edit` fallback after authentication verification; return one Backlog Report | Edit code, commit, push, create a PR, create sessions, publish, deploy, research or plan delivery work, or change issue state without an explicit user directive |
-| Dispatch | Orchestrator | Invoke Product Owner, select from its Backlog Report, show the proposed Developer sessions, request approval, then dispatch approved issues | Read/search the repository; invoke Product Owner through `agent`; show the Selected Issues Overview and wait for explicit approval; then invoke `create_session` once per approved issue with the exact `kickoff.agent: "Developer"`, `kickoff.mode: "autopilot"`, and the issue plus this contract in the prompt; block instead of retrying with a default agent if the kickoff is rejected | Read GitHub directly, edit code, execute commands, write GitHub state, push, create a PR, publish, deploy, research or plan an issue, fix review findings, or dispatch before explicit approval |
-| Delivery | Developer | Research one issue, prepare its Execution Plan, implement it, coordinate independent review, and finalize exactly one PR after review passes | Read/search/edit/execute, invoke user-invocable Reviewer, commit local code, and use the existing `git push` and `gh pr create` workflow after Reviewer passes; remain user-invocable so the App can select it for `create_session` | Expand scope, create sessions, deploy, invoke agents other than Reviewer, publish anything other than the exact reviewed commit's one post-review PR, or create a PR before review |
+| Dispatch | Orchestrator | Invoke Product Owner, select from its Backlog Report, show the proposed Developer sessions, request approval, then dispatch approved issues | Read/search the repository; invoke Product Owner through `agent`; show the Selected Issues Overview and wait for explicit approval; then invoke `create_session` once per approved issue with the exact `kickoff.agent: "Developer"`, `kickoff.mode: "autopilot"`, the issue, an explicit PR base branch, and this contract in the prompt; block instead of retrying with a default agent if the kickoff is rejected | Read GitHub directly, edit code, execute commands, write GitHub state, push, create a PR, publish, deploy, research or plan an issue, fix review findings, or dispatch before explicit approval |
+| Delivery | Developer | Research one issue, prepare its Execution Plan, implement it, coordinate independent review, and finalize exactly one PR after review passes | Read/search/edit/execute, invoke user-invocable Reviewer, commit local code, verify the remote PR base, and use the existing `git push` and noninteractive `gh pr create` workflow after Reviewer passes; remain user-invocable so the App can select it for `create_session` | Expand scope, create sessions, deploy, invoke agents other than Reviewer, publish anything other than the exact reviewed commit's one post-review PR, or create a PR before review |
 | Delivery | Reviewer | Independently assess the Developer's result | Read/search/execute scoped checks; remain user-invocable so Developer can select it | Edit, commit, push, create sessions, publish, deploy, or invoke Developer |
 
 ## Flow
@@ -88,15 +88,17 @@ flowchart LR
     requests fresh approval.
 6. Only after explicit approval, it dispatches one isolated Developer session per approved issue via
     `create_session` with this exact kickoff: `agent: "Developer"`, `mode: "autopilot"`,
-    and a complete prompt with the issue and path to this contract. It never omits the
-    agent or relies on the default. If the kickoff is rejected, the Orchestrator reports
-    a blocked outcome instead of retrying with an unspecified agent. Developer remains
-    user-invocable because the App's `create_session` surface must resolve that exact
-    agent; if the App reports a default-agent fallback, the dispatch is blocked.
-    When explicitly testing unmerged agent-configuration changes, Orchestrator also sets
-    `base_branch` to its current branch so the Developer worktree includes those profiles.
-    For ordinary delivery, it omits `base_branch` and starts from the project default
-    branch.
+    and a complete prompt with the issue, path to this contract, and explicit PR base
+    branch. It never omits the agent or relies on the default. If the kickoff is rejected,
+    the Orchestrator reports a blocked outcome instead of retrying with an unspecified
+    agent. Developer remains user-invocable because the App's `create_session` surface
+    must resolve that exact agent; if the App reports a default-agent fallback, the
+    dispatch is blocked. For ordinary delivery, the project default branch is the PR base
+    and Orchestrator omits `base_branch`. When explicitly testing unmerged
+    agent-configuration changes, the host must first push the current configuration branch
+    to `origin` and confirm that it exists remotely. Only then does Orchestrator set
+    `base_branch` and the PR base to that branch. Without that confirmation, it returns a
+    blocked test outcome rather than dispatching children from a local-only base.
 7. Developer researches the repository and prepares an **Execution Plan** with:
     target, objective, in-scope work, out-of-scope work, likely paths, and existing checks
     to run.
@@ -119,10 +121,13 @@ flowchart LR
     exact reviewed commit and create **exactly one** pull request. Finalization never edits
     code: if a code change still turns out to be needed, Developer reports `blocked` instead
     of pushing, and the session routes it back through the bounded repair pass (step 11)
-    and a fresh Reviewer pass. After `gh auth status` and `git push --dry-run origin HEAD`
-    pass, Developer runs `git push origin HEAD` and `gh pr create` in the same active run;
-    it does not stop between those commands. Developer records the PR URL and outcome in
-    its Developer Result.
+    and a fresh Reviewer pass. Before pushing, it runs `gh auth status`,
+    `git ls-remote --exit-code --heads origin <PR base>`, and `git push --dry-run origin HEAD`.
+    If any check fails, Developer reports a blocked publication result without pushing.
+    After the checks pass, Developer runs `git push origin HEAD` and the noninteractive
+    `gh pr create --base <PR base> --head <current branch> --title <title> --body <description>`
+    in the same active run; it does not stop between those commands. Developer records the
+    PR URL and outcome in its Developer Result.
 13. Developer finishes with a pull request or a blocked report. It does not report back
     to the Orchestrator through any cross-session mechanism.
 
@@ -193,12 +198,14 @@ the single pull request Developer creates in step 12.
 - **Status:** Conditional. Generic `execute` is behavioral control only and does not itself
   establish an authenticated publication capability.
 - **Runtime evidence:** Immediately before publication, Developer runs `gh auth status` to
-  verify scoped GitHub authentication and `git push --dry-run origin HEAD` to verify
-  authenticated remote write access. Both must succeed.
-- **Failure routing and manual fallback:** If either check is unavailable or fails, Developer
+  verify scoped GitHub authentication, `git ls-remote --exit-code --heads origin <PR base>`
+  to verify the selected base is on GitHub, and `git push --dry-run origin HEAD` to verify
+  authenticated remote write access. All must succeed.
+- **Failure routing and manual fallback:** If any check is unavailable or fails, Developer
   does not attempt `git push` or `gh pr create`. Its Developer Result records publication as
-  blocked and directs the user to authenticate, push the committed branch, and create the
-  pull request manually. Developer does not substitute another tool or role.
+  blocked and directs the user to authenticate, push the PR base when appropriate, push the
+  committed branch, and create the pull request manually. Developer does not substitute
+  another tool or role.
 
 ### Developer Result
 
@@ -206,6 +213,7 @@ the single pull request Developer creates in step 12.
 - plan target and scope implemented
 - changed paths
 - local commit SHA, if committed
+- PR base branch
 - commands run and outcomes
 - PR URL and outcome, if the post-review pull request was attempted
 - limitations or blockers

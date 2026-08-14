@@ -40,7 +40,7 @@ Follow [`docs/agents/simple-delivery.md`](../../docs/agents/simple-delivery.md).
    kickoff: {
      agent: "Developer",
      mode: "autopilot",
-     prompt: "<issue details and docs/agents/simple-delivery.md>"
+     prompt: "<issue details, PR base branch, and docs/agents/simple-delivery.md>"
    }
    ```
 
@@ -51,10 +51,14 @@ Follow [`docs/agents/simple-delivery.md`](../../docs/agents/simple-delivery.md).
    session. If it is unavailable, return the selected issues as delivery packets with
    the manual fallback.
 
-   When the host is explicitly testing unmerged agent-configuration changes, also set
-   `base_branch` to the current session branch. This ensures each Developer worktree
-   contains the same agent profiles and delivery contract under test. For ordinary
-   delivery, omit `base_branch` so work starts from the project default branch.
+   When the host is explicitly testing unmerged agent-configuration changes, set
+   `base_branch` to the current session branch only after the host confirms that branch
+   has already been pushed to `origin`. Include that branch as the Developer's explicit
+   PR base in the kickoff prompt. This ensures each Developer worktree contains the same
+   agent profiles and can open a stacked PR against a remote base. If the confirmation is
+   absent, return a blocked test outcome; do not dispatch child sessions from a local-only
+   base. For ordinary delivery, omit `base_branch` and specify the project default branch
+   as the Developer's PR base.
 
 If the host asks about the selection reasoning or requests a different shortlist, invoke
 Product Owner again, show the revised Selected Issues Overview, and request fresh
