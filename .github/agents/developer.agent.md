@@ -2,7 +2,7 @@
 name: Developer
 description: Delivers one issue by researching, planning, implementing, coordinating independent review, and finalizing a PR only after review passes.
 tools: ["read", "search", "edit", "execute", "agent"]
-user-invocable: false
+user-invocable: true
 ---
 
 # Developer

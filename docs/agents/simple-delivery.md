@@ -9,9 +9,10 @@ verified: 2026-08-13
 
 The active agent workflow is **product-owner triage -> dispatch -> per-issue delivery**.
 The Product Owner reads the live backlog and returns the authoritative ranked shortlist.
-The Orchestrator dispatches one isolated **Developer** session per selected issue via
-its native `create_session` capability; that agent owns research, planning,
-implementation, review coordination, and the build -> review -> finalize -> PR pipeline.
+After explicit host approval, the Orchestrator dispatches one isolated **Developer**
+session per selected issue via its native `create_session` capability; that agent owns
+research, planning, implementation, review coordination, and the build -> review ->
+finalize -> PR pipeline.
 
 This deliberately does not use transcript queries, shared worktrees, startup
 acknowledgements, or cross-session artifacts between the Orchestrator and a subsession.
@@ -21,9 +22,9 @@ publishes, and never follows up on a subsession it dispatched.
 **Who triages and dispatches:** the Product Owner owns the authoritative backlog report;
 the Orchestrator owns dispatch. `agent` and `create_session` are verified custom-agent
 capabilities of this runtime. The Orchestrator invokes Product Owner once per backlog
-request, then invokes `create_session` once per selected issue, passing the issue and
-the path to this contract. Dispatch is implemented by this workflow, not delegated to an
-external runtime.
+request, shows the selected issues, and invokes `create_session` once per approved issue,
+passing the issue and the path to this contract. Dispatch is implemented by this workflow,
+not delegated to an external runtime.
 
 ## Why this is small
 
@@ -39,9 +40,9 @@ and a subsession finishes with a pull request or a blocked report.
 
 | Layer | Role | Owns | May do | Must not do |
 | --- | --- | --- | --- | --- |
-| Product management | Product Owner | Read the live GitHub backlog, recommend ranked delivery candidates, and create or update issues only when explicitly directed | Read GitHub issues through MCP, falling back to the documented read-only `gh issue list` command; use configured GitHub write tools or the documented `gh issue create` and `gh issue edit` fallback after authentication verification; return one Backlog Report | Edit code, commit, push, create a PR, create sessions, publish, deploy, research or plan delivery work, or change issue state without an explicit user directive |
-| Dispatch | Orchestrator | Invoke Product Owner, select from its Backlog Report, dispatch one isolated Developer session per issue, and report the shortlist | Read/search the repository; invoke Product Owner through `agent`; invoke `create_session` once per shortlisted issue with the exact `kickoff.agent: "Developer"`, `kickoff.mode: "autopilot"`, and the issue plus this contract in the prompt; block instead of retrying with a default agent if the kickoff is rejected | Read GitHub directly, edit code, execute commands, write GitHub state, push, create a PR, publish, deploy, research or plan an issue, or fix review findings |
-| Delivery | Developer | Research one issue, prepare its Execution Plan, implement it, coordinate independent review, and finalize exactly one PR after review passes | Read/search/edit/execute, invoke Reviewer, commit local code, and use the existing `git push` and `gh pr create` workflow after Reviewer passes | Expand scope, create sessions, publish, deploy, invoke agents other than Reviewer, or create a PR before review |
+| Product management | Product Owner | Read the live GitHub backlog, recommend ranked delivery candidates with evidence-based selection reasoning, and create or update issues only when explicitly directed | Read GitHub issues through MCP, falling back to the documented read-only `gh issue list` command; read full details for recommended issues; use configured GitHub write tools or the documented `gh issue create` and `gh issue edit` fallback after authentication verification; return one Backlog Report | Edit code, commit, push, create a PR, create sessions, publish, deploy, research or plan delivery work, or change issue state without an explicit user directive |
+| Dispatch | Orchestrator | Invoke Product Owner, select from its Backlog Report, show the proposed Developer sessions, request approval, then dispatch approved issues | Read/search the repository; invoke Product Owner through `agent`; show the Selected Issues Overview and wait for explicit approval; then invoke `create_session` once per approved issue with the exact `kickoff.agent: "Developer"`, `kickoff.mode: "autopilot"`, and the issue plus this contract in the prompt; block instead of retrying with a default agent if the kickoff is rejected | Read GitHub directly, edit code, execute commands, write GitHub state, push, create a PR, publish, deploy, research or plan an issue, fix review findings, or dispatch before explicit approval |
+| Delivery | Developer | Research one issue, prepare its Execution Plan, implement it, coordinate independent review, and finalize exactly one PR after review passes | Read/search/edit/execute, invoke Reviewer, commit local code, and use the existing `git push` and `gh pr create` workflow after Reviewer passes; remain user-invocable so the App can select it for `create_session` | Expand scope, create sessions, publish, deploy, invoke agents other than Reviewer, or create a PR before review |
 | Delivery | Reviewer | Independently assess the Developer's result | Read/search/execute scoped checks | Edit, commit, push, create sessions, publish, deploy, or invoke Developer |
 
 ## Flow
@@ -50,7 +51,9 @@ and a subsession finishes with a pull request or a blocked report.
 flowchart LR
     B[Read backlog] --> PO[Product Owner]
     PO -->|Backlog Report| O[Orchestrator]
-        O -->|create_session: Developer per issue| D[Developer]
+    O -->|Selected Issues Overview| A{Host approval}
+    A -->|approved issues| O
+    O -->|create_session: Developer per issue| D[Developer]
     D -->|research + plan| P[Execution Plan]
     P -->|implement| D
     D --> R[Developer Result]
@@ -77,13 +80,19 @@ flowchart LR
     researches, plans, builds, reviews, or publishes an issue itself.
 5. Before dispatching, the Orchestrator shows the host a **Selected Issues Overview**
     containing priority, issue number, title, URL, labels, and the concise selection
-    rationale for every shortlisted issue. The overview is informational and does not
-    require approval unless the user explicitly asks to review it first.
-6. It dispatches one isolated Developer session per shortlisted issue via
+    rationale for every shortlisted issue, including Product Owner's selection criteria,
+    material tradeoffs, and uncertainty. It asks the host to explicitly approve the
+    listed issues, then stops; the overview is a mandatory approval gate, not an
+    informational message. If the host questions the shortlist or requests different
+    candidates, Orchestrator re-invokes Product Owner, shows a revised overview, and
+    requests fresh approval.
+6. Only after explicit approval, it dispatches one isolated Developer session per approved issue via
     `create_session` with this exact kickoff: `agent: "Developer"`, `mode: "autopilot"`,
     and a complete prompt with the issue and path to this contract. It never omits the
     agent or relies on the default. If the kickoff is rejected, the Orchestrator reports
-    a blocked outcome instead of retrying with an unspecified agent.
+    a blocked outcome instead of retrying with an unspecified agent. Developer remains
+    user-invocable because the App's `create_session` surface must resolve that exact
+    agent; if the App reports a default-agent fallback, the dispatch is blocked.
 7. Developer researches the repository and prepares an **Execution Plan** with:
     target, objective, in-scope work, out-of-scope work, likely paths, and existing checks
     to run.
@@ -109,10 +118,11 @@ flowchart LR
 
 ## Handoff contracts
 
-The Product Owner's Backlog Report is the sole handoff to Dispatch. The Orchestrator's
-`create_session` invocation is the sole handoff from Dispatch to a Developer session; the
-Orchestrator makes it once per shortlisted issue after it reports the shortlist. Inside
-a Developer session, the terminal response is the sole artifact for each delegated-agent
+The Product Owner's Backlog Report is the sole handoff to Dispatch. The host's explicit
+approval of the Selected Issues Overview is the required gate before the Orchestrator's
+`create_session` invocation, which is the sole handoff from Dispatch to a Developer
+session. The Orchestrator creates one Developer session per approved issue. Inside a
+Developer session, the terminal response is the sole artifact for each delegated-agent
 handoff (Developer Result, Review Result). The only post-review publication artifact is
 the single pull request Developer creates in step 12.
 
@@ -134,6 +144,13 @@ the single pull request Developer creates in step 12.
 - **Product Owner invocation:** Verified. Custom agents support the `agent` tool. The
   Orchestrator is the normal workflow entry point, while Product Owner remains
   user-invocable for the documented manual fallback.
+- **Developer session selection:** Conditional. `create_session` receives the explicit
+  `kickoff.agent: "Developer"` argument, and Developer remains user-invocable so the App
+  can resolve it. A 2026-08-13 test observed a default Copilot CLI fallback while
+  Developer was non-user-invocable, despite the correct argument being supplied. Any
+  reported default-agent fallback blocks delivery; the user must restart the App in a
+  fresh session after committing the profile and select Developer manually if the
+  fallback persists.
 - **Backlog reads:** MCP first. If MCP does not return sufficient issue data, Product
   Owner uses the documented read-only `gh issue list` fallback. The fallback was
   authenticated and verified for this repository on 2026-08-13.
@@ -147,8 +164,11 @@ the single pull request Developer creates in step 12.
 
 - `status`: `ready` or `blocked`
 - repository and retrieval timestamp
-- ranked candidates with number, title, URL, labels, assignees, and prioritization
-  rationale
+- selection criteria and material tradeoffs or uncertainty
+- ranked candidates with number, title, URL, labels, assignees, and evidence-based
+  rationale for why each was selected now
+- concise reasoning for why higher-ranked candidates take precedence over other relevant
+  backlog items
 - GitHub tools or CLI commands used and outcomes
 - issues created or updated during the request
 - limitations, blockers, and manual fallback

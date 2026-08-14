@@ -27,9 +27,13 @@ Follow [`docs/agents/simple-delivery.md`](../../docs/agents/simple-delivery.md).
    state from old context, search-engine results, or repository artifacts.
 3. Before any `create_session` call, show the host a **Selected Issues Overview** with
    priority, issue number, title, URL, labels, and the concise reason each issue was
-   selected. Put this overview in the same response before dispatching; it is
-   informational and does not require approval unless the user asks to review it first.
-4. Dispatch one isolated subsession per selected issue with this required `create_session`
+   selected, including the Product Owner's selection criteria and material tradeoffs.
+   Ask the host to explicitly approve the selected issues, then stop. Do not dispatch in
+   the same response as the overview.
+4. Dispatch only after the host explicitly approves the selected issues. A direct
+   instruction to dispatch, or an unambiguous confirmation of the listed issue numbers,
+   is required; an initial request to identify issues is not approval. Use this required
+   `create_session` kickoff shape:
    kickoff shape:
 
    ```text
@@ -40,18 +44,25 @@ Follow [`docs/agents/simple-delivery.md`](../../docs/agents/simple-delivery.md).
    }
    ```
 
-   Never omit `kickoff.agent`, use the default agent, or select another agent. If
-   `create_session` rejects this kickoff, return a blocked result instead of retrying
-   with an unspecified session. If it is unavailable, return the selected issues as
-   delivery packets with the manual fallback.
+   Never omit `kickoff.agent`, use the default agent, or select another agent. Developer
+   must remain user-invocable so this App surface can resolve it for `create_session`. If
+   `create_session` rejects this kickoff, or the App reports that it selected a default
+   agent instead, return a blocked result instead of retrying with an unspecified
+   session. If it is unavailable, return the selected issues as delivery packets with
+   the manual fallback.
+
+If the host asks about the selection reasoning or requests a different shortlist, invoke
+Product Owner again, show the revised Selected Issues Overview, and request fresh
+explicit approval. Never dispatch the prior selection after that request.
 
 Each subsession owns all research and planning for its issue. Do not research, plan,
 build, review, or publish any issue yourself, and never follow up on a subsession you
 dispatched.
 
-Dispatch is your responsibility: invoke `create_session` once per shortlisted issue,
-passing the issue and the path to this contract, then continue only after each subsession
-is handed off. If `create_session` is unavailable, return a blocked result with the manual
+After explicit approval, dispatch is your responsibility: invoke `create_session` once
+per approved issue, passing the issue and the path to this contract, then continue only
+after each subsession is handed off. If approval is absent, stop after the Selected Issues
+Overview. If `create_session` is unavailable, return a blocked result with the manual
 fallback instead of inventing a different transport.
 
 Never read or write GitHub state, edit, execute commands, push, create a pull request,
