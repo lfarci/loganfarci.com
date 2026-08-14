@@ -1,6 +1,6 @@
 ---
 spec: accessibility
-version: 0.2.2
+version: 0.2.3
 status: current-state
 ---
 
@@ -52,11 +52,17 @@ Verified in the code today:
   article page against the prerendered build. Every route MUST score at least 90 in
   the accessibility category, with 100 retained as the target; downloadable HTML
   reports are retained with each workflow run.
+- **Automated axe checks.** The Playwright acceptance suite (`axe.spec.ts`) runs an
+  axe scan on the hydrated `/`, `/about`, `/articles`, and one article route and
+  fails on any **serious** or **critical** violation (see
+  [testing.md](./testing.md#browser-acceptance-suite)).
 
 ## Automated checks
 
-From `src/`, build the production site and run the same accessibility gate used in
-CI (Google Chrome or Chromium must be installed):
+### Lighthouse
+
+From `src/`, build the production site and run the same accessibility gate used in CI
+(Google Chrome or Chromium must be installed):
 
 ```sh
 npm run build
@@ -68,6 +74,20 @@ The reports are written to `src/lighthouse-reports/`. The
 content changes and can also be started manually with `workflow_dispatch`. See the
 [Lighthouse usage guide](../lighthouse.md) for prerequisites, local troubleshooting,
 reports, and manual workflow instructions.
+
+### axe
+
+The axe scan runs as part of the browser acceptance suite against a built preview or
+deployed environment (see [testing.md](./testing.md#browser-acceptance-suite)):
+
+```sh
+npm run build
+npm run preview:swa
+PLAYWRIGHT_BASE_URL=http://127.0.0.1:4280 npm run test:e2e
+```
+
+It fails on serious or critical violations and stays deterministic because it scans the
+hydrated, prerendered pages served by the SWA emulator.
 
 ## Requirements
 
@@ -112,7 +132,8 @@ Targets to grow toward, guided by [vision.md](./vision.md). Prefer platform feat
 established, lightweight helpers over bespoke a11y machinery:
 
 - **Screen-reader passes** on the home, about, and article-reading flows, documented and
-  repeated as the site grows.
+  repeated as the site grows. The repeatable procedure, tested combination, and result
+  template live in [screen-reader-validation.md](../screen-reader-validation.md).
 - **Per-locale `lang`** and correct document language once multilanguage lands
   ([i18n.md](./i18n.md)).
 

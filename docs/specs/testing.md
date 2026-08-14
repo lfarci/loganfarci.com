@@ -1,6 +1,6 @@
 ---
 spec: testing
-version: 0.3.0
+version: 0.3.1
 status: current-state
 ---
 
@@ -24,12 +24,12 @@ The site is **static prerendered HTML with no runtime server** (see
 strategy: there is no backend to integration-test, so confidence comes from four
 layers.
 
-| Layer | Scope | Runs | Status |
-| --- | --- | --- | --- |
-| **Unit** | Pure logic in `core/`, components in isolation | `npm run test` locally; CI on app changes | Current |
-| **Build gate** | `npm run build` produces valid client + SSR + prerendered HTML | CI on deploy-triggering app/content changes | Current |
-| **Deployment validation** | HTTP smoke checks against a live deployed URL | After each deploy | Current |
-| **Browser acceptance** | Hydration, client navigation/history, persistent browser state, and runtime errors | After each active non-Dependabot PR preview deploy | Current |
+| Layer                     | Scope                                                                              | Runs                                               | Status  |
+| ------------------------- | ---------------------------------------------------------------------------------- | -------------------------------------------------- | ------- |
+| **Unit**                  | Pure logic in `core/`, components in isolation                                     | `npm run test` locally; CI on app changes          | Current |
+| **Build gate**            | `npm run build` produces valid client + SSR + prerendered HTML                     | CI on deploy-triggering app/content changes        | Current |
+| **Deployment validation** | HTTP smoke checks against a live deployed URL                                      | After each deploy                                  | Current |
+| **Browser acceptance**    | Hydration, client navigation/history, persistent browser state, and runtime errors | After each active non-Dependabot PR preview deploy | Current |
 
 Keep the pyramid bottom-heavy: prefer many fast unit tests, a green build, and small,
 high-signal deployment checks. Playwright is limited to Chromium on PR previews and
@@ -57,11 +57,11 @@ Verified from [`src/vite.config.ts`](../../src/vite.config.ts) and
 
 ### Commands
 
-| Command | Use |
-| --- | --- |
-| `npm run test` | One-shot run (what CI runs). |
-| `npm run test:watch` | Watch mode while developing. |
-| `npm run test:coverage` | Run with a coverage report. |
+| Command                 | Use                          |
+| ----------------------- | ---------------------------- |
+| `npm run test`          | One-shot run (what CI runs). |
+| `npm run test:watch`    | Watch mode while developing. |
+| `npm run test:coverage` | Run with a coverage report.  |
 
 ### What MUST be tested
 
@@ -166,9 +166,18 @@ component it exercises, and shared Playwright helpers live in `src/test/playwrig
 The suite MUST remain focused on hydrated browser behavior: visible core-page contracts,
 primary desktop and mobile navigation, menu dismissal and responsive state, article
 deep links and navigation, browser Back/Forward, keyboard skip navigation, and explicit
-theme persistence across navigation and reload. HTTP status codes, prerendered markup,
-metadata, machine files, assets, and the 404 fallback remain the Node smoke suite's
-responsibility.
+theme persistence across navigation and reload. It also runs an **axe scan** on the
+hydrated `/`, `/about`, `/articles`, and one article route and fails on any serious or
+critical violation (see [accessibility.md](./accessibility.md#automated-checks)). HTTP
+status codes, prerendered markup, metadata, machine files, assets, and the 404 fallback
+remain the Node smoke suite's responsibility.
+
+Beyond automated axe coverage, a **manual screen-reader pass** remains the guard for
+landmarks, heading order, navigation behavior, focus order, and accessible names that
+automation cannot fully judge. The concise, repeatable script for the home, about, and
+article-reading flows — including the tested screen reader/browser combination and a
+result template — is documented in
+[screen-reader-validation.md](../screen-reader-validation.md).
 
 Run the browser suite against a local Azure Static Web Apps emulator or deployed
 environment from `src/`. The SWA emulator serves the prerendered HTML for clean deep
@@ -207,4 +216,5 @@ A change satisfies the testing bar when:
 - [ ] Component tests query by role/accessible name and mock content at the boundary.
 - [ ] `npm run build` succeeds (client + SSR + prerender).
 - [ ] Post-deploy smoke suite is green against the deployed URL.
-- [ ] The Playwright suite is green against the PR preview URL when the change deploys a preview.
+- [ ] The Playwright suite is green against the PR preview URL when the change deploys a preview, including the axe scans on the core routes and one article.
+- [ ] The manual screen-reader pass documented in `docs/screen-reader-validation.md` is repeated after material UI changes, and the result template is recorded.
