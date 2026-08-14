@@ -27,7 +27,7 @@ const mockContacts: Contact[] = [
 const mockExperience: Experience = {
     name: "Software Engineer",
     company: { name: "Contoso", website: "https://contoso.com", location: "Brussels" },
-    start: new Date("2022-01-01"),
+    start: "2022-01-01",
 };
 
 const mockArticle: Article = {
