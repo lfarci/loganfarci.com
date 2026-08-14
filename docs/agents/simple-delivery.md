@@ -166,6 +166,25 @@ the single pull request Developer creates in step 12.
   cycles or has an environmental or out-of-scope cause. It records the command output and
   blocker rather than publishing a knowingly failing change.
 
+## Validation status
+
+- **Static contract check:** Run
+  `node scripts/validate-delivery-contract.mjs` from the repository root before a live
+  workflow test. It is dependency-free and validates profile capabilities, approval and
+  dispatch gates, independent `main`-based Developer branches, publication preconditions,
+  and the two-cycle quality-gate repair loop. It does not access GitHub or exercise the
+  App runtime.
+- **Test 5 (2026-08-14):** Demonstrated that using an unmerged local configuration branch
+  as the delivery checkout and PR base prevents GitHub PR creation. Delivery sessions now
+  always start from and target the project default branch.
+- **Test 6 (2026-08-14):** Confirmed that a Developer session starts on an independent
+  branch from `main`. It stopped at a local quality-gate failure before review or
+  publication, revealing that the prior contract did not require repair attempts. The
+  quality-gate repair loop now requires up to two targeted repair cycles.
+- **Pending live proof:** A minimal Developer run that reaches Reviewer, pushes its
+  independent branch, and opens one PR against `main` after the quality-gate repair update.
+  Repeat that smoke test after App-runtime or credential-boundary changes.
+
 ## Backlog capability
 
 - **Product Owner invocation:** Verified. Custom agents support the `agent` tool. The
@@ -179,10 +198,10 @@ the single pull request Developer creates in step 12.
   fresh session after committing the profile and select Developer manually if the
   fallback persists.
 - **Reviewer selection:** Conditional. Reviewer remains user-invocable so Developer can
-  resolve it through the `agent` tool. The 2026-08-14 delivery runs committed changes
-  but did not create PRs; their runtime records have not yet exposed a Reviewer
-  invocation or terminal result. A default-agent fallback or unavailable Reviewer blocks
-  delivery rather than allowing publication without independent review.
+  resolve it through the `agent` tool. Test 6 stopped at a local quality gate before it
+  reached review, so a full Reviewer-to-PR run remains pending. A default-agent fallback
+  or unavailable Reviewer blocks delivery rather than allowing publication without
+  independent review.
 - **Backlog reads:** MCP first. If MCP does not return sufficient issue data, Product
   Owner uses the documented read-only `gh issue list` fallback. The fallback was
   authenticated and verified for this repository on 2026-08-13.
@@ -212,7 +231,9 @@ the single pull request Developer creates in step 12.
 - **Runtime evidence:** Immediately before publication, Developer runs `gh auth status` to
   verify scoped GitHub authentication, `git ls-remote --exit-code --heads origin <PR base>`
   to verify the selected base is on GitHub, and `git push --dry-run origin HEAD` to verify
-  authenticated remote write access. All must succeed.
+  authenticated remote write access. All must succeed. Authentication and remote write
+  access were manually verified during the 2026-08-14 tests; the complete automated
+  Reviewer-to-PR path remains pending the live proof above.
 - **Failure routing and manual fallback:** If any check is unavailable or fails, Developer
   does not attempt `git push` or `gh pr create`. Its Developer Result records publication as
   blocked and directs the user to authenticate, push the PR base when appropriate, push the
