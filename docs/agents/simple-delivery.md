@@ -165,7 +165,6 @@ the single pull request Developer creates in step 12.
 - Developer returns a blocked result, without a PR, when a gate remains red after two
   cycles or has an environmental or out-of-scope cause. It records the command output and
   blocker rather than publishing a knowingly failing change.
-
 ## Validation status
 
 - **Static contract check:** Run
