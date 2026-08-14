@@ -64,6 +64,20 @@ Before you begin, ensure you have the following tools installed on your workstat
     To verify formatting without changing files, run `npm run format:check`. The same
     check runs in CI.
 
+## Agent workflow validation
+
+Before running a live Product Owner -> Orchestrator -> Developer test, validate the
+workflow contract locally from the repository root:
+
+```bash
+node scripts/validate-delivery-contract.mjs
+```
+
+This dependency-free check verifies the agent profiles, approval and dispatch boundaries,
+independent `main`-based Developer branches, publication preconditions, and the two-cycle
+quality-gate repair policy. It does not access GitHub or create sessions, branches, or pull
+requests. Run one minimal live test after an App-runtime or credential-boundary change.
+
 ## Smoke tests (deployment validation)
 
 Run smoke tests from `src/` against a deployed URL:
