@@ -37,3 +37,23 @@ export async function getFirstArticlePage(page: Page): Promise<PageExpectation> 
 
     return { path: new URL(href, page.url()).pathname, heading };
 }
+
+export async function getAllArticlePages(page: Page): Promise<PageExpectation[]> {
+    const articleLinks = page.getByRole("main").getByRole("article").getByRole("link");
+    const count = await articleLinks.count();
+    if (count === 0) {
+        throw new Error("Expected at least one article link on the articles page.");
+    }
+
+    const pages: PageExpectation[] = [];
+    for (let i = 0; i < count; i++) {
+        const link = articleLinks.nth(i);
+        const heading = (await link.innerText()).trim();
+        const href = await link.getAttribute("href");
+        if (!href) {
+            throw new Error(`Expected article link ${i} to have an href.`);
+        }
+        pages.push({ path: new URL(href, page.url()).pathname, heading });
+    }
+    return pages;
+}

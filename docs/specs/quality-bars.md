@@ -31,6 +31,10 @@ This is the enforced gate; the full accessibility contract and ideal state are i
 - `npm run accessibility` MUST report a Lighthouse accessibility score of at least 90
   on every core route, with 100 retained as the target. The same gate runs in the
   [`Accessibility`](../../.github/workflows/accessibility.yml) workflow.
+- The Playwright acceptance suite MUST pass with **no serious or critical axe
+  violations** on the hydrated `/`, `/about`, `/articles`, and one article route (see
+  [testing.md](./testing.md#browser-acceptance-suite) and
+  [accessibility.md](./accessibility.md#automated-checks)).
 
 ## Performance
 
@@ -112,7 +116,7 @@ A change ships only when all of these hold:
 - [ ] `npm run accessibility` passes after `npm run build`.
 - [ ] `npm run build` succeeds (client + SSR + prerender).
 - [ ] `npm run test` passes; new/changed core logic has tests.
-- [ ] The Playwright PR-preview gate passes for deploy-triggering pull requests.
+- [ ] The Playwright PR-preview gate passes for deploy-triggering pull requests, including the axe scans on `/`, `/about`, `/articles`, and one article route with no serious or critical violations.
 - [ ] Images have alt text and dimensions; new images are AVIF.
 - [ ] No new client-side fetching for prerenderable content.
 - [ ] New routes ship full metadata (title, description, canonical, OG, JSON-LD) and are in `getStaticRoutes()`.
