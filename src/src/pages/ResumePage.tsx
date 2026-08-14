@@ -44,6 +44,7 @@ const pageTitle = "Résumé - Logan Farci";
 const pageDescription =
     "Professional résumé for Logan Farci, a Software Engineer specializing in Azure, C#, .NET, and cloud-native solutions.";
 const pageUrl = createCanonicalUrl("/resume");
+const skillKeywords = [...new Set(skillCategories.flatMap((cat) => cat.skills.map((s) => s.name)))].sort();
 const breadcrumbJsonLd = createBreadcrumbJsonLd([
     { name: "Home", path: "/" },
     { name: "Résumé", path: "/resume" },
@@ -100,6 +101,7 @@ export default function ResumePage() {
             <title>{pageTitle}</title>
             <link rel="canonical" href={pageUrl} />
             <meta name="description" content={pageDescription} />
+            <meta name="keywords" content={skillKeywords.join(", ")} />
             <meta property="og:type" content="website" />
             <meta property="og:title" content={pageTitle} />
             <meta property="og:description" content={pageDescription} />
