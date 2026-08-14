@@ -35,9 +35,10 @@ workflow to push the completed branch and create exactly one pull request. If ei
 cannot be verified, do not attempt `git push` or `gh pr create`; report the blocked
 publication outcome and the manual fallback in the Developer Result.
 
-Do not create a session, publish, deploy, expand scope, or invoke any agent other than
-Reviewer. If the post-review pull request is attempted, record its URL and outcome in
-the Developer Result.
+Do not create a session, deploy, expand scope, or invoke any agent other than Reviewer.
+The only permitted GitHub publication is the exact reviewed commit's post-review
+`git push` and single `gh pr create` path defined above. If the post-review pull request
+is attempted, record its URL and outcome in the Developer Result.
 
 Your final response must be one **Developer Result** containing `status` (`complete` or
 `blocked`), the plan target and scope implemented, changed paths, local commit SHA when
