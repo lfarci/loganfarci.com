@@ -1,6 +1,6 @@
 ---
 spec: accessibility
-version: 0.2.2
+version: 0.2.3
 status: current-state
 ---
 
@@ -68,6 +68,18 @@ The reports are written to `src/lighthouse-reports/`. The
 content changes and can also be started manually with `workflow_dispatch`. See the
 [Lighthouse usage guide](../lighthouse.md) for prerequisites, local troubleshooting,
 reports, and manual workflow instructions.
+
+The Playwright acceptance suite also runs axe against `/`, `/about`, `/articles`, and a
+representative article page after each route renders. It fails on serious or critical
+violations. Run it with the local SWA emulator or a deployed preview using the
+[browser acceptance command](./testing.md#browser-acceptance-suite).
+
+## Manual screen-reader validation
+
+Follow the concise [screen-reader validation script](../screen-reader-testing.md) after
+material changes to navigation, headings, focus behavior, or accessible names. Its result
+template records the tested screen-reader/browser combination and makes future passes
+comparable.
 
 ## Requirements
 
