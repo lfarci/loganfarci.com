@@ -100,8 +100,10 @@ flowchart LR
 7. Developer researches the repository and prepares an **Execution Plan** with:
     target, objective, in-scope work, out-of-scope work, likely paths, and existing checks
     to run.
-8. Developer implements the plan, commits the completed local change, and returns a
-    **Developer Result**.
+8. Developer implements the plan and commits the completed local change. A commit is an
+    intermediate checkpoint, not a terminal result: Developer continues in the same active
+    run through review and finalization until it produces a pull request URL or a blocked
+    Developer Result.
 9. Developer does not create a pull request before review. The review gate is mandatory.
 10. Developer invokes the user-invocable Reviewer custom agent in-process with the
     Developer Result and the plan. If Reviewer cannot be selected or the App reports a
@@ -117,7 +119,10 @@ flowchart LR
     exact reviewed commit and create **exactly one** pull request. Finalization never edits
     code: if a code change still turns out to be needed, Developer reports `blocked` instead
     of pushing, and the session routes it back through the bounded repair pass (step 11)
-    and a fresh Reviewer pass. Developer records the PR URL and outcome in its Developer Result.
+    and a fresh Reviewer pass. After `gh auth status` and `git push --dry-run origin HEAD`
+    pass, Developer runs `git push origin HEAD` and `gh pr create` in the same active run;
+    it does not stop between those commands. Developer records the PR URL and outcome in
+    its Developer Result.
 13. Developer finishes with a pull request or a blocked report. It does not report back
     to the Orchestrator through any cross-session mechanism.
 

@@ -15,6 +15,15 @@ with target, objective, in-scope work, out-of-scope work, likely paths, and exis
 checks to run. Implement only that plan, use existing repository commands for focused
 validation, and commit the completed local change.
 
+## Completion invariant
+
+A local commit is an intermediate checkpoint, never a terminal outcome. Do not end the
+active run, return a progress update, or report completion after committing. Continue in
+the same run through review and finalization until one of these terminal artifacts exists:
+
+1. a Reviewer result followed by one pull request URL, or
+2. a Developer Result with `status: blocked` and a concrete blocker.
+
 Invoke the user-invocable **Reviewer** custom agent with the plan and Developer Result;
 never replace it with the default agent. If the App reports a default-agent fallback or
 cannot invoke Reviewer, return a blocked Developer Result with no pull request. If
@@ -34,6 +43,10 @@ with `git push --dry-run origin HEAD`, then use the existing `git push` and `gh 
 workflow to push the completed branch and create exactly one pull request. If either check
 cannot be verified, do not attempt `git push` or `gh pr create`; report the blocked
 publication outcome and the manual fallback in the Developer Result.
+
+After both publication checks pass, execute `git push origin HEAD` followed by
+`gh pr create` in the same active run. Do not stop between the successful dry run and
+PR creation. Capture the returned pull request URL in the Developer Result.
 
 Do not create a session, deploy, expand scope, or invoke any agent other than Reviewer.
 The only permitted GitHub publication is the exact reviewed commit's post-review
