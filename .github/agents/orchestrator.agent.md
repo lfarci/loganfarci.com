@@ -51,14 +51,11 @@ Follow [`docs/agents/simple-delivery.md`](../../docs/agents/simple-delivery.md).
    session. If it is unavailable, return the selected issues as delivery packets with
    the manual fallback.
 
-   When the host is explicitly testing unmerged agent-configuration changes, set
-   `base_branch` to the current session branch only after the host confirms that branch
-   has already been pushed to `origin`. Include that branch as the Developer's explicit
-   PR base in the kickoff prompt. This ensures each Developer worktree contains the same
-   agent profiles and can open a stacked PR against a remote base. If the confirmation is
-   absent, return a blocked test outcome; do not dispatch child sessions from a local-only
-   base. For ordinary delivery, omit `base_branch` and specify the project default branch
-   as the Developer's PR base.
+   Every Developer session must start from and target the project default branch. Omit
+   `base_branch` and specify that default branch as the Developer's PR base. Never use an
+   unmerged agent-configuration branch as a Developer checkout or PR base: a full delivery
+   test must wait until the configuration reaches the default branch. If the host requests
+   that test earlier, return a blocked outcome with the manual profile-level test fallback.
 
 If the host asks about the selection reasoning or requests a different shortlist, invoke
 Product Owner again, show the revised Selected Issues Overview, and request fresh

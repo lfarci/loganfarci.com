@@ -1,6 +1,6 @@
 ---
 spec: simple delivery workflow
-version: 2.2.0
+version: 2.3.0
 status: current-design
 verified: 2026-08-14
 ---
@@ -93,12 +93,11 @@ flowchart LR
     the Orchestrator reports a blocked outcome instead of retrying with an unspecified
     agent. Developer remains user-invocable because the App's `create_session` surface
     must resolve that exact agent; if the App reports a default-agent fallback, the
-    dispatch is blocked. For ordinary delivery, the project default branch is the PR base
-    and Orchestrator omits `base_branch`. When explicitly testing unmerged
-    agent-configuration changes, the host must first push the current configuration branch
-    to `origin` and confirm that it exists remotely. Only then does Orchestrator set
-    `base_branch` and the PR base to that branch. Without that confirmation, it returns a
-    blocked test outcome rather than dispatching children from a local-only base.
+    dispatch is blocked. Every Developer session starts from the project default branch and
+    uses it as the PR base, so Orchestrator always omits `base_branch`. It never uses an
+    unmerged agent-configuration branch as a Developer checkout or PR base. A full delivery
+    test must wait until its configuration reaches the default branch; before then,
+    Orchestrator returns a blocked outcome with the manual profile-level test fallback.
 7. Developer researches the repository and prepares an **Execution Plan** with:
     target, objective, in-scope work, out-of-scope work, likely paths, and existing checks
     to run.
@@ -235,4 +234,6 @@ If Product Owner or the `agent` tool is unavailable, the Orchestrator returns a 
 outcome with the exact `@product-owner` invocation for a human to run; it does not query
 GitHub itself. If `create_session` or in-process delivery delegation is unavailable, the
 user runs the Developer session phases directly against the same Execution Plan and Developer
-Result. The Orchestrator does not substitute a different transport mechanism.
+Result. Before unmerged agent-configuration changes reach the default branch, the user may
+run a manual profile-level test but does not launch issue-delivery sessions from that branch.
+The Orchestrator does not substitute a different transport mechanism.
