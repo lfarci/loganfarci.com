@@ -1,6 +1,6 @@
 ---
 spec: testing
-version: 0.3.0
+version: 0.3.1
 status: current-state
 ---
 
@@ -188,6 +188,11 @@ in CI, and uploads the HTML report and retained failure trace only when the run 
 Tests MUST use roles and accessible names, web-first assertions, and no fixed sleeps or
 test-only selectors. The suite blocks browser requests outside the target preview so
 it remains deterministic and independent of mutable external services.
+
+The suite includes axe audits for `/`, `/about`, `/articles`, and a representative
+article route, failing on serious or critical violations. The [screen-reader validation
+procedure](../screen-reader-validation.md) defines the complementary manual pass and
+its repeatable result template.
 
 ### Constraints
 

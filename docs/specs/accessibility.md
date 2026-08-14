@@ -1,6 +1,6 @@
 ---
 spec: accessibility
-version: 0.2.2
+version: 0.2.3
 status: current-state
 ---
 
@@ -51,7 +51,8 @@ Verified in the code today:
 - **Automated CI checks.** Lighthouse CI audits `/`, `/about`, `/articles`, and an
   article page against the prerendered build. Every route MUST score at least 90 in
   the accessibility category, with 100 retained as the target; downloadable HTML
-  reports are retained with each workflow run.
+  reports are retained with each workflow run. The rendered-browser Playwright suite
+  also fails on serious or critical axe violations for the same routes.
 
 ## Automated checks
 
@@ -68,6 +69,11 @@ The reports are written to `src/lighthouse-reports/`. The
 content changes and can also be started manually with `workflow_dispatch`. See the
 [Lighthouse usage guide](../lighthouse.md) for prerequisites, local troubleshooting,
 reports, and manual workflow instructions.
+
+The browser acceptance command in [testing.md](./testing.md#browser-acceptance-suite)
+also runs axe against rendered pages. Follow the repeatable
+[screen-reader validation procedure](../screen-reader-validation.md) after material
+changes to structure, navigation, focus management, labels, or article rendering.
 
 ## Requirements
 
