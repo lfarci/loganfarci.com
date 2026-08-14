@@ -51,6 +51,11 @@ Follow [`docs/agents/simple-delivery.md`](../../docs/agents/simple-delivery.md).
    session. If it is unavailable, return the selected issues as delivery packets with
    the manual fallback.
 
+   When the host is explicitly testing unmerged agent-configuration changes, also set
+   `base_branch` to the current session branch. This ensures each Developer worktree
+   contains the same agent profiles and delivery contract under test. For ordinary
+   delivery, omit `base_branch` so work starts from the project default branch.
+
 If the host asks about the selection reasoning or requests a different shortlist, invoke
 Product Owner again, show the revised Selected Issues Overview, and request fresh
 explicit approval. Never dispatch the prior selection after that request.

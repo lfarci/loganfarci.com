@@ -93,6 +93,10 @@ flowchart LR
     a blocked outcome instead of retrying with an unspecified agent. Developer remains
     user-invocable because the App's `create_session` surface must resolve that exact
     agent; if the App reports a default-agent fallback, the dispatch is blocked.
+    When explicitly testing unmerged agent-configuration changes, Orchestrator also sets
+    `base_branch` to its current branch so the Developer worktree includes those profiles.
+    For ordinary delivery, it omits `base_branch` and starts from the project default
+    branch.
 7. Developer researches the repository and prepares an **Execution Plan** with:
     target, objective, in-scope work, out-of-scope work, likely paths, and existing checks
     to run.
