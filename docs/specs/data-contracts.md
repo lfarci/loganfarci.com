@@ -13,6 +13,11 @@ Every file in `content/data/` is imported and cast to a type in `src/src/types/`
 authoritative contract; this spec summarizes them for quick reference. When a shape
 changes, update **both** the JSON and the type.
 
+Calendar dates are modeled as `ISODateString` ([`date.ts`](../../src/src/types/date.ts)),
+a branded `string` with a `YYYY-MM-DD` shape that matches the runtime value Vite imports
+from JSON. They are never typed as `Date`; consumers parse them with `new Date(...)` when
+needed.
+
 ## Shared: `Image`
 
 Used by many contracts. All fields required
@@ -24,12 +29,6 @@ Used by many contracts. All fields required
 | `alt` | string | Required, descriptive (accessibility). |
 | `width` | number | Intrinsic width, avoids layout shift. |
 | `height` | number | Intrinsic height. |
-
-> **Date drift (applies below):** Fields typed as `Date` (`certification.date`,
-> `experience.start`/`end`) are stored in JSON as **ISO date strings** (e.g.
-> `"2025-03-28"`) and only **type-asserted** to `Date` in `core/data.ts` (a TypeScript
-> `as` cast) — the runtime values remain ISO strings, and helpers like `formatDate`
-> take a string. Keep the `YYYY-MM-DD` string form in JSON.
 
 ## Files → types
 
@@ -53,7 +52,7 @@ Used by many contracts. All fields required
 | `image` | `Image` | yes |
 | `url` | string | yes |
 | `issuer` | string | yes |
-| `date` | `Date` (ISO string in JSON) | yes |
+| `date` | `ISODateString` (`YYYY-MM-DD`) | yes |
 | `relevance` | `"High" \| "Medium" \| "Low"` | yes |
 | `order` | number | yes (sort key on About) |
 
@@ -62,8 +61,8 @@ Used by many contracts. All fields required
 | --- | --- | --- |
 | `name` | string | yes |
 | `company` | `Company` | yes |
-| `start` | `Date` (ISO string in JSON) | yes |
-| `end` | `Date` (ISO string in JSON) | no (omit = "Present") |
+| `start` | `ISODateString` (`YYYY-MM-DD`) | yes |
+| `end` | `ISODateString` (`YYYY-MM-DD`) | no (omit = "Present") |
 | `type` | `"Full-Time" \| "Part-Time" \| "Internship" \| "Freelance"` | no |
 | `description` | string (markdown) | no |
 

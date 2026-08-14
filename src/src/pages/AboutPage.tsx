@@ -6,6 +6,7 @@ import InfoCard from "@/components/cards/InfoCard";
 import { Certification, SkillCategory } from "@/types";
 import { MarkdownPreview } from "@/components/shared/preview";
 import { getCertifications, getDiploma, getExperiences, getProfile, getSkillCategories } from "@/core/data";
+import { formatExperiencePeriod } from "@/core/date";
 import IconTag from "@/components/shared/IconTag";
 import { Text } from "@/components/shared/typography";
 import { createId } from "@/core/string";
@@ -14,17 +15,6 @@ import ThumbnailGridSection from "@/components/shared/ThumbnailGridSection";
 import JsonLd from "@/components/shared/JsonLd";
 import { Heading1 } from "@/components/shared/typography";
 import { createBreadcrumbJsonLd, createCanonicalUrl } from "@/core/seo";
-
-const formatMonthYear = (date: Date | string) => {
-    const d = typeof date === "string" ? new Date(date) : date;
-    return d.toLocaleDateString(undefined, { year: "numeric", month: "long" });
-};
-
-const formatExperiencePeriod = (start: Date, end?: Date) => {
-    const startDate = formatMonthYear(start);
-    const endDate = end ? formatMonthYear(end) : "Present";
-    return `${startDate} - ${endDate}`;
-};
 
 const certifications = getCertifications()
     .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
