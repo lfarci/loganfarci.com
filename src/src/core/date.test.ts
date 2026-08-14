@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 
+import type { ISODateString } from "@/types";
 import { formatDate, formatExperiencePeriod, formatMonthYear, formatSimpleDate } from "./date";
 
 describe("formatDate", () => {
@@ -54,9 +55,9 @@ describe("formatMonthYear", () => {
     });
 
     it("returns Invalid Date for invalid input", () => {
-        expect(formatMonthYear("")).toBe("Invalid Date");
-        expect(formatMonthYear("not-a-date")).toBe("Invalid Date");
-        expect(formatMonthYear("2024-13-01")).toBe("Invalid Date");
+        expect(formatMonthYear("" as ISODateString)).toBe("Invalid Date");
+        expect(formatMonthYear("not-a-date" as ISODateString)).toBe("Invalid Date");
+        expect(formatMonthYear("2024-13-01" as ISODateString)).toBe("Invalid Date");
     });
 });
 
@@ -74,10 +75,10 @@ describe("formatExperiencePeriod", () => {
     });
 
     it("returns Invalid Date for an invalid start date", () => {
-        expect(formatExperiencePeriod("not-a-date", "2025-12-01")).toContain("Invalid Date");
+        expect(formatExperiencePeriod("not-a-date" as ISODateString, "2025-12-01")).toContain("Invalid Date");
     });
 
     it("returns Invalid Date for an invalid end date", () => {
-        expect(formatExperiencePeriod("2022-06-01", "not-a-date")).toContain("Invalid Date");
+        expect(formatExperiencePeriod("2022-06-01", "not-a-date" as ISODateString)).toContain("Invalid Date");
     });
 });
