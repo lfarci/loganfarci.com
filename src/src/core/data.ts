@@ -1,4 +1,15 @@
-import { Certification, Experience, SkillCategory, Interest, Contact, Profile, Diploma, Icon, Skill } from "@/types";
+import type {
+    Certification,
+    Contact,
+    Diploma,
+    Experience,
+    Icon,
+    Interest,
+    ISODateString,
+    Profile,
+    Skill,
+    SkillCategory,
+} from "@/types";
 
 // Vite resolves JSON imports at build time — inlined into the bundle
 import certifications from "@content/data/certifications.json";
@@ -10,8 +21,32 @@ import contacts from "@content/data/contacts.json";
 import profile from "@content/data/profile.json";
 import education from "@content/data/education.json";
 
-export const getCertifications = (): Certification[] => certifications as Certification[];
-export const getExperiences = (): Experience[] => experiences as Experience[];
+const isoDatePattern = /^\d{4}-\d{2}-\d{2}$/u;
+
+function assertISODateString(value: unknown, field: string): asserts value is ISODateString {
+    if (typeof value !== "string" || !isoDatePattern.test(value)) {
+        throw new Error(`${field} must use the YYYY-MM-DD date format.`);
+    }
+}
+
+export const getCertifications = (): Certification[] =>
+    certifications.map((certification, index) => {
+        assertISODateString(certification.date, `certifications[${index}].date`);
+
+        return certification as Certification;
+    });
+
+export const getExperiences = (): Experience[] =>
+    experiences.map((experience, index) => {
+        assertISODateString(experience.start, `experiences[${index}].start`);
+
+        if (experience.end !== undefined) {
+            assertISODateString(experience.end, `experiences[${index}].end`);
+        }
+
+        return experience as Experience;
+    });
+
 export const getSkillCategories = (): SkillCategory[] => skills as SkillCategory[];
 export const getIcons = (): Icon[] => icons as Icon[];
 export const getInterests = (): Interest[] => interests as Interest[];
