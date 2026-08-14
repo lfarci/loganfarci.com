@@ -42,8 +42,8 @@ and a subsession finishes with a pull request or a blocked report.
 | --- | --- | --- | --- | --- |
 | Product management | Product Owner | Read the live GitHub backlog, recommend ranked delivery candidates with evidence-based selection reasoning, and create or update issues only when explicitly directed | Read GitHub issues through MCP, falling back to the documented read-only `gh issue list` command; read full details for recommended issues; use configured GitHub write tools or the documented `gh issue create` and `gh issue edit` fallback after authentication verification; return one Backlog Report | Edit code, commit, push, create a PR, create sessions, publish, deploy, research or plan delivery work, or change issue state without an explicit user directive |
 | Dispatch | Orchestrator | Invoke Product Owner, select from its Backlog Report, show the proposed Developer sessions, request approval, then dispatch approved issues | Read/search the repository; invoke Product Owner through `agent`; show the Selected Issues Overview and wait for explicit approval; then invoke `create_session` once per approved issue with the exact `kickoff.agent: "Developer"`, `kickoff.mode: "autopilot"`, and the issue plus this contract in the prompt; block instead of retrying with a default agent if the kickoff is rejected | Read GitHub directly, edit code, execute commands, write GitHub state, push, create a PR, publish, deploy, research or plan an issue, fix review findings, or dispatch before explicit approval |
-| Delivery | Developer | Research one issue, prepare its Execution Plan, implement it, coordinate independent review, and finalize exactly one PR after review passes | Read/search/edit/execute, invoke Reviewer, commit local code, and use the existing `git push` and `gh pr create` workflow after Reviewer passes; remain user-invocable so the App can select it for `create_session` | Expand scope, create sessions, publish, deploy, invoke agents other than Reviewer, or create a PR before review |
-| Delivery | Reviewer | Independently assess the Developer's result | Read/search/execute scoped checks | Edit, commit, push, create sessions, publish, deploy, or invoke Developer |
+| Delivery | Developer | Research one issue, prepare its Execution Plan, implement it, coordinate independent review, and finalize exactly one PR after review passes | Read/search/edit/execute, invoke user-invocable Reviewer, commit local code, and use the existing `git push` and `gh pr create` workflow after Reviewer passes; remain user-invocable so the App can select it for `create_session` | Expand scope, create sessions, publish, deploy, invoke agents other than Reviewer, or create a PR before review |
+| Delivery | Reviewer | Independently assess the Developer's result | Read/search/execute scoped checks; remain user-invocable so Developer can select it | Edit, commit, push, create sessions, publish, deploy, or invoke Developer |
 
 ## Flow
 
@@ -99,9 +99,10 @@ flowchart LR
 8. Developer implements the plan, commits the completed local change, and returns a
     **Developer Result**.
 9. Developer does not create a pull request before review. The review gate is mandatory.
-10. Developer invokes Reviewer in-process with the Developer Result and the plan.
-    Reviewer runs the smallest existing checks that cover the change and returns a
-    **Review Result**.
+10. Developer invokes the user-invocable Reviewer custom agent in-process with the
+    Developer Result and the plan. If Reviewer cannot be selected or the App reports a
+    default-agent fallback, Developer returns a blocked Developer Result. Reviewer runs
+    the smallest existing checks that cover the change and returns a **Review Result**.
 11. If the Review Result is `needs-changes`, Developer repairs its actionable findings
     once, then re-invokes Reviewer. This repair loop is bounded: it never exceeds one
     additional Developer + Reviewer pass. If the result is still `needs-changes` or is
@@ -151,6 +152,11 @@ the single pull request Developer creates in step 12.
   reported default-agent fallback blocks delivery; the user must restart the App in a
   fresh session after committing the profile and select Developer manually if the
   fallback persists.
+- **Reviewer selection:** Conditional. Reviewer remains user-invocable so Developer can
+  resolve it through the `agent` tool. The 2026-08-14 delivery runs committed changes
+  but did not create PRs; their runtime records have not yet exposed a Reviewer
+  invocation or terminal result. A default-agent fallback or unavailable Reviewer blocks
+  delivery rather than allowing publication without independent review.
 - **Backlog reads:** MCP first. If MCP does not return sufficient issue data, Product
   Owner uses the documented read-only `gh issue list` fallback. The fallback was
   authenticated and verified for this repository on 2026-08-13.

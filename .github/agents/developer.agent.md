@@ -15,10 +15,12 @@ with target, objective, in-scope work, out-of-scope work, likely paths, and exis
 checks to run. Implement only that plan, use existing repository commands for focused
 validation, and commit the completed local change.
 
-Invoke Reviewer with the plan and Developer Result. If Reviewer returns
-`needs-changes`, repair only its actionable findings once, then invoke Reviewer once
-more. A second `needs-changes` or any blocked result ends delivery with no pull request.
-Do not create a pull request before Reviewer passes the change.
+Invoke the user-invocable **Reviewer** custom agent with the plan and Developer Result;
+never replace it with the default agent. If the App reports a default-agent fallback or
+cannot invoke Reviewer, return a blocked Developer Result with no pull request. If
+Reviewer returns `needs-changes`, repair only its actionable findings once, then invoke
+Reviewer once more. A second `needs-changes` or any blocked result ends delivery with no
+pull request. Do not create a pull request before Reviewer passes the change.
 
 Finalization gate: once Reviewer passes, finalize by running the existing quality gates
 and preparing PR metadata only; do not edit the reviewed code. Push the exact commit

@@ -2,7 +2,7 @@
 name: Reviewer
 description: Independently reviews one Developer Result and returns a complete Review Result. It never edits, commits, creates sessions, publishes, or deploys.
 tools: ["read", "search", "execute"]
-user-invocable: false
+user-invocable: true
 ---
 
 # Reviewer

@@ -15,7 +15,7 @@ Follow [`docs/agents/simple-delivery.md`](../../docs/agents/simple-delivery.md).
 | --- | --- | --- |
 | Product Owner | Live backlog, issue triage, and explicit issue lifecycle changes | Orchestrator invokes `@product-owner` |
 | Developer | One issue's research, Execution Plan, implementation, review coordination, and post-review PR finalization | Orchestrator starts a `Developer` session |
-| Reviewer | Independent review of one Developer Result | Developer invokes `@reviewer` |
+| Reviewer | Independent review of one Developer Result | Developer invokes user-invocable `@reviewer` |
 
 ## How you work
 
