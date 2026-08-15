@@ -76,9 +76,23 @@ cpSync(join(resume, "resume.tex"), join(output, "resume.tex"));
 for (const name of ["summary.tex", "experience.tex", "skills.tex", "education.tex", "certifications.tex"])
     cpSync(join(resume, "sections", name), join(output, "sections", name));
 writeFileSync(join(output, "generated", "facts.tex"), facts);
-execFileSync("tectonic", ["--chatter", "minimal", "--outdir", output, join(output, "resume.tex")], {
-    stdio: "inherit",
-});
-execFileSync(process.execPath, [join(root, "scripts", "validate-resume.mjs"), join(output, "resume.pdf")], {
-    stdio: "inherit",
-});
+let lastError;
+for (let attempt = 1; attempt <= 3; attempt += 1) {
+    try {
+        execFileSync("tectonic", ["--chatter", "minimal", "--outdir", output, join(output, "resume.tex")], {
+            stdio: "inherit",
+        });
+        execFileSync(process.execPath, [join(root, "scripts", "validate-resume.mjs"), join(output, "resume.pdf")], {
+            stdio: "inherit",
+        });
+        lastError = undefined;
+        break;
+    } catch (error) {
+        lastError = error;
+        if (attempt < 3)
+            console.warn(
+                `Resume build attempt ${attempt} failed; retrying to recover transient renderer or bundle errors.`,
+            );
+    }
+}
+if (lastError) throw lastError;
