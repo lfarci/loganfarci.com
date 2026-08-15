@@ -24,4 +24,14 @@ describe("structured-data date contract", () => {
             }
         }
     });
+
+    it("keeps every experience summary and achievement list structured", () => {
+        for (const experience of getExperiences()) {
+            expect(experience.summary, `${experience.name} summary`).toEqual(expect.stringMatching(/\S/));
+            expect(Array.isArray(experience.achievements), `${experience.name} achievements`).toBe(true);
+            for (const achievement of experience.achievements) {
+                expect(achievement, `${experience.name} achievement`).toEqual(expect.stringMatching(/\S/));
+            }
+        }
+    });
 });

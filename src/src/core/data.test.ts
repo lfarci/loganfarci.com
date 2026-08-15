@@ -15,7 +15,15 @@ vi.mock("@content/data/certifications.json", () => ({
 }));
 
 vi.mock("@content/data/experiences.json", () => ({
-    default: [{ name: "Software Engineer", company: { name: "Acme", url: "https://acme.com" }, start: "2022-01-01" }],
+    default: [
+        {
+            name: "Software Engineer",
+            company: { name: "Acme", url: "https://acme.com" },
+            start: "2022-01-01",
+            summary: "A software engineer summary",
+            achievements: ["Achievement A", "Achievement B"],
+        },
+    ],
 }));
 
 vi.mock("@content/data/skills.json", () => ({

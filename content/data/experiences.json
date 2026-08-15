@@ -9,7 +9,14 @@
             "location": "Merelbeke, Flanders, Belgium",
             "logo": { "src": "/images/experience/avanade.avif", "alt": "Avanade Logo", "width": 128, "height": 128 }
         },
-        "description": "Leading enterprise-scale solutions and driving technical direction as a consultant for global clients.\n\n- Lead development of cloud-native enterprise solutions using Azure, .NET, and the Microsoft ecosystem.  \n- Architect and deliver scalable applications with Infrastructure as Code and clean architectural patterns.  \n- Mentor developers and interns across client and internal projects, fostering team growth.  \n- Drive agile practices as a hands-on Scrum practitioner focused on continuous improvement.  \n- Partner closely with clients to turn business requirements into secure, high-performance solutions."
+        "summary": "Leading enterprise-scale solutions and driving technical direction as a consultant for global clients.",
+        "achievements": [
+            "Lead development of cloud-native enterprise solutions using Azure, .NET, and the Microsoft ecosystem.",
+            "Architect and deliver scalable applications with Infrastructure as Code and clean architectural patterns.",
+            "Mentor developers and interns across client and internal projects, fostering team growth.",
+            "Drive agile practices as a hands-on Scrum practitioner focused on continuous improvement.",
+            "Partner closely with clients to turn business requirements into secure, high-performance solutions."
+        ]
     },
     {
         "name": "Senior Analyst, Full-Stack Developer",
@@ -22,7 +29,14 @@
             "location": "Merelbeke, Flanders, Belgium",
             "logo": { "src": "/images/experience/avanade.avif", "alt": "Avanade Logo", "width": 128, "height": 128 }
         },
-        "description": "Delivered enterprise-grade solutions across the full stack, gaining deep expertise in Azure and the Microsoft ecosystem.\n\n- Developed and maintained enterprise solutions using Azure, .NET, and modern frontend frameworks.  \n- Championed code quality through clean code principles, resulting in maintainable, testable software.  \n- Collaborated with clients across multiple sectors to design secure, high-performance applications.  \n- Mentored junior team members and contributed to internal knowledge-sharing initiatives.  \n- Promoted agile development practices and continuous delivery across client engagements."
+        "summary": "Delivered enterprise-grade solutions across the full stack, gaining deep expertise in Azure and the Microsoft ecosystem.",
+        "achievements": [
+            "Developed and maintained enterprise solutions using Azure, .NET, and modern frontend frameworks.",
+            "Championed code quality through clean code principles, resulting in maintainable, testable software.",
+            "Collaborated with clients across multiple sectors to design secure, high-performance applications.",
+            "Mentored junior team members and contributed to internal knowledge-sharing initiatives.",
+            "Promoted agile development practices and continuous delivery across client engagements."
+        ]
     },
     {
         "name": "Analyst Developer",
@@ -35,7 +49,14 @@
             "location": "Brussels, Brussels-Capital Region, Belgium",
             "logo": { "src": "/images/experience/smals.avif", "alt": "Smals Logo", "width": 128, "height": 128 }
         },
-        "description": "Built public-sector digital services at the Belgian National Employment Office (ONEM) through Smals, a non-profit IT partner for government institutions.\n\n- Contributed to mainframe system migration to Linux and modernization of legacy systems.  \n- Maintained a C++ shared library on Linux and supported a custom mainframe emulator.  \n- Developed web applications using Angular, Spring Boot, Docker, and Kubernetes for government workflows.  \n- Automated deployments with Atlassian Bamboo, improving release speed and reliability.  \n- Implemented testing strategies with Cypress, Cucumber, Jest, and JUnit to ensure code quality."
+        "summary": "Built public-sector digital services at the Belgian National Employment Office (ONEM) through Smals, a non-profit IT partner for government institutions.",
+        "achievements": [
+            "Contributed to mainframe system migration to Linux and modernization of legacy systems.",
+            "Maintained a C++ shared library on Linux and supported a custom mainframe emulator.",
+            "Developed web applications using Angular, Spring Boot, Docker, and Kubernetes for government workflows.",
+            "Automated deployments with Atlassian Bamboo, improving release speed and reliability.",
+            "Implemented testing strategies with Cypress, Cucumber, Jest, and JUnit to ensure code quality."
+        ]
     },
     {
         "name": "Software Engineer Intern",
@@ -48,7 +69,14 @@
             "location": "Merelbeke, Flanders, Belgium",
             "logo": { "src": "/images/experience/avanade.avif", "alt": "Avanade Logo", "width": 128, "height": 128 }
         },
-        "description": "Developed a cloud-native proof-of-concept and Azure DevOps tooling as part of a competitive internship program.\n\n- Designed and built a cloud-native PoC application using React, TypeScript, Azure Functions (.NET), and Azure Storage Tables.  \n- Created Azure DevOps web extensions for agile team mood tracking and reporting.  \n- Implemented automated build and deployment workflows within the Azure ecosystem.  \n- Delivered technical demos to both technical and non-technical stakeholders.  \n- Applied clean code and security best practices with a focus on scalability."
+        "summary": "Developed a cloud-native proof-of-concept and Azure DevOps tooling as part of a competitive internship program.",
+        "achievements": [
+            "Designed and built a cloud-native PoC application using React, TypeScript, Azure Functions (.NET), and Azure Storage Tables.",
+            "Created Azure DevOps web extensions for agile team mood tracking and reporting.",
+            "Implemented automated build and deployment workflows within the Azure ecosystem.",
+            "Delivered technical demos to both technical and non-technical stakeholders.",
+            "Applied clean code and security best practices with a focus on scalability."
+        ]
     },
     {
         "name": "Software Engineer Intern",
@@ -61,6 +89,12 @@
             "location": "Brussels, Brussels-Capital Region, Belgium",
             "logo": { "src": "/images/experience/microsoft.avif", "alt": "Microsoft Logo", "width": 128, "height": 128 }
         },
-        "description": "Selected for a competitive prototyping internship program, working on an Avanade-sponsored project with mentorship from Microsoft.\n\n- Trained in Scrum, Python, Node.js, Angular, React, Big Data, and IoT through expert-led workshops.  \n- Contributed to innovation projects supporting startups and entrepreneurs in the local tech ecosystem.  \n- Developed technical and soft skills through mentorship sessions and hands-on prototyping.  \n- Adapted to remote collaboration during the coronavirus outbreak, maintaining productivity through online supervision."
+        "summary": "Selected for a competitive prototyping internship program, working on an Avanade-sponsored project with mentorship from Microsoft.",
+        "achievements": [
+            "Trained in Scrum, Python, Node.js, Angular, React, Big Data, and IoT through expert-led workshops.",
+            "Contributed to innovation projects supporting startups and entrepreneurs in the local tech ecosystem.",
+            "Developed technical and soft skills through mentorship sessions and hands-on prototyping.",
+            "Adapted to remote collaboration during the coronavirus outbreak, maintaining productivity through online supervision."
+        ]
     }
 ]

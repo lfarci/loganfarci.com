@@ -7,5 +7,6 @@ export interface Experience {
     start: ISODateString;
     end?: ISODateString;
     type?: "Full-Time" | "Part-Time" | "Internship" | "Freelance";
-    description?: string;
+    summary: string;
+    achievements: string[];
 }

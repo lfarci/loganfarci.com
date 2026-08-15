@@ -18,31 +18,25 @@ function renderAboutPage() {
 }
 
 describe("AboutPage experience presentation", () => {
-    it("renders every experience description directly without a disclosure control", () => {
+    it("renders every experience summary directly without a disclosure control", () => {
         renderAboutPage();
+
+        for (const experience of getExperiences()) {
+            expect(screen.getByText(experience.summary)).toBeTruthy();
+        }
 
         expect(screen.queryByRole("button")).toBeNull();
     });
 
-    it("shows the full experience descriptions without clipping", () => {
+    it("renders the achievement bullets as list items for each experience", () => {
         renderAboutPage();
 
-        for (const experience of getExperiences()) {
-            const summary = experience.description?.split("\n\n")[0];
-            expect(summary).toBeTruthy();
-            expect(screen.getByText(summary as string)).toBeTruthy();
-        }
-    });
+        const allAchievements = getExperiences().flatMap((experience) => experience.achievements);
 
-    it("renders the achievement bullets for each experience", () => {
-        renderAboutPage();
+        expect(screen.getAllByRole("list")).toHaveLength(getExperiences().length);
 
-        const examples = getExperiences()
-            .map((experience) => experience.description?.split("\n").at(-1)?.replace(/^- /u, ""))
-            .filter(Boolean);
-
-        for (const bullet of examples) {
-            expect(screen.getByText(bullet as string)).toBeTruthy();
+        for (const achievement of allAchievements) {
+            expect(screen.getByText(achievement)).toBeTruthy();
         }
     });
 });

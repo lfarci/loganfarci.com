@@ -7,12 +7,11 @@ import { Certification, SkillCategory } from "@/types";
 import { getCertifications, getDiploma, getExperiences, getProfile, getSkillCategories } from "@/core/data";
 import { formatExperiencePeriod } from "@/core/date";
 import IconTag from "@/components/shared/IconTag";
-import { Text } from "@/components/shared/typography";
 import { createId } from "@/core/string";
 import ColumnContainer from "@/components/layout/ColumnContainer";
 import ThumbnailGridSection from "@/components/shared/ThumbnailGridSection";
 import JsonLd from "@/components/shared/JsonLd";
-import { Heading1 } from "@/components/shared/typography";
+import { Heading1, ListItem, Text, UnorderedList } from "@/components/shared/typography";
 import { createBreadcrumbJsonLd, createCanonicalUrl } from "@/core/seo";
 
 const certifications = getCertifications()
@@ -82,7 +81,12 @@ export default function AboutPage() {
                                 align="start"
                                 showTitleTooltip
                             >
-                                <MarkdownContent content={experience.description ?? ""} />
+                                <Text>{experience.summary}</Text>
+                                <UnorderedList>
+                                    {experience.achievements.map((achievement) => (
+                                        <ListItem key={achievement}>{achievement}</ListItem>
+                                    ))}
+                                </UnorderedList>
                             </InfoCard>
                         ))}
                     </ColumnContainer>

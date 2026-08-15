@@ -28,6 +28,8 @@ const mockExperience: Experience = {
     name: "Software Engineer",
     company: { name: "Contoso", website: "https://contoso.com", location: "Brussels" },
     start: "2022-01-01",
+    summary: "A software engineering role.",
+    achievements: ["Delivered features."],
 };
 
 const mockArticle: Article = {
