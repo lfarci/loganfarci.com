@@ -56,7 +56,12 @@ const InfoCard: FC<InfoCardProps> = ({
     const hasBody = Boolean(children);
 
     return (
-        <Card className={mergeClassNames("scroll-mt-24", className)}>
+        <Card
+            className={mergeClassNames(
+                "scroll-mt-24 relative overflow-hidden before:absolute before:inset-x-0 before:top-0 before:h-1 before:bg-gradient-brand before:content-['']",
+                className,
+            )}
+        >
             <div className="flex w-full items-start gap-4">
                 {media && (
                     <CardMedia

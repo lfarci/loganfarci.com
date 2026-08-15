@@ -12,6 +12,7 @@ import ColumnContainer from "@/components/layout/ColumnContainer";
 import ThumbnailGridSection from "@/components/shared/ThumbnailGridSection";
 import JsonLd from "@/components/shared/JsonLd";
 import { Heading1, ListItem, Text, UnorderedList } from "@/components/shared/typography";
+import { Separator } from "@/components/shared/primitives/Separator";
 import { createBreadcrumbJsonLd, createCanonicalUrl } from "@/core/seo";
 
 const certifications = getCertifications()
@@ -82,7 +83,8 @@ export default function AboutPage() {
                                 showTitleTooltip
                             >
                                 <Text>{experience.summary}</Text>
-                                <UnorderedList>
+                                <Separator className="my-4" />
+                                <UnorderedList className="marker:text-primary space-y-1.5! mb-0!">
                                     {experience.achievements.map((achievement) => (
                                         <ListItem key={achievement}>{achievement}</ListItem>
                                     ))}
