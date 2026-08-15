@@ -1,0 +1,25 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[margin=1.35cm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[hidelinks]{hyperref}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{xcolor}
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlist[itemize]{leftmargin=1.2em,noitemsep,topsep=1pt}
+\titleformat{\section}{\large\bfseries\color{black}}{}{0pt}{}[\vspace{-3pt}\rule{\linewidth}{0.4pt}]
+\titlespacing*{\section}{0pt}{6pt}{3pt}
+\begin{document}
+\input{generated/facts.tex}
+{\LARGE\textbf{Logan Farci}}\\
+\textbf{Software Engineer | Azure Developer}\\[-1pt]
+\href{mailto:logan.farci@outlook.be}{logan.farci@outlook.be} $\cdot$ Belgium $\cdot$ \href{https://www.linkedin.com/in/lfarci/}{linkedin.com/in/lfarci} $\cdot$ \href{https://github.com/lfarci}{github.com/lfarci}
+\input{sections/summary.tex}
+\input{sections/experience.tex}
+\input{sections/skills.tex}
+\input{sections/education.tex}
+\input{sections/certifications.tex}
+\end{document}
