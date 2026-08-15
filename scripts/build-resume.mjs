@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { execFileSync } from "node:child_process";
 import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
-import { isAbsolute, relative, resolve, join } from "node:path";
+import { isAbsolute, relative, resolve, join, sep } from "node:path";
 
 const root = resolve(import.meta.dirname, "..");
 const resume = join(root, "content", "resume");
@@ -10,10 +10,12 @@ const outputIndex = process.argv.indexOf("--output");
 const outputArg = outputIndex === -1 ? "build/resume" : process.argv[outputIndex + 1];
 if (!outputArg) throw new Error("--output requires a path");
 const output = resolve(root, outputArg);
+if (output === root || root.startsWith(`${output}${sep}`)) throw new Error("Output must be a generated child path, not a repository ancestor");
 const outputRelativeToResume = relative(resume, output);
-if (!outputRelativeToResume || (!outputRelativeToResume.startsWith("..") && !isAbsolute(outputRelativeToResume))) {
-  throw new Error("Output must be outside content/resume");
-}
+const parentPrefix = `..${sep}`;
+const outputIsInsideResume = !outputRelativeToResume || (!outputRelativeToResume.startsWith(parentPrefix) && outputRelativeToResume !== ".." && !isAbsolute(outputRelativeToResume));
+const malformedParentPath = outputRelativeToResume.startsWith("..") && !outputRelativeToResume.startsWith(parentPrefix);
+if (outputIsInsideResume || malformedParentPath) throw new Error("Output must be outside content/resume");
 if (existsSync(output)) rmSync(output, { recursive: true });
 mkdirSync(join(output, "sections"), { recursive: true });
 mkdirSync(join(output, "generated"));
