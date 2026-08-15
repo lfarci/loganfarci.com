@@ -21,8 +21,8 @@ A consumer workflow can download the named artifact with `actions/download-artif
 ```yaml
 - uses: actions/download-artifact@v6
   with:
-    name: resume-pdf
-    path: public
+      name: resume-pdf
+      path: public
 ```
 
 The website does not publish this artifact yet; that integration is tracked separately in #421.

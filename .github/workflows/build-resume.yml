@@ -1,57 +1,57 @@
 name: Build Resume
 
 on:
-  push:
-    paths:
-      - "content/data/**"
-      - "content/resume/**"
-      - "scripts/build-resume.mjs"
-      - "scripts/validate-resume.mjs"
-      - ".github/workflows/build-resume.yml"
-  pull_request:
-    paths:
-      - "content/data/**"
-      - "content/resume/**"
-      - "scripts/build-resume.mjs"
-      - "scripts/validate-resume.mjs"
-      - ".github/workflows/build-resume.yml"
+    push:
+        paths:
+            - "content/data/**"
+            - "content/resume/**"
+            - "scripts/build-resume.mjs"
+            - "scripts/validate-resume.mjs"
+            - ".github/workflows/build-resume.yml"
+    pull_request:
+        paths:
+            - "content/data/**"
+            - "content/resume/**"
+            - "scripts/build-resume.mjs"
+            - "scripts/validate-resume.mjs"
+            - ".github/workflows/build-resume.yml"
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
+    build:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v6
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: "24"
+            - name: Set up Node.js
+              uses: actions/setup-node@v6
+              with:
+                  node-version: "24"
 
-      - name: Cache Tectonic bundle
-        uses: actions/cache@v5
-        with:
-          path: ~/.cache/Tectonic
-          key: tectonic-${{ runner.os }}-${{ hashFiles('content/resume/resume.tex') }}
-          restore-keys: tectonic-${{ runner.os }}-
+            - name: Cache Tectonic bundle
+              uses: actions/cache@v5
+              with:
+                  path: ~/.cache/Tectonic
+                  key: tectonic-${{ runner.os }}-${{ hashFiles('content/resume/resume.tex') }}
+                  restore-keys: tectonic-${{ runner.os }}-
 
-      - name: Install PDF text tools
-        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y poppler-utils
+            - name: Install PDF text tools
+              run: sudo apt-get update && sudo apt-get install --no-install-recommends -y poppler-utils
 
-      - name: Install Tectonic
-        uses: wtfjoke/setup-tectonic@v3
-        with:
-          tectonic-version: "0.15.0"
+            - name: Install Tectonic
+              uses: wtfjoke/setup-tectonic@v3
+              with:
+                  tectonic-version: "0.15.0"
 
-      - name: Build and validate resume
-        run: node scripts/build-resume.mjs --output build/resume
+            - name: Build and validate resume
+              run: node scripts/build-resume.mjs --output build/resume
 
-      - name: Upload resume artifact
-        uses: actions/upload-artifact@v6
-        with:
-          name: resume-pdf
-          path: build/resume/resume.pdf
-          if-no-files-found: error
-          retention-days: 30
+            - name: Upload resume artifact
+              uses: actions/upload-artifact@v6
+              with:
+                  name: resume-pdf
+                  path: build/resume/resume.pdf
+                  if-no-files-found: error
+                  retention-days: 30
