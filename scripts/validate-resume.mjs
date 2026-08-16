@@ -8,6 +8,13 @@ const pdfInfo = execFileSync("pdfinfo", [pdf], { encoding: "utf8" });
 const pageCount = pdfInfo.match(/^Pages:\s+(\d+)$/m)?.[1];
 if (pageCount !== "1")
     throw new Error(`PDF validation failed; expected one page, received ${pageCount ?? "an unknown page count"}`);
+const pageSize = pdfInfo.match(/^Page size:\s+([\d.]+)\s+x\s+([\d.]+)\s+pts\b/m);
+const pageWidth = Number(pageSize?.[1]);
+const pageHeight = Number(pageSize?.[2]);
+if (Math.abs(pageWidth - 595.276) > 1 || Math.abs(pageHeight - 841.89) > 1)
+    throw new Error(
+        `PDF validation failed; expected A4 (595.276 x 841.89 pts), received ${pageSize?.[0] ?? "an unknown page size"}`,
+    );
 const text = execFileSync("pdftotext", ["-layout", pdf, "-"], { encoding: "utf8" });
 const required = [
     "Summary",
