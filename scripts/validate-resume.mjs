@@ -4,6 +4,10 @@ import { readFileSync, statSync } from "node:fs";
 
 const pdf = process.argv[2] || "build/resume/resume.pdf";
 statSync(pdf);
+const pdfInfo = execFileSync("pdfinfo", [pdf], { encoding: "utf8" });
+const pageCount = pdfInfo.match(/^Pages:\s+(\d+)$/m)?.[1];
+if (pageCount !== "1")
+    throw new Error(`PDF validation failed; expected one page, received ${pageCount ?? "an unknown page count"}`);
 const text = execFileSync("pdftotext", ["-layout", pdf, "-"], { encoding: "utf8" });
 const required = [
     "Summary",

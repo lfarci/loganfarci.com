@@ -4,13 +4,13 @@ The resume is an ATS-friendly, one-page LaTeX document built from the canonical 
 
 ## Local build
 
-Prerequisites: Node.js 20+, [Tectonic](https://tectonic-typesetting.github.io/), and `pdftotext` (Poppler). From the repository root, run:
+Prerequisites: Node.js 20+, [Tectonic](https://tectonic-typesetting.github.io/), and Poppler's `pdftotext`, `pdfinfo`, and `pdftoppm` commands on your `PATH`. From the repository root, run:
 
 ```bash
 node scripts/build-resume.mjs --output build/resume
 ```
 
-The command creates `build/resume/resume.pdf`, validates that it has selectable text, and checks required headings, dates, and keywords. It is non-interactive and reproducible from a clean checkout. No PDF is stored under `content/resume/`.
+The command creates `build/resume/resume.pdf` and a 150 DPI first-page preview at `build/resume/resume-preview.png`. It validates that the PDF has selectable text, is one page, and contains required headings, dates, and keywords. Review the PNG after layout changes before sharing the PDF. The command is non-interactive and reproducible from a clean checkout. No PDF is stored under `content/resume/`.
 
 ## CI artifact
 

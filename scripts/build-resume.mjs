@@ -85,6 +85,11 @@ for (let attempt = 1; attempt <= 3; attempt += 1) {
         execFileSync(process.execPath, [join(root, "scripts", "validate-resume.mjs"), join(output, "resume.pdf")], {
             stdio: "inherit",
         });
+        execFileSync(
+            "pdftoppm",
+            ["-f", "1", "-singlefile", "-png", "-r", "150", join(output, "resume.pdf"), join(output, "resume-preview")],
+            { stdio: "inherit" },
+        );
         lastError = undefined;
         break;
     } catch (error) {
