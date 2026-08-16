@@ -52,6 +52,8 @@ jobs:
               uses: actions/upload-artifact@v6
               with:
                   name: resume-pdf
-                  path: build/resume/resume.pdf
+                  path: |
+                      build/resume/resume.pdf
+                      build/resume/resume-preview.png
                   if-no-files-found: error
                   retention-days: 30

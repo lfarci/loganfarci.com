@@ -73,7 +73,14 @@ const facts = [
     "",
 ].join("\n");
 cpSync(join(resume, "resume.tex"), join(output, "resume.tex"));
-for (const name of ["summary.tex", "experience.tex", "skills.tex", "education.tex", "certifications.tex"])
+for (const name of [
+    "summary.tex",
+    "experience.tex",
+    "skills.tex",
+    "languages.tex",
+    "education.tex",
+    "certifications.tex",
+])
     cpSync(join(resume, "sections", name), join(output, "sections", name));
 writeFileSync(join(output, "generated", "facts.tex"), facts);
 let lastError;

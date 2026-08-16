@@ -15,6 +15,7 @@ const required = [
     "Education",
     "Certifications",
     "Skills",
+    "Languages",
     "Azure Developer Associate",
     "Professional Scrum Developer I",
     "2020",
