@@ -13,6 +13,7 @@ const required = [
     "Summary",
     "Experience",
     "Education",
+    "Certifications",
     "Skills",
     "Azure Developer Associate",
     "Professional Scrum Developer I",
@@ -24,8 +25,13 @@ const required = [
     "TypeScript",
     "GitHub",
 ];
-const normalizedText = text.toLowerCase().replace(/[^a-z0-9]/g, "");
-const missing = required.filter((term) => !normalizedText.includes(term.toLowerCase().replace(/[^a-z0-9]/g, "")));
+const normalize = (value) =>
+    value
+        .normalize("NFKD")
+        .toLowerCase()
+        .replace(/[^a-z0-9]/g, "");
+const normalizedText = normalize(text);
+const missing = required.filter((term) => !normalizedText.includes(normalize(term)));
 if (missing.length) throw new Error(`PDF text validation failed; missing: ${missing.join(", ")}`);
 if (text.trim().length < 500) throw new Error("PDF text validation failed; extracted text is unexpectedly short");
 console.log(`Validated selectable ATS text (${text.length} characters): ${pdf}`);
