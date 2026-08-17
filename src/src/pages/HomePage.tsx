@@ -5,6 +5,8 @@ import HeroSection from "@/components/HeroSection";
 import ColumnContainer from "@/components/layout/ColumnContainer";
 import TextSection from "@/components/shared/TextSection";
 import ThumbnailGridSection from "@/components/shared/ThumbnailGridSection";
+import { DownloadIcon } from "@/components/shared/icons";
+import { Button } from "@/components/shared/primitives/Button";
 import { getFeaturedArticles } from "@/core/articles";
 import { getCertifications, getContacts, getInterests, getProfile } from "@/core/data";
 import { createCanonicalUrl } from "@/core/seo";
@@ -37,7 +39,17 @@ export default function HomePage() {
                     heading={<GreetingHeading greeting="Hi" name="Logan" />}
                     description={profile.role}
                     image={profile.avatar}
-                    actions={<ContactLinks contacts={contacts} />}
+                    actions={
+                        <div className="flex flex-col items-start gap-4">
+                            <Button asChild variant="secondary">
+                                <a href="/resume.pdf" download>
+                                    <DownloadIcon size={20} />
+                                    Download résumé
+                                </a>
+                            </Button>
+                            <ContactLinks contacts={contacts} className="gap-2" />
+                        </div>
+                    }
                 />
                 <TextSection
                     heading="About Me"

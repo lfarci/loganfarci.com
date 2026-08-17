@@ -2,6 +2,7 @@ import React from "react";
 import Tooltip from "@/components/shared/Tooltip";
 import NewTabLink from "@/components/shared/NewTabLink";
 import { BlueskyIcon, EmailIcon, GitHubIcon, LinkedInIcon } from "@/components/shared/icons";
+import { mergeClassNames } from "@/core/mergeClassNames";
 import type { Contact } from "@/types";
 
 type SupportedContactIcon = "bluesky" | "email" | "github" | "linkedin";
@@ -35,7 +36,7 @@ const ContactLinks: React.FC<ContactLinksProps> = ({ contacts, iconSize = 32, cl
         return null;
     }
 
-    const containerClassName = `flex flex-wrap gap-6 ${className}`.trim();
+    const containerClassName = mergeClassNames("flex flex-wrap gap-6", className);
 
     return (
         <div className={containerClassName}>
@@ -45,7 +46,11 @@ const ContactLinks: React.FC<ContactLinksProps> = ({ contacts, iconSize = 32, cl
 
                 return (
                     <Tooltip key={contact.name} content={contact.name} placement="bottom">
-                        <NewTabLink url={contact.url} aria-label={contact.name}>
+                        <NewTabLink
+                            url={contact.url}
+                            aria-label={contact.name}
+                            className="inline-flex min-h-11 min-w-11 items-center justify-center"
+                        >
                             {content}
                         </NewTabLink>
                     </Tooltip>

@@ -36,6 +36,9 @@ const MACHINE_FILE_EXPECTATIONS = [
         bodyPatternDescription: `# ${LLMS_FULL_TITLE}`,
     },
 ];
+const DOWNLOADABLE_FILE_EXPECTATIONS = [
+    { pathname: "/resume.pdf", contentTypePattern: /application\/pdf/i, contentTypeDescription: "application/pdf" },
+];
 const CUSTOM_NOT_FOUND_EXPECTATIONS = {
     titlePattern: new RegExp(`<title[^>]*>\\s*Page Not Found - ${SITE_OWNER_NAME}\\s*<\\/title>`, "i"),
     robotsDirectivePattern: /\bnoindex\b/i,
@@ -238,6 +241,27 @@ function createChecker(baseUrl) {
         );
     }
 
+    async function checkDownloadableFile({ pathname, contentTypePattern, contentTypeDescription }) {
+        const targetUrl = new globalThis.URL(pathname, `${baseUrl}/`).toString();
+        const response = await globalThis.fetch(targetUrl, {
+            signal: globalThis.AbortSignal.timeout(requestTimeoutMs),
+        });
+        const body = await response.arrayBuffer();
+        const contentType = response.headers.get("content-type") ?? "";
+
+        check(
+            response.status === 200,
+            `${targetUrl} returned HTTP 200`,
+            `${targetUrl} returned HTTP ${response.status} (expected 200)`,
+        );
+        check(body.byteLength > 0, `${targetUrl} returned a non-empty body`, `${targetUrl} returned an empty body`);
+        check(
+            contentTypePattern.test(contentType),
+            `${targetUrl} returned ${contentTypeDescription}`,
+            `${targetUrl} returned content-type "${contentType}" (expected ${contentTypeDescription})`,
+        );
+    }
+
     async function resolveArticlePathFromSitemap() {
         const { targetUrl, response, body } = await request("/sitemap.xml");
         check(
@@ -284,6 +308,7 @@ function createChecker(baseUrl) {
     return {
         checkHtmlRoute,
         checkMachineFile,
+        checkDownloadableFile,
         resolveArticlePathFromSitemap,
         checkNotFoundFallback,
         hasFailures: () => hasFailures,
@@ -341,6 +366,10 @@ try {
 
     for (const machineFileExpectation of MACHINE_FILE_EXPECTATIONS) {
         await checker.checkMachineFile(machineFileExpectation);
+    }
+
+    for (const downloadableFileExpectation of DOWNLOADABLE_FILE_EXPECTATIONS) {
+        await checker.checkDownloadableFile(downloadableFileExpectation);
     }
 
     await checker.checkNotFoundFallback();

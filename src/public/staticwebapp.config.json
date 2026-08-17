@@ -5,6 +5,7 @@
             "/images/*.{png,jpg,gif,svg,ico,webp,avif}",
             "/assets/*",
             "/favicon.ico",
+            "/resume.pdf",
             "/llms.txt",
             "/llms-full.txt",
             "/sitemap.xml",

@@ -36,6 +36,15 @@ test.describe("Desktop primary navigation", () => {
         await expectClientNavigation(page);
     });
 
+    test("offers the résumé as a direct download", async ({ page }) => {
+        await page.goto("/");
+
+        const downloadLink = page.getByRole("navigation").getByRole("link", { name: "Résumé", exact: true });
+        await expect(downloadLink).toBeVisible();
+        await expect(downloadLink).toHaveAttribute("href", "/resume.pdf");
+        await expect(downloadLink).toHaveAttribute("download", "");
+    });
+
     test("navigates from an article to a primary page without reloading", async ({ page }) => {
         await page.goto("/articles");
         const articlePage = await getFirstArticlePage(page);
@@ -121,6 +130,18 @@ test.describe("Mobile navigation", () => {
 
         await expect(navigation.getByRole("button", { name: "Open menu" })).toHaveAttribute("aria-expanded", "false");
         await expect(navigation.getByRole("link", { name: "About", exact: true })).toHaveCount(0);
+    });
+
+    test("offers the résumé as a direct download in the open menu", async ({ page }) => {
+        await page.goto("/");
+        const navigation = page.getByRole("navigation");
+
+        await navigation.getByRole("button", { name: "Open menu" }).click();
+        const downloadLink = navigation.getByRole("link", { name: "Résumé", exact: true });
+
+        await expect(downloadLink).toBeVisible();
+        await expect(downloadLink).toHaveAttribute("href", "/resume.pdf");
+        await expect(downloadLink).toHaveAttribute("download", "");
     });
 
     for (const destination of [

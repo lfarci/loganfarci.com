@@ -12,9 +12,10 @@ interface NavigationBarProps {
 }
 
 const navigationItems = [
-    { url: "/", label: "Home" },
-    { url: "/about", label: "About" },
-    { url: "/articles", label: "Articles" },
+    { url: "/", label: "Home", download: false },
+    { url: "/about", label: "About", download: false },
+    { url: "/articles", label: "Articles", download: false },
+    { url: "/resume.pdf", label: "Résumé", download: true },
 ] as const;
 
 const NavigationBar: React.FC<NavigationBarProps> = ({ title }) => {
@@ -113,6 +114,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ title }) => {
                         <NavBarEntry
                             key={item.url}
                             url={item.url}
+                            download={item.download}
                             className="hover:text-primary-hover transition-colors"
                         >
                             {item.label}
@@ -136,6 +138,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ title }) => {
                                 <div key={item.url} onClick={handleMenuItemClick}>
                                     <NavBarEntry
                                         url={item.url}
+                                        download={item.download}
                                         className="hover:text-primary-hover transition-colors text-base py-2 motion-reduce:transition-none"
                                     >
                                         {item.label}
