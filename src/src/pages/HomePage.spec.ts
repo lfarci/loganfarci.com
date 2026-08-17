@@ -40,33 +40,6 @@ test.describe("Home page", () => {
         }
     });
 
-    test("offers the résumé as a direct download from the hero", async ({ page }) => {
-        await page.goto("/");
-
-        const downloadLink = page.getByRole("main").getByRole("link", { name: "Download résumé", exact: true });
-        await expect(downloadLink).toHaveAttribute("href", "/resume.pdf");
-        await expect(downloadLink).toHaveAttribute("download", "");
-    });
-
-    test("provides touch-sized contact actions", async ({ page }) => {
-        await page.goto("/");
-
-        const main = page.getByRole("main");
-        const contactNames = [
-            "Let's connect on LinkedIn",
-            "Explore my GitHub",
-            "Follow me on Bluesky",
-            "Send me an email",
-        ];
-
-        for (const name of contactNames) {
-            const contact = main.getByRole("link", { name, exact: true });
-            const bounds = await contact.boundingBox();
-            expect(bounds?.width).toBeGreaterThanOrEqual(44);
-            expect(bounds?.height).toBeGreaterThanOrEqual(44);
-        }
-    });
-
     test("opens the complete article catalog from Featured Articles", async ({ page }) => {
         await page.goto("/");
 

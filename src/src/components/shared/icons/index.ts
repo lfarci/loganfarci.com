@@ -8,4 +8,3 @@ export { default as EmailIcon } from "@/components/shared/icons/EmailIcon";
 export { default as GitHubIcon } from "@/components/shared/icons/GitHubIcon";
 export { default as LinkedInIcon } from "@/components/shared/icons/LinkedInIcon";
 export { default as LinkIcon } from "@/components/shared/icons/LinkIcon";
-export { default as DownloadIcon } from "@/components/shared/icons/DownloadIcon";
