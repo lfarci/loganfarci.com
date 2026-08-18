@@ -90,6 +90,23 @@ Skill: `name` (req), `iconId` (opt — **must match an `icons.json` `id`**),
 `name` (req), `University` (req — note the capital `U`), `logo` (`Image`, req),
 `details` (`string[]`, req), `description` (req).
 
+## Certification synchronization
+
+`content/data/certifications.json` is refreshed by `npm run sync:certifications` before the
+production build. The build-time script at [`scripts/sync-certifications.mjs`](../../scripts/sync-certifications.mjs)
+reads comma-separated credential page URLs from `MICROSOFT_LEARN_CREDENTIAL_URLS` and
+`CREDLY_BADGE_URLS`, fetches public metadata and badge images, converts new badges to
+128×128 AVIF, and appends only credentials that are not already present. Network errors,
+rate limits, missing metadata, and unavailable image conversion are warnings; existing
+content remains usable and the build continues.
+
+Existing entries, including their curated `relevance` and `order`, are never overwritten.
+The checked-in [`certifications.json.backup`](../../content/data/certifications.json.backup)
+file preserves the initial curated dataset. The sync script also refreshes this backup
+before each run; review generated JSON and images before committing updates. To manually
+override a certification, edit the main JSON after syncing (or remove its source URL), and
+keep the backup in sync with the curated baseline.
+
 ## Rules for agents editing data
 
 - Match the exact type; do not add fields the type doesn't declare.

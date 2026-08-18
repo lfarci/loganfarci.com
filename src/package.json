@@ -5,7 +5,8 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
-        "build": "npm run build:client && npm run build:server && npm run prerender",
+        "build": "npm run sync:certifications && npm run build:client && npm run build:server && npm run prerender",
+        "sync:certifications": "node ../scripts/sync-certifications.mjs",
         "build:client": "vite build",
         "build:server": "vite build --ssr src/entry-server.tsx --outDir dist/server",
         "prerender": "node scripts/prerender.mjs",
@@ -60,6 +61,7 @@
         "gray-matter": "^4.0.3",
         "jsdom": "^28.1.0",
         "prettier": "3.6.2",
+        "sharp": "^0.35.3",
         "tailwindcss": "^4.2.1",
         "typescript": "^5.8.3",
         "typescript-eslint": "^8.47.0",
