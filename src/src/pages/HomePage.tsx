@@ -42,7 +42,7 @@ export default function HomePage() {
                     actions={
                         <div className="flex flex-col items-start gap-6">
                             {emailContact && (
-                                <Button asChild>
+                                <Button asChild className="active:bg-accent active:text-accent-foreground">
                                     <a href={emailContact.url}>Get in touch</a>
                                 </Button>
                             )}
