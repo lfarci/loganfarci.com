@@ -52,6 +52,19 @@ function slugify(title) {
         .slice(0, 80);
 }
 
+function extractStructuredData(body) {
+    return [...body.matchAll(/<script[^>]+type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi)].flatMap(
+        (match) => {
+            try {
+                const value = JSON.parse(match[1]);
+                return Array.isArray(value) ? value : [value];
+            } catch {
+                return [];
+            }
+        },
+    );
+}
+
 function parseCredentialPage(url, contentType, body) {
     if (contentType.includes("json")) {
         const data = JSON.parse(body);
@@ -65,13 +78,20 @@ function parseCredentialPage(url, contentType, body) {
         };
     }
 
+    const structured = extractStructuredData(body).find(
+        (value) => value.issuedOn || value.dateIssued || value.datePublished,
+    );
     const rawTitle = metadata(body, "og:title") ?? body.match(/<title[^>]*>([^<]+)/i)?.[1]?.trim();
     const issuedTitle = rawTitle?.match(/^(.+?)\s+was issued by\s+(.+?)\s+to\s+/i);
-    const title = issuedTitle?.[1] ?? rawTitle;
-    const imageUrl = metadata(body, "og:image");
-    const issuer = issuedTitle?.[2] ?? (title?.includes("Microsoft") ? "Microsoft" : undefined);
+    const title = structured?.name ?? issuedTitle?.[1] ?? rawTitle;
+    const imageUrl = structured?.image?.url ?? structured?.image ?? metadata(body, "og:image");
+    const issuer =
+        structured?.issuer?.name ?? issuedTitle?.[2] ?? (title?.includes("Microsoft") ? "Microsoft" : undefined);
     const date = dateFrom(
-        metadata(body, "article:published_time") ??
+        structured?.issuedOn ??
+            structured?.dateIssued ??
+            structured?.datePublished ??
+            metadata(body, "article:published_time") ??
             body.match(
                 /(?:issued(?:\s+on)?|earned(?:\s+on)?|date|issuedon|issued_at)\s*[:\-]?\s*(?:on\s+)?([A-Z][a-z]+\s+\d{1,2},\s+20\d{2}|20\d{2}[-/.]\d{1,2}[-/.]\d{1,2})/i,
             )?.[1],
