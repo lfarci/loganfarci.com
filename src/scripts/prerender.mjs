@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -140,7 +140,8 @@ async function prerender() {
     const template = fs.readFileSync(path.join(distDir, "index.html"), "utf-8");
 
     // Import the SSR bundle
-    const { render, getStaticRoutes, getAllArticles } = await import(path.join(distDir, "server/entry-server.js"));
+    const serverBundleUrl = pathToFileURL(path.join(distDir, "server/entry-server.js"));
+    const { render, getStaticRoutes, getAllArticles } = await import(serverBundleUrl.href);
 
     const routes = getStaticRoutes();
     const articles = getAllArticles();
