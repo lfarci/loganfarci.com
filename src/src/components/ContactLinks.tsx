@@ -38,14 +38,18 @@ const ContactLinks: React.FC<ContactLinksProps> = ({ contacts, iconSize = 32, cl
     const containerClassName = `flex flex-wrap gap-6 ${className}`.trim();
 
     return (
-        <div className={containerClassName}>
+        <div className={containerClassName} role="group" aria-label="Social links">
             {contacts.map((contact) => {
                 const icon = renderContactIcon(contact.icon, iconSize);
                 const content = icon ?? <span className="text-text-tertiary font-medium">{contact.name}</span>;
 
                 return (
                     <Tooltip key={contact.name} content={contact.name} placement="bottom">
-                        <NewTabLink url={contact.url} aria-label={contact.name}>
+                        <NewTabLink
+                            url={contact.url}
+                            aria-label={contact.name}
+                            className="flex size-11 items-center justify-center rounded-control"
+                        >
                             {content}
                         </NewTabLink>
                     </Tooltip>
