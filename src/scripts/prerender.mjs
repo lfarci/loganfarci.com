@@ -141,7 +141,7 @@ async function prerender() {
 
     // Import the SSR bundle
     const { render, getStaticRoutes, getAllArticles } = await import(
-        pathToFileURL(path.join(distDir, "server/entry-server.js")).href,
+        pathToFileURL(path.join(distDir, "server/entry-server.js")).href
     );
 
     const routes = getStaticRoutes();
