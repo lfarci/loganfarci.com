@@ -66,7 +66,7 @@ function parseCredentialPage(url, contentType, body) {
   const issuer = issuedTitle?.[2] ?? (title?.includes("Microsoft") ? "Microsoft" : undefined);
   const date = dateFrom(
     metadata(body, "article:published_time") ??
-      body.match(/(?:issued|earned|date|issuedon|issued_at)[^\dA-Za-z]{0,30}([A-Z][a-z]+\s+\d{1,2},\s+20\d{2}|20\d{2}[-/.]\d{1,2}[-/.]\d{1,2})/i)?.[1],
+      body.match(/(?:issued(?:\s+on)?|earned(?:\s+on)?|date|issuedon|issued_at)\s*[:\-]?\s*(?:on\s+)?([A-Z][a-z]+\s+\d{1,2},\s+20\d{2}|20\d{2}[-/.]\d{1,2}[-/.]\d{1,2})/i)?.[1],
   );
   return title ? { title: title.replace(/^Microsoft Certified:\s*/i, "").trim(), issuer, date, imageUrl, url } : undefined;
 }
