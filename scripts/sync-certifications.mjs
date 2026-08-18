@@ -34,8 +34,12 @@ function metadata(html, property) {
 }
 
 function dateFrom(value) {
-  const match = value?.match(/(20\d{2})[-/.](\d{1,2})[-/.](\d{1,2})/);
-  return match ? `${match[1]}-${match[2].padStart(2, "0")}-${match[3].padStart(2, "0")}` : undefined;
+  const numeric = value?.match(/(20\d{2})[-/.](\d{1,2})[-/.](\d{1,2})/);
+  if (numeric) return `${numeric[1]}-${numeric[2].padStart(2, "0")}-${numeric[3].padStart(2, "0")}`;
+  const named = value?.match(/([A-Z][a-z]+)\s+(\d{1,2}),\s+(20\d{2})/);
+  if (!named) return undefined;
+  const month = new Date(`${named[1]} 1, ${named[3]}`).getMonth() + 1;
+  return `${named[3]}-${String(month).padStart(2, "0")}-${named[2].padStart(2, "0")}`;
 }
 
 function slugify(title) {
@@ -55,11 +59,16 @@ function parseCredentialPage(url, contentType, body) {
     };
   }
 
-  const title = metadata(body, "og:title") ?? body.match(/<title[^>]*>([^<]+)/i)?.[1]?.trim();
+  const rawTitle = metadata(body, "og:title") ?? body.match(/<title[^>]*>([^<]+)/i)?.[1]?.trim();
+  const issuedTitle = rawTitle?.match(/^(.+?)\s+was issued by\s+(.+?)\s+to\s+/i);
+  const title = issuedTitle?.[1] ?? rawTitle;
   const imageUrl = metadata(body, "og:image");
-  const issuer = title?.includes("Microsoft") ? "Microsoft" : title?.includes("Credly") ? "Credly" : undefined;
-  const date = dateFrom(metadata(body, "article:published_time") ?? body.match(/(?:issued|earned|date)[^\d]{0,30}(20\d{2}[-/.]\d{1,2}[-/.]\d{1,2})/i)?.[1]);
-  return title ? { title: title.replace(/^Microsoft Certified:\s*/i, ""), issuer, date, imageUrl, url } : undefined;
+  const issuer = issuedTitle?.[2] ?? (title?.includes("Microsoft") ? "Microsoft" : undefined);
+  const date = dateFrom(
+    metadata(body, "article:published_time") ??
+      body.match(/(?:issued|earned|date|issuedon|issued_at)[^\dA-Za-z]{0,30}([A-Z][a-z]+\s+\d{1,2},\s+20\d{2}|20\d{2}[-/.]\d{1,2}[-/.]\d{1,2})/i)?.[1],
+  );
+  return title ? { title: title.replace(/^Microsoft Certified:\s*/i, "").trim(), issuer, date, imageUrl, url } : undefined;
 }
 
 async function readSources() {
