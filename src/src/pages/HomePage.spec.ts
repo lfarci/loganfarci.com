@@ -22,6 +22,14 @@ test.describe("Home page", () => {
         ]);
     });
 
+    test("offers a labeled email CTA in the hero", async ({ page }) => {
+        await page.goto("/");
+        const cta = page.getByRole("main").getByRole("link", { name: "Get in touch", exact: true });
+
+        await expect(cta).toHaveAttribute("href", "mailto:logan.farci@outlook.be");
+        await expect(cta).toHaveCSS("height", "44px");
+    });
+
     test("exposes the complete set of accessible contact actions", async ({ page }) => {
         await page.goto("/");
         const main = page.getByRole("main");

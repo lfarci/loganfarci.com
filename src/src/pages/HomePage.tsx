@@ -1,5 +1,6 @@
 import ArticleListSection from "@/components/ArticleListSection";
 import ContactLinks from "@/components/ContactLinks";
+import { Button } from "@/components/shared/primitives/Button";
 import GreetingHeading from "@/components/GreetingHeading";
 import HeroSection from "@/components/HeroSection";
 import ColumnContainer from "@/components/layout/ColumnContainer";
@@ -12,6 +13,7 @@ import { createCanonicalUrl } from "@/core/seo";
 const featuredCertifications = getCertifications().filter((c) => c.relevance == "High");
 const interests = getInterests();
 const contacts = getContacts();
+const emailContact = contacts.find((contact) => contact.icon === "email");
 const profile = getProfile();
 const featuredArticles = getFeaturedArticles();
 
@@ -37,7 +39,16 @@ export default function HomePage() {
                     heading={<GreetingHeading greeting="Hi" name="Logan" />}
                     description={profile.role}
                     image={profile.avatar}
-                    actions={<ContactLinks contacts={contacts} />}
+                    actions={
+                        <div className="flex flex-col items-start gap-6">
+                            {emailContact && (
+                                <Button asChild>
+                                    <a href={emailContact.url}>Get in touch</a>
+                                </Button>
+                            )}
+                            <ContactLinks contacts={contacts} />
+                        </div>
+                    }
                 />
                 <TextSection
                     heading="About Me"
