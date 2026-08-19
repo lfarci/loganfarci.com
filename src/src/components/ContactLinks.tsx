@@ -10,6 +10,7 @@ interface ContactLinksProps {
     contacts: Contact[];
     iconSize?: number;
     className?: string;
+    linkSizeClassName?: string;
 }
 
 const renderContactIcon = (icon: Contact["icon"], size: number) => {
@@ -30,7 +31,12 @@ const renderContactIcon = (icon: Contact["icon"], size: number) => {
 };
 
 // Reusable row of social/contact links rendered as icon buttons with tooltips.
-const ContactLinks: React.FC<ContactLinksProps> = ({ contacts, iconSize = 32, className = "" }) => {
+const ContactLinks: React.FC<ContactLinksProps> = ({
+    contacts,
+    iconSize = 32,
+    className = "",
+    linkSizeClassName = "size-11",
+}) => {
     if (!contacts || contacts.length === 0) {
         return null;
     }
@@ -48,7 +54,7 @@ const ContactLinks: React.FC<ContactLinksProps> = ({ contacts, iconSize = 32, cl
                         <NewTabLink
                             url={contact.url}
                             aria-label={contact.name}
-                            className="flex size-11 items-center justify-center rounded-control"
+                            className={`flex ${linkSizeClassName} items-center justify-center rounded-control`}
                         >
                             {content}
                         </NewTabLink>
