@@ -19,7 +19,7 @@ const HeroActions: FC<HeroActionsProps> = ({ contacts }) => (
                 <Link to="/articles">Read my articles</Link>
             </Button>
         </div>
-        <ContactLinks contacts={contacts} className="gap-2" />
+        <ContactLinks contacts={contacts} className="gap-2 [&_a]:size-9 [&_svg]:size-6" />
     </div>
 );
 

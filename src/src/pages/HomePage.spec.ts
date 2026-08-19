@@ -48,8 +48,8 @@ test.describe("Home page", () => {
 
         for (const contact of contacts) {
             const link = main.getByRole("link", { name: contact.name, exact: true });
-            await expect(link).toHaveCSS("height", "44px");
-            await expect(link).toHaveCSS("width", "44px");
+            await expect(link).toHaveCSS("height", "36px");
+            await expect(link).toHaveCSS("width", "36px");
             await expect(link).toHaveAttribute("href", contact.href);
             await expect(link).toHaveAttribute("target", "_blank");
             await expect(link).toHaveAttribute("rel", "noopener noreferrer");
