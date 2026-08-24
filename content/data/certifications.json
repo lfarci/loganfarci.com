@@ -1,73 +1,101 @@
 [
   {
-    "title": "Azure Developer Associate",
-    "issuer": "Microsoft",
-    "date": "2025-03-28",
+    "title": "AzureDevOps to GitHub Migrations Delivery Credential",
+    "issuer": "GitHub",
+    "date": "2026-08-18",
     "image": {
-      "src": "/images/certifications/azure-developer-associate.avif",
-      "alt": "Azure Developer Associate badge",
+      "src": "/images/certifications/azuredevops-to-github-migrations-delivery-credential.avif",
+      "alt": "AzureDevOps to GitHub Migrations Delivery Credential badge",
       "width": 128,
       "height": 128
     },
-    "url": "https://learn.microsoft.com/api/credentials/share/en-us/avanade-logan-farci/982302979423E055?sharingId=C15D4BAF8E2D5DFD",
-    "relevance": "High",
-    "order": 0
-  },
-  {
-    "title": "Azure Fundamentals",
-    "issuer": "Microsoft",
-    "date": "2022-07-08",
-    "image": {
-      "src": "/images/certifications/azure-fundamentals.avif",
-      "alt": "Azure Fundamentals badge",
-      "width": 128,
-      "height": 128
-    },
-    "url": "https://learn.microsoft.com/api/credentials/share/en-us/avanade-logan-farci/2C1C6B5085309683?sharingId=C15D4BAF8E2D5DFD",
+    "url": "https://www.credly.com/badges/56d17969-108c-443d-8392-2075a43e198a/public_url",
     "relevance": "Medium",
-    "order": 1
+    "order": 6
   },
   {
-    "title": "Professional Scrum Developer I",
-    "issuer": "Scrum.org",
-    "date": "2024-07-22",
-    "image": {
-      "src": "/images/certifications/professional-scrum-developer.avif",
-      "alt": "Professional Scrum Developer I badge",
-      "width": 128,
-      "height": 128
-    },
-    "url": "https://www.credly.com/badges/50d97296-5c28-4dfa-96bf-f0imageSize23b7dccc/public_url",
-    "relevance": "High",
-    "order": 2
-  },
-  {
-    "title": "GitHub Foundations",
+    "title": "GitHub Advanced Security Delivery Credential",
     "issuer": "GitHub",
-    "date": "2024-04-19",
+    "date": "2026-08-18",
     "image": {
-      "src": "/images/certifications/github-foundations.avif",
-      "alt": "GitHub Foundations badge",
+      "src": "/images/certifications/github-advanced-security-delivery-credential.avif",
+      "alt": "GitHub Advanced Security Delivery Credential badge",
       "width": 128,
       "height": 128
     },
-    "url": "https://www.credly.com/badges/3cfa4c4f-c20e-42d8-8514-05a43imageSizecdba0/public_url",
-    "relevance": "Low",
-    "order": 3
+    "url": "https://www.credly.com/badges/8c5fb63f-2668-43cd-9196-66e598eb7f44/public_url",
+    "relevance": "Medium",
+    "order": 7
   },
   {
-    "title": "GitHub Actions",
+    "title": "GitHub Migrations Delivery Credential",
     "issuer": "GitHub",
-    "date": "2024-05-31",
+    "date": "2026-08-18",
     "image": {
-      "src": "/images/certifications/github-actions.avif",
-      "alt": "Green Software for Practitioners badge",
+      "src": "/images/certifications/github-migrations-delivery-credential.avif",
+      "alt": "GitHub Migrations Delivery Credential badge",
       "width": 128,
       "height": 128
     },
-    "url": "https://www.credly.com/badges/e686950e-c4d2-4055-9e31-a2726743f1ff/public_url",
-    "relevance": "High",
-    "order": 4
+    "url": "https://www.credly.com/badges/b4c90f40-bcac-4891-9cc6-6dfccf1fb754/public_url",
+    "relevance": "Medium",
+    "order": 8
+  },
+  {
+    "title": "GitHub Copilot: Deploying and Scaling AI in the Enterprise Delivery Credential",
+    "issuer": "GitHub",
+    "date": "2026-08-13",
+    "image": {
+      "src": "/images/certifications/github-copilot-deploying-and-scaling-ai-in-the-enterprise-delivery-credential.avif",
+      "alt": "GitHub Copilot: Deploying and Scaling AI in the Enterprise Delivery Credential badge",
+      "width": 128,
+      "height": 128
+    },
+    "url": "https://www.credly.com/badges/e16e130d-51b9-4e49-bfde-dec416b2ddf8/public_url",
+    "relevance": "Medium",
+    "order": 9
+  },
+  {
+    "title": "Modernizing Enterprise CI/CD with GitHub Actions Delivery Credential",
+    "issuer": "GitHub",
+    "date": "2026-08-13",
+    "image": {
+      "src": "/images/certifications/modernizing-enterprise-ci-cd-with-github-actions-delivery-credential.avif",
+      "alt": "Modernizing Enterprise CI/CD with GitHub Actions Delivery Credential badge",
+      "width": 128,
+      "height": 128
+    },
+    "url": "https://www.credly.com/badges/569d38e8-6019-41c6-8787-6592644f9a88/public_url",
+    "relevance": "Medium",
+    "order": 10
+  },
+  {
+    "title": "GitHub Copilot: Core Skills & Application Delivery Credential",
+    "issuer": "GitHub",
+    "date": "2026-07-23",
+    "image": {
+      "src": "/images/certifications/github-copilot-core-skills-application-delivery-credential.avif",
+      "alt": "GitHub Copilot: Core Skills & Application Delivery Credential badge",
+      "width": 128,
+      "height": 128
+    },
+    "url": "https://www.credly.com/badges/08661234-a97c-45fd-8947-5c9fb0707f66/public_url",
+    "relevance": "Medium",
+    "order": 11
+  },
+  {
+    "title": "Agentic AI",
+    "issuer": "Accenture",
+    "date": "2026-04-01",
+    "image": {
+      "src": "/images/certifications/agentic-ai.avif",
+      "alt": "Agentic AI badge",
+      "width": 128,
+      "height": 128
+    },
+    "url": "https://www.credly.com/badges/b9eb397f-eca8-468a-872b-09baa6798d09/public_url",
+    "relevance": "Medium",
+    "order": 12
   },
   {
     "title": "GitHub Copilot",
@@ -84,17 +112,101 @@
     "order": 5
   },
   {
-    "title": "Green Software for Practitioners",
+    "title": "Professional Scrum Developer™ I (PSD I)",
+    "issuer": "Scrum.org",
+    "date": "2024-07-22",
+    "image": {
+      "src": "/images/certifications/professional-scrum-developer-i-psd-i.avif",
+      "alt": "Professional Scrum Developer™ I (PSD I) badge",
+      "width": 128,
+      "height": 128
+    },
+    "url": "https://www.credly.com/badges/50d97296-5c28-4dfa-96bf-f06423b7dccc/public_url",
+    "relevance": "High",
+    "order": 2
+  },
+  {
+    "title": "GitHub Actions",
+    "issuer": "GitHub",
+    "date": "2024-05-31",
+    "image": {
+      "src": "/images/certifications/github-actions.avif",
+      "alt": "GitHub Actions badge",
+      "width": 128,
+      "height": 128
+    },
+    "url": "https://www.credly.com/badges/e686950e-c4d2-4055-9e31-a2726743f1ff/public_url",
+    "relevance": "High",
+    "order": 4
+  },
+  {
+    "title": "GitHub Foundations",
+    "issuer": "GitHub",
+    "date": "2024-04-19",
+    "image": {
+      "src": "/images/certifications/github-foundations.avif",
+      "alt": "GitHub Foundations badge",
+      "width": 128,
+      "height": 128
+    },
+    "url": "https://www.credly.com/badges/3cfa4c4f-c20e-42d8-8514-05a4364cdba0/public_url",
+    "relevance": "Low",
+    "order": 3
+  },
+  {
+    "title": "LFC131: Green Software for Practitioners",
     "issuer": "The Linux Foundation",
     "date": "2023-03-20",
     "image": {
-      "src": "/images/certifications/green-software.avif",
-      "alt": "GitHub Actions",
+      "src": "/images/certifications/lfc131-green-software-for-practitioners.avif",
+      "alt": "LFC131: Green Software for Practitioners badge",
       "width": 128,
       "height": 128
     },
     "url": "https://www.credly.com/badges/2c74038b-d0d7-493c-85ab-1cc039545a20/public_url",
     "relevance": "Low",
     "order": 5
+  },
+  {
+    "title": "Microsoft Certified: Azure Fundamentals",
+    "issuer": "Microsoft",
+    "date": "2022-07-08",
+    "image": {
+      "src": "/images/certifications/microsoft-certified-azure-fundamentals.avif",
+      "alt": "Microsoft Certified: Azure Fundamentals badge",
+      "width": 128,
+      "height": 128
+    },
+    "url": "https://www.credly.com/badges/c0de2672-f09a-4ec6-9a18-3287481d8dd7/public_url",
+    "relevance": "Medium",
+    "order": 1
+  },
+  {
+    "title": "Azure Developer Associate",
+    "issuer": "Microsoft",
+    "date": "2025-03-28",
+    "image": {
+      "src": "/images/certifications/azure-developer-associate.avif",
+      "alt": "Azure Developer Associate badge",
+      "width": 128,
+      "height": 128
+    },
+    "url": "https://learn.microsoft.com/en-us/users/avanade-logan-farci/transcript/v2zpzc0kelwykj1?tab=credentials-tab",
+    "relevance": "High",
+    "order": 0
+  },
+  {
+    "title": "Microsoft Applied Skills: Accelerate AI-assisted development by using GitHub Copilot",
+    "issuer": "Microsoft",
+    "date": "2025-07-17",
+    "image": {
+      "src": "/images/certifications/microsoft-applied-skills-accelerate-ai-assisted-development-by-using-github-copi.avif",
+      "alt": "Microsoft Applied Skills: Accelerate AI-assisted development by using GitHub Copilot badge",
+      "width": 128,
+      "height": 128
+    },
+    "url": "https://learn.microsoft.com/api/credentials/share/en-us/avanade-logan-farci/948234F4CF7310A8?sharingId=v2zpzc0kelwykj1",
+    "relevance": "Medium",
+    "order": 13
   }
 ]

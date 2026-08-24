@@ -12,26 +12,28 @@ npm run sync:certifications
 git diff -- ../content/data/certifications.json public/images/certifications
 ```
 
-The tool only appends newly discovered credentials. Review and commit the generated JSON and
-AVIF badge images when the output is correct. It never runs as part of `npm run build`.
+The tool rebuilds the complete JSON from the two public profiles. It keeps the existing
+`relevance` and `order` for matching credentials; newly discovered credentials default to
+`Medium` relevance and are appended after the existing order. Review and commit the generated
+JSON and AVIF badge images when the output is correct. It never runs as part of `npm run build`.
 
 ## Source configuration
 
-`certification-sources.json` contains arrays of public, individual credential-page URLs:
+`certification-sources.json` contains two public profile URLs:
 
-- `microsoftLearn` for Microsoft Learn credentials.
-- `credly` for Credly badges.
+- `microsoftLearn` for the Microsoft Learn transcript.
+- `credly` for the Credly profile.
 
-Adding a source URL does not change the deployed site by itself. Run the sync command and
-commit its generated output to publish a credential.
+The sync tool discovers the individual credentials itself. Updating a profile does not change the
+deployed site by itself; run the sync command and commit its generated output to publish changes.
 
 ## Modules
 
-- `index.ts` coordinates the sync and updates `certifications.json`.
-- `microsoft-learn.ts` and `credly.ts` parse their providers independently.
+- `index.ts` coordinates the rebuild and replaces `certifications.json` only after both profile
+  reads succeed.
+- `microsoft-learn.ts` and `credly.ts` discover and parse their providers independently.
 - `image.ts` downloads and converts badge images to 128×128 AVIF.
 - `sources.ts` reads the checked-in source configuration.
 - `shared.ts` contains small shared HTTP, metadata, date, and slug helpers.
 
-Network and metadata failures are reported as warnings and do not alter existing
-certifications.
+Profile, metadata, or badge-image failures stop the sync without replacing the existing JSON.

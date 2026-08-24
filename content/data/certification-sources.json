@@ -1,13 +1,4 @@
 {
-    "microsoftLearn": [
-        "https://learn.microsoft.com/api/credentials/share/en-us/avanade-logan-farci/982302979423E055?sharingId=C15D4BAF8E2D5DFD",
-        "https://learn.microsoft.com/api/credentials/share/en-us/avanade-logan-farci/2C1C6B5085309683?sharingId=C15D4BAF8E2D5DFD"
-    ],
-    "credly": [
-        "https://www.credly.com/badges/50d97296-5c28-4dfa-96bf-f0imageSize23b7dccc/public_url",
-        "https://www.credly.com/badges/3cfa4c4f-c20e-42d8-8514-05a43imageSizecdba0/public_url",
-        "https://www.credly.com/badges/e686950e-c4d2-4055-9e31-a2726743f1ff/public_url",
-        "https://www.credly.com/badges/c2727308-8752-400a-afb9-b524cd804c67/public_url",
-        "https://www.credly.com/badges/2c74038b-d0d7-493c-85ab-1cc039545a20/public_url"
-    ]
+    "microsoftLearn": "https://learn.microsoft.com/en-us/users/avanade-logan-farci/transcript/v2zpzc0kelwykj1?tab=credentials-tab",
+    "credly": "https://www.credly.com/users/logan-farci"
 }

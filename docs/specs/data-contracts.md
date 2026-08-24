@@ -23,92 +23,101 @@ needed.
 Used by many contracts. All fields required
 ([`image.ts`](../../src/src/types/image.ts)):
 
-| Field | Type | Notes |
-| --- | --- | --- |
-| `src` | string | Path under `src/public/` (e.g. `/images/...`). Prefer `.avif`. |
-| `alt` | string | Required, descriptive (accessibility). |
-| `width` | number | Intrinsic width, avoids layout shift. |
-| `height` | number | Intrinsic height. |
+| Field    | Type   | Notes                                                          |
+| -------- | ------ | -------------------------------------------------------------- |
+| `src`    | string | Path under `src/public/` (e.g. `/images/...`). Prefer `.avif`. |
+| `alt`    | string | Required, descriptive (accessibility).                         |
+| `width`  | number | Intrinsic width, avoids layout shift.                          |
+| `height` | number | Intrinsic height.                                              |
 
 ## Files → types
 
-| File | Loader | Type | Shape |
-| --- | --- | --- | --- |
-| `certifications.json` | `getCertifications()` | `Certification[]` | array |
-| `certification-sources.json` | certification sync tool only | source URL lists | object |
-| `experiences.json` | `getExperiences()` | `Experience[]` | array |
-| `skills.json` | `getSkillCategories()` | `SkillCategory[]` | array |
-| `icons.json` | `getIcons()` | `Icon[]` | array |
-| `interests.json` | `getInterests()` | `Interest[]` | array |
-| `contacts.json` | `getContacts()` | `Contact[]` | array |
-| `profile.json` | `getProfile()` | `Profile` | single object |
-| `education.json` | `getDiploma()` | `Diploma` | single object |
+| File                         | Loader                       | Type              | Shape         |
+| ---------------------------- | ---------------------------- | ----------------- | ------------- |
+| `certifications.json`        | `getCertifications()`        | `Certification[]` | array         |
+| `certification-sources.json` | certification sync tool only | source URL lists  | object        |
+| `experiences.json`           | `getExperiences()`           | `Experience[]`    | array         |
+| `skills.json`                | `getSkillCategories()`       | `SkillCategory[]` | array         |
+| `icons.json`                 | `getIcons()`                 | `Icon[]`          | array         |
+| `interests.json`             | `getInterests()`             | `Interest[]`      | array         |
+| `contacts.json`              | `getContacts()`              | `Contact[]`       | array         |
+| `profile.json`               | `getProfile()`               | `Profile`         | single object |
+| `education.json`             | `getDiploma()`               | `Diploma`         | single object |
 
 ## Field reference
 
 ### `Certification` ([certification.ts](../../src/src/types/certification.ts))
-| Field | Type | Required |
-| --- | --- | --- |
-| `title` | string | yes |
-| `image` | `Image` | yes |
-| `url` | string | yes |
-| `issuer` | string | yes |
-| `date` | `ISODateString` (`YYYY-MM-DD`) | yes |
-| `relevance` | `"High" \| "Medium" \| "Low"` | yes |
-| `order` | number | yes (sort key on About) |
+
+| Field       | Type                           | Required                |
+| ----------- | ------------------------------ | ----------------------- |
+| `title`     | string                         | yes                     |
+| `image`     | `Image`                        | yes                     |
+| `url`       | string                         | yes                     |
+| `issuer`    | string                         | yes                     |
+| `date`      | `ISODateString` (`YYYY-MM-DD`) | yes                     |
+| `relevance` | `"High" \| "Medium" \| "Low"`  | yes                     |
+| `order`     | number                         | yes (sort key on About) |
 
 ### `Certification sources` (`certification-sources.json`)
 
-Used only by the local certification sync tool. Both fields are arrays of public,
-individual credential-page URLs: `microsoftLearn` for Microsoft Learn and `credly` for
-Credly. These sources generate `certifications.json`; they do not ship to the application.
+Used only by the local certification sync tool. Both fields are public profile URL strings:
+`microsoftLearn` for the Microsoft Learn transcript and `credly` for the Credly profile. These
+sources generate `certifications.json`; they do not ship to the application.
 
 ### `Experience` ([experience.ts](../../src/src/types/experience.ts))
-| Field | Type | Required |
-| --- | --- | --- |
-| `name` | string | yes |
-| `company` | `Company` | yes |
-| `start` | `ISODateString` (`YYYY-MM-DD`) | yes |
-| `end` | `ISODateString` (`YYYY-MM-DD`) | no (omit = "Present") |
-| `type` | `"Full-Time" \| "Part-Time" \| "Internship" \| "Freelance"` | no |
-| `description` | string (markdown) | no |
+
+| Field         | Type                                                        | Required              |
+| ------------- | ----------------------------------------------------------- | --------------------- |
+| `name`        | string                                                      | yes                   |
+| `company`     | `Company`                                                   | yes                   |
+| `start`       | `ISODateString` (`YYYY-MM-DD`)                              | yes                   |
+| `end`         | `ISODateString` (`YYYY-MM-DD`)                              | no (omit = "Present") |
+| `type`        | `"Full-Time" \| "Part-Time" \| "Internship" \| "Freelance"` | no                    |
+| `description` | string (markdown)                                           | no                    |
 
 ### `Company` ([company.ts](../../src/src/types/company.ts))
+
 `name` (req), `logo` (`Image`, opt), `website` (req), `location` (req).
 
 ### `SkillCategory` ([skill-category.ts](../../src/src/types/skill-category.ts)) + `Skill` ([skill.ts](../../src/src/types/skill.ts))
+
 Category: `name` (req), `description` (opt), `skills` (`Skill[]`, req).
 Skill: `name` (req), `iconId` (opt — **must match an `icons.json` `id`**),
 `yearsOfExperience` (opt).
 
 ### `Icon` ([icon.ts](../../src/src/types/icon.ts))
+
 `id` (req, referenced by `skill.iconId`), `name` (req), `icon` (req — path to svg).
 
 ### `Interest` ([interest.ts](../../src/src/types/interest.ts))
+
 `title` (req), `image` (`Image`, req), `description` (req), `redirectPath` (opt).
 
 ### `Contact` ([contact.ts](../../src/src/types/contact.ts))
+
 `name` (req — the link label), `icon` (req — icon key string), `url` (req).
 
 ### `Profile` ([profile.ts](../../src/src/types/profile.ts))
+
 `role` (req), `introduction` (req), `description` (req, markdown), `avatar` (`Image`, req).
 
 ### `Diploma` ([diploma.ts](../../src/src/types/diploma.ts))
+
 `name` (req), `University` (req — note the capital `U`), `logo` (`Image`, req),
 `details` (`string[]`, req), `description` (req).
 
 ## Certification synchronization
 
 Run `npm run sync:certifications` from `src/` to refresh `certifications.json` from the public
-URLs in [`certification-sources.json`](../../content/data/certification-sources.json). The
-tool keeps Microsoft Learn and Credly parsing separate, converts new badges to 128×128 AVIF,
-and appends only credentials that are not already present. Network errors, rate limits, and
-missing metadata are warnings; existing content remains unchanged.
+profile URLs in [`certification-sources.json`](../../content/data/certification-sources.json). The
+tool keeps Microsoft Learn and Credly parsing separate, converts badges to 128×128 AVIF, and
+rebuilds the complete credential list. Matches retain their existing `relevance` and `order`;
+new credentials default to `Medium` relevance and receive sequential orders after existing ones.
+Profile, metadata, and badge-image failures leave the existing JSON unchanged.
 
 The production build does not run the sync tool. Review the generated JSON and images, then
-commit them before deploying. Existing entries, including their curated `relevance` and
-`order`, are never overwritten. To manually override a certification, edit the main JSON
-after syncing or remove its source URL.
+commit them before deploying. To manually override a certification, edit the main JSON after
+syncing; matching entries retain its `relevance` and `order` on the next run.
 
 ## Rules for agents editing data
 

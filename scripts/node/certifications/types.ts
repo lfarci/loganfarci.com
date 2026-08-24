@@ -17,8 +17,8 @@ export interface DiscoveredCredential {
 }
 
 export interface CredentialSources {
-    microsoftLearn: string[];
-    credly: string[];
+    microsoftLearn: string;
+    credly: string;
 }
 
 export interface StructuredCredential {

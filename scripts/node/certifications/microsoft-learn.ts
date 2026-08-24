@@ -1,47 +1,78 @@
-import { dateFrom, dateInText, extractStructuredData, fetchPage, imageUrl, issuerName, metadata } from "./shared.js";
-import type { DiscoveredCredential, StructuredCredential } from "./types.js";
+import { fetchPage, metadata } from "./shared.js";
+import type { DiscoveredCredential } from "./types.js";
 
-export function parseMicrosoftLearnCredential(
-    url: string,
-    contentType: string,
-    body: string,
-): DiscoveredCredential | undefined {
-    if (contentType.includes("json")) {
-        const data = JSON.parse(body) as StructuredCredential & { credential?: StructuredCredential };
-        const credential = data.credential ?? data;
-        const title = credential.name ?? credential.title;
-
-        return title
-            ? {
-                  title,
-                  issuer: issuerName(credential.issuer) ?? "Microsoft",
-                  date: dateFrom(credential.issuedOn ?? credential.issueDate ?? credential.date),
-                  imageUrl: imageUrl(credential.image) ?? credential.imageUrl ?? credential.badge?.imageUrl,
-                  url,
-              }
-            : undefined;
-    }
-
-    const structured = extractStructuredData(body).find(
-        (value) => value.issuedOn || value.dateIssued || value.datePublished,
-    );
-    const rawTitle = metadata(body, "og:title") ?? body.match(/<title[^>]*>([^<]+)/i)?.[1]?.trim();
-    const title = structured?.name ?? rawTitle?.replace(/^Microsoft Certified:\s*/i, "").trim();
-
-    return title
-        ? {
-              title,
-              issuer: issuerName(structured?.issuer) ?? "Microsoft",
-              date:
-                  dateFrom(structured?.issuedOn ?? structured?.dateIssued ?? structured?.datePublished) ??
-                  dateInText(body),
-              imageUrl: imageUrl(structured?.image) ?? metadata(body, "og:image"),
-              url,
-          }
-        : undefined;
+interface MicrosoftTranscript {
+    userName?: string;
+    certificationData?: {
+        activeCertifications?: MicrosoftCertification[];
+        historicalCertifications?: MicrosoftCertification[];
+    };
+    appliedSkillsData?: { appliedSkillsCredentials?: MicrosoftAppliedSkill[] };
 }
 
-export async function readMicrosoftLearnCredential(url: string): Promise<DiscoveredCredential | undefined> {
-    const page = await fetchPage(url);
-    return parseMicrosoftLearnCredential(url, page.contentType, page.body);
+interface MicrosoftCertification {
+    name?: string;
+    dateEarned?: string;
+}
+
+interface MicrosoftAppliedSkill {
+    credentialId?: string;
+    title?: string;
+    awardedOn?: string;
+}
+
+function transcriptId(profileUrl: string): string {
+    const id = new URL(profileUrl).pathname.match(/\/transcript\/([^/]+)/)?.[1];
+    if (!id) throw new Error("Microsoft Learn profile URL must contain a transcript ID");
+    return id;
+}
+
+function transcriptUrl(profileUrl: string): string {
+    const profile = new URL(profileUrl);
+    return `${profile.origin}/api/profiles/transcript/share/${transcriptId(profileUrl)}?locale=en-us`;
+}
+
+function microsoftTitle(title: string): string {
+    return title.replace(/^Microsoft Certified:\s*/i, "");
+}
+
+export function parseMicrosoftTranscript(profileUrl: string, body: string): DiscoveredCredential[] {
+    const transcript = JSON.parse(body) as MicrosoftTranscript;
+    return [
+        ...(transcript.certificationData?.activeCertifications ?? []),
+        ...(transcript.certificationData?.historicalCertifications ?? []),
+    ].flatMap((certification) => {
+        if (!certification.name || !certification.dateEarned) return [];
+        return [
+            {
+                title: microsoftTitle(certification.name),
+                issuer: "Microsoft",
+                date: certification.dateEarned.slice(0, 10),
+                url: profileUrl,
+            },
+        ];
+    });
+}
+
+export async function readMicrosoftLearnProfile(profileUrl: string): Promise<DiscoveredCredential[]> {
+    const transcriptPage = await fetchPage(transcriptUrl(profileUrl));
+    const transcript = JSON.parse(transcriptPage.body) as MicrosoftTranscript;
+    const credentials = parseMicrosoftTranscript(profileUrl, transcriptPage.body);
+    const shareId = transcriptId(profileUrl);
+
+    for (const skill of transcript.appliedSkillsData?.appliedSkillsCredentials ?? []) {
+        if (!skill.credentialId || !skill.title || !skill.awardedOn || !transcript.userName) continue;
+
+        const credentialUrl = `https://learn.microsoft.com/api/credentials/share/en-us/${transcript.userName}/${skill.credentialId}?sharingId=${shareId}`;
+        const credentialPage = await fetchPage(credentialUrl);
+        credentials.push({
+            title: skill.title,
+            issuer: "Microsoft",
+            date: skill.awardedOn.slice(0, 10),
+            imageUrl: metadata(credentialPage.body, "og:image"),
+            url: credentialUrl,
+        });
+    }
+
+    return credentials;
 }
