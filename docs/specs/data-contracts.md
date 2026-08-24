@@ -1,6 +1,6 @@
 ---
 spec: data-contracts
-version: 0.1.0
+version: 0.1.1
 status: current-state
 ---
 
@@ -35,6 +35,7 @@ Used by many contracts. All fields required
 | File | Loader | Type | Shape |
 | --- | --- | --- | --- |
 | `certifications.json` | `getCertifications()` | `Certification[]` | array |
+| `certification-sources.json` | certification sync tool only | source URL lists | object |
 | `experiences.json` | `getExperiences()` | `Experience[]` | array |
 | `skills.json` | `getSkillCategories()` | `SkillCategory[]` | array |
 | `icons.json` | `getIcons()` | `Icon[]` | array |
@@ -55,6 +56,12 @@ Used by many contracts. All fields required
 | `date` | `ISODateString` (`YYYY-MM-DD`) | yes |
 | `relevance` | `"High" \| "Medium" \| "Low"` | yes |
 | `order` | number | yes (sort key on About) |
+
+### `Certification sources` (`certification-sources.json`)
+
+Used only by the local certification sync tool. Both fields are arrays of public,
+individual credential-page URLs: `microsoftLearn` for Microsoft Learn and `credly` for
+Credly. These sources generate `certifications.json`; they do not ship to the application.
 
 ### `Experience` ([experience.ts](../../src/src/types/experience.ts))
 | Field | Type | Required |
@@ -92,20 +99,16 @@ Skill: `name` (req), `iconId` (opt — **must match an `icons.json` `id`**),
 
 ## Certification synchronization
 
-`content/data/certifications.json` is refreshed by `npm run sync:certifications` before the
-production build. The build-time script at [`scripts/sync-certifications.mjs`](../../scripts/sync-certifications.mjs)
-reads comma-separated credential page URLs from `MICROSOFT_LEARN_CREDENTIAL_URLS` and
-`CREDLY_BADGE_URLS`, fetches public metadata and badge images, converts new badges to
-128×128 AVIF, and appends only credentials that are not already present. Network errors,
-rate limits, missing metadata, and unavailable image conversion are warnings; existing
-content remains usable and the build continues.
+Run `npm run sync:certifications` from `src/` to refresh `certifications.json` from the public
+URLs in [`certification-sources.json`](../../content/data/certification-sources.json). The
+tool keeps Microsoft Learn and Credly parsing separate, converts new badges to 128×128 AVIF,
+and appends only credentials that are not already present. Network errors, rate limits, and
+missing metadata are warnings; existing content remains unchanged.
 
-Existing entries, including their curated `relevance` and `order`, are never overwritten.
-The checked-in [`certifications.json.backup`](../../content/data/certifications.json.backup)
-file preserves the initial curated dataset. The sync script also refreshes this backup
-before each run; review generated JSON and images before committing updates. To manually
-override a certification, edit the main JSON after syncing (or remove its source URL), and
-keep the backup in sync with the curated baseline.
+The production build does not run the sync tool. Review the generated JSON and images, then
+commit them before deploying. Existing entries, including their curated `relevance` and
+`order`, are never overwritten. To manually override a certification, edit the main JSON
+after syncing or remove its source URL.
 
 ## Rules for agents editing data
 

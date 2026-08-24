@@ -5,8 +5,8 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
-        "build": "npm run sync:certifications && npm run build:client && npm run build:server && npm run prerender",
-        "sync:certifications": "node ../scripts/sync-certifications.mjs",
+        "build": "npm run build:client && npm run build:server && npm run prerender",
+        "sync:certifications": "node ../scripts/node/certifications/index.mjs",
         "build:client": "vite build",
         "build:server": "vite build --ssr src/entry-server.tsx --outDir dist/server",
         "prerender": "node scripts/prerender.mjs",
@@ -17,7 +17,8 @@
         "format": "prettier --write . --ignore-path ../.prettierignore",
         "format:check": "prettier --check . --ignore-path ../.prettierignore",
         "accessibility": "lhci autorun",
-        "test": "vitest run",
+        "test": "vitest run && npm run test:certifications",
+        "test:certifications": "node --test ../scripts/node/certifications/*.test.mjs",
         "test:e2e": "playwright test",
         "test:watch": "vitest",
         "test:coverage": "vitest run --coverage"
