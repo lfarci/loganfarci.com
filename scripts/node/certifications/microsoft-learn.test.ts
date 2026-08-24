@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { parseMicrosoftLearnCredential } from "./microsoft-learn.mjs";
+import { parseMicrosoftLearnCredential } from "./microsoft-learn.js";
 
 test("parses Microsoft Learn JSON credential metadata", () => {
     const credential = parseMicrosoftLearnCredential(

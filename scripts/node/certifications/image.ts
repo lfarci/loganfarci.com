@@ -4,7 +4,11 @@ import { join } from "node:path";
 
 const timeoutMs = 15_000;
 
-export async function downloadBadge(root, imageUrl, slug) {
+export async function downloadBadge(
+    root: string,
+    imageUrl: string | undefined,
+    slug: string,
+): Promise<string | undefined> {
     if (!imageUrl) return undefined;
 
     const response = await fetch(imageUrl, { signal: AbortSignal.timeout(timeoutMs) });

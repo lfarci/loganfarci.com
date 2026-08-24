@@ -1,6 +1,7 @@
-import { dateFrom, dateInText, extractStructuredData, fetchPage, metadata } from "./shared.mjs";
+import { dateFrom, dateInText, extractStructuredData, fetchPage, imageUrl, issuerName, metadata } from "./shared.js";
+import type { DiscoveredCredential } from "./types.js";
 
-export function parseCredlyCredential(url, body) {
+export function parseCredlyCredential(url: string, body: string): DiscoveredCredential | undefined {
     const structured = extractStructuredData(body).find(
         (value) => value.issuedOn || value.dateIssued || value.datePublished,
     );
@@ -11,17 +12,17 @@ export function parseCredlyCredential(url, body) {
     return title
         ? {
               title,
-              issuer: structured?.issuer?.name ?? issuedTitle?.[2] ?? "Credly",
+              issuer: issuerName(structured?.issuer) ?? issuedTitle?.[2] ?? "Credly",
               date:
                   dateFrom(structured?.issuedOn ?? structured?.dateIssued ?? structured?.datePublished) ??
                   dateInText(body),
-              imageUrl: structured?.image?.url ?? structured?.image ?? metadata(body, "og:image"),
+              imageUrl: imageUrl(structured?.image) ?? metadata(body, "og:image"),
               url,
           }
         : undefined;
 }
 
-export async function readCredlyCredential(url) {
+export async function readCredlyCredential(url: string): Promise<DiscoveredCredential | undefined> {
     const page = await fetchPage(url);
     return parseCredlyCredential(url, page.body);
 }

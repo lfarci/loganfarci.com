@@ -1,18 +1,23 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { readCredlyCredential } from "./credly.mjs";
-import { downloadBadge } from "./image.mjs";
-import { readMicrosoftLearnCredential } from "./microsoft-learn.mjs";
-import { loadSources } from "./sources.mjs";
-import { slugify } from "./shared.mjs";
+import { readCredlyCredential } from "./credly.js";
+import { downloadBadge } from "./image.js";
+import { readMicrosoftLearnCredential } from "./microsoft-learn.js";
+import { loadSources } from "./sources.js";
+import { slugify } from "./shared.js";
+import type { Certification, DiscoveredCredential } from "./types.js";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "../../..");
 const dataPath = join(root, "content", "data", "certifications.json");
-const warn = (message) => console.warn(`[certifications] ${message}`);
+const warn = (message: string) => console.warn(`[certifications] ${message}`);
 
-async function readCredentials(provider, urls, readCredential) {
-    const credentials = [];
+async function readCredentials(
+    provider: string,
+    urls: string[],
+    readCredential: (url: string) => Promise<DiscoveredCredential | undefined>,
+): Promise<DiscoveredCredential[]> {
+    const credentials: DiscoveredCredential[] = [];
 
     for (const url of urls) {
         try {
@@ -29,7 +34,7 @@ async function readCredentials(provider, urls, readCredential) {
     return credentials;
 }
 
-const existing = JSON.parse(await readFile(dataPath, "utf8"));
+const existing = JSON.parse(await readFile(dataPath, "utf8")) as Certification[];
 const sources = await loadSources(root);
 const discovered = [
     ...(await readCredentials("Microsoft Learn", sources.microsoftLearn, readMicrosoftLearnCredential)),
@@ -38,7 +43,7 @@ const discovered = [
 const knownUrls = new Set(existing.map((certification) => certification.url));
 const knownTitles = new Set(existing.map((certification) => certification.title));
 let nextOrder = Math.max(-1, ...existing.map((certification) => certification.order)) + 1;
-const additions = [];
+const additions: Certification[] = [];
 
 for (const credential of discovered) {
     if (!credential.title || knownUrls.has(credential.url) || knownTitles.has(credential.title)) continue;

@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { parseCredlyCredential } from "./credly.mjs";
+import { parseCredlyCredential } from "./credly.js";
 
 test("parses Credly page metadata", () => {
     const credential = parseCredlyCredential(
