@@ -64,6 +64,19 @@ Before you begin, ensure you have the following tools installed on your workstat
     To verify formatting without changing files, run `npm run format:check`. The same
     check runs in CI.
 
+## Project structure
+
+The repository-level `src/` directory is the Vite project root. It contains the
+frontend package and build configuration, including `package.json`, `vite.config.ts`,
+and `tsconfig.json`. Application code lives one level deeper in `src/src/`; this
+double nesting keeps the Vite project separate from repository-level content,
+infrastructure, and documentation.
+
+TypeScript path aliases keep imports independent of that layout:
+
+- `@/` resolves to `src/src/` for application modules.
+- `@content/` resolves to the repository-level `content/` directory.
+
 ## Agent workflow validation
 
 Before running a live Product Owner -> Orchestrator -> Developer test, validate the
