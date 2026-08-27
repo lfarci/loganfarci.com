@@ -1,0 +1,7 @@
+interface:
+  display_name: "Site Designer"
+  short_description: "Critique and revamp loganfarci.com UI"
+  default_prompt: "Use $site-designer to critique the current site and prepare an approval-ready full-revamp plan."
+
+policy:
+  allow_implicit_invocation: true
