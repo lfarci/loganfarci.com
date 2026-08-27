@@ -2,39 +2,43 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
 import { TooltipProvider } from "@/components/shared/primitives/TooltipPrimitives";
-import Preview from "./Preview";
+import MarkdownPreview from "./MarkdownPreview";
 
-function renderPreview() {
-    render(
+function renderMarkdownPreview() {
+    return render(
         <TooltipProvider>
-            <Preview collapsedContent={<h2>Summary</h2>} expandedContent={<h2>Full details</h2>} />
+            <MarkdownPreview>## Preview details</MarkdownPreview>
         </TooltipProvider>,
     );
 }
 
-describe("Preview", () => {
-    it("starts with the collapsed preview selected", () => {
-        renderPreview();
+describe("MarkdownPreview", () => {
+    it("starts collapsed", () => {
+        renderMarkdownPreview();
 
-        expect(screen.getByRole("heading", { name: "Summary" })).toBeTruthy();
+        expect(screen.getByRole("button", { name: "Show more" })).toBeTruthy();
     });
 
     it("expands the preview", () => {
-        renderPreview();
+        renderMarkdownPreview();
 
         fireEvent.click(screen.getByRole("button", { name: "Show more" }));
 
-        expect(screen.getByRole("heading", { name: "Full details" })).toBeTruthy();
         expect(screen.getByRole("button", { name: "Show less" })).toBeTruthy();
     });
 
     it("collapses an expanded preview", () => {
-        renderPreview();
+        renderMarkdownPreview();
         fireEvent.click(screen.getByRole("button", { name: "Show more" }));
 
         fireEvent.click(screen.getByRole("button", { name: "Show less" }));
 
-        expect(screen.getByRole("heading", { name: "Summary" })).toBeTruthy();
         expect(screen.getByRole("button", { name: "Show more" })).toBeTruthy();
+    });
+
+    it("fades collapsed content into the elevated card surface", () => {
+        const { container } = renderMarkdownPreview();
+
+        expect(container.querySelector(".to-surface-elevated")).toBeTruthy();
     });
 });
