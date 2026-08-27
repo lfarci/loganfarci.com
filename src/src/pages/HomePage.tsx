@@ -1,5 +1,5 @@
 import ArticleListSection from "@/components/ArticleListSection";
-import ContactLinks from "@/components/ContactLinks";
+import HeroActions from "@/components/HeroActions";
 import GreetingHeading from "@/components/GreetingHeading";
 import HeroSection from "@/components/HeroSection";
 import ColumnContainer from "@/components/layout/ColumnContainer";
@@ -37,7 +37,7 @@ export default function HomePage() {
                     heading={<GreetingHeading greeting="Hi" name="Logan" />}
                     description={profile.role}
                     image={profile.avatar}
-                    actions={<ContactLinks contacts={contacts} />}
+                    actions={<HeroActions contacts={contacts} />}
                 />
                 <TextSection
                     heading="About Me"

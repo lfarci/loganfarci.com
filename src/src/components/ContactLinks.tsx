@@ -10,6 +10,7 @@ interface ContactLinksProps {
     contacts: Contact[];
     iconSize?: number;
     className?: string;
+    linkSizeClassName?: string;
 }
 
 const renderContactIcon = (icon: Contact["icon"], size: number) => {
@@ -30,7 +31,12 @@ const renderContactIcon = (icon: Contact["icon"], size: number) => {
 };
 
 // Reusable row of social/contact links rendered as icon buttons with tooltips.
-const ContactLinks: React.FC<ContactLinksProps> = ({ contacts, iconSize = 32, className = "" }) => {
+const ContactLinks: React.FC<ContactLinksProps> = ({
+    contacts,
+    iconSize = 32,
+    className = "",
+    linkSizeClassName = "size-11",
+}) => {
     if (!contacts || contacts.length === 0) {
         return null;
     }
@@ -38,14 +44,18 @@ const ContactLinks: React.FC<ContactLinksProps> = ({ contacts, iconSize = 32, cl
     const containerClassName = `flex flex-wrap gap-6 ${className}`.trim();
 
     return (
-        <div className={containerClassName}>
+        <div className={containerClassName} role="group" aria-label="Social links">
             {contacts.map((contact) => {
                 const icon = renderContactIcon(contact.icon, iconSize);
                 const content = icon ?? <span className="text-text-tertiary font-medium">{contact.name}</span>;
 
                 return (
                     <Tooltip key={contact.name} content={contact.name} placement="bottom">
-                        <NewTabLink url={contact.url} aria-label={contact.name}>
+                        <NewTabLink
+                            url={contact.url}
+                            aria-label={contact.name}
+                            className={`flex ${linkSizeClassName} items-center justify-center rounded-control`}
+                        >
                             {content}
                         </NewTabLink>
                     </Tooltip>

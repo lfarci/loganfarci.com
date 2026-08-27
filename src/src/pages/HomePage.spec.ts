@@ -22,6 +22,20 @@ test.describe("Home page", () => {
         ]);
     });
 
+    test("presents labeled discovery actions separately from social utilities", async ({ page }) => {
+        await page.goto("/");
+        const main = page.getByRole("main");
+        await expect(main.getByRole("link", { name: "Explore my profile", exact: true })).toHaveAttribute(
+            "href",
+            "/about",
+        );
+        await expect(main.getByRole("link", { name: "Read my articles", exact: true })).toHaveAttribute(
+            "href",
+            "/articles",
+        );
+        await expect(main.getByRole("group", { name: "Social links" })).toBeVisible();
+    });
+
     test("exposes the complete set of accessible contact actions", async ({ page }) => {
         await page.goto("/");
         const main = page.getByRole("main");
@@ -34,6 +48,8 @@ test.describe("Home page", () => {
 
         for (const contact of contacts) {
             const link = main.getByRole("link", { name: contact.name, exact: true });
+            await expect(link).toHaveCSS("height", "36px");
+            await expect(link).toHaveCSS("width", "36px");
             await expect(link).toHaveAttribute("href", contact.href);
             await expect(link).toHaveAttribute("target", "_blank");
             await expect(link).toHaveAttribute("rel", "noopener noreferrer");
