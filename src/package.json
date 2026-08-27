@@ -6,6 +6,7 @@
     "scripts": {
         "dev": "vite",
         "build": "npm run build:client && npm run build:server && npm run prerender",
+        "sync:certifications": "tsx ../scripts/node/certifications/index.ts",
         "build:client": "vite build",
         "build:server": "vite build --ssr src/entry-server.tsx --outDir dist/server",
         "prerender": "node scripts/prerender.mjs",
@@ -16,7 +17,9 @@
         "format": "prettier --write . --ignore-path ../.prettierignore",
         "format:check": "prettier --check . --ignore-path ../.prettierignore",
         "accessibility": "lhci autorun",
-        "test": "vitest run",
+        "test": "vitest run && npm run typecheck:certifications && npm run test:certifications",
+        "typecheck:certifications": "tsc --project ../scripts/node/certifications/tsconfig.json",
+        "test:certifications": "tsx --test ../scripts/node/certifications/*.test.ts",
         "test:e2e": "playwright test",
         "test:watch": "vitest",
         "test:coverage": "vitest run --coverage"
@@ -60,7 +63,9 @@
         "gray-matter": "^4.0.3",
         "jsdom": "^28.1.0",
         "prettier": "3.6.2",
+        "sharp": "^0.35.3",
         "tailwindcss": "^4.2.1",
+        "tsx": "^4.23.12",
         "typescript": "^5.8.3",
         "typescript-eslint": "^8.47.0",
         "vite": "^7.3.5",

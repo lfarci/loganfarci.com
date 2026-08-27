@@ -37,25 +37,40 @@ Before you begin, ensure you have the following tools installed on your workstat
 
     The application works out of the box with default values. Environment variables are only needed if you want to customize paths or run in special configurations.
 
-3. **Start development server:**
+3. **Refresh certifications (optional):**
+
+    The public Microsoft Learn and Credly credential pages are listed in
+    [`content/data/certification-sources.json`](content/data/certification-sources.json).
+    Refresh the generated certification data and badge images when you want to check for new
+    credentials:
+
+    ```bash
+    npm run sync:certifications
+    git diff -- ../content/data/certifications.json public/images/certifications
+    ```
+
+    Review and commit any generated changes. The regular production build does not fetch
+    credentials.
+
+4. **Start development server:**
 
     ```bash
     npm run dev
     ```
 
-4. **Build for production:**
+5. **Build for production:**
 
     ```bash
     npm run build
     ```
 
-5. **Lint code:**
+6. **Lint code:**
 
     ```bash
     npm run lint
     ```
 
-6. **Format code:**
+7. **Format code:**
 
     ```bash
     npm run format
