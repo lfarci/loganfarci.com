@@ -14,7 +14,11 @@ interface HeroSectionProps {
 const HeroSection: React.FC<HeroSectionProps> = ({ heading, description, image, actions, proof }) => {
     const renderHeading = () => (typeof heading === "string" ? <Heading1>{heading}</Heading1> : heading);
     const renderDescription = () =>
-        typeof description === "string" ? <Text className="w-full">{description}</Text> : (description ?? null);
+        typeof description === "string" ? (
+            <Text className="max-w-xl text-lg md:text-xl">{description}</Text>
+        ) : (
+            (description ?? null)
+        );
 
     const buildImageClassName = () => {
         const baseClassName = "relative block w-full bg-surface object-cover shadow-card";
@@ -24,7 +28,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ heading, description, image, 
     };
 
     return (
-        <section className="grid items-center gap-8 border-b border-border-light py-10 md:grid-cols-[minmax(0,1fr)_minmax(16rem,0.68fr)] md:gap-12 md:py-16">
+        <section className="grid items-center gap-8 border-b border-border-light py-12 md:grid-cols-[minmax(0,1fr)_minmax(16rem,0.68fr)] md:gap-14 md:py-20">
             <div className="flex min-w-0 flex-col justify-center space-y-5 md:space-y-6">
                 {renderHeading()}
                 {renderDescription()}

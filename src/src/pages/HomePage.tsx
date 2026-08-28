@@ -1,13 +1,12 @@
 import ArticleListSection from "@/components/ArticleListSection";
 import ContactLinks from "@/components/ContactLinks";
-import GreetingHeading from "@/components/GreetingHeading";
 import HeroSection from "@/components/HeroSection";
 import ColumnContainer from "@/components/layout/ColumnContainer";
 import Section from "@/components/shared/Section";
 import TextSection from "@/components/shared/TextSection";
 import ThumbnailGridSection from "@/components/shared/ThumbnailGridSection";
 import { Button } from "@/components/shared/primitives/Button";
-import { Heading3, Text } from "@/components/shared/typography";
+import { Heading1, Heading3, Text } from "@/components/shared/typography";
 import { getFeaturedArticles } from "@/core/articles";
 import { getCertifications, getContacts, getInterests, getProfile } from "@/core/data";
 import { createCanonicalUrl } from "@/core/seo";
@@ -39,8 +38,19 @@ export default function HomePage() {
             <meta name="twitter:description" content={pageDescription} />
             <ColumnContainer>
                 <HeroSection
-                    heading={<GreetingHeading greeting="Hi" name="Logan" />}
-                    description={profile.role}
+                    heading={
+                        <Heading1 className="max-w-3xl text-5xl tracking-[-0.035em] md:text-7xl md:leading-[0.98]">
+                            Cloud-native solutions that scale.
+                        </Heading1>
+                    }
+                    description={
+                        <div className="max-w-xl space-y-3">
+                            <p className="font-[family-name:var(--font-reddit-mono)] text-xs uppercase tracking-[0.14em] text-accent">
+                                Azure Associate Developer
+                            </p>
+                            <Text>{profile.introduction}</Text>
+                        </div>
+                    }
                     image={profile.avatar}
                     actions={
                         <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center">

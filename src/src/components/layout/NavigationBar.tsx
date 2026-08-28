@@ -68,15 +68,18 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ title }) => {
     }, [isMenuOpen]);
 
     return (
-        <header className="border-b border-border bg-background/90 backdrop-blur">
+        <header className="border-b border-border bg-background/95 backdrop-blur">
             <nav
                 className={mergeClassNames(
                     contentWidthStyles.pageContainer,
-                    "flex flex-wrap items-center justify-between py-3 text-center",
+                    "flex flex-wrap items-center justify-between py-4 text-center",
                 )}
             >
                 <div className="flex-1 text-left md:flex-none md:text-center">
-                    <Link to="/" className="text-xl md:text-2xl font-thin heading-font cursor-pointer">
+                    <Link
+                        to="/"
+                        className="heading-font text-xl font-semibold tracking-tight text-text-primary md:text-2xl"
+                    >
                         {title}
                     </Link>
                 </div>
