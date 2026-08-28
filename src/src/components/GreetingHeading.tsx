@@ -4,30 +4,10 @@ import { Heading1 } from "@/components/shared/typography";
 interface GreetingHeadingProps {
     greeting?: string;
     name: string;
-    iconSrc?: string;
-    iconAlt?: string;
-    iconSize?: number;
 }
 
-// Friendly heading with an optional inline icon.
-const GreetingHeading: React.FC<GreetingHeadingProps> = ({
-    greeting = "Hi",
-    name,
-    iconSrc = "/images/icons/waving_hand.avif",
-    iconAlt = "Waving hand",
-    iconSize = 64,
-}) => (
-    <Heading1 className="flex items-center">
-        <span className="mr-2">{greeting}</span>
-        <img
-            src={iconSrc}
-            alt={iconAlt}
-            width={iconSize}
-            height={iconSize}
-            className="inline-block size-[1em] shrink-0"
-        />
-        <span>, I&apos;m {name}</span>
-    </Heading1>
+const GreetingHeading: React.FC<GreetingHeadingProps> = ({ greeting = "Hi", name }) => (
+    <Heading1>{`${greeting}, I’m ${name}.`}</Heading1>
 );
 
 export default GreetingHeading;

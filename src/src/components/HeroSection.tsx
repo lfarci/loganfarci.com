@@ -7,37 +7,42 @@ interface HeroSectionProps {
     description?: React.ReactNode | string;
     image?: ImageProps;
     actions?: React.ReactNode;
+    proof?: React.ReactNode;
 }
 
-// Generic hero layout pairing text with optional media and actions.
-const HeroSection: React.FC<HeroSectionProps> = ({ heading, description, image, actions }) => {
+// Generic hero layout pairing text with optional media, actions, and factual proof.
+const HeroSection: React.FC<HeroSectionProps> = ({ heading, description, image, actions, proof }) => {
     const renderHeading = () => (typeof heading === "string" ? <Heading1>{heading}</Heading1> : heading);
     const renderDescription = () =>
         typeof description === "string" ? <Text className="w-full">{description}</Text> : (description ?? null);
 
     const buildImageClassName = () => {
-        const baseClassName = "rounded-none w-full md:w-1/3 mt-6 md:mt-0";
+        const baseClassName = "relative block w-full bg-surface object-cover shadow-card";
         if (!image?.className) return baseClassName;
 
         return `${baseClassName} ${image.className}`;
     };
 
     return (
-        <section className="flex flex-col items-center gap-6 pt-8 pb-4 md:flex-row md:gap-8 md:pt-10 md:pb-6">
-            <div className="flex flex-1 flex-col justify-center space-y-5 md:space-y-6">
+        <section className="grid items-center gap-8 border-b border-border-light py-10 md:grid-cols-[minmax(0,1fr)_minmax(16rem,0.68fr)] md:gap-12 md:py-16">
+            <div className="flex min-w-0 flex-col justify-center space-y-5 md:space-y-6">
                 {renderHeading()}
                 {renderDescription()}
                 {actions}
+                {proof}
             </div>
             {image && (
-                <img
-                    src={image.src}
-                    alt={image.alt}
-                    width={image.width ?? 512}
-                    height={image.height ?? 512}
-                    fetchPriority="high"
-                    className={buildImageClassName()}
-                />
+                <div className="relative mx-auto w-full max-w-sm md:max-w-none">
+                    <div aria-hidden="true" className="absolute -inset-3 border border-accent/50" />
+                    <img
+                        src={image.src}
+                        alt={image.alt}
+                        width={image.width ?? 512}
+                        height={image.height ?? 512}
+                        fetchPriority="high"
+                        className={buildImageClassName()}
+                    />
+                </div>
             )}
         </section>
     );

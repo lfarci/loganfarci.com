@@ -12,7 +12,7 @@ const ThemeToggle: React.FC = () => {
 
     if (!mounted) {
         return (
-            <div className="p-2 w-9 h-9 rounded-lg bg-surface-hover border border-border">
+            <div className="size-11 rounded-control border border-border bg-surface-hover p-2.5">
                 <div className="w-5 h-5" />
             </div>
         );

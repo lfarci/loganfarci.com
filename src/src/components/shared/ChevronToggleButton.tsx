@@ -1,31 +1,36 @@
-import React from "react";
 import Tooltip from "@/components/shared/Tooltip";
 import { ChevronDownIcon } from "@/components/shared/icons";
+import { Button } from "@/components/shared/primitives/Button";
 
 interface ChevronToggleButtonProps {
     isExpanded: boolean;
     onToggle: () => void;
+    controls: string;
 }
 
-function ChevronToggleButton({ isExpanded, onToggle }: ChevronToggleButtonProps) {
+function ChevronToggleButton({ isExpanded, onToggle, controls }: ChevronToggleButtonProps) {
     const toggleText = isExpanded ? "Show less" : "Show more";
 
     return (
         <div className="flex justify-center mt-2">
             <Tooltip content={toggleText} placement="bottom">
-                <button
+                <Button
                     onClick={onToggle}
                     type="button"
                     aria-label={toggleText}
-                    className="cursor-pointer focus:outline-hidden focus:ring-2 focus:ring-border rounded-sm"
+                    aria-expanded={isExpanded}
+                    aria-controls={controls}
+                    variant="ghost"
+                    size="icon"
+                    className="cursor-pointer"
                 >
                     <ChevronDownIcon
                         strokeWidth={1}
-                        className={`h-5 w-5 text-text-tertiary transition-transform duration-300 motion-reduce:transition-none ${
+                        className={`size-5 text-text-tertiary transition-transform duration-300 motion-reduce:transition-none ${
                             isExpanded ? "rotate-180" : ""
                         }`}
                     />
-                </button>
+                </Button>
             </Tooltip>
         </div>
     );

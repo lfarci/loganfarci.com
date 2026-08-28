@@ -115,6 +115,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ title }) => {
                             key={item.url}
                             url={item.url}
                             download={item.download}
+                            active={!item.download && location.pathname === item.url}
                             className="hover:text-primary-hover transition-colors"
                         >
                             {item.label}
@@ -139,6 +140,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ title }) => {
                                     <NavBarEntry
                                         url={item.url}
                                         download={item.download}
+                                        active={!item.download && location.pathname === item.url}
                                         className="hover:text-primary-hover transition-colors text-base py-2 motion-reduce:transition-none"
                                     >
                                         {item.label}

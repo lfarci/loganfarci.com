@@ -29,8 +29,9 @@ describe("CodeSnippet", () => {
         expect({
             element: container.firstElementChild?.tagName,
             keepsInlineRadius: container.firstElementChild?.classList.contains("rounded-sm"),
+            wrapsLongValues: container.firstElementChild?.classList.contains("break-all"),
             copyControl: screen.queryByRole("button"),
-        }).toEqual({ element: "CODE", keepsInlineRadius: true, copyControl: null });
+        }).toEqual({ element: "CODE", keepsInlineRadius: true, wrapsLongValues: true, copyControl: null });
     });
 
     it("renders an ordinary code block without requesting the diagram module", () => {

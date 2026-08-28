@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useId, useRef, useState } from "react";
 import ChevronToggleButton from "../ChevronToggleButton";
 
 interface PreviewProps {
@@ -9,12 +9,14 @@ interface PreviewProps {
 function Preview({ collapsedContent, expandedContent }: PreviewProps) {
     const [isExpanded, setIsExpanded] = useState(false);
     const expandedContentRef = useRef<HTMLDivElement>(null);
+    const contentId = useId();
 
     const handleToggle = () => setIsExpanded((prev) => !prev);
 
     return (
         <div className="w-full">
             <div
+                id={contentId}
                 className="relative overflow-hidden transition-[height] duration-300 ease-in-out motion-reduce:transition-none"
                 style={{ height: isExpanded ? `${expandedContentRef.current?.scrollHeight || 0}px` : "2em" }}
             >
@@ -39,7 +41,7 @@ function Preview({ collapsedContent, expandedContent }: PreviewProps) {
                 </div>
             </div>
 
-            <ChevronToggleButton isExpanded={isExpanded} onToggle={handleToggle} />
+            <ChevronToggleButton isExpanded={isExpanded} onToggle={handleToggle} controls={contentId} />
         </div>
     );
 }

@@ -13,7 +13,7 @@ const buttonVariants = cva(
                 ghost: "text-text-primary hover:bg-surface-hover",
                 icon: "border border-border bg-surface-hover text-text-primary hover:bg-surface-elevated",
             },
-            size: { default: "h-11 px-6 py-3", sm: "h-9 px-3", icon: "size-9 p-2" },
+            size: { default: "h-11 px-6 py-3", sm: "h-9 px-3", icon: "size-11 p-2.5" },
         },
         defaultVariants: { variant: "default", size: "default" },
     },
