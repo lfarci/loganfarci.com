@@ -1,0 +1,4 @@
+interface:
+  display_name: "Plan Site Redesign"
+  short_description: "Plan and visualize a redesign before implementation"
+  default_prompt: "Use Impeccable to create and critique an evidence-based redesign brief, browser-viewable visual directions, design-system specification, and sequenced backlog for loganfarci.com without changing the application until I approve the plan and visuals."
