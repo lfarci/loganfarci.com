@@ -1,5 +1,6 @@
 import { Link } from "react-router";
 import ErrorMessage from "@/components/shared/ErrorMessage";
+import { Button } from "@/components/shared/primitives/Button";
 
 export default function NotFoundPage() {
     return (
@@ -12,12 +13,9 @@ export default function NotFoundPage() {
                 heading="Page Not Found"
                 message="Sorry, the page you are looking for does not exist or has been moved."
             >
-                <Link
-                    to="/"
-                    className="px-6 py-3 bg-primary text-text-inverse font-medium rounded-lg hover:bg-primary-hover transition-colors duration-200"
-                >
-                    Back to Home
-                </Link>
+                <Button asChild>
+                    <Link to="/">Back to Home</Link>
+                </Button>
             </ErrorMessage>
         </>
     );

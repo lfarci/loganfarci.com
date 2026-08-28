@@ -18,18 +18,18 @@ const Section: React.FC<SectionProps> = ({ heading, label, redirectPath, redirec
 
     return (
         <section id={id ?? createId(heading)} className="pt-8 md:pt-10 scroll-mt-24">
-            <div className="flex flex-col mb-5 md:mb-6">
+            <div className="mb-5 flex flex-col border-b border-border-light pb-4 md:mb-6 md:pb-5">
                 {label && <Label className="mb-2">{label}</Label>}
                 <div className="flex items-center">
                     {redirectPath ? (
                         <Tooltip content={toolTip} placement="right">
                             <Link
                                 to={redirectPath}
-                                className="flex items-center group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-sm"
+                                className="group flex items-center rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                             >
                                 <Heading2 className="mb-0">{heading}</Heading2>
                                 <ChevronRightIcon
-                                    className="size-6 md:size-8 ml-2 shrink-0 self-center text-text-tertiary"
+                                    className="ml-2 size-6 shrink-0 self-center text-accent transition-transform duration-200 group-hover:translate-x-1 motion-reduce:transition-none md:size-7"
                                     strokeWidth={2}
                                 />
                             </Link>

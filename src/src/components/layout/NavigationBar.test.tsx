@@ -110,6 +110,13 @@ describe("NavigationBar", () => {
         expect(menu.getAttribute("aria-hidden")).toBe("true");
     });
 
+    it("identifies the current application route", () => {
+        renderNavigationBarWithProviders();
+
+        expect(screen.getAllByRole("link", { name: "Home" })[0].getAttribute("aria-current")).toBe("page");
+        expect(screen.getAllByRole("link", { name: "About" })[0].getAttribute("aria-current")).toBeNull();
+    });
+
     it("opens the mobile menu when the toggle button is clicked", () => {
         renderNavigationBarWithProviders();
 

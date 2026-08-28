@@ -25,7 +25,7 @@ describe("Preview", () => {
         fireEvent.click(screen.getByRole("button", { name: "Show more" }));
 
         expect(screen.getByRole("heading", { name: "Full details" })).toBeTruthy();
-        expect(screen.getByRole("button", { name: "Show less" })).toBeTruthy();
+        expect(screen.getByRole("button", { name: "Show less" }).getAttribute("aria-expanded")).toBe("true");
     });
 
     it("collapses an expanded preview", () => {
@@ -35,6 +35,6 @@ describe("Preview", () => {
         fireEvent.click(screen.getByRole("button", { name: "Show less" }));
 
         expect(screen.getByRole("heading", { name: "Summary" })).toBeTruthy();
-        expect(screen.getByRole("button", { name: "Show more" })).toBeTruthy();
+        expect(screen.getByRole("button", { name: "Show more" }).getAttribute("aria-expanded")).toBe("false");
     });
 });

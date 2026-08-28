@@ -134,7 +134,7 @@ export default function CodeSnippet({ children, className, forceBlock = false }:
     }
 
     return isInline ? (
-        <code className="rounded-sm bg-surface-elevated px-1.5 py-0.5 font-mono text-[0.9em] text-text-primary">
+        <code className="break-all rounded-sm bg-surface-elevated px-1.5 py-0.5 font-mono text-[0.9em] text-text-primary">
             {children}
         </code>
     ) : (
