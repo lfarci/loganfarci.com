@@ -190,6 +190,12 @@
     --shadow-focus: 0 0 0 3px oklch(72% 0.15 252 / 0.32);
 }
 
+.hero-portrait-surface {
+    background:
+        radial-gradient(circle at 18% 70%, color-mix(in oklch, var(--color-accent) 72%, transparent), transparent 48%),
+        linear-gradient(145deg, var(--color-foreground), var(--color-background));
+}
+
 /* Font utilities */
 .heading-font {
     font-family: var(--font-manrope);

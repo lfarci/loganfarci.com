@@ -51,7 +51,7 @@ export default function HomePage() {
                             <Text>{profile.introduction}</Text>
                         </div>
                     }
-                    image={profile.avatar}
+                    image={{ ...profile.avatar, src: "/images/avatar.png" }}
                     actions={
                         <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center">
                             <Button asChild>

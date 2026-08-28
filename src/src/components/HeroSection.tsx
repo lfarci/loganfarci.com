@@ -21,23 +21,26 @@ const HeroSection: React.FC<HeroSectionProps> = ({ heading, description, image, 
         );
 
     const buildImageClassName = () => {
-        const baseClassName = "relative block w-full bg-surface object-cover shadow-card";
+        const baseClassName = "relative z-10 mx-auto h-full max-h-[42rem] w-full object-contain object-bottom";
         if (!image?.className) return baseClassName;
 
         return `${baseClassName} ${image.className}`;
     };
 
     return (
-        <section className="grid items-center gap-8 border-b border-border-light py-12 md:grid-cols-[minmax(0,1fr)_minmax(16rem,0.68fr)] md:gap-14 md:py-20">
-            <div className="flex min-w-0 flex-col justify-center space-y-5 md:space-y-6">
+        <section className="grid overflow-hidden border-y border-border-light bg-surface md:grid-cols-[minmax(0,1.35fr)_minmax(18rem,0.85fr)]">
+            <div className="flex min-w-0 flex-col justify-center space-y-5 px-6 py-12 md:px-10 md:py-20 lg:px-14">
                 {renderHeading()}
                 {renderDescription()}
                 {actions}
                 {proof}
             </div>
             {image && (
-                <div className="relative mx-auto w-full max-w-sm md:max-w-none">
-                    <div aria-hidden="true" className="absolute -inset-3 border border-accent/50" />
+                <div className="hero-portrait-surface relative mx-auto flex min-h-[24rem] w-full items-end overflow-hidden md:min-h-full md:max-w-none">
+                    <div
+                        aria-hidden="true"
+                        className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-foreground/30 to-transparent"
+                    />
                     <img
                         src={image.src}
                         alt={image.alt}
