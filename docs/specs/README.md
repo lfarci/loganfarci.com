@@ -1,6 +1,6 @@
 ---
 spec: loganfarci.com repository specs
-version: 0.2.0
+version: 0.3.0
 status: index
 ---
 
@@ -21,19 +21,20 @@ still a work in progress.
 
 ## The specs
 
-| Spec | Purpose |
-| --- | --- |
-| [vision.md](./vision.md) | The north star: core principles, planned sections, accessibility/SEO ambitions, and the target sitemap. |
-| [architecture.md](./architecture.md) | Routes and page responsibilities, SSR + prerender contract, and the content pipeline. |
-| [quality-bars.md](./quality-bars.md) | The rubric a reviewer agent checks against: accessibility, performance, TS strictness, testing, linting. |
-| [testing.md](./testing.md) | The testing contract: unit-test guidelines, the build gate, and deployment validation to check a live version is valid. |
-| [linting.md](./linting.md) | The linter as a guardrail: toolchain, fast local + CI runs, and how to add custom rules that enforce the other specs. |
-| [accessibility.md](./accessibility.md) | The detailed accessibility contract: current baseline, requirements, themes/contrast, machine-readability, and ideal state. |
-| [i18n.md](./i18n.md) | Multilanguage plan: locale scheme, per-locale prerendering, content/string translation, and SEO (`hreflang`). |
-| [data-contracts.md](./data-contracts.md) | Shape and required fields of each `content/data/*.json` file, mirroring `src/src/types/`. |
-| [content-style-guide.md](./content-style-guide.md) | Tone, structure, and front-matter rules for articles. Extends the article instructions. |
-| [markdown-rendering.md](./markdown-rendering.md) | How article/markdown content is rendered: supported GFM syntax, element mapping, code blocks, and Mermaid. |
-| [non-goals.md](./non-goals.md) | What the site is explicitly **not**, to keep automated proposals in scope. |
+| Spec                                               | Purpose                                                                                                                                                            |
+| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [vision.md](./vision.md)                           | The north star: core principles, planned sections, accessibility/SEO ambitions, and the target sitemap.                                                            |
+| [architecture.md](./architecture.md)               | Routes and page responsibilities, SSR + prerender contract, and the content pipeline.                                                                              |
+| [quality-bars.md](./quality-bars.md)               | The rubric a reviewer agent checks against: accessibility, performance, TS strictness, testing, linting.                                                           |
+| [testing.md](./testing.md)                         | The testing contract: unit-test guidelines, the build gate, and deployment validation to check a live version is valid.                                            |
+| [linting.md](./linting.md)                         | The linter as a guardrail: toolchain, fast local + CI runs, and how to add custom rules that enforce the other specs.                                              |
+| [accessibility.md](./accessibility.md)             | The detailed accessibility contract: current baseline, requirements, themes/contrast, machine-readability, and ideal state.                                        |
+| [i18n.md](./i18n.md)                               | Multilanguage plan: locale scheme, per-locale prerendering, content/string translation, and SEO (`hreflang`).                                                      |
+| [data-contracts.md](./data-contracts.md)           | Shape and required fields of each `content/data/*.json` file, mirroring `src/src/types/`.                                                                          |
+| [content-style-guide.md](./content-style-guide.md) | Tone, structure, and front-matter rules for articles. Extends the article instructions.                                                                            |
+| [markdown-rendering.md](./markdown-rendering.md)   | How article/markdown content is rendered: supported GFM syntax, element mapping, code blocks, and Mermaid.                                                         |
+| [non-goals.md](./non-goals.md)                     | What the site is explicitly **not**, to keep automated proposals in scope.                                                                                         |
+| [DESIGN.md](../../DESIGN.md)                       | Approved visual direction and reusable interface rules. It is a direction contract while implementation is pending, then must be reconciled with the built system. |
 
 Each spec carries frontmatter with its `status`: `current-state` (describes what
 exists today), `vision` (planned direction), or `index` (this file).
@@ -52,6 +53,9 @@ Read the spec that matches the task, then check it against the code before actin
 - Writing or editing an article → [content-style-guide.md](./content-style-guide.md)
   and [markdown-rendering.md](./markdown-rendering.md).
 - Proposing anything new → [non-goals.md](./non-goals.md) and [vision.md](./vision.md).
+- Changing visual hierarchy, components, typography, colour roles, or interaction
+  styling → [DESIGN.md](../../DESIGN.md), then the relevant architecture, accessibility,
+  and quality specs.
 
 **Precedence when guidance conflicts:**
 
@@ -62,8 +66,9 @@ Read the spec that matches the task, then check it against the code before actin
    the stale text.
 3. **[quality-bars.md](./quality-bars.md) gates shipping.** A change that regresses a
    quality bar does not ship.
-4. **[vision.md](./vision.md) guides direction** but never authorizes crossing a
-   non-goal or a quality bar.
+4. **[vision.md](./vision.md) and [DESIGN.md](../../DESIGN.md) guide direction** but
+   never authorize crossing a non-goal or a quality bar. `DESIGN.md` must not override
+   code facts until its approved direction is implemented and reconciled.
 
 ## Requirement levels
 

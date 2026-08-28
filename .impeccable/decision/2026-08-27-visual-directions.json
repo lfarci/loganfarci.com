@@ -1,0 +1,164 @@
+{
+  "title": "Choose the visual world",
+  "question": "Each direction makes Download resume the primary action and Contact me the immediate secondary action. Which world should shape Logan Farci's visual revamp?",
+  "options": [
+    {
+      "id": "field-notes-continuous",
+      "label": "Field Notes, continuous",
+      "kicker": "YOUR COMBINATION",
+      "lineage": "the current site, edited with the information rhythm of an engineering field notebook",
+      "thesis": "A single human-technical system: recognisably Logan's current site, reorganised with the confident editorial structure of practical engineering notes.",
+      "palette": ["#F8FAFC", "#172238", "#356EDA", "#42AFA7", "#D89A68"],
+      "materials": ["porcelain and midnight themes", "precise index markers", "thin rules and sparse evidence surfaces"],
+      "viewport": "Manrope-style hierarchy and the existing signal-blue/teal/copper system lead a spacious hero; Resume download and Contact are immediate, while a restrained field-note rail turns Experience, Writing, and Cloud systems into meaningful proof.",
+      "case": "It keeps continuity for returning visitors and gains the Field Notes direction's authored clarity without a second visual language.",
+      "risk": "It must keep annotation and numbering disciplined; too much turns a professional site into a notebook costume.",
+      "comp": ".impeccable/mocks/decision/2026-08-27-field-notes-continuous.png"
+    },
+    {
+      "id": "assigned",
+      "label": "Signal Room",
+      "kicker": "THE ROLL",
+      "lineage": "an engineer's operational field guide",
+      "thesis": "A precise professional briefing where proof, systems thinking, and a ready-to-use resume arrive as one confident signal.",
+      "palette": ["#0C182A", "#DCE8EE", "#42AFA7", "#D89A68"],
+      "materials": ["blue-black instrument panel", "copper signal trace", "soft paper-light reading planes"],
+      "viewport": "A midnight signal field frames Logan's role and proof points; a copper Resume PDF control leads, with Contact me beside it and a restrained profile portrait as the human anchor.",
+      "risk": "It can become dashboard theatre if the instrument grammar overwhelms the writing; articles and About need generous quiet space.",
+      "raised": [
+        {
+          "from": "Akari workshop",
+          "raise": "Warm internal illumination gives key proof and resume moments a human, welcoming glow rather than a cold interface sheen."
+        },
+        {
+          "from": "Versailles vistas",
+          "raise": "The long scroll has deliberate reveal points, so evidence is encountered in a clear sequence instead of a wall of equal cards."
+        },
+        {
+          "from": "green-phosphor terminal",
+          "raise": "Selected states communicate crisply and instantly, with no decorative animation standing between a visitor and the next action."
+        }
+      ],
+      "comp": ".impeccable/mocks/decision/2026-08-27-signal-room.png"
+    },
+    {
+      "id": "model-pick",
+      "label": "Field Notes",
+      "kicker": "IMPECCABLE’S PICK",
+      "lineage": "a well-used engineering notebook and technical monograph",
+      "thesis": "Logan's site reads like an authored record of practical engineering judgment: warm, rigorous, and unmistakably personal without becoming casual.",
+      "palette": ["#F4EFE5", "#172238", "#236C75", "#B56E45"],
+      "materials": ["warm stock paper", "ink annotations", "measured rules and index tabs"],
+      "viewport": "A bright editorial title block introduces Logan and his specialty; Resume PDF is the clear primary action, Contact me is adjacent, and a compact margin note carries the personal signal.",
+      "risk": "Editorial portfolio systems are familiar; it needs confident information density and exact annotation discipline to avoid looking like a generic personal journal.",
+      "comp": ".impeccable/mocks/decision/2026-08-27-field-notes.png"
+    },
+    {
+      "id": "continuity",
+      "label": "Continuity, sharpened",
+      "kicker": "CONTINUITY OPTION",
+      "lineage": "the current site, edited into a more decisive professional system",
+      "thesis": "Keep the familiar calm, technical voice while using the existing type and token system with much stronger editorial hierarchy and fewer repeated card surfaces.",
+      "palette": ["#F8FAFC", "#172238", "#356EDA", "#42AFA7", "#D89A68"],
+      "materials": ["porcelain and midnight themes", "signal-blue to teal trace", "quiet elevated surfaces"],
+      "viewport": "The familiar Manrope greeting and Noto Sans body remain; Download resume leads a spacious asymmetric hero, Contact me stays beside it, and a thin proof rail replaces the equal-weight card grid.",
+      "case": "This preserves continuity for returning visitors while directly addressing the critique's hierarchy, visual-language, and affordance findings.",
+      "risk": "It has less surprise than the other worlds, so the spacing, editorial rhythm, and proof rail must carry real conviction.",
+      "comp": ".impeccable/mocks/decision/2026-08-27-continuity-sharpened.png"
+    },
+    {
+      "id": "challenger-cathode",
+      "label": "Cathode Evidence",
+      "kicker": "ALTERNATE",
+      "verdict": "competitive",
+      "lineage": "a calibrated cathode display and precision test bench",
+      "thesis": "Experience is presented as evidence under illumination: selected work, current role, and resume availability strike forward while the rest remains visible in depth.",
+      "palette": ["#0B1220", "#F6EFE0", "#E88A36", "#766A55"],
+      "materials": ["dark glass", "bronze mesh", "hard orange signal glow"],
+      "viewport": "Logan's role is the single struck-forward line over a layered evidence field; Resume PDF glows as the primary control and Contact me stays plainly legible beside it.",
+      "case": "It strongly signals engineering depth and a distinctive interaction system, but gives up some immediate warmth for first-time hiring readers.",
+      "risk": "The dark, high-contrast world can read niche or severe if the human voice and article typography do not counterbalance it.",
+      "comp": ".impeccable/mocks/decision/2026-08-27-cathode-evidence.png",
+      "hero": "https://impeccable.style/worlds/cards/operate-b-struck-cathode-gauze-hero.webp",
+      "board": "https://impeccable.style/worlds/cards/operate-b-struck-cathode-gauze.webp"
+    },
+    {
+      "id": "challenger-versailles",
+      "label": "Versailles vistas",
+      "verdict": "declined",
+      "lineage": "choreographed axial landscapes",
+      "palette": ["#23452D", "#E9DFC4", "#AE8036", "#D4D7D5"],
+      "materials": ["garden plan", "gravel field", "gilt accent"],
+      "viewport": "A long central axis turns the resume and contact invitation into a ceremonial first stop.",
+      "case": "Declined: the formal spectacle competes with professional clarity and is not native to Logan's audience.",
+      "kept": "Deliberate reveal sequencing for the long scroll.",
+      "risk": "Over-formal for a direct technical portfolio."
+    },
+    {
+      "id": "challenger-akari",
+      "label": "Akari workshop",
+      "verdict": "declined",
+      "lineage": "washi lamps over bamboo ribs",
+      "palette": ["#F5E9D4", "#2D2B28", "#B34A35", "#B79062"],
+      "materials": ["washi light", "bamboo line", "vermilion mark"],
+      "viewport": "Warm paper volumes gather the introduction and actions around a calm profile image.",
+      "case": "Declined: its warmth helps, but it cannot carry the full technical evidence system as directly as the lead world.",
+      "kept": "Human warmth expressed as light, not as decorative texture.",
+      "risk": "Too craft-led for the intended engineering authority."
+    },
+    {
+      "id": "challenger-agit-train",
+      "label": "Constructivist agit-train",
+      "verdict": "declined",
+      "lineage": "diagonal poster broadsides",
+      "palette": ["#F4EBDC", "#1D2228", "#C83125"],
+      "materials": ["newsprint", "stencil", "photomontage"],
+      "viewport": "A red action wedge carries the resume through a diagonal proof sequence.",
+      "case": "Declined: its political, urgent rhetoric conflicts with Logan's close, enterprise-credible voice.",
+      "kept": "None; action clarity is already stronger in the lead world.",
+      "risk": "Too forceful and historically loaded."
+    },
+    {
+      "id": "challenger-sand",
+      "label": "Kinetic sand glyphs",
+      "verdict": "declined",
+      "lineage": "a tactile rotating control surface",
+      "palette": ["#2C211B", "#BC7D24", "#E6B85B", "#F0D3A0"],
+      "materials": ["raised sand", "warm metal", "rotating dial"],
+      "viewport": "A centered control dial directs the visitor to the resume and contact actions.",
+      "case": "Declined: a speculative control metaphor would distract from factual professional proof.",
+      "kept": "None; the product does not need a novel navigation mechanism.",
+      "risk": "Too ornamental and culturally ungrounded for this portfolio."
+    },
+    {
+      "id": "challenger-phosphor",
+      "label": "Green-phosphor terminal",
+      "verdict": "declined",
+      "lineage": "midnight machine-room terminal",
+      "palette": ["#07110B", "#9CF3A0", "#4C8C58", "#142A19"],
+      "materials": ["curved glass", "scanline", "afterimage"],
+      "viewport": "A typed system prompt invites a resume download and a direct contact command.",
+      "case": "Declined: terminal nostalgia narrows the audience and makes readable articles harder to sustain.",
+      "kept": "Crisp, instantly legible selected states.",
+      "risk": "A familiar developer-portfolio trope."
+    }
+  ],
+  "reroll": {
+    "registers": ["safer", "bolder"]
+  },
+  "buildPath": {
+    "value": "comp",
+    "toggle": true
+  },
+  "canon": true,
+  "canonCard": {
+    "label": "The category standard",
+    "thesis": "A polished modern portfolio with a centered hero, blue accent, cards, and a clear resume CTA.",
+    "palette": ["#FFFFFF", "#172238", "#2563EB", "#E5E7EB"],
+    "materials": ["clean grid", "quiet card surfaces"],
+    "viewport": "A conventional two-column hero puts the resume CTA above a concise credential grid.",
+    "risk": "It is credible but intentionally easy to confuse with other developer portfolios.",
+    "comp": ".impeccable/mocks/decision/2026-08-27-category-standard.png"
+  },
+  "steer": true
+}
