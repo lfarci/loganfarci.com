@@ -1,25 +1,19 @@
 import { expect, test } from "@/test/playwright/fixtures";
-import {
-    ABOUT_PAGE,
-    ARTICLES_PAGE,
-    expectClientNavigation,
-    expectPage,
-    getFirstArticlePage,
-    HOME_PAGE,
-    markHydratedPage,
-} from "@/test/playwright/pages";
+import { ABOUT_PAGE, ARTICLES_PAGE, expectPage, HOME_PAGE } from "@/test/playwright/pages";
 
 test.describe("Home page", () => {
-    test("presents the profile and discovery sections", async ({ page }) => {
+    test("presents the proposition, proof and primary actions in the opening", async ({ page }) => {
         await page.goto("/");
         await expectPage(page, HOME_PAGE);
 
-        await expect(page.getByRole("main").getByRole("heading", { level: 2 })).toHaveText([
-            "About Me",
-            "What I Do",
-            "My Certifications",
-            "Featured Articles",
-        ]);
+        const main = page.getByRole("main");
+        await expect(main.getByRole("heading", { level: 1 })).toHaveText("Hi, I'm Logan.Software Engineer");
+        await expect(main.getByRole("link", { name: "Download résumé" })).toHaveAttribute("download", "");
+        await expect(main.getByRole("link", { name: "Contact me" })).toHaveAttribute(
+            "href",
+            "mailto:logan.farci@outlook.be",
+        );
+        await expect(main.getByRole("navigation", { name: "Profile highlights" }).getByRole("link")).toHaveCount(3);
     });
 
     test("exposes the complete set of accessible contact actions", async ({ page }) => {
@@ -40,34 +34,26 @@ test.describe("Home page", () => {
         }
     });
 
-    test("opens the complete article catalog from Featured Articles", async ({ page }) => {
+    test("opens the article catalog from the writing proof", async ({ page }) => {
         await page.goto("/");
-
-        await page.getByRole("main").getByRole("link", { name: "Featured Articles", exact: true }).click();
+        await page
+            .getByRole("navigation", { name: "Profile highlights" })
+            .getByRole("link", { name: /Writing/ })
+            .click();
 
         await expectPage(page, ARTICLES_PAGE);
     });
 
-    test("opens a featured article without reloading the document", async ({ page }) => {
-        await page.goto("/");
-        const articlePage = await getFirstArticlePage(page);
-        await markHydratedPage(page);
-
-        await page.getByRole("main").getByRole("article").first().getByRole("link").click();
-
-        await expectPage(page, articlePage);
-        await expectClientNavigation(page);
-    });
-
     for (const destination of [
-        { link: "About Me", hash: "about-me", targetHeading: "About Me" },
-        { link: "What I Do", hash: "skills", targetHeading: "Skills" },
-        { link: "My Certifications", hash: "certifications", targetHeading: "Certifications" },
+        { link: "Experience", hash: "experience", targetHeading: "Experience" },
+        { link: "Cloud systems", hash: "skills", targetHeading: "Skills" },
     ]) {
         test(`opens the ${destination.targetHeading} details from ${destination.link}`, async ({ page }) => {
             await page.goto("/");
-
-            await page.getByRole("main").getByRole("link", { name: destination.link, exact: true }).click();
+            await page
+                .getByRole("navigation", { name: "Profile highlights" })
+                .getByRole("link", { name: new RegExp(destination.link, "u") })
+                .click();
 
             await expectPage(page, ABOUT_PAGE);
             await expect(page).toHaveURL(new RegExp(`/about#${destination.hash}$`, "u"));

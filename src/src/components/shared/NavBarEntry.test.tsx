@@ -26,4 +26,16 @@ describe("NavBarEntry", () => {
         expect(link.getAttribute("href")).toBe("/resume.pdf");
         expect(link.hasAttribute("download")).toBe(true);
     });
+
+    it("marks the active application route for assistive technology", () => {
+        render(
+            <MemoryRouter>
+                <NavBarEntry url="/about" active>
+                    About
+                </NavBarEntry>
+            </MemoryRouter>,
+        );
+
+        expect(screen.getByRole("link", { name: "About" }).getAttribute("aria-current")).toBe("page");
+    });
 });

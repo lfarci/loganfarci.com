@@ -25,6 +25,11 @@
         overflow-x: clip;
     }
 
+    ::selection {
+        color: var(--color-brand-foreground);
+        background: var(--color-brand);
+    }
+
     h1,
     h2,
     h3,
@@ -67,6 +72,7 @@
     --color-text-tertiary: oklch(53% 0.03 262); /* soft slate */
     --color-text-muted: oklch(54% 0.026 260); /* quiet slate */
     --color-text-inverse: oklch(100% 0 0); /* white */
+    --color-portrait-foreground: oklch(98% 0.01 255);
 
     /* Border semantic colors */
     --color-border: oklch(86% 0.018 258); /* cool line */
@@ -110,6 +116,9 @@
         radial-gradient(circle at 12% 8%, var(--color-brand-subtle) 0%, transparent 36%),
         linear-gradient(180deg, var(--color-surface-elevated) 0%, var(--color-surface) 100%);
     --gradient-fade-surface: linear-gradient(90deg, transparent 0%, var(--color-surface) 100%);
+    --gradient-home-portrait:
+        radial-gradient(circle at 35% 38%, var(--color-accent-hover) 0%, transparent 43%),
+        linear-gradient(145deg, var(--color-brand-subtle) 0%, var(--color-foreground) 82%);
     --background-image-gradient-brand: var(--gradient-brand);
     --background-image-gradient-accent: var(--gradient-accent);
     --background-image-gradient-highlight: var(--gradient-highlight);
@@ -124,6 +133,1028 @@
     --radius-control: 0.625rem;
     --radius-card: 0.875rem;
     --radius-surface: 1.25rem;
+}
+
+@layer components {
+    .home-frame {
+        position: relative;
+        display: grid;
+        grid-template-areas:
+            "masthead"
+            "intro"
+            "stage"
+            "proof";
+        grid-template-rows: auto auto minmax(23rem, 46svh) auto;
+        min-height: 100svh;
+        overflow: clip;
+        background: var(--color-background);
+    }
+
+    .home-masthead {
+        grid-area: masthead;
+        z-index: 20;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 1rem 1.25rem;
+        border-bottom: 1px solid var(--color-border);
+        background: var(--color-background);
+    }
+
+    .home-wordmark {
+        display: inline-flex;
+        min-height: 2.75rem;
+        align-items: center;
+        gap: 0.75rem;
+        width: fit-content;
+        color: var(--color-text-primary);
+        font-family: var(--font-manrope);
+        font-size: 1rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+    }
+
+    .home-wordmark-dot {
+        width: 0.55rem;
+        height: 0.55rem;
+        border-radius: 999px;
+        background: var(--color-brand);
+    }
+
+    .home-primary-nav {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-top: 1px solid var(--color-border-light);
+        padding-top: 0.5rem;
+    }
+
+    .home-nav-link {
+        display: inline-flex;
+        min-height: 2.75rem;
+        align-items: center;
+        border-bottom: 1px solid transparent;
+        color: var(--color-text-secondary);
+        font-family: var(--font-noto-sans);
+        font-size: 0.95rem;
+        transition:
+            color 180ms ease-out,
+            border-color 180ms ease-out;
+    }
+
+    .home-nav-link[aria-current="page"] {
+        border-bottom-color: var(--color-brand);
+        color: var(--color-brand);
+    }
+
+    .home-nav-link:hover {
+        color: var(--color-brand-hover);
+    }
+
+    .home-nav-link:focus-visible,
+    .home-contact-link:focus-visible,
+    .home-proof-link:focus-visible {
+        border-radius: var(--radius-control);
+        outline: 2px solid var(--color-ring);
+        outline-offset: 4px;
+    }
+
+    .home-intro {
+        grid-area: intro;
+        z-index: 2;
+        padding: 2.5rem 1.25rem 2rem;
+    }
+
+    .home-heading {
+        max-width: 11ch;
+        color: var(--color-text-primary);
+        font-family: var(--font-manrope);
+        font-size: clamp(2.75rem, 13vw, 4.25rem);
+        font-weight: 550;
+        letter-spacing: -0.035em;
+        line-height: 0.98;
+        text-wrap: balance;
+    }
+
+    .home-heading > span {
+        display: block;
+    }
+
+    .home-heading > span + span {
+        margin-top: 0.55rem;
+    }
+
+    .home-role {
+        max-width: 42rem;
+        margin-top: 1.5rem;
+        color: var(--color-text-secondary);
+        font-family: var(--font-noto-sans);
+        font-size: clamp(1rem, 4.2vw, 1.2rem);
+        line-height: 1.6;
+    }
+
+    .home-stack {
+        margin-top: 1rem;
+        color: var(--color-text-muted);
+        font-family: var(--font-reddit-mono);
+        font-size: 0.75rem;
+        letter-spacing: 0.03em;
+    }
+
+    .home-actions {
+        grid-area: stage;
+        z-index: 10;
+        align-self: end;
+        width: min(58%, 13.75rem);
+        margin: 0 0 1.5rem 1.25rem;
+    }
+
+    .home-cta-row {
+        display: grid;
+        gap: 0.75rem;
+    }
+
+    .home-cta {
+        width: 100%;
+        min-height: 3.25rem;
+        padding-inline: 0.875rem;
+        font-size: 0.85rem;
+    }
+
+    .home-cta-primary {
+        box-shadow: 0 14px 30px -22px var(--color-foreground);
+    }
+
+    .home-cta-secondary {
+        border-color: var(--color-border-strong);
+        background: var(--color-background);
+    }
+
+    .home-contact-list {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 0.75rem;
+    }
+
+    .home-contact-link {
+        display: inline-flex;
+        width: 2.75rem;
+        height: 2.75rem;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-control);
+        color: var(--color-text-primary);
+        background: var(--color-background);
+        transition:
+            color 180ms ease-out,
+            border-color 180ms ease-out,
+            transform 180ms ease-out;
+    }
+
+    .home-contact-link:hover {
+        border-color: var(--color-brand);
+        color: var(--color-brand-hover);
+        transform: translateY(-2px);
+    }
+
+    .home-portrait {
+        position: relative;
+        grid-area: stage;
+        min-width: 0;
+        overflow: hidden;
+        background: var(--gradient-home-portrait);
+    }
+
+    .home-portrait::after {
+        position: absolute;
+        inset: 0;
+        content: "";
+        background: linear-gradient(90deg, var(--color-background) 0%, transparent 32%);
+        pointer-events: none;
+    }
+
+    .home-portrait img {
+        position: absolute;
+        right: -26%;
+        bottom: -1%;
+        width: auto;
+        max-width: none;
+        height: 108%;
+        object-fit: contain;
+        filter: drop-shadow(0 30px 45px color-mix(in oklch, var(--color-foreground) 28%, transparent));
+    }
+
+    .home-portrait-marker {
+        position: absolute;
+        z-index: 2;
+        top: 1rem;
+        right: 1rem;
+        color: var(--color-accent);
+        font-family: var(--font-reddit-mono);
+        font-size: 0.65rem;
+        letter-spacing: 0.18em;
+        writing-mode: vertical-rl;
+    }
+
+    .home-portrait figcaption {
+        position: absolute;
+        z-index: 3;
+        right: 1rem;
+        bottom: 1rem;
+        display: none;
+        color: var(--color-portrait-foreground);
+        font-family: var(--font-reddit-mono);
+        font-size: 0.68rem;
+        line-height: 1.6;
+        text-align: right;
+    }
+
+    .home-portrait figcaption span {
+        display: block;
+    }
+
+    .home-proof {
+        grid-area: proof;
+        z-index: 3;
+        display: grid;
+        border-top: 1px solid var(--color-border);
+        background: var(--color-background);
+    }
+
+    .home-proof-link {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: center;
+        gap: 0.25rem 1rem;
+        min-height: 5.75rem;
+        padding: 1rem 1.25rem;
+        border-bottom: 1px solid var(--color-border-light);
+        color: var(--color-text-primary);
+        transition:
+            background-color 180ms ease-out,
+            color 180ms ease-out;
+    }
+
+    .home-proof-link:hover {
+        color: var(--color-brand-hover);
+        background: var(--color-brand-subtle);
+    }
+
+    .home-proof-label {
+        font-family: var(--font-manrope);
+        font-size: 1rem;
+        font-weight: 650;
+    }
+
+    .home-proof-detail {
+        grid-column: 1;
+        color: var(--color-text-muted);
+        font-family: var(--font-reddit-mono);
+        font-size: 0.72rem;
+        line-height: 1.45;
+    }
+
+    .home-proof-link > svg {
+        grid-column: 2;
+        grid-row: 1 / 3;
+        transition: transform 180ms ease-out;
+    }
+
+    .home-proof-link:hover > svg {
+        transform: translateX(0.2rem);
+    }
+}
+
+@media (min-width: 64rem) {
+    .home-frame {
+        grid-template-areas:
+            "masthead portrait"
+            "intro portrait"
+            "actions portrait"
+            "proof portrait";
+        grid-template-columns: minmax(0, 61.5%) minmax(26rem, 38.5%);
+        grid-template-rows: auto minmax(0, 1fr) auto auto;
+        min-height: 100svh;
+    }
+
+    .home-frame::before {
+        position: absolute;
+        z-index: 4;
+        top: 0;
+        bottom: 0;
+        left: clamp(4rem, 5vw, 5.5rem);
+        width: 1px;
+        content: "";
+        background: var(--color-border);
+        pointer-events: none;
+    }
+
+    .home-masthead {
+        grid-template-columns: minmax(12rem, 1fr) auto auto;
+        gap: clamp(1.5rem, 3vw, 3.5rem);
+        padding: 1.6rem clamp(2rem, 4vw, 4.5rem) 1.6rem clamp(7rem, 8vw, 9rem);
+    }
+
+    .home-primary-nav {
+        grid-column: auto;
+        grid-row: auto;
+        gap: clamp(1.5rem, 3vw, 3rem);
+        justify-content: flex-start;
+        border-top: 0;
+        padding-top: 0;
+    }
+
+    .home-nav-link {
+        font-size: 1rem;
+    }
+
+    .home-intro {
+        align-self: center;
+        padding: clamp(3rem, 7vh, 6.5rem) clamp(2rem, 5vw, 5rem) 2rem clamp(7rem, 8vw, 9rem);
+    }
+
+    .home-heading {
+        max-width: none;
+        font-size: clamp(4rem, 4.7vw, 5.25rem);
+    }
+
+    .home-role {
+        max-width: 34rem;
+        margin-top: 2rem;
+        font-size: clamp(1.1rem, 1.4vw, 1.35rem);
+    }
+
+    .home-stack {
+        font-size: 0.82rem;
+    }
+
+    .home-actions {
+        grid-area: actions;
+        align-self: auto;
+        width: auto;
+        margin: 0;
+        padding: 0 clamp(2rem, 5vw, 5rem) clamp(2.5rem, 5vh, 4rem) clamp(7rem, 8vw, 9rem);
+    }
+
+    .home-cta-row {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .home-cta {
+        width: auto;
+        min-height: 3.5rem;
+        padding-inline: 1.4rem;
+        font-size: 0.95rem;
+    }
+
+    .home-contact-list {
+        justify-content: flex-start;
+        gap: 0.5rem;
+        margin-top: 1rem;
+    }
+
+    .home-portrait {
+        grid-area: portrait;
+        min-height: 100svh;
+    }
+
+    .home-portrait::after {
+        display: none;
+    }
+
+    .home-portrait img {
+        right: 50%;
+        height: 101%;
+        transform: translateX(54%);
+    }
+
+    .home-portrait-marker {
+        top: 2.5rem;
+        right: 2.5rem;
+        font-size: 0.75rem;
+    }
+
+    .home-portrait figcaption {
+        display: block;
+    }
+
+    .home-proof {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        margin-left: clamp(7rem, 8vw, 9rem);
+        margin-right: clamp(2rem, 5vw, 5rem);
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .home-proof-link {
+        min-height: 7.5rem;
+        padding: 1.4rem 1.25rem;
+        border-right: 1px solid var(--color-border-light);
+        border-bottom: 0;
+    }
+
+    .home-proof-link:last-child {
+        border-right: 0;
+    }
+}
+
+@layer components {
+    .field-shell-header {
+        position: sticky;
+        z-index: 40;
+        top: 0;
+        border-bottom: 1px solid var(--color-border);
+        background: color-mix(in oklch, var(--color-background) 92%, transparent);
+        backdrop-filter: blur(14px);
+    }
+
+    .field-shell-nav {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.8rem 1.25rem;
+    }
+
+    .field-shell-link {
+        transition: color 180ms ease-out;
+    }
+
+    .field-shell-link:hover {
+        color: var(--color-brand-hover);
+    }
+
+    .field-shell-mobile-menu {
+        border-top: 1px solid var(--color-border-light);
+    }
+
+    .field-shell-footer {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.4rem 1rem;
+        margin-top: clamp(4rem, 9vw, 9rem);
+        padding: 1.5rem 1.25rem 2.5rem;
+        border-top: 1px solid var(--color-border);
+    }
+
+    .field-page {
+        position: relative;
+        width: 100%;
+        min-width: 0;
+        padding: clamp(3.25rem, 10vw, 6rem) 1.25rem 1rem;
+    }
+
+    .field-page-header {
+        max-width: 58rem;
+        padding-bottom: clamp(3rem, 8vw, 6rem);
+    }
+
+    .field-kicker {
+        margin-bottom: 1rem;
+        color: var(--color-brand);
+        font-family: var(--font-reddit-mono);
+        font-size: 0.72rem;
+        font-weight: 600;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+    }
+
+    .field-page-title {
+        color: var(--color-text-primary);
+        font-family: var(--font-manrope);
+        font-size: clamp(3.25rem, 15vw, 6rem);
+        font-weight: 550;
+        letter-spacing: -0.055em;
+        line-height: 0.95;
+    }
+
+    .field-page-deck {
+        max-width: 42rem;
+        margin-top: 1.5rem;
+        color: var(--color-text-secondary);
+        font-size: clamp(1.05rem, 3.6vw, 1.35rem);
+        line-height: 1.6;
+        text-wrap: pretty;
+    }
+
+    .field-about-intro {
+        display: grid;
+        gap: 2rem;
+        padding-bottom: clamp(4.5rem, 12vw, 8rem);
+    }
+
+    .field-about-portrait {
+        position: relative;
+        aspect-ratio: 5 / 4;
+        min-width: 0;
+        overflow: hidden;
+        background: var(--gradient-home-portrait);
+    }
+
+    .field-about-portrait::after {
+        position: absolute;
+        inset: auto 0 0;
+        height: 28%;
+        content: "";
+        background: linear-gradient(transparent, color-mix(in oklch, var(--color-foreground) 30%, transparent));
+        pointer-events: none;
+    }
+
+    .field-about-portrait img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center 22%;
+    }
+
+    .field-about-narrative {
+        align-self: center;
+        font-size: 1.05rem;
+    }
+
+    .field-section {
+        padding-block: clamp(3.5rem, 9vw, 6.5rem);
+        border-top: 1px solid var(--color-border);
+    }
+
+    .field-section-header {
+        margin-bottom: 2rem;
+    }
+
+    .field-section-header h2 {
+        color: var(--color-text-primary);
+        font-size: clamp(2.2rem, 9vw, 4.5rem);
+        font-weight: 550;
+        letter-spacing: -0.045em;
+        line-height: 1;
+    }
+
+    .field-section-header p {
+        max-width: 34rem;
+        margin-top: 1rem;
+        color: var(--color-text-secondary);
+        line-height: 1.65;
+    }
+
+    .field-disclosure-list,
+    .field-credential-list {
+        border-top: 1px solid var(--color-border);
+    }
+
+    .field-disclosure,
+    .field-credential-link {
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .field-disclosure > summary {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 1rem;
+        min-height: 5.5rem;
+        align-items: center;
+        padding-block: 1.25rem;
+        color: var(--color-text-primary);
+        cursor: pointer;
+        list-style: none;
+    }
+
+    .field-disclosure > summary::-webkit-details-marker {
+        display: none;
+    }
+
+    .field-disclosure > summary:hover h3 {
+        color: var(--color-brand-hover);
+    }
+
+    .field-disclosure > summary:focus-visible,
+    .field-credential-link:focus-visible,
+    .field-article-title-link:focus-visible,
+    .field-back-link:focus-visible {
+        border-radius: var(--radius-control);
+        outline: 2px solid var(--color-ring);
+        outline-offset: 4px;
+    }
+
+    .field-disclosure h3,
+    .field-credential-link h3,
+    .field-education-entry h3 {
+        color: var(--color-text-primary);
+        font-family: var(--font-manrope);
+        font-size: clamp(1.1rem, 3.2vw, 1.4rem);
+        font-weight: 650;
+        line-height: 1.3;
+        transition: color 180ms ease-out;
+    }
+
+    .field-meta {
+        display: block;
+        margin-top: 0.35rem;
+        color: var(--color-text-muted);
+        font-family: var(--font-reddit-mono);
+        font-size: 0.72rem;
+        line-height: 1.5;
+    }
+
+    .field-disclosure-icon {
+        flex: none;
+        color: var(--color-brand);
+        transition: transform 180ms ease-out;
+    }
+
+    .field-disclosure[open] .field-disclosure-icon {
+        transform: rotate(180deg);
+    }
+
+    .field-disclosure-body {
+        padding: 0.75rem 0 2rem;
+    }
+
+    .field-entry-layout {
+        display: grid;
+        gap: 1.5rem;
+    }
+
+    .field-entry-logo,
+    .field-education-entry > img {
+        width: 4rem;
+        height: 4rem;
+        object-fit: contain;
+    }
+
+    .field-education-entry {
+        display: grid;
+        gap: 1.5rem;
+        padding-block: 2rem;
+        border-block: 1px solid var(--color-border);
+    }
+
+    .field-credential-link {
+        display: grid;
+        grid-template-columns: 3.5rem minmax(0, 1fr) auto;
+        gap: 1rem;
+        align-items: center;
+        min-height: 6.5rem;
+        padding-block: 1.25rem;
+        transition:
+            color 180ms ease-out,
+            background-color 180ms ease-out;
+    }
+
+    .field-credential-link:hover {
+        background: var(--color-brand-subtle);
+    }
+
+    .field-credential-link:hover h3 {
+        color: var(--color-brand-hover);
+    }
+
+    .field-credential-link > img {
+        width: 3.5rem;
+        height: 3.5rem;
+        object-fit: contain;
+    }
+
+    .field-link-arrow,
+    .field-index-arrow {
+        width: 1.35rem;
+        height: 1.35rem;
+        color: var(--color-brand);
+        transition: transform 180ms ease-out;
+    }
+
+    .field-credential-link:hover .field-link-arrow {
+        transform: translate(0.15rem, -0.15rem);
+    }
+
+    .field-supporting-copy {
+        max-width: 48rem;
+        color: var(--color-text-secondary);
+        line-height: 1.65;
+    }
+
+    .field-skill-list,
+    .field-article-tags,
+    .field-article-meta-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: 1.25rem;
+    }
+
+    .field-article-index {
+        border-top: 1px solid var(--color-border);
+    }
+
+    .field-article-entry {
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .field-article-row {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        grid-template-areas:
+            "number copy"
+            "date date";
+        gap: 0.75rem 1rem;
+        min-height: 11rem;
+        padding-block: 1.5rem;
+        color: var(--color-text-primary);
+        transition:
+            background-color 180ms ease-out,
+            color 180ms ease-out;
+    }
+
+    .field-article-entry:has(.field-article-title-link:hover) {
+        background: var(--color-brand-subtle);
+    }
+
+    .field-index-number {
+        grid-area: number;
+        padding-top: 0.2rem;
+        color: var(--color-text-muted);
+        font-family: var(--font-reddit-mono);
+        font-size: 0.72rem;
+    }
+
+    .field-article-copy {
+        grid-area: copy;
+        min-width: 0;
+    }
+
+    .field-article-title-link {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 1rem;
+    }
+
+    .field-article-title {
+        display: block;
+        max-width: 31ch;
+        font-family: var(--font-manrope);
+        font-size: clamp(1.35rem, 5vw, 2.35rem);
+        font-weight: 600;
+        letter-spacing: -0.035em;
+        line-height: 1.15;
+        text-wrap: balance;
+    }
+
+    .field-article-description {
+        display: block;
+        max-width: 50rem;
+        margin-top: 0.75rem;
+        color: var(--color-text-secondary);
+        line-height: 1.6;
+    }
+
+    .field-article-date {
+        grid-area: date;
+        color: var(--color-text-muted);
+        font-family: var(--font-reddit-mono);
+        font-size: 0.72rem;
+    }
+
+    .field-article-title-link .field-index-arrow {
+        flex: none;
+        margin-top: 0.1rem;
+    }
+
+    .field-article-title-link:hover .field-index-arrow {
+        transform: translateX(0.2rem);
+    }
+
+    .field-empty-state {
+        padding-block: 3rem;
+        border-block: 1px solid var(--color-border);
+        color: var(--color-text-secondary);
+    }
+
+    .field-back-link {
+        display: inline-flex;
+        min-height: 2.75rem;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--color-text-secondary);
+        font-family: var(--font-reddit-mono);
+        font-size: 0.78rem;
+        transition: color 180ms ease-out;
+    }
+
+    .field-back-link:hover {
+        color: var(--color-brand-hover);
+    }
+
+    .field-back-link svg {
+        width: 1.1rem;
+        height: 1.1rem;
+    }
+
+    .field-article-masthead {
+        max-width: 68rem;
+        padding: clamp(2rem, 7vw, 5rem) 0 clamp(3rem, 9vw, 6rem);
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .field-article-masthead h1 {
+        max-width: 19ch;
+        color: var(--color-text-primary);
+        font-size: clamp(2.7rem, 10vw, 6.75rem);
+        font-weight: 550;
+        letter-spacing: -0.055em;
+        line-height: 0.98;
+        text-wrap: balance;
+    }
+
+    .field-article-deck {
+        max-width: 48rem;
+        margin-top: 1.75rem;
+        color: var(--color-text-secondary);
+        font-size: clamp(1.05rem, 3.5vw, 1.4rem);
+        font-style: italic;
+        line-height: 1.6;
+    }
+
+    .field-article-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.65rem 1.25rem;
+        margin-top: 2rem;
+        color: var(--color-text-muted);
+        font-family: var(--font-reddit-mono);
+        font-size: 0.72rem;
+    }
+
+    .field-article-meta > :not(:last-child) {
+        position: relative;
+    }
+
+    .field-article-meta > :not(:last-child)::after {
+        position: absolute;
+        top: 50%;
+        right: -0.75rem;
+        width: 0.2rem;
+        height: 0.2rem;
+        border-radius: 50%;
+        content: "";
+        background: var(--color-border-strong);
+        transform: translateY(-50%);
+    }
+
+    .field-article-meta-tags {
+        margin-top: 0;
+    }
+
+    .field-article-body {
+        max-width: 78rem;
+        padding-top: clamp(3rem, 8vw, 6rem);
+    }
+
+    .field-not-found {
+        display: grid;
+        min-height: 70svh;
+        align-items: center;
+        gap: 1.5rem;
+    }
+
+    .field-error-code {
+        color: var(--color-brand-subtle);
+        font-family: var(--font-manrope);
+        font-size: clamp(8rem, 40vw, 18rem);
+        font-weight: 700;
+        letter-spacing: -0.09em;
+        line-height: 0.75;
+        user-select: none;
+    }
+
+    .field-error-copy h1 {
+        color: var(--color-text-primary);
+        font-size: clamp(2.6rem, 11vw, 5rem);
+        font-weight: 550;
+        letter-spacing: -0.05em;
+        line-height: 1;
+    }
+
+    .field-error-copy > p:last-of-type {
+        max-width: 32rem;
+        margin-top: 1.25rem;
+        color: var(--color-text-secondary);
+        font-size: 1.05rem;
+        line-height: 1.65;
+    }
+}
+
+@media (min-width: 48rem) {
+    .field-shell-nav,
+    .field-shell-footer {
+        padding-inline: clamp(3rem, 6vw, 7rem);
+    }
+
+    .field-page {
+        padding-right: clamp(3rem, 6vw, 7rem);
+        padding-left: clamp(5rem, 8vw, 9rem);
+    }
+
+    .field-page::before {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: clamp(2rem, 4vw, 4.5rem);
+        width: 1px;
+        content: "";
+        background: var(--color-border-light);
+        pointer-events: none;
+    }
+
+    .field-about-intro {
+        grid-template-columns: minmax(16rem, 0.72fr) minmax(0, 1fr);
+        gap: clamp(3rem, 7vw, 8rem);
+        align-items: center;
+    }
+
+    .field-about-portrait {
+        aspect-ratio: 4 / 5;
+    }
+
+    .field-section {
+        display: grid;
+        grid-template-columns: minmax(12rem, 0.42fr) minmax(0, 1fr);
+        gap: clamp(3rem, 7vw, 8rem);
+    }
+
+    .field-section-header {
+        position: sticky;
+        top: 7rem;
+        align-self: start;
+        margin-bottom: 0;
+    }
+
+    .field-entry-layout,
+    .field-education-entry {
+        grid-template-columns: 5rem minmax(0, 1fr);
+        gap: 2rem;
+    }
+
+    .field-article-row {
+        grid-template-columns: 2.5rem minmax(0, 1fr) 9rem;
+        grid-template-areas: "number copy date";
+        gap: 1.5rem;
+        min-height: 12rem;
+        align-items: start;
+        padding: 2rem 1rem 2rem 0;
+    }
+
+    .field-article-date,
+    .field-article-title-link .field-index-arrow {
+        margin-top: 0.25rem;
+    }
+
+    .field-not-found {
+        grid-template-columns: minmax(18rem, 0.75fr) minmax(0, 1fr);
+        gap: clamp(3rem, 8vw, 10rem);
+    }
+}
+
+@media (min-width: 80rem) {
+    .field-about-page .field-page-header {
+        margin-left: 23%;
+    }
+
+    .field-articles-page .field-page-header {
+        margin-left: 16%;
+    }
+
+    .field-article-index {
+        margin-left: 8%;
+    }
+
+    .field-article-page .field-back-link,
+    .field-article-page .field-article-masthead,
+    .field-article-page .field-article-body {
+        margin-left: 8%;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .home-nav-link,
+    .home-contact-link,
+    .home-proof-link,
+    .home-proof-link > svg,
+    .field-shell-link,
+    .field-disclosure-icon,
+    .field-credential-link,
+    .field-link-arrow,
+    .field-article-title-link,
+    .field-index-arrow,
+    .field-back-link {
+        transition: none;
+    }
 }
 
 /* Dark mode styles when .dark class is applied */

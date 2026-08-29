@@ -1,14 +1,11 @@
-import { useParams, Navigate } from "react-router";
-import { getArticleBySlug } from "@/core/articles";
-import MarkdownContent from "@/components/shared/MarkdownContent";
+import { Link, Navigate, useParams } from "react-router";
+import IconTag from "@/components/shared/IconTag";
 import JsonLd from "@/components/shared/JsonLd";
-import { Separator } from "@/components/shared/primitives/Separator";
-import { Heading1, Secondary } from "@/components/shared/typography";
-import { typographyStyles } from "@/components/shared/typography/core";
+import MarkdownContent from "@/components/shared/MarkdownContent";
+import Tooltip from "@/components/shared/Tooltip";
+import { getArticleBySlug } from "@/core/articles";
 import { formatDate } from "@/core/date";
 import { createArticleJsonLd, createBreadcrumbJsonLd, createCanonicalUrl } from "@/core/seo";
-import Tooltip from "@/components/shared/Tooltip";
-import IconTag from "@/components/shared/IconTag";
 import { siteOgImage } from "@/core/site";
 
 interface ArticleMetaProps {
@@ -18,29 +15,36 @@ interface ArticleMetaProps {
     tags?: string[];
 }
 
+function BackIcon() {
+    return (
+        <svg aria-hidden="true" fill="none" viewBox="0 0 24 24">
+            <path
+                d="M19 12H5m5 5-5-5 5-5"
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="1.75"
+            />
+        </svg>
+    );
+}
+
 function ArticleMeta({ publishedAt, author, coauthoredWithAgent, tags }: Readonly<ArticleMetaProps>) {
     return (
-        <div className="mb-4 flex w-full flex-row flex-wrap items-center gap-2">
-            <span className={typographyStyles.caption}>{formatDate(publishedAt)}</span>
-            <Separator orientation="vertical" className="h-6 mx-2" />
-            <span className={typographyStyles.caption}>{author}</span>
+        <div className="field-article-meta">
+            <time dateTime={publishedAt}>{formatDate(publishedAt)}</time>
+            <span>{author}</span>
             {coauthoredWithAgent && (
-                <>
-                    <Separator orientation="vertical" className="h-6 mx-2" />
-                    <Tooltip content="This article was co-authored with help from an AI assistant.">
-                        <span className={typographyStyles.caption}>Co-authored with AI</span>
-                    </Tooltip>
-                </>
+                <Tooltip content="This article was co-authored with help from an AI assistant.">
+                    <span>Co-authored with AI</span>
+                </Tooltip>
             )}
             {tags && tags.length > 0 && (
-                <>
-                    <Separator orientation="vertical" className="h-6 mx-2" />
-                    <span className="flex min-w-0 flex-wrap gap-2 align-middle">
-                        {tags.map((tag: string) => (
-                            <IconTag key={tag}>{tag}</IconTag>
-                        ))}
-                    </span>
-                </>
+                <span className="field-article-meta-tags">
+                    {tags.map((tag) => (
+                        <IconTag key={tag}>{tag}</IconTag>
+                    ))}
+                </span>
             )}
         </div>
     );
@@ -75,19 +79,26 @@ export default function ArticlePage() {
             <meta name="twitter:description" content={article.description} />
             <meta name="twitter:image" content={siteOgImage} />
             <JsonLd data={[breadcrumbJsonLd, createArticleJsonLd(article)]} />
-            <article className="py-8 md:py-10">
-                <header className="w-full">
-                    <Heading1 className="mb-5">{article.title}</Heading1>
+
+            <article className="field-page field-article-page">
+                <Link to="/articles" className="field-back-link">
+                    <BackIcon />
+                    <span>All articles</span>
+                </Link>
+                <header className="field-article-masthead">
+                    <p className="field-kicker">Field note</p>
+                    <h1>{article.title}</h1>
+                    <p className="field-article-deck">{article.description}</p>
                     <ArticleMeta
                         publishedAt={article.publishedAt}
                         author={article.author}
                         coauthoredWithAgent={article.coauthoredWithAgent}
                         tags={article.tags}
                     />
-                    <Secondary className="italic">{article.description}</Secondary>
                 </header>
-                <Separator className="mt-6 mb-8 md:mb-10" />
-                <MarkdownContent content={article.content} articleNavigation />
+                <div className="field-article-body">
+                    <MarkdownContent content={article.content} articleNavigation />
+                </div>
             </article>
         </>
     );
