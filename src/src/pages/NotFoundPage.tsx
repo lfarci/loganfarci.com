@@ -12,7 +12,6 @@ export default function NotFoundPage() {
                     404
                 </p>
                 <div className="field-error-copy">
-                    <p className="field-kicker">Dead end / field note missing</p>
                     <h1>Page Not Found</h1>
                     <p>That page does not exist, has moved, or was never committed in the first place.</p>
                     <Button asChild className="mt-8">

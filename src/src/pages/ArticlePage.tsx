@@ -86,7 +86,6 @@ export default function ArticlePage() {
                     <span>All articles</span>
                 </Link>
                 <header className="field-article-masthead">
-                    <p className="field-kicker">Field note</p>
                     <h1>{article.title}</h1>
                     <p className="field-article-deck">{article.description}</p>
                     <ArticleMeta

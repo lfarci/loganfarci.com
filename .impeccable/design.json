@@ -1,6 +1,6 @@
 {
     "schemaVersion": 2,
-    "generatedAt": "2026-08-29T12:32:20Z",
+    "generatedAt": "2026-08-30T10:30:01Z",
     "title": "Design System: loganfarci.com",
     "extensions": {
         "colorMeta": {
@@ -330,7 +330,7 @@
             "Compact mono metadata that supports rather than competes with the reading voice.",
             "Responsive composition that changes hierarchy while preserving reading and tab order.",
             "A shared sticky inner-page shell and editorial page grid across About, Articles, article detail, and 404.",
-            "Ruled disclosures, numbered article rows, and bounded reading surfaces for progressive evidence."
+            "Ruled disclosures, compact article rows, and bounded reading surfaces for progressive evidence."
         ],
         "rules": [
             {
@@ -349,6 +349,11 @@
                 "section": "typography"
             },
             {
+                "name": "The Evidence-Only Mono Rule",
+                "body": "Use mono labels and markers when they add factual orientation—dates, counts, stack details, authorship, or location. Omit them when they only preface or repeat an already clear heading.",
+                "section": "typography"
+            },
+            {
                 "name": "The Flat-by-Default Rule",
                 "body": "A boundary or interaction must justify elevation; ordinary sections are separated with space and a one-pixel semantic rule.",
                 "section": "elevation"
@@ -358,6 +363,7 @@
             "Do use Home, About, Articles, article detail, the shared shell, and 404 together as the implemented reference for Field Notes typography, semantic colour, ruled structure, control treatment, evidence hierarchy, and reading rhythm.",
             "Do keep the résumé action first and Contact me second in label, reading order, and tab order.",
             "Do use the real portrait and real evidence; make priority visible through spacing, rules, and writing hierarchy.",
+            "Do reserve mono labels and index markers for information that improves orientation; remove ornamental prefaces that duplicate the heading beside them.",
             "Do test light and dark themes, keyboard focus, reduced motion, and narrow viewports."
         ],
         "donts": [

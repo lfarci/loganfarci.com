@@ -154,7 +154,7 @@ pairing is modern and technical without becoming sterile or code-themed.
   homepage greeting and professional proposition. At the 64rem desktop composition it
   shifts to a separate 4–5.25rem range while keeping the same weight and line-height.
 - **Body** (regular, responsive 1–1.2rem, 1.6): the professional role and supporting
-  explanation; the desktop candidate raises it to 1.1–1.35rem.
+  explanation; the desktop implementation raises it to 1.1–1.35rem.
 - **Title** (650, 1rem): proof-rail destinations and compact evidence headings.
 - **Label** (regular, 0.65–0.82rem, tracked): stack metadata, portrait notation,
   captions, and proof details.
@@ -162,6 +162,10 @@ pairing is modern and technical without becoming sterile or code-themed.
 
 **The Three Voices Rule.** Manrope proposes, Noto Sans explains, and Reddit Mono
 indexes; mono must never become the body voice.
+
+**The Evidence-Only Mono Rule.** Use mono labels and markers when they add factual
+orientation—dates, counts, stack details, authorship, or location. Omit them when they
+only preface or repeat an already clear heading.
 
 ## Layout
 
@@ -180,11 +184,13 @@ portrait caption and vertical `L. FARCI` marker sit inside the image field.
 
 The résumé action remains first in reading and tab order at every width. The mobile
 layout changes visual placement through the grid without reordering the document.
-Inner pages use the implemented full-width Field Notes shell: a sticky translucent
+Inner pages use the implemented full-width Field Notes shell: a sticky opaque
 navigation bar, responsive editorial insets, a quiet left rule from 48rem, and generous
 section spacing. About shifts to portrait-plus-narrative and sticky section labels;
-Articles becomes a numbered index; article detail uses a broad masthead and bounded
-reading surface; the 404 uses the same grid, type, and signal hierarchy.
+Articles becomes a compact ruled index; article detail uses a broad masthead and bounded
+reading surface; the 404 uses the same grid, type, and signal hierarchy. At 64rem,
+inner-page titles and decks align as a direct two-column pair, and section labels become
+sticky only where the available width supports that scan pattern.
 
 ## Elevation & Depth
 
@@ -192,7 +198,8 @@ The system is flat by default. Hairline rules, tonal fields, and the portrait gr
 do most of the spatial work. The homepage gives the primary action one compact ambient
 shadow and the cutout portrait a larger drop shadow; other links stay flat and express
 state through colour, border, or small directional movement. The sticky shared shell
-uses translucent tonal layering and blur rather than a raised card treatment.
+uses the document background and a hairline boundary rather than blur or a raised card
+treatment.
 
 ### Shadow Vocabulary
 
@@ -226,7 +233,7 @@ focus-visible states use a two-pixel semantic ring with a four-pixel offset.
 
 ### Shared inner-page shell — implemented
 
-About, Articles, article detail, and 404 use a sticky translucent header with the same
+About, Articles, article detail, and 404 use a sticky opaque header with the same
 wordmark, active-link treatment, résumé link, theme control, accessible mobile menu,
 and a ruled footer. The shell preserves the homepage identity without copying its
 full-viewport split.
@@ -266,17 +273,15 @@ credentials, expose clear expanded state, and retain full-size keyboard targets.
 
 ### Articles index and reading surface — implemented
 
-The Articles index uses numbered ruled rows with title, description, tags, date, and a
+The Articles index uses compact ruled rows with title, description, tags, date, and a
 directional arrow; the linked title controls the hover affordance. Article detail uses a
-back link, Field note kicker, balanced masthead, mono metadata rail, and the established
-Markdown renderer for headings, navigation, callouts, tables, inline code, and block
-code controls.
+back link, balanced masthead, mono metadata rail, and the established Markdown renderer
+for headings, navigation, callouts, tables, inline code, and block code controls.
 
 ### Not-found surface — implemented
 
-The 404 page turns the error code into quiet signal-mist typography, pairs it with a
-Field Notes kicker and plain-language recovery copy, and provides a labelled primary
-route back home.
+The 404 page turns the error code into quiet signal-mist typography, pairs it directly
+with plain-language recovery copy, and provides a labelled primary route back home.
 
 ## Do's and Don'ts
 
@@ -289,6 +294,8 @@ route back home.
   tab order.
 - **Do** use the real portrait and real evidence; make priority visible through spacing,
   rules, and writing hierarchy.
+- **Do** reserve mono labels and index markers for information that improves orientation;
+  remove ornamental prefaces that duplicate the heading beside them.
 - **Do** test light and dark themes, keyboard focus, reduced motion, and narrow viewports.
 
 ### Don't:

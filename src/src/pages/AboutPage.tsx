@@ -201,7 +201,7 @@ export default function AboutPage() {
                             ))}
                         </div>
                         {additionalCertifications.length > 0 && (
-                            <div className="mt-3">
+                            <div>
                                 <Disclosure
                                     title="Additional certifications"
                                     detail={`${additionalCertifications.length} credentials`}

@@ -46,7 +46,6 @@ export default function ArticlesPage() {
 
             <section className="field-page field-articles-page">
                 <header className="field-page-header">
-                    <p className="field-kicker">Field notes / engineering</p>
                     <h1 className="field-page-title">Articles</h1>
                     <p className="field-page-deck">
                         Practical notes from building and operating software—mostly .NET, Azure, and the decisions
@@ -59,12 +58,9 @@ export default function ArticlesPage() {
                     <p className="field-empty-state">No articles published yet.</p>
                 ) : (
                     <div className="field-article-index">
-                        {articles.map((article, index) => (
+                        {articles.map((article) => (
                             <article key={article.slug} className="field-article-entry">
                                 <div className="field-article-row">
-                                    <span aria-hidden="true" className="field-index-number">
-                                        {String(index + 1).padStart(2, "0")}
-                                    </span>
                                     <span className="field-article-copy">
                                         <Link to={`/articles/${article.slug}`} className="field-article-title-link">
                                             <span className="field-article-title">{article.title}</span>
