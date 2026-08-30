@@ -1027,7 +1027,8 @@
         pointer-events: none;
     }
 
-    .field-about-page::before {
+    .field-about-page::before,
+    .field-articles-page::before {
         bottom: calc(0rem - var(--field-footer-gap));
     }
 

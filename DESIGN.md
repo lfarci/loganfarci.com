@@ -192,9 +192,9 @@ consistent with mobile; the horizontal navigation begins at 72rem. About stays
 single-column through medium widths before shifting to portrait-plus-narrative and
 sticky section labels. The inner-page rule shares Home's exact horizontal position;
 About section boundaries and Articles index rows extend from that rule to the right
-viewport edge without moving their inset content. On About, the vertical rule continues
-through the footer gap and terminates at the footer boundary. Articles keeps each date
-below its tags at every width. Article detail uses a broad masthead and
+viewport edge without moving their inset content. On About and the Articles index, the
+vertical rule continues through the footer gap and terminates at the footer boundary.
+Articles keeps each date below its tags at every width. Article detail uses a broad masthead and
 bounded reading surface; the 404 uses the same grid, type, and signal hierarchy. At
 every width, inner-page decks remain directly beneath and left-aligned with their titles
 as one editorial group. At 72rem, section labels become sticky only where the available
