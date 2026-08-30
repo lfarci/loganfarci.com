@@ -502,16 +502,29 @@
 
     .home-proof {
         grid-template-columns: repeat(3, minmax(0, 1fr));
-        padding-right: clamp(2rem, 5vw, 5rem);
-        padding-left: clamp(7rem, 8vw, 9rem);
         border-bottom: 1px solid var(--color-border);
     }
 
     .home-proof-link {
+        grid-template-columns: minmax(0, 1fr);
+        align-content: center;
+        justify-items: center;
         min-height: 7.5rem;
-        padding: 1.4rem 1.25rem;
+        padding: 1.4rem 2rem;
         border-right: 1px solid var(--color-border-light);
         border-bottom: 0;
+        text-align: center;
+    }
+
+    .home-proof-detail {
+        grid-column: 1;
+        max-width: 27ch;
+    }
+
+    .home-proof-link > svg {
+        grid-column: 1;
+        grid-row: auto;
+        margin-top: 0.25rem;
     }
 
     .home-proof-link:last-child {
@@ -1074,22 +1087,6 @@
 
     .field-article-date {
         white-space: nowrap;
-    }
-
-    .field-page-header {
-        display: grid;
-        grid-template-columns: minmax(23rem, 0.52fr) minmax(0, 1fr);
-        gap: clamp(2.5rem, 5vw, 5rem);
-        align-items: end;
-    }
-
-    .field-page-title {
-        white-space: nowrap;
-    }
-
-    .field-page-deck {
-        margin-top: 0;
-        padding-bottom: 0.35rem;
     }
 }
 

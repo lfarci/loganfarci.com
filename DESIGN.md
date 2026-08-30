@@ -193,8 +193,9 @@ single-column through medium widths before shifting to portrait-plus-narrative a
 sticky section labels. Articles keeps dates below each entry through medium widths,
 then restores its compact desktop date rail. Article detail uses a broad masthead and
 bounded reading surface; the 404 uses the same grid, type, and signal hierarchy. At
-72rem, inner-page titles and decks align as a direct two-column pair, and section labels
-become sticky only where the available width supports that scan pattern.
+every width, inner-page decks remain directly beneath and left-aligned with their titles
+as one editorial group. At 72rem, section labels become sticky only where the available
+width supports that scan pattern.
 
 ## Elevation & Depth
 
@@ -262,9 +263,10 @@ full-height desktop portrait without adding a second image or decorative texture
 Experience, Articles, and Certifications are three fully linked destinations with a
 Manrope title, configurable muted mono detail, and directional arrow. They stack as
 92px-minimum rows below 72rem and become a ruled three-column rail with 120px-minimum
-cells at the desktop handoff. Hover uses signal mist and nudges only the arrow; focus
-uses the shared visible ring. Homepage technologies and proof copy come from
-`content/data/home.json` rather than component literals.
+cells at the desktop handoff. The desktop cells divide the full left field equally and
+centre each destination as a balanced unit. Hover uses signal mist and nudges only the
+arrow; focus uses the shared visible ring. Homepage technologies and proof copy come
+from `content/data/home.json` rather than component literals.
 
 ### About evidence system — implemented
 
