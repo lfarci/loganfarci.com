@@ -19,11 +19,11 @@ and keeps a restrained reading measure. This removes the awkward title/copy spli
 desktop while preserving the existing typography and vertical rhythm.
 
 The homepage proof rail remains three equal grid tracks at desktop. Each destination
-centres its label, supporting copy, and arrow as one balanced composition. All three
-cells use the same internal alignment and spacing so Experience, Articles, and
-Certifications carry equal visual weight. The rail begins at the vertical editorial
-rule and continues to the portrait edge, so the first cell never crosses the rule.
-Mobile proof rows retain their current scannable layout.
+left-aligns its label and supporting copy while holding the arrow at the right edge.
+All three cells use the same internal alignment and spacing so Experience, Articles,
+and Certifications carry equal visual weight. The rail begins at the vertical
+editorial rule and continues to the portrait edge, so the first cell never crosses the
+rule. Mobile proof rows retain their current scannable layout.
 
 ## Considered approaches
 
@@ -33,8 +33,9 @@ Mobile proof rows retain their current scannable layout.
    reads naturally and matches the editorial character.
 3. Remove the supporting copy. This is visually clean but discards useful orientation.
 
-For the proof rail, equal centred cells are preferred over width-by-content tracks or
-left-aligned equal tracks because the three destinations are peers.
+For the proof rail, equal tracks with left-aligned text are preferred over
+width-by-content tracks or centred text because the destinations are peers while their
+descriptions remain easiest to scan from a stable left edge.
 
 ## Acceptance criteria
 
@@ -42,7 +43,7 @@ left-aligned equal tracks because the three destinations are peers.
   mobile, medium, and desktop widths.
 - The copy retains a readable maximum width and does not collide with navigation.
 - At 72rem and wider, all three homepage proof destinations occupy equal widths and
-  centre their content consistently.
+  left-align their label and detail consistently, with the arrow on the right.
 - The desktop proof cells begin at the vertical editorial rule and do not cover or
   cross it.
 - Mobile homepage proof rows remain readable and preserve their current interaction
