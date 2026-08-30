@@ -60,11 +60,15 @@ export default function ArticlesPage() {
                     <div className="field-article-index">
                         {articles.map((article) => (
                             <article key={article.slug} className="field-article-entry">
-                                <div className="field-article-row">
+                                <Link
+                                    to={`/articles/${article.slug}`}
+                                    className="field-article-row"
+                                    aria-labelledby={`article-title-${article.slug}`}
+                                >
                                     <span className="field-article-copy">
-                                        <Link to={`/articles/${article.slug}`} className="field-article-title-link">
-                                            <span className="field-article-title">{article.title}</span>
-                                        </Link>
+                                        <span id={`article-title-${article.slug}`} className="field-article-title">
+                                            {article.title}
+                                        </span>
                                         <span className="field-article-description">{article.description}</span>
                                         <span className="field-article-tags">
                                             {article.tags.map((tag) => (
@@ -78,7 +82,7 @@ export default function ArticlesPage() {
                                         </time>
                                         <ArrowRightIcon />
                                     </span>
-                                </div>
+                                </Link>
                             </article>
                         ))}
                     </div>

@@ -28,7 +28,7 @@ export async function getFirstArticlePage(page: Page): Promise<PageExpectation> 
     const articleLink = page.getByRole("main").getByRole("article").first().getByRole("link");
     await expect(articleLink).toBeVisible();
 
-    const heading = (await articleLink.innerText()).trim();
+    const heading = (await articleLink.locator(".field-article-title").innerText()).trim();
     const href = await articleLink.getAttribute("href");
 
     if (!href) {
@@ -48,7 +48,7 @@ export async function getAllArticlePages(page: Page): Promise<PageExpectation[]>
     const pages: PageExpectation[] = [];
     for (let i = 0; i < count; i++) {
         const link = articleLinks.nth(i);
-        const heading = (await link.innerText()).trim();
+        const heading = (await link.locator(".field-article-title").innerText()).trim();
         const href = await link.getAttribute("href");
         if (!href) {
             throw new Error(`Expected article link ${i} to have an href.`);

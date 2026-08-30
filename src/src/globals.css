@@ -692,7 +692,6 @@
 
     .field-disclosure > summary:focus-visible,
     .field-credential-link:focus-visible,
-    .field-article-title-link:focus-visible,
     .field-back-link:focus-visible {
         border-radius: var(--radius-control);
         outline: 2px solid var(--color-ring);
@@ -823,17 +822,18 @@
         color: var(--color-text-primary);
     }
 
+    .field-article-row:focus-visible {
+        outline: 2px solid var(--color-ring);
+        outline-offset: -2px;
+    }
+
     .field-article-copy {
         grid-area: copy;
         min-width: 0;
     }
 
-    .field-article-title-link {
-        display: block;
-        transition: color 180ms ease-out;
-    }
-
-    .field-article-title-link:hover {
+    .field-article-row:hover .field-article-title,
+    .field-article-row:focus-visible .field-article-title {
         color: var(--color-brand-hover);
     }
 
@@ -846,6 +846,7 @@
         letter-spacing: -0.035em;
         line-height: 1.15;
         text-wrap: balance;
+        transition: color 180ms ease-out;
     }
 
     .field-article-description {
@@ -872,6 +873,11 @@
 
     .field-article-row-meta .field-index-arrow {
         flex: none;
+    }
+
+    .field-article-row:hover .field-index-arrow,
+    .field-article-row:focus-visible .field-index-arrow {
+        transform: translateX(0.2rem);
     }
 
     .field-empty-state {
@@ -1111,7 +1117,7 @@
     .field-disclosure-icon,
     .field-credential-link,
     .field-link-arrow,
-    .field-article-title-link,
+    .field-article-title,
     .field-index-arrow,
     .field-back-link {
         transition: none;

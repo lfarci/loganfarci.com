@@ -287,9 +287,10 @@ into body prose when expanded.
 ### Articles index and reading surface — implemented
 
 The Articles index uses compact ruled rows with title, description, tags, date, and a
-directional arrow; the linked title controls the hover affordance. The title uses its
-full content track at every width. The date remains on the lower metadata line below the
-tags while the arrow holds the row edge. Article detail
+directional arrow. Each row is one semantic link whose accessible name comes from the
+visible title; its complete surface is clickable while hover and focus animate the title
+and arrow. The title uses its full content track at every width. The date remains on the
+lower metadata line below the tags while the arrow holds the row edge. Article detail
 uses a back link, balanced masthead, mono metadata rail, and the established Markdown
 renderer for headings, navigation, callouts, tables, inline code, and block code
 controls.

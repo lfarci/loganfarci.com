@@ -29,6 +29,19 @@ test.describe("Articles", () => {
         await expect(page.getByRole("main").getByRole("article")).toBeVisible();
     });
 
+    test("opens an article from anywhere in its index item", async ({ page }) => {
+        await page.goto("/articles");
+        const articlePage = await getFirstArticlePage(page);
+        const firstArticle = page.getByRole("main").getByRole("article").first();
+        const articleLink = firstArticle.getByRole("link");
+
+        await expect(articleLink).toHaveCount(1);
+        await expect(articleLink).toHaveAccessibleName(articlePage.heading);
+        await firstArticle.locator(".field-index-arrow").click();
+
+        await expectPage(page, articlePage);
+    });
+
     test("serves a clean article deep link", async ({ page }) => {
         await page.goto("/articles");
         const articlePage = await getFirstArticlePage(page);
