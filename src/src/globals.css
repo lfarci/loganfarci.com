@@ -13,6 +13,7 @@
 @layer base {
     :root {
         --editorial-rule-x: clamp(4rem, 5vw, 5.5rem);
+        --field-footer-gap: clamp(3rem, 6vw, 6rem);
     }
 
     *,
@@ -559,7 +560,7 @@
         flex-wrap: wrap;
         align-items: center;
         gap: 0.4rem 1rem;
-        margin-top: clamp(3rem, 6vw, 6rem);
+        margin-top: var(--field-footer-gap);
         padding: 1.5rem 1.25rem 2.5rem;
         border-top: 1px solid var(--color-border);
     }
@@ -1026,6 +1027,10 @@
         pointer-events: none;
     }
 
+    .field-about-page::before {
+        bottom: calc(0rem - var(--field-footer-gap));
+    }
+
     .field-about-portrait {
         width: min(100%, 34rem);
     }
@@ -1082,10 +1087,6 @@
         min-height: 10.5rem;
         padding-top: 1.75rem;
         padding-bottom: 1.75rem;
-    }
-
-    .field-article-title {
-        max-width: 31ch;
     }
 
     .field-article-date {
