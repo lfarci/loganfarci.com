@@ -21,8 +21,9 @@ desktop while preserving the existing typography and vertical rhythm.
 The homepage proof rail remains three equal grid tracks at desktop. Each destination
 centres its label, supporting copy, and arrow as one balanced composition. All three
 cells use the same internal alignment and spacing so Experience, Articles, and
-Certifications carry equal visual weight. Mobile proof rows retain their current
-scannable layout.
+Certifications carry equal visual weight. The rail begins at the vertical editorial
+rule and continues to the portrait edge, so the first cell never crosses the rule.
+Mobile proof rows retain their current scannable layout.
 
 ## Considered approaches
 
@@ -42,6 +43,8 @@ left-aligned equal tracks because the three destinations are peers.
 - The copy retains a readable maximum width and does not collide with navigation.
 - At 72rem and wider, all three homepage proof destinations occupy equal widths and
   centre their content consistently.
+- The desktop proof cells begin at the vertical editorial rule and do not cover or
+  cross it.
 - Mobile homepage proof rows remain readable and preserve their current interaction
   and tab order.
 - Light and dark themes retain existing contrast and focus treatments.

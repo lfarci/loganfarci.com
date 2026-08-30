@@ -264,9 +264,10 @@ Experience, Articles, and Certifications are three fully linked destinations wit
 Manrope title, configurable muted mono detail, and directional arrow. They stack as
 92px-minimum rows below 72rem and become a ruled three-column rail with 120px-minimum
 cells at the desktop handoff. The desktop cells divide the full left field equally and
-centre each destination as a balanced unit. Hover uses signal mist and nudges only the
-arrow; focus uses the shared visible ring. Homepage technologies and proof copy come
-from `content/data/home.json` rather than component literals.
+centre each destination as a balanced unit, beginning at the vertical editorial rule
+rather than crossing it. Hover uses signal mist and nudges only the arrow; focus uses
+the shared visible ring. Homepage technologies and proof copy come from
+`content/data/home.json` rather than component literals.
 
 ### About evidence system — implemented
 
