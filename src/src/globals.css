@@ -140,25 +140,12 @@
         position: relative;
         display: grid;
         grid-template-areas:
-            "masthead"
             "intro"
             "stage"
             "proof";
-        grid-template-rows: auto auto minmax(23rem, 46svh) auto;
-        min-height: 100svh;
+        grid-template-rows: auto minmax(23rem, 46svh) auto;
+        min-height: calc(100svh - 4.25rem);
         overflow: clip;
-        background: var(--color-background);
-    }
-
-    .home-masthead {
-        grid-area: masthead;
-        z-index: 20;
-        display: grid;
-        grid-template-columns: 1fr auto;
-        align-items: center;
-        gap: 0.75rem;
-        padding: 1rem 1.25rem;
-        border-bottom: 1px solid var(--color-border);
         background: var(--color-background);
     }
 
@@ -183,39 +170,6 @@
         background: var(--color-brand);
     }
 
-    .home-primary-nav {
-        grid-column: 1 / -1;
-        grid-row: 2;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        border-top: 1px solid var(--color-border-light);
-        padding-top: 0.5rem;
-    }
-
-    .home-nav-link {
-        display: inline-flex;
-        min-height: 2.75rem;
-        align-items: center;
-        border-bottom: 1px solid transparent;
-        color: var(--color-text-secondary);
-        font-family: var(--font-noto-sans);
-        font-size: 0.95rem;
-        transition:
-            color 180ms ease-out,
-            border-color 180ms ease-out;
-    }
-
-    .home-nav-link[aria-current="page"] {
-        border-bottom-color: var(--color-brand);
-        color: var(--color-brand);
-    }
-
-    .home-nav-link:hover {
-        color: var(--color-brand-hover);
-    }
-
-    .home-nav-link:focus-visible,
     .home-contact-link:focus-visible,
     .home-proof-link:focus-visible {
         border-radius: var(--radius-control);
@@ -306,20 +260,18 @@
         height: 2.75rem;
         align-items: center;
         justify-content: center;
-        border: 1px solid var(--color-border);
+        border: 1px solid var(--color-border-light);
         border-radius: var(--radius-control);
-        color: var(--color-text-primary);
-        background: var(--color-background);
+        color: var(--color-text-muted);
+        background: color-mix(in oklch, var(--color-background) 82%, transparent);
         transition:
             color 180ms ease-out,
-            border-color 180ms ease-out,
-            transform 180ms ease-out;
+            border-color 180ms ease-out;
     }
 
     .home-contact-link:hover {
-        border-color: var(--color-brand);
+        border-color: var(--color-border-strong);
         color: var(--color-brand-hover);
-        transform: translateY(-2px);
     }
 
     .home-portrait {
@@ -354,7 +306,11 @@
         z-index: 2;
         top: 1rem;
         right: 1rem;
-        color: var(--color-accent);
+        padding: 0.7rem 0.45rem;
+        border: 1px solid var(--color-border-strong);
+        border-radius: var(--radius-control);
+        color: var(--color-text-primary);
+        background: color-mix(in oklch, var(--color-background) 92%, transparent);
         font-family: var(--font-reddit-mono);
         font-size: 0.65rem;
         letter-spacing: 0.18em;
@@ -430,16 +386,35 @@
     }
 }
 
-@media (min-width: 64rem) {
+@media (min-width: 48rem) and (max-width: 71.999rem) {
+    .home-frame {
+        grid-template-rows: auto minmax(30rem, 54svh) auto;
+    }
+
+    .home-intro {
+        padding-right: clamp(3rem, 8vw, 7rem);
+        padding-left: clamp(5rem, 8vw, 9rem);
+    }
+
+    .home-actions {
+        margin-left: clamp(5rem, 8vw, 9rem);
+    }
+
+    .home-portrait img {
+        right: clamp(1.5rem, 9vw, 6rem);
+        height: 112%;
+    }
+}
+
+@media (min-width: 72rem) {
     .home-frame {
         grid-template-areas:
-            "masthead portrait"
             "intro portrait"
             "actions portrait"
             "proof portrait";
         grid-template-columns: minmax(0, 61.5%) minmax(26rem, 38.5%);
-        grid-template-rows: auto minmax(0, 1fr) auto auto;
-        min-height: 100svh;
+        grid-template-rows: minmax(0, 1fr) auto auto;
+        min-height: calc(100svh - 4.25rem);
     }
 
     .home-frame::before {
@@ -452,25 +427,6 @@
         content: "";
         background: var(--color-border);
         pointer-events: none;
-    }
-
-    .home-masthead {
-        grid-template-columns: minmax(12rem, 1fr) auto auto;
-        gap: clamp(1.5rem, 3vw, 3.5rem);
-        padding: 1.6rem clamp(2rem, 4vw, 4.5rem) 1.6rem clamp(7rem, 8vw, 9rem);
-    }
-
-    .home-primary-nav {
-        grid-column: auto;
-        grid-row: auto;
-        gap: clamp(1.5rem, 3vw, 3rem);
-        justify-content: flex-start;
-        border-top: 0;
-        padding-top: 0;
-    }
-
-    .home-nav-link {
-        font-size: 1rem;
     }
 
     .home-intro {
@@ -521,7 +477,7 @@
 
     .home-portrait {
         grid-area: portrait;
-        min-height: 100svh;
+        min-height: calc(100svh - 4.25rem);
     }
 
     .home-portrait::after {
@@ -546,8 +502,8 @@
 
     .home-proof {
         grid-template-columns: repeat(3, minmax(0, 1fr));
-        margin-left: clamp(7rem, 8vw, 9rem);
-        margin-right: clamp(2rem, 5vw, 5rem);
+        padding-right: clamp(2rem, 5vw, 5rem);
+        padding-left: clamp(7rem, 8vw, 9rem);
         border-bottom: 1px solid var(--color-border);
     }
 
@@ -642,7 +598,7 @@
 
     .field-about-portrait {
         position: relative;
-        aspect-ratio: 5 / 4;
+        aspect-ratio: 1;
         min-width: 0;
         overflow: hidden;
         background: var(--gradient-home-portrait);
@@ -672,14 +628,12 @@
     .field-about-narrative p,
     .field-about-narrative li,
     .field-disclosure-body p,
-    .field-disclosure-body li,
-    .field-education-entry p {
+    .field-disclosure-body li {
         color: var(--color-text-secondary);
     }
 
     .field-section {
         padding-block: clamp(3rem, 6vw, 5rem);
-        border-top: 1px solid var(--color-border);
     }
 
     .field-section-header {
@@ -741,8 +695,7 @@
     }
 
     .field-disclosure h3,
-    .field-credential-link h3,
-    .field-education-entry h3 {
+    .field-credential-link h3 {
         color: var(--color-text-primary);
         font-family: var(--font-manrope);
         font-size: clamp(1.1rem, 3.2vw, 1.4rem);
@@ -774,23 +727,22 @@
         padding: 0.5rem 0 1.75rem;
     }
 
-    .field-entry-layout {
+    .field-disclosure-preview {
         display: grid;
-        gap: 1.5rem;
+        grid-template-columns: 3.5rem minmax(0, 1fr);
+        gap: 1rem;
+        min-width: 0;
+        align-items: center;
     }
 
-    .field-entry-logo,
-    .field-education-entry > img {
+    .field-disclosure-preview-image {
         width: 3.5rem;
         height: 3.5rem;
         object-fit: contain;
     }
 
-    .field-education-entry {
-        display: grid;
-        gap: 1.5rem;
-        padding-block: 2rem;
-        border-block: 1px solid var(--color-border);
+    .field-entry-body {
+        max-width: 72ch;
     }
 
     .field-credential-link {
@@ -872,10 +824,7 @@
     }
 
     .field-article-title-link {
-        display: flex;
-        align-items: flex-start;
-        justify-content: space-between;
-        gap: 1rem;
+        display: block;
         transition: color 180ms ease-out;
     }
 
@@ -885,7 +834,7 @@
 
     .field-article-title {
         display: block;
-        max-width: 31ch;
+        max-width: none;
         font-family: var(--font-manrope);
         font-size: clamp(1.4rem, 5vw, 2.25rem);
         font-weight: 600;
@@ -902,20 +851,22 @@
         line-height: 1.6;
     }
 
-    .field-article-date {
+    .field-article-row-meta {
         grid-area: date;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+    }
+
+    .field-article-date {
         color: var(--color-text-muted);
         font-family: var(--font-reddit-mono);
         font-size: 0.75rem;
     }
 
-    .field-article-title-link .field-index-arrow {
+    .field-article-row-meta .field-index-arrow {
         flex: none;
-        margin-top: 0.1rem;
-    }
-
-    .field-article-title-link:hover .field-index-arrow {
-        transform: translateX(0.2rem);
     }
 
     .field-empty-state {
@@ -1067,45 +1018,8 @@
         pointer-events: none;
     }
 
-    .field-about-intro {
-        grid-template-columns: minmax(16rem, 0.64fr) minmax(0, 1fr);
-        gap: clamp(2.5rem, 6vw, 6rem);
-        align-items: center;
-    }
-
     .field-about-portrait {
-        aspect-ratio: 4 / 5;
-    }
-
-    .field-section {
-        display: grid;
-        grid-template-columns: minmax(12rem, 0.36fr) minmax(0, 1fr);
-        gap: clamp(2.5rem, 6vw, 6rem);
-    }
-
-    .field-section-header {
-        align-self: start;
-        margin-bottom: 0;
-    }
-
-    .field-entry-layout,
-    .field-education-entry {
-        grid-template-columns: 5rem minmax(0, 1fr);
-        gap: 2rem;
-    }
-
-    .field-article-row {
-        grid-template-columns: minmax(0, 1fr) 9rem;
-        grid-template-areas: "copy date";
-        gap: 2rem;
-        min-height: 10.5rem;
-        align-items: start;
-        padding: 1.75rem 0;
-    }
-
-    .field-article-date,
-    .field-article-title-link .field-index-arrow {
-        margin-top: 0.25rem;
+        width: min(100%, 34rem);
     }
 
     .field-not-found {
@@ -1114,10 +1028,57 @@
     }
 }
 
-@media (min-width: 64rem) {
+@media (min-width: 72rem) {
+    .field-about-intro {
+        grid-template-columns: minmax(16rem, 0.64fr) minmax(0, 1fr);
+        gap: clamp(2.5rem, 6vw, 6rem);
+        align-items: center;
+    }
+
+    .field-about-portrait {
+        width: 100%;
+        aspect-ratio: 4 / 5;
+    }
+
+    .field-section {
+        display: grid;
+        grid-template-columns: minmax(22rem, 0.48fr) minmax(0, 1fr);
+        gap: clamp(3rem, 5vw, 5rem);
+        border-top: 1px solid var(--color-border);
+    }
+
+    .field-section-header {
+        position: sticky;
+        top: 6.5rem;
+        align-self: start;
+        margin-bottom: 0;
+    }
+
+    .field-article-row {
+        grid-template-columns: minmax(0, 1fr) 11.5rem;
+        grid-template-areas: "copy date";
+        gap: 2rem;
+        min-height: 10.5rem;
+        align-items: start;
+        padding: 1.75rem 0;
+    }
+
+    .field-article-title {
+        max-width: 31ch;
+    }
+
+    .field-article-row-meta {
+        flex-direction: row-reverse;
+        margin-top: 0.25rem;
+    }
+
+    .field-article-date {
+        white-space: nowrap;
+    }
+
     .field-page-header {
         display: grid;
-        grid-template-columns: minmax(20rem, 0.5fr) minmax(0, 1fr);
+        grid-template-columns: minmax(23rem, 0.52fr) minmax(0, 1fr);
         gap: clamp(2.5rem, 5vw, 5rem);
         align-items: end;
     }
@@ -1130,11 +1091,6 @@
         margin-top: 0;
         padding-bottom: 0.35rem;
     }
-
-    .field-section-header {
-        position: sticky;
-        top: 6.5rem;
-    }
 }
 
 @media (min-width: 80rem) {
@@ -1146,7 +1102,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .home-nav-link,
     .home-contact-link,
     .home-proof-link,
     .home-proof-link > svg,

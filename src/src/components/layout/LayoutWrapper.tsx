@@ -20,7 +20,7 @@ const LayoutWrapper: React.FC<Readonly<LayoutWrapperProps>> = ({ children, githu
             >
                 Skip to content
             </a>
-            {!isHomePage && <NavigationBar title="Logan Farci" />}
+            <NavigationBar title="Logan Farci" />
             <main id="main-content" tabIndex={-1} className="min-w-0 w-full">
                 {children}
             </main>

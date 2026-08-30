@@ -6,7 +6,7 @@ import { ChevronDownIcon } from "@/components/shared/icons";
 import { getCertifications, getDiploma, getExperiences, getProfile, getSkillCategories } from "@/core/data";
 import { formatExperiencePeriod } from "@/core/date";
 import { createBreadcrumbJsonLd, createCanonicalUrl } from "@/core/seo";
-import type { Certification, SkillCategory } from "@/types";
+import type { Certification, Image, SkillCategory } from "@/types";
 
 const relevanceOrder: Record<Certification["relevance"], number> = { High: 0, Medium: 1, Low: 2 };
 const certifications = getCertifications().sort(
@@ -47,16 +47,28 @@ interface DisclosureProps {
     children: ReactNode;
     defaultOpen?: boolean;
     detail?: string;
+    image?: Image;
     title: string;
 }
 
-function Disclosure({ children, defaultOpen = false, detail, title }: Readonly<DisclosureProps>) {
+function Disclosure({ children, defaultOpen = false, detail, image, title }: Readonly<DisclosureProps>) {
     return (
         <details className="field-disclosure" open={defaultOpen}>
             <summary>
-                <span className="min-w-0">
-                    <h3>{title}</h3>
-                    {detail && <span className="field-meta">{detail}</span>}
+                <span className={image ? "field-disclosure-preview" : "min-w-0"}>
+                    {image && (
+                        <img
+                            src={image.src}
+                            alt={image.alt}
+                            width={image.width}
+                            height={image.height}
+                            className="field-disclosure-preview-image"
+                        />
+                    )}
+                    <span className="min-w-0">
+                        <h3>{title}</h3>
+                        {detail && <span className="field-meta">{detail}</span>}
+                    </span>
                 </span>
                 <ChevronDownIcon aria-hidden="true" className="field-disclosure-icon" size={22} strokeWidth={1.75} />
             </summary>
@@ -144,21 +156,13 @@ export default function AboutPage() {
                                 defaultOpen={index === 0}
                                 title={experience.name}
                                 detail={`${experience.company.name} · ${formatExperiencePeriod(experience.start, experience.end)}`}
+                                image={experience.company.logo}
                             >
-                                <div className="field-entry-layout">
-                                    <img
-                                        src={experience.company.logo.src}
-                                        alt={experience.company.logo.alt}
-                                        width={experience.company.logo.width}
-                                        height={experience.company.logo.height}
-                                        className="field-entry-logo"
-                                    />
-                                    <div>
-                                        <p className="field-meta mb-4">
-                                            {experience.company.location} · {experience.type}
-                                        </p>
-                                        <MarkdownContent content={experience.description} measure />
-                                    </div>
+                                <div className="field-entry-body">
+                                    <p className="field-meta mb-4">
+                                        {experience.company.location} · {experience.type}
+                                    </p>
+                                    <MarkdownContent content={experience.description} measure />
                                 </div>
                             </Disclosure>
                         ))}
@@ -170,23 +174,18 @@ export default function AboutPage() {
                         <h2>Education</h2>
                         <p>The foundation beneath the professional work.</p>
                     </header>
-                    <article className="field-education-entry">
-                        <img
-                            src={diploma.logo.src}
-                            alt={diploma.logo.alt}
-                            width={diploma.logo.width}
-                            height={diploma.logo.height}
-                        />
-                        <div>
-                            <h3>{diploma.name}</h3>
-                            <p className="field-meta">
-                                {diploma.University} · {diploma.details.join(" · ")}
-                            </p>
-                            <div className="mt-5">
+                    <div className="field-disclosure-list">
+                        <Disclosure
+                            defaultOpen
+                            title={diploma.name}
+                            detail={`${diploma.University} · ${diploma.details.join(" · ")}`}
+                            image={diploma.logo}
+                        >
+                            <div className="field-entry-body">
                                 <MarkdownContent content={diploma.description} measure />
                             </div>
-                        </div>
-                    </article>
+                        </Disclosure>
+                    </div>
                 </section>
 
                 <section className="field-section" id="certifications">

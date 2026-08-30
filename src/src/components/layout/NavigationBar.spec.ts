@@ -158,14 +158,7 @@ test.describe("Mobile navigation", () => {
             await navigation.getByRole("link", { name: destination.label, exact: true }).click();
 
             await expectPage(page, destination.page);
-            if (destination.page === HOME_PAGE) {
-                await expect(page.getByRole("button", { name: "Open menu" })).toHaveCount(0);
-            } else {
-                await expect(navigation.getByRole("button", { name: "Open menu" })).toHaveAttribute(
-                    "aria-expanded",
-                    "false",
-                );
-            }
+            await expect(page.getByRole("button", { name: "Open menu" })).toHaveAttribute("aria-expanded", "false");
         });
     }
 
@@ -174,11 +167,18 @@ test.describe("Mobile navigation", () => {
         const navigation = page.getByRole("navigation");
 
         await navigation.getByRole("button", { name: "Open menu" }).click();
-        await page.setViewportSize({ width: 1024, height: 768 });
+        await page.setViewportSize({ width: 1280, height: 800 });
         await expect(navigation.getByRole("link", { name: "About", exact: true })).toBeVisible();
         await expect(navigation.getByLabel("Open menu", { exact: true })).toHaveAttribute("aria-expanded", "false");
         await page.setViewportSize({ width: 390, height: 844 });
 
         await expect(navigation.getByRole("button", { name: "Open menu" })).toBeVisible();
+    });
+
+    test("keeps the compact menu at medium width", async ({ page }) => {
+        await page.setViewportSize({ width: 1024, height: 768 });
+        await page.goto("/");
+
+        await expect(page.getByRole("navigation").getByRole("button", { name: "Open menu" })).toBeVisible();
     });
 });

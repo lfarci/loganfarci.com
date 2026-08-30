@@ -14,6 +14,7 @@ test.describe("Home page", () => {
             "mailto:logan.farci@outlook.be",
         );
         await expect(main.getByRole("navigation", { name: "Profile highlights" }).getByRole("link")).toHaveCount(3);
+        await expect(main.getByText("GitHub Copilot · GitHub Actions · .NET · Azure", { exact: true })).toBeVisible();
     });
 
     test("exposes the complete set of accessible contact actions", async ({ page }) => {
@@ -34,11 +35,11 @@ test.describe("Home page", () => {
         }
     });
 
-    test("opens the article catalog from the writing proof", async ({ page }) => {
+    test("opens the article catalog from the Articles proof", async ({ page }) => {
         await page.goto("/");
         await page
             .getByRole("navigation", { name: "Profile highlights" })
-            .getByRole("link", { name: /Writing/ })
+            .getByRole("link", { name: /Articles/ })
             .click();
 
         await expectPage(page, ARTICLES_PAGE);
@@ -46,7 +47,7 @@ test.describe("Home page", () => {
 
     for (const destination of [
         { link: "Experience", hash: "experience", targetHeading: "Experience" },
-        { link: "Cloud systems", hash: "skills", targetHeading: "Skills" },
+        { link: "Certifications", hash: "certifications", targetHeading: "Certifications" },
     ]) {
         test(`opens the ${destination.targetHeading} details from ${destination.link}`, async ({ page }) => {
             await page.goto("/");
@@ -60,4 +61,13 @@ test.describe("Home page", () => {
             await expect(page.getByRole("heading", { name: destination.targetHeading, exact: true })).toBeVisible();
         });
     }
+
+    test("uses the shared compact navigation on mobile", async ({ page }) => {
+        await page.setViewportSize({ width: 390, height: 844 });
+        await page.goto("/");
+
+        await expect(
+            page.getByRole("navigation", { name: "Primary" }).getByRole("button", { name: "Open menu" }),
+        ).toBeVisible();
+    });
 });

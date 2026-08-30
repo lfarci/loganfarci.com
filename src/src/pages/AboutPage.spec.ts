@@ -43,4 +43,15 @@ test.describe("About page", () => {
         await expect(page).toHaveURL(/\/about\/?#skills$/u);
         await expect(page.getByRole("heading", { level: 2, name: "Skills" })).toBeVisible();
     });
+
+    test("keeps the education preview visible when its details are collapsed", async ({ page }) => {
+        await page.goto("/about");
+        const education = page.locator("#education details");
+
+        await education.locator("summary").click();
+
+        await expect(education).not.toHaveAttribute("open", "");
+        await expect(education.getByRole("heading", { level: 3, name: "Bachelor in Computer Science" })).toBeVisible();
+        await expect(education.getByRole("img", { name: "ESI Logo" })).toBeVisible();
+    });
 });

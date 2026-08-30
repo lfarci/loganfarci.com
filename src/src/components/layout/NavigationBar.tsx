@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router";
 import NavBarEntry from "@/components/shared/NavBarEntry";
 import { Button } from "@/components/shared/primitives/Button";
 import ThemeToggle from "@/components/shared/ThemeToggle";
-import { MD_BREAKPOINT_MEDIA_QUERY } from "@/core/breakpoints";
+import { DESKTOP_NAV_BREAKPOINT_MEDIA_QUERY } from "@/core/breakpoints";
 
 interface NavigationBarProps {
     title: string;
@@ -55,7 +55,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ title }) => {
         }
 
         const handleResize = () => {
-            if (window.matchMedia(MD_BREAKPOINT_MEDIA_QUERY).matches) {
+            if (window.matchMedia(DESKTOP_NAV_BREAKPOINT_MEDIA_QUERY).matches) {
                 setIsMenuOpen(false);
             }
         };
@@ -68,7 +68,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ title }) => {
     return (
         <header className="field-shell-header">
             <nav className="field-shell-nav" aria-label="Primary">
-                <div className="flex-1 text-left md:flex-none md:text-center">
+                <div className="flex-1 text-left min-[72rem]:flex-none min-[72rem]:text-center">
                     <Link to="/" className="home-wordmark">
                         <span aria-hidden="true" className="home-wordmark-dot" />
                         <span>{title}</span>
@@ -81,7 +81,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ title }) => {
                     aria-label={isMenuOpen ? "Close menu" : "Open menu"}
                     aria-controls={menuId}
                     aria-expanded={isMenuOpen}
-                    className="md:hidden"
+                    className="min-[72rem]:hidden"
                     onClick={handleMenuToggle}
                 >
                     <span className="sr-only">{isMenuOpen ? "Close menu" : "Open menu"}</span>
@@ -103,7 +103,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ title }) => {
                         />
                     </span>
                 </Button>
-                <div className="hidden items-center gap-8 md:flex">
+                <div className="hidden items-center gap-8 min-[72rem]:flex">
                     {navigationItems.map((item) => (
                         <NavBarEntry
                             key={item.url}
@@ -121,7 +121,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ title }) => {
                     id={menuId}
                     aria-hidden={!isMenuOpen}
                     inert={!isMenuOpen}
-                    className={`field-shell-mobile-menu grid w-full overflow-hidden text-center transition-[grid-template-rows,opacity,transform] duration-300 ease-out motion-reduce:transition-none md:hidden ${
+                    className={`field-shell-mobile-menu grid w-full overflow-hidden text-center transition-[grid-template-rows,opacity,transform] duration-300 ease-out motion-reduce:transition-none min-[72rem]:hidden ${
                         isMenuOpen
                             ? "grid-rows-[1fr] translate-y-0 opacity-100"
                             : "pointer-events-none -translate-y-2 opacity-0 grid-rows-[0fr]"

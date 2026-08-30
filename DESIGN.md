@@ -85,11 +85,10 @@ evidence. Hairline rules and generous reading fields create rhythm without simul
 paper, terminal chrome, or a developer dashboard.
 
 Field Notes, continuous is implemented across Home, About, the Articles index, article
-detail, the shared inner-page navigation and footer, and the 404 surface. The homepage's
-custom masthead and split portrait stage are its most expressive composition; the other
-routes extend the same type, colour, ruled structure, metadata, and interaction grammar
-into editorial reading and evidence surfaces. The finish review disposition was
-ship-with-notes with no blockers.
+detail, the shared navigation and footer, and the 404 surface. The homepage's split
+portrait stage is its most expressive composition; the other routes extend the same
+type, colour, ruled structure, metadata, and interaction grammar into editorial reading
+and evidence surfaces. The finish review disposition was ship with no blockers.
 
 **Key Characteristics:**
 
@@ -151,7 +150,7 @@ pairing is modern and technical without becoming sterile or code-themed.
 ### Hierarchy
 
 - **Display** (550, responsive 2.75–4.25rem before the desktop layout, 0.98): the
-  homepage greeting and professional proposition. At the 64rem desktop composition it
+  homepage greeting and professional proposition. At the 72rem desktop composition it
   shifts to a separate 4–5.25rem range while keeping the same weight and line-height.
 - **Body** (regular, responsive 1–1.2rem, 1.6): the professional role and supporting
   explanation; the desktop implementation raises it to 1.1–1.35rem.
@@ -170,27 +169,32 @@ only preface or repeat an already clear heading.
 ## Layout
 
 The homepage is a full-viewport responsive composition rather than the standard
-inner-page container. Below 64rem it flows as masthead, introduction, portrait stage,
-and a vertical proof rail. The action cluster overlays the lower-left of the portrait
-stage, while the portrait crops from the right and a background-to-transparent veil
-protects action contrast. Navigation wraps beneath the wordmark and theme control.
+inner-page container. Below 48rem it flows as introduction, portrait stage, and a
+vertical proof rail beneath the shared navigation. The action cluster overlays the
+lower-left of the portrait stage, while the portrait crops from the right and a
+background-to-transparent veil protects action contrast. From 48rem through 71.999rem,
+the same landscape stage gains a taller, deliberately centred portrait and wider
+editorial insets instead of prematurely switching to the desktop split.
 
-At 64rem and above, the homepage becomes a 61.5% / 38.5% split. Masthead,
-introduction, actions, and the three-column proof rail occupy the left field; the
-portrait fills the right field for the full viewport height. A single vertical rule
-offset 4–5.5rem from the left and horizontal masthead/proof rules make the composition
-feel like one continuous page. The left content uses a 7–9rem editorial inset; the
-portrait caption and vertical `L. FARCI` marker sit inside the image field.
+At 72rem and above, the homepage becomes a 61.5% / 38.5% split. Introduction, actions,
+and the three-column proof rail occupy the left field; the portrait fills the right
+field below the shared navigation. A single vertical rule offset 4–5.5rem from the left
+and a full-width proof boundary make the composition feel like one continuous page. The
+left content uses a 7–9rem editorial inset; the portrait caption and high-contrast
+vertical `L. FARCI` marker sit inside the image field.
 
 The résumé action remains first in reading and tab order at every width. The mobile
 layout changes visual placement through the grid without reordering the document.
-Inner pages use the implemented full-width Field Notes shell: a sticky opaque
+Every route uses the implemented full-width Field Notes shell: a sticky opaque
 navigation bar, responsive editorial insets, a quiet left rule from 48rem, and generous
-section spacing. About shifts to portrait-plus-narrative and sticky section labels;
-Articles becomes a compact ruled index; article detail uses a broad masthead and bounded
-reading surface; the 404 uses the same grid, type, and signal hierarchy. At 64rem,
-inner-page titles and decks align as a direct two-column pair, and section labels become
-sticky only where the available width supports that scan pattern.
+section spacing. The compact menu remains active below 72rem so tablet navigation is
+consistent with mobile; the horizontal navigation begins at 72rem. About stays
+single-column through medium widths before shifting to portrait-plus-narrative and
+sticky section labels. Articles keeps dates below each entry through medium widths,
+then restores its compact desktop date rail. Article detail uses a broad masthead and
+bounded reading surface; the 404 uses the same grid, type, and signal hierarchy. At
+72rem, inner-page titles and decks align as a direct two-column pair, and section labels
+become sticky only where the available width supports that scan pattern.
 
 ## Elevation & Depth
 
@@ -224,19 +228,14 @@ reserved for the small blue wordmark dot.
 
 ## Components
 
-### Homepage masthead — implemented
+### Shared site shell — implemented
 
-The homepage owns a compact wordmark, three-link navigation, and 44px theme control.
-On mobile the navigation becomes a second row separated by a light rule; on desktop it
-sits inline. The active route uses signal-blue text and a one-pixel underline, while
-focus-visible states use a two-pixel semantic ring with a four-pixel offset.
-
-### Shared inner-page shell — implemented
-
-About, Articles, article detail, and 404 use a sticky opaque header with the same
-wordmark, active-link treatment, résumé link, theme control, accessible mobile menu,
-and a ruled footer. The shell preserves the homepage identity without copying its
-full-viewport split.
+Home, About, Articles, article detail, and 404 use one sticky opaque header with the
+same wordmark, active-link treatment, résumé link, theme control, and accessible compact
+menu. The compact menu applies below 72rem; horizontal navigation applies at 72rem and
+above. Inner routes add the ruled footer, while Home keeps the opening composition
+full-height. Focus-visible states use a two-pixel semantic ring with a four-pixel
+offset.
 
 ### Calls to action — implemented
 
@@ -245,38 +244,46 @@ full-viewport split.
 - **Secondary:** Labelled Contact me, document-field fill, etched semantic border, and
   the same height and radius as the primary action.
 - **Supplemental contacts:** Four labelled 44px square icon links below the actions.
-  They use semantic borders and lift by 2px on hover without replacing the named contact
-  action.
+  They use lighter semantic borders and muted foregrounds so they remain visibly
+  secondary to the named actions.
 - **Sizing:** Actions are 52px high on the narrow composition and 56px on desktop.
   Reduced-motion preferences remove their transitions.
 
 ### Portrait stage — implemented
 
 The real portrait is the sole dominant image. A blue-to-ink gradient creates the field,
-aurora teal carries the vertical name marker, and a quiet mono caption identifies the
-current role and company on desktop. The crop moves from a right-weighted mobile figure
-to a full-height desktop portrait without adding a second image or decorative texture.
+a high-contrast semantic backing protects the vertical name marker in both themes, and
+a quiet mono caption identifies the current role and company on desktop. The crop moves
+from a right-weighted mobile figure through a deliberately centred medium stage to a
+full-height desktop portrait without adding a second image or decorative texture.
 
 ### Proof rail — implemented
 
-Experience, Writing, and Cloud systems are three fully linked destinations with a
-Manrope title, muted mono detail, and directional arrow. They stack as 92px-minimum rows
-on mobile and become a ruled three-column rail with 120px-minimum cells on desktop.
-Hover uses signal mist and nudges only the arrow; focus uses the shared visible ring.
+Experience, Articles, and Certifications are three fully linked destinations with a
+Manrope title, configurable muted mono detail, and directional arrow. They stack as
+92px-minimum rows below 72rem and become a ruled three-column rail with 120px-minimum
+cells at the desktop handoff. Hover uses signal mist and nudges only the arrow; focus
+uses the shared visible ring. Homepage technologies and proof copy come from
+`content/data/home.json` rather than component literals.
 
 ### About evidence system — implemented
 
-About pairs the real portrait with the profile narrative, then uses ruled two-column
-sections for experience, education, certifications, and skills. Native details/summary
-disclosures keep the current role and primary skill group open, tier additional
-credentials, expose clear expanded state, and retain full-size keyboard targets.
+About uses a square, width-capped portrait and a single reading column through medium
+widths, then pairs the portrait with the profile narrative at 72rem. Native
+details/summary disclosures place organization logos and essential metadata in the
+preview, keep the current role, Education, and primary skill group open, tier additional
+credentials, expose clear expanded state, and retain full-size keyboard targets. Ruled
+two-column sections and sticky labels begin only at the desktop handoff.
 
 ### Articles index and reading surface — implemented
 
 The Articles index uses compact ruled rows with title, description, tags, date, and a
-directional arrow; the linked title controls the hover affordance. Article detail uses a
-back link, balanced masthead, mono metadata rail, and the established Markdown renderer
-for headings, navigation, callouts, tables, inline code, and block code controls.
+directional arrow; the linked title controls the hover affordance. Below 72rem the title
+uses the full row width and the date remains on the lower metadata line beside the
+arrow. At 72rem the date and arrow move to a fixed-width desktop rail. Article detail
+uses a back link, balanced masthead, mono metadata rail, and the established Markdown
+renderer for headings, navigation, callouts, tables, inline code, and block code
+controls.
 
 ### Not-found surface — implemented
 

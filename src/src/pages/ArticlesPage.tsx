@@ -64,7 +64,6 @@ export default function ArticlesPage() {
                                     <span className="field-article-copy">
                                         <Link to={`/articles/${article.slug}`} className="field-article-title-link">
                                             <span className="field-article-title">{article.title}</span>
-                                            <ArrowRightIcon />
                                         </Link>
                                         <span className="field-article-description">{article.description}</span>
                                         <span className="field-article-tags">
@@ -73,9 +72,12 @@ export default function ArticlesPage() {
                                             ))}
                                         </span>
                                     </span>
-                                    <time className="field-article-date" dateTime={article.publishedAt}>
-                                        {formatDate(article.publishedAt)}
-                                    </time>
+                                    <span className="field-article-row-meta">
+                                        <time className="field-article-date" dateTime={article.publishedAt}>
+                                            {formatDate(article.publishedAt)}
+                                        </time>
+                                        <ArrowRightIcon />
+                                    </span>
                                 </div>
                             </article>
                         ))}
