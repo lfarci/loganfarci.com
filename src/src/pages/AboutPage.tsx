@@ -159,9 +159,6 @@ export default function AboutPage() {
                                 image={experience.company.logo}
                             >
                                 <div className="field-entry-body">
-                                    <p className="field-meta mb-4">
-                                        {experience.company.location} · {experience.type}
-                                    </p>
                                     <MarkdownContent content={experience.description} measure />
                                 </div>
                             </Disclosure>

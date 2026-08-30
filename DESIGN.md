@@ -190,8 +190,10 @@ navigation bar, responsive editorial insets, a quiet left rule from 48rem, and g
 section spacing. The compact menu remains active below 72rem so tablet navigation is
 consistent with mobile; the horizontal navigation begins at 72rem. About stays
 single-column through medium widths before shifting to portrait-plus-narrative and
-sticky section labels. Articles keeps dates below each entry through medium widths,
-then restores its compact desktop date rail. Article detail uses a broad masthead and
+sticky section labels. The inner-page rule shares Home's exact horizontal position;
+About section boundaries and Articles index rows extend from that rule to the right
+viewport edge without moving their inset content. Articles keeps each date below its
+tags at every width. Article detail uses a broad masthead and
 bounded reading surface; the 404 uses the same grid, type, and signal hierarchy. At
 every width, inner-page decks remain directly beneath and left-aligned with their titles
 as one editorial group. At 72rem, section labels become sticky only where the available
@@ -276,14 +278,17 @@ widths, then pairs the portrait with the profile narrative at 72rem. Native
 details/summary disclosures place organization logos and essential metadata in the
 preview, keep the current role, Education, and primary skill group open, tier additional
 credentials, expose clear expanded state, and retain full-size keyboard targets. Ruled
-two-column sections and sticky labels begin only at the desktop handoff.
+section boundaries begin with the shared editorial rule at 48rem; the two-column
+sections and sticky labels still begin only at the desktop handoff. Experience and
+Education disclosures keep one muted metadata line in their summary and move directly
+into body prose when expanded.
 
 ### Articles index and reading surface — implemented
 
 The Articles index uses compact ruled rows with title, description, tags, date, and a
 directional arrow; the linked title controls the hover affordance. Below 72rem the title
-uses the full row width and the date remains on the lower metadata line beside the
-arrow. At 72rem the date and arrow move to a fixed-width desktop rail. Article detail
+uses the full row width. At every width, the date remains on the lower metadata line
+below the tags while the arrow holds the row edge. Article detail
 uses a back link, balanced masthead, mono metadata rail, and the established Markdown
 renderer for headings, navigation, callouts, tables, inline code, and block code
 controls.

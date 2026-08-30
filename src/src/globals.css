@@ -11,6 +11,10 @@
   color utility to any element that depends on these defaults.
 */
 @layer base {
+    :root {
+        --editorial-rule-x: clamp(4rem, 5vw, 5.5rem);
+    }
+
     *,
     ::after,
     ::before,
@@ -422,7 +426,7 @@
         z-index: 4;
         top: 0;
         bottom: 0;
-        left: clamp(4rem, 5vw, 5.5rem);
+        left: var(--editorial-rule-x);
         width: 1px;
         content: "";
         background: var(--color-border);
@@ -502,7 +506,7 @@
 
     .home-proof {
         grid-template-columns: repeat(3, minmax(0, 1fr));
-        padding-left: clamp(4rem, 5vw, 5.5rem);
+        padding-left: var(--editorial-rule-x);
         border-bottom: 1px solid var(--color-border);
     }
 
@@ -1003,15 +1007,19 @@
     }
 
     .field-page {
-        padding-right: clamp(3rem, 6vw, 7rem);
-        padding-left: clamp(5rem, 8vw, 9rem);
+        --field-content-left: clamp(5rem, 8vw, 9rem);
+        --field-content-right: clamp(3rem, 6vw, 7rem);
+        --field-rule-gap: calc(var(--field-content-left) - var(--editorial-rule-x));
+
+        padding-right: var(--field-content-right);
+        padding-left: var(--field-content-left);
     }
 
     .field-page::before {
         position: absolute;
         top: 0;
         bottom: 0;
-        left: clamp(2rem, 4vw, 4.5rem);
+        left: var(--editorial-rule-x);
         width: 1px;
         content: "";
         background: var(--color-border-light);
@@ -1020,6 +1028,23 @@
 
     .field-about-portrait {
         width: min(100%, 34rem);
+    }
+
+    .field-about-page .field-section,
+    .field-articles-page .field-article-index {
+        margin-right: calc(0rem - var(--field-content-right));
+        margin-left: calc(0rem - var(--field-rule-gap));
+    }
+
+    .field-about-page .field-section {
+        padding-right: var(--field-content-right);
+        padding-left: var(--field-rule-gap);
+        border-top: 1px solid var(--color-border);
+    }
+
+    .field-articles-page .field-article-row {
+        padding-right: var(--field-content-right);
+        padding-left: var(--field-rule-gap);
     }
 
     .field-not-found {
@@ -1044,7 +1069,6 @@
         display: grid;
         grid-template-columns: minmax(22rem, 0.48fr) minmax(0, 1fr);
         gap: clamp(3rem, 5vw, 5rem);
-        border-top: 1px solid var(--color-border);
     }
 
     .field-section-header {
@@ -1055,21 +1079,13 @@
     }
 
     .field-article-row {
-        grid-template-columns: minmax(0, 1fr) 11.5rem;
-        grid-template-areas: "copy date";
-        gap: 2rem;
         min-height: 10.5rem;
-        align-items: start;
-        padding: 1.75rem 0;
+        padding-top: 1.75rem;
+        padding-bottom: 1.75rem;
     }
 
     .field-article-title {
         max-width: 31ch;
-    }
-
-    .field-article-row-meta {
-        flex-direction: row-reverse;
-        margin-top: 0.25rem;
     }
 
     .field-article-date {
