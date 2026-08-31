@@ -603,6 +603,7 @@
     .field-about-intro {
         display: grid;
         gap: 2rem;
+        align-items: start;
         padding-bottom: clamp(3.75rem, 8vw, 6rem);
     }
 
@@ -631,8 +632,21 @@
     }
 
     .field-about-narrative {
-        align-self: center;
+        max-width: 42rem;
+        align-self: start;
         font-size: 1.05rem;
+    }
+
+    .field-about-narrative p:first-child {
+        max-width: 36ch !important;
+        margin-bottom: 2rem !important;
+        color: var(--color-text-primary) !important;
+        font-family: var(--font-manrope) !important;
+        font-size: clamp(1.25rem, 1.7vw, 1.5rem) !important;
+        font-weight: 550 !important;
+        letter-spacing: -0.02em !important;
+        line-height: 1.45 !important;
+        text-wrap: pretty;
     }
 
     .field-about-narrative p,
@@ -644,6 +658,18 @@
 
     .field-section {
         padding-block: clamp(3rem, 6vw, 5rem);
+    }
+
+    .field-about-page .field-section:last-child {
+        padding-bottom: 0;
+    }
+
+    .field-about-page {
+        --field-footer-gap: clamp(2.5rem, 3vw, 3.5rem);
+    }
+
+    .field-shell-about-main + .field-shell-footer {
+        margin-top: clamp(2.5rem, 3vw, 3.5rem);
     }
 
     .field-section-header {
@@ -1110,9 +1136,8 @@
 
 @media (min-width: 72rem) {
     .field-about-intro {
-        grid-template-columns: minmax(16rem, 0.64fr) minmax(0, 1fr);
+        grid-template-columns: minmax(17rem, 3fr) minmax(0, 4fr);
         gap: clamp(2.5rem, 6vw, 6rem);
-        align-items: center;
     }
 
     .field-about-portrait {

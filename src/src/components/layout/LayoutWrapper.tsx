@@ -11,6 +11,7 @@ interface LayoutWrapperProps {
 const LayoutWrapper: React.FC<Readonly<LayoutWrapperProps>> = ({ children, githubRepositoryUrl, commitHash }) => {
     const location = useLocation();
     const isHomePage = location.pathname === "/";
+    const isAboutPage = location.pathname === "/about";
 
     return (
         <>
@@ -21,7 +22,11 @@ const LayoutWrapper: React.FC<Readonly<LayoutWrapperProps>> = ({ children, githu
                 Skip to content
             </a>
             <NavigationBar title="Logan Farci" />
-            <main id="main-content" tabIndex={-1} className="min-w-0 w-full">
+            <main
+                id="main-content"
+                tabIndex={-1}
+                className={isAboutPage ? "field-shell-about-main min-w-0 w-full" : "min-w-0 w-full"}
+            >
                 {children}
             </main>
             {!isHomePage && <Footer githubRepositoryUrl={githubRepositoryUrl} commitHash={commitHash} />}
