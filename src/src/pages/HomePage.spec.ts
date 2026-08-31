@@ -17,6 +17,20 @@ test.describe("Home page", () => {
         await expect(main.getByText("GitHub Copilot · GitHub Actions · .NET · Azure", { exact: true })).toBeVisible();
     });
 
+    test("fits the complete desktop opening within its viewport", async ({ page }) => {
+        await page.setViewportSize({ width: 1440, height: 900 });
+        await page.goto("/");
+
+        await expect
+            .poll(() =>
+                page.evaluate(() => ({
+                    clientHeight: document.documentElement.clientHeight,
+                    scrollHeight: document.documentElement.scrollHeight,
+                })),
+            )
+            .toEqual({ clientHeight: 900, scrollHeight: 900 });
+    });
+
     test("exposes the complete set of accessible contact actions", async ({ page }) => {
         await page.goto("/");
         const main = page.getByRole("main");

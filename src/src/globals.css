@@ -13,6 +13,7 @@
 @layer base {
     :root {
         --editorial-rule-x: clamp(4rem, 5vw, 5.5rem);
+        --field-shell-header-height: 4.25rem;
         --field-footer-gap: clamp(3rem, 6vw, 6rem);
     }
 
@@ -149,7 +150,7 @@
             "stage"
             "proof";
         grid-template-rows: auto minmax(23rem, 46svh) auto;
-        min-height: calc(100svh - 4.25rem);
+        min-height: calc(100svh - var(--field-shell-header-height));
         overflow: clip;
         background: var(--color-background);
     }
@@ -412,6 +413,10 @@
 }
 
 @media (min-width: 72rem) {
+    .field-shell-header {
+        block-size: var(--field-shell-header-height);
+    }
+
     .home-frame {
         grid-template-areas:
             "intro portrait"
@@ -419,7 +424,7 @@
             "proof portrait";
         grid-template-columns: minmax(0, 61.5%) minmax(26rem, 38.5%);
         grid-template-rows: minmax(0, 1fr) auto auto;
-        min-height: calc(100svh - 4.25rem);
+        min-height: calc(100svh - var(--field-shell-header-height));
     }
 
     .home-frame::before {
