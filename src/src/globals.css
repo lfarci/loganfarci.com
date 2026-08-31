@@ -632,7 +632,7 @@
     }
 
     .field-about-narrative {
-        max-width: 42rem;
+        max-width: 62ch;
         align-self: start;
         font-size: 1.05rem;
     }
@@ -642,7 +642,7 @@
         margin-bottom: 2rem !important;
         color: var(--color-text-primary) !important;
         font-family: var(--font-manrope) !important;
-        font-size: clamp(1.25rem, 1.7vw, 1.5rem) !important;
+        font-size: clamp(1.4rem, 1.7vw, 1.6rem) !important;
         font-weight: 550 !important;
         letter-spacing: -0.02em !important;
         line-height: 1.45 !important;
@@ -1136,12 +1136,12 @@
 
 @media (min-width: 72rem) {
     .field-about-intro {
-        grid-template-columns: minmax(17rem, 3fr) minmax(0, 4fr);
-        gap: clamp(2.5rem, 6vw, 6rem);
+        grid-template-columns: minmax(17rem, min(38%, 28rem)) minmax(0, 1fr);
+        gap: clamp(4rem, 5vw, 5rem);
     }
 
     .field-about-portrait {
-        width: 100%;
+        width: min(100%, 28rem);
         aspect-ratio: 4 / 5;
     }
 
