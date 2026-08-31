@@ -667,28 +667,31 @@
 
     .field-disclosure-list,
     .field-credential-list {
-        border-top: 1px solid var(--color-border);
-    }
-
-    .field-disclosure,
-    .field-credential-link {
-        border-bottom: 1px solid var(--color-border);
+        display: grid;
+        gap: 0.5rem;
     }
 
     .field-disclosure > summary {
         display: grid;
         grid-template-columns: minmax(0, 1fr) auto;
         gap: 1rem;
-        min-height: 4.75rem;
+        min-height: 5.5rem;
         align-items: center;
-        padding-block: 1rem;
+        margin-inline: -0.75rem;
+        padding: 1.5rem 0.75rem;
+        border-radius: var(--radius-card);
         color: var(--color-text-primary);
         cursor: pointer;
         list-style: none;
+        transition: background-color 180ms ease-out;
     }
 
     .field-disclosure > summary::-webkit-details-marker {
         display: none;
+    }
+
+    .field-disclosure > summary:hover {
+        background: color-mix(in oklch, var(--color-foreground) 2.5%, transparent);
     }
 
     .field-disclosure > summary:hover h3 {
@@ -725,7 +728,15 @@
     .field-disclosure-icon {
         flex: none;
         color: var(--color-brand);
-        transition: transform 180ms ease-out;
+        opacity: 0.6;
+        transition:
+            transform 180ms ease-out,
+            opacity 180ms ease-out;
+    }
+
+    .field-disclosure > summary:hover .field-disclosure-icon,
+    .field-disclosure > summary:focus-visible .field-disclosure-icon {
+        opacity: 1;
     }
 
     .field-disclosure[open] .field-disclosure-icon {
@@ -733,20 +744,30 @@
     }
 
     .field-disclosure-body {
-        padding: 0.5rem 0 1.75rem;
+        padding: 0.5rem 0.75rem 1.75rem;
     }
 
     .field-disclosure-preview {
         display: grid;
-        grid-template-columns: 3.5rem minmax(0, 1fr);
+        grid-template-columns: 3.25rem minmax(0, 1fr);
         gap: 1rem;
         min-width: 0;
         align-items: center;
     }
 
+    .field-disclosure-preview-mark {
+        display: grid;
+        width: 3.25rem;
+        height: 3.25rem;
+        place-items: center;
+        padding: 0.375rem;
+        border-radius: var(--radius-control);
+        background: color-mix(in oklch, var(--color-foreground) 2%, transparent);
+    }
+
     .field-disclosure-preview-image {
-        width: 3.5rem;
-        height: 3.5rem;
+        width: 100%;
+        height: 100%;
         object-fit: contain;
     }
 
@@ -759,15 +780,17 @@
         grid-template-columns: 3.5rem minmax(0, 1fr) auto;
         gap: 1rem;
         align-items: center;
-        min-height: 5.75rem;
-        padding-block: 1rem;
+        min-height: 5.5rem;
+        margin-inline: -0.75rem;
+        padding: 1.5rem 0.75rem;
+        border-radius: var(--radius-card);
         transition:
             color 180ms ease-out,
             background-color 180ms ease-out;
     }
 
     .field-credential-link:hover {
-        background: var(--color-brand-subtle);
+        background: color-mix(in oklch, var(--color-foreground) 2.5%, transparent);
     }
 
     .field-credential-link:hover h3 {
@@ -775,8 +798,11 @@
     }
 
     .field-credential-link > img {
-        width: 3.5rem;
-        height: 3.5rem;
+        width: 3.25rem;
+        height: 3.25rem;
+        padding: 0.375rem;
+        border-radius: var(--radius-control);
+        background: color-mix(in oklch, var(--color-foreground) 2%, transparent);
         object-fit: contain;
     }
 
@@ -785,10 +811,22 @@
         width: 1.35rem;
         height: 1.35rem;
         color: var(--color-brand);
+    }
+
+    .field-link-arrow {
+        opacity: 0.6;
+        transition:
+            transform 180ms ease-out,
+            opacity 180ms ease-out;
+    }
+
+    .field-index-arrow {
         transition: transform 180ms ease-out;
     }
 
-    .field-credential-link:hover .field-link-arrow {
+    .field-credential-link:hover .field-link-arrow,
+    .field-credential-link:focus-visible .field-link-arrow {
+        opacity: 1;
         transform: translate(0.15rem, -0.15rem);
     }
 

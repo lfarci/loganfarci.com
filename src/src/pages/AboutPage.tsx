@@ -56,13 +56,15 @@ function Disclosure({ children, detail, image, title }: Readonly<DisclosureProps
             <summary>
                 <span className={image ? "field-disclosure-preview" : "min-w-0"}>
                     {image && (
-                        <img
-                            src={image.src}
-                            alt={image.alt}
-                            width={image.width}
-                            height={image.height}
-                            className="field-disclosure-preview-image"
-                        />
+                        <span className="field-disclosure-preview-mark">
+                            <img
+                                src={image.src}
+                                alt={image.alt}
+                                width={image.width}
+                                height={image.height}
+                                className="field-disclosure-preview-image"
+                            />
+                        </span>
                     )}
                     <span className="min-w-0">
                         <h3>{title}</h3>
