@@ -45,15 +45,14 @@ function ArrowUpRightIcon() {
 
 interface DisclosureProps {
     children: ReactNode;
-    defaultOpen?: boolean;
     detail?: string;
     image?: Image;
     title: string;
 }
 
-function Disclosure({ children, defaultOpen = false, detail, image, title }: Readonly<DisclosureProps>) {
+function Disclosure({ children, detail, image, title }: Readonly<DisclosureProps>) {
     return (
-        <details className="field-disclosure" open={defaultOpen}>
+        <details className="field-disclosure">
             <summary>
                 <span className={image ? "field-disclosure-preview" : "min-w-0"}>
                     {image && (
@@ -95,9 +94,9 @@ function CertificationLink({ certification }: Readonly<{ certification: Certific
     );
 }
 
-function SkillDisclosure({ category, defaultOpen }: Readonly<{ category: SkillCategory; defaultOpen: boolean }>) {
+function SkillDisclosure({ category }: Readonly<{ category: SkillCategory }>) {
     return (
-        <Disclosure defaultOpen={defaultOpen} detail={`${category.skills.length} skills`} title={category.name}>
+        <Disclosure detail={`${category.skills.length} skills`} title={category.name}>
             <p className="field-supporting-copy">{category.description}</p>
             <div className="field-skill-list">
                 {category.skills.map((skill) => (
@@ -150,10 +149,9 @@ export default function AboutPage() {
                         <p>Selected roles and the systems delivered along the way.</p>
                     </header>
                     <div className="field-disclosure-list">
-                        {experiences.map((experience, index) => (
+                        {experiences.map((experience) => (
                             <Disclosure
                                 key={`${experience.name}-${experience.company.name}`}
-                                defaultOpen={index === 0}
                                 title={experience.name}
                                 detail={`${experience.company.name} · ${formatExperiencePeriod(experience.start, experience.end)}`}
                                 image={experience.company.logo}
@@ -173,7 +171,6 @@ export default function AboutPage() {
                     </header>
                     <div className="field-disclosure-list">
                         <Disclosure
-                            defaultOpen
                             title={diploma.name}
                             detail={`${diploma.University} · ${diploma.details.join(" · ")}`}
                             image={diploma.logo}
@@ -222,8 +219,8 @@ export default function AboutPage() {
                         <p>Grouped by how the tools combine in real delivery work.</p>
                     </header>
                     <div className="field-disclosure-list">
-                        {skillCategories.map((category, index) => (
-                            <SkillDisclosure key={category.name} category={category} defaultOpen={index === 0} />
+                        {skillCategories.map((category) => (
+                            <SkillDisclosure key={category.name} category={category} />
                         ))}
                     </div>
                 </section>

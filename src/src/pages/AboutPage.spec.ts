@@ -44,14 +44,20 @@ test.describe("About page", () => {
         await expect(page.getByRole("heading", { level: 2, name: "Skills" })).toBeVisible();
     });
 
-    test("keeps the education preview visible when its details are collapsed", async ({ page }) => {
+    test("keeps every disclosure closed while leaving the education preview visible", async ({ page }) => {
         await page.goto("/about");
+        const disclosures = page.locator("details.field-disclosure");
+        const disclosureCount = await disclosures.count();
+
+        for (let index = 0; index < disclosureCount; index++) {
+            await expect(disclosures.nth(index)).not.toHaveAttribute("open", "");
+        }
+
         const education = page.locator("#education details");
-
-        await education.locator("summary").click();
-
-        await expect(education).not.toHaveAttribute("open", "");
         await expect(education.getByRole("heading", { level: 3, name: "Bachelor in Computer Science" })).toBeVisible();
         await expect(education.getByRole("img", { name: "ESI Logo" })).toBeVisible();
+
+        await education.locator("summary").click();
+        await expect(education).toHaveAttribute("open", "");
     });
 });

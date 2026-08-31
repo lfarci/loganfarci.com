@@ -277,12 +277,11 @@ proof copy come from `content/data/home.json` rather than component literals.
 About uses a square, width-capped portrait and a single reading column through medium
 widths, then pairs the portrait with the profile narrative at 72rem. Native
 details/summary disclosures place organization logos and essential metadata in the
-preview, keep the current role, Education, and primary skill group open, tier additional
-credentials, expose clear expanded state, and retain full-size keyboard targets. Ruled
-section boundaries begin with the shared editorial rule at 48rem; the two-column
-sections and sticky labels still begin only at the desktop handoff. Experience and
-Education disclosures keep one muted metadata line in their summary and move directly
-into body prose when expanded.
+preview, start closed, tier additional credentials, expose clear expanded state, and
+retain full-size keyboard targets. Ruled section boundaries begin with the shared
+editorial rule at 48rem; the two-column sections and sticky labels still begin only at
+the desktop handoff. Experience and Education disclosures keep one muted metadata line
+in their summary and move directly into body prose when expanded.
 
 ### Articles index and reading surface — implemented
 
