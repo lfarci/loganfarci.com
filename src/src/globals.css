@@ -147,10 +147,10 @@
         display: grid;
         grid-template-areas:
             "intro"
-            "stage"
+            "actions"
+            "portrait"
             "proof";
-        grid-template-rows: auto minmax(23rem, 46svh) auto;
-        min-height: calc(100svh - var(--field-shell-header-height));
+        grid-template-rows: auto auto minmax(23rem, 46svh) auto;
         overflow: clip;
         background: var(--color-background);
     }
@@ -186,7 +186,7 @@
     .home-intro {
         grid-area: intro;
         z-index: 2;
-        padding: 2.5rem 1.25rem 2rem;
+        padding: 2.5rem clamp(1.25rem, calc(10vw - 1rem), 9rem) 2rem;
     }
 
     .home-heading {
@@ -219,18 +219,17 @@
 
     .home-stack {
         margin-top: 1rem;
-        color: var(--color-text-muted);
+        color: color-mix(in oklch, var(--color-text-secondary) 55%, var(--color-text-muted));
         font-family: var(--font-reddit-mono);
         font-size: 0.75rem;
         letter-spacing: 0.03em;
     }
 
     .home-actions {
-        grid-area: stage;
+        grid-area: actions;
         z-index: 10;
-        align-self: end;
-        width: min(58%, 13.75rem);
-        margin: 0 0 1.5rem 1.25rem;
+        width: 100%;
+        padding: 0 clamp(1.25rem, calc(10vw - 1rem), 9rem) 2rem;
     }
 
     .home-cta-row {
@@ -256,7 +255,8 @@
 
     .home-contact-list {
         display: flex;
-        justify-content: space-between;
+        justify-content: flex-start;
+        gap: 0.5rem;
         margin-top: 0.75rem;
     }
 
@@ -266,23 +266,26 @@
         height: 2.75rem;
         align-items: center;
         justify-content: center;
-        border: 1px solid var(--color-border-light);
+        border: 1px solid color-mix(in oklch, var(--color-border-light) 65%, transparent);
         border-radius: var(--radius-control);
         color: var(--color-text-muted);
-        background: color-mix(in oklch, var(--color-background) 82%, transparent);
+        background: color-mix(in oklch, var(--color-foreground) 2.5%, transparent);
         transition:
+            background-color 180ms ease-out,
             color 180ms ease-out,
             border-color 180ms ease-out;
     }
 
-    .home-contact-link:hover {
-        border-color: var(--color-border-strong);
+    .home-contact-link:hover,
+    .home-contact-link:focus-visible {
+        border-color: var(--color-border-light);
+        background: color-mix(in oklch, var(--color-foreground) 5%, transparent);
         color: var(--color-brand-hover);
     }
 
     .home-portrait {
         position: relative;
-        grid-area: stage;
+        grid-area: portrait;
         min-width: 0;
         overflow: hidden;
         background: var(--gradient-home-portrait);
@@ -307,22 +310,6 @@
         filter: drop-shadow(0 30px 45px color-mix(in oklch, var(--color-foreground) 28%, transparent));
     }
 
-    .home-portrait-marker {
-        position: absolute;
-        z-index: 2;
-        top: 1rem;
-        right: 1rem;
-        padding: 0.7rem 0.45rem;
-        border: 1px solid var(--color-border-strong);
-        border-radius: var(--radius-control);
-        color: var(--color-text-primary);
-        background: color-mix(in oklch, var(--color-background) 92%, transparent);
-        font-family: var(--font-reddit-mono);
-        font-size: 0.65rem;
-        letter-spacing: 0.18em;
-        writing-mode: vertical-rl;
-    }
-
     .home-portrait figcaption {
         position: absolute;
         z-index: 3;
@@ -336,15 +323,12 @@
         text-align: right;
     }
 
-    .home-portrait figcaption span {
-        display: block;
-    }
-
     .home-proof {
         grid-area: proof;
         z-index: 3;
         display: grid;
-        border-top: 1px solid var(--color-border);
+        gap: 0.5rem;
+        border-top: 1px solid var(--color-border-light);
         background: var(--color-background);
     }
 
@@ -355,7 +339,6 @@
         gap: 0.25rem 1rem;
         min-height: 5.75rem;
         padding: 1rem 1.25rem;
-        border-bottom: 1px solid var(--color-border-light);
         color: var(--color-text-primary);
         transition:
             background-color 180ms ease-out,
@@ -375,7 +358,7 @@
 
     .home-proof-detail {
         grid-column: 1;
-        color: var(--color-text-muted);
+        color: color-mix(in oklch, var(--color-text-secondary) 65%, var(--color-text-muted));
         font-family: var(--font-reddit-mono);
         font-size: 0.72rem;
         line-height: 1.45;
@@ -392,18 +375,31 @@
     }
 }
 
-@media (min-width: 48rem) and (max-width: 71.999rem) {
+@media (min-width: 48rem) and (max-width: 74.999rem) {
     .home-frame {
-        grid-template-rows: auto minmax(30rem, 54svh) auto;
-    }
-
-    .home-intro {
-        padding-right: clamp(3rem, 8vw, 7rem);
-        padding-left: clamp(5rem, 8vw, 9rem);
+        grid-template-rows: auto auto minmax(30rem, 54svh) auto;
     }
 
     .home-actions {
-        margin-left: clamp(5rem, 8vw, 9rem);
+        padding-bottom: clamp(2.5rem, 5vw, 4rem);
+    }
+
+    .home-cta-row {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .home-cta {
+        width: auto;
+        min-height: 3.5rem;
+        padding-inline: 1.4rem;
+        font-size: 0.95rem;
+    }
+
+    .home-contact-list {
+        justify-content: flex-start;
+        gap: 0.5rem;
+        margin-top: 1rem;
     }
 
     .home-portrait img {
@@ -412,7 +408,7 @@
     }
 }
 
-@media (min-width: 72rem) {
+@media (min-width: 75rem) {
     .field-shell-header {
         block-size: var(--field-shell-header-height);
     }
@@ -425,18 +421,6 @@
         grid-template-columns: minmax(0, 61.5%) minmax(26rem, 38.5%);
         grid-template-rows: minmax(0, 1fr) auto auto;
         min-height: calc(100svh - var(--field-shell-header-height));
-    }
-
-    .home-frame::before {
-        position: absolute;
-        z-index: 4;
-        top: 0;
-        bottom: 0;
-        left: var(--editorial-rule-x);
-        width: 1px;
-        content: "";
-        background: var(--color-border);
-        pointer-events: none;
     }
 
     .home-intro {
@@ -463,8 +447,13 @@
         grid-area: actions;
         align-self: auto;
         width: auto;
-        margin: 0;
+        margin: -4.5rem 0 0;
         padding: 0 clamp(2rem, 5vw, 5rem) clamp(2.5rem, 5vh, 4rem) clamp(7rem, 8vw, 9rem);
+    }
+
+    .home-intro,
+    .home-actions {
+        transform: translateY(-1rem);
     }
 
     .home-cta-row {
@@ -500,32 +489,27 @@
         transform: translateX(54%);
     }
 
-    .home-portrait-marker {
-        top: 2.5rem;
-        right: 2.5rem;
-        font-size: 0.75rem;
-    }
-
     .home-portrait figcaption {
         display: block;
     }
 
     .home-proof {
         grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.75rem;
         padding-left: var(--editorial-rule-x);
-        border-bottom: 1px solid var(--color-border);
     }
 
     .home-proof-link {
         align-content: center;
         min-height: 7.5rem;
-        padding: 1.4rem 2rem;
-        border-right: 1px solid var(--color-border-light);
-        border-bottom: 0;
+        padding: 1.4rem clamp(2.25rem, 2.8vw, 2.75rem);
     }
+}
 
-    .home-proof-link:last-child {
-        border-right: 0;
+@media (min-width: 75rem) and (max-width: 82.499rem) {
+    .home-intro,
+    .home-actions {
+        transform: translateY(clamp(-9.625rem, calc(115vw - 95.875rem), -1rem));
     }
 }
 

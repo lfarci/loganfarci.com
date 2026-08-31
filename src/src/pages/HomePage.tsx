@@ -1,14 +1,13 @@
 import { Link } from "react-router";
 import { BlueskyIcon, EmailIcon, GitHubIcon, LinkedInIcon } from "@/components/shared/icons";
 import { Button } from "@/components/shared/primitives/Button";
-import { getContacts, getExperiences, getHomeContent, getProfile } from "@/core/data";
+import { getContacts, getHomeContent, getProfile } from "@/core/data";
 import { createCanonicalUrl } from "@/core/seo";
 import type { Contact } from "@/types";
 
 const contacts = getContacts();
 const profile = getProfile();
 const homeContent = getHomeContent();
-const currentExperience = getExperiences()[0];
 const emailContact = contacts.find((contact) => contact.icon === "email");
 
 const pageTitle = "Logan Farci - Software Engineer";
@@ -33,7 +32,7 @@ function getContactIcon(contact: Contact) {
     }
 }
 
-function DownloadIcon() {
+function ResumeIcon() {
     return (
         <svg
             aria-hidden="true"
@@ -43,7 +42,8 @@ function DownloadIcon() {
             stroke="currentColor"
             strokeWidth="2"
         >
-            <path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14" />
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z" />
+            <path d="M14 2v6h6M8 13h8M8 17h6" />
         </svg>
     );
 }
@@ -90,8 +90,8 @@ export default function HomePage() {
                     <div className="home-cta-row">
                         <Button asChild className="home-cta home-cta-primary">
                             <a href="/resume.pdf" download>
-                                <DownloadIcon />
-                                Download résumé
+                                <ResumeIcon />
+                                View résumé
                             </a>
                         </Button>
                         <Button asChild variant="secondary" className="home-cta home-cta-secondary">
@@ -118,9 +118,6 @@ export default function HomePage() {
                 </div>
 
                 <figure className="home-portrait">
-                    <div className="home-portrait-marker" aria-hidden="true">
-                        L. FARCI
-                    </div>
                     <img
                         src={profile.avatar.src}
                         alt={profile.avatar.alt}
@@ -128,10 +125,7 @@ export default function HomePage() {
                         height={profile.avatar.height ?? 512}
                         fetchPriority="high"
                     />
-                    <figcaption>
-                        <span>{currentExperience?.name ?? "Full-Stack Developer"}</span>
-                        <span>{currentExperience?.company.name ?? "Avanade"}</span>
-                    </figcaption>
+                    <figcaption>Consultant · Avanade</figcaption>
                 </figure>
 
                 <nav className="home-proof" aria-label="Profile highlights">

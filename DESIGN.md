@@ -168,20 +168,17 @@ only preface or repeat an already clear heading.
 
 ## Layout
 
-The homepage is a full-viewport responsive composition rather than the standard
-inner-page container. Below 48rem it flows as introduction, portrait stage, and a
-vertical proof rail beneath the shared navigation. The action cluster overlays the
-lower-left of the portrait stage, while the portrait crops from the right and a
-background-to-transparent veil protects action contrast. From 48rem through 71.999rem,
-the same landscape stage gains a taller, deliberately centred portrait and wider
-editorial insets instead of prematurely switching to the desktop split.
+The homepage is a responsive editorial composition rather than the standard inner-page
+container. Below 48rem it flows as introduction, actions, portrait stage, and a vertical
+proof rail beneath the shared navigation. From 48rem through 74.999rem, that same order
+remains intact with wider editorial insets, side-by-side actions, and a taller, centred
+portrait—never an action overlay or premature desktop split.
 
-At 72rem and above, the homepage becomes a 61.5% / 38.5% split. Introduction, actions,
+At 75rem and above, the homepage becomes a 61.5% / 38.5% split. Introduction, actions,
 and the three-column proof rail occupy the left field; the portrait fills the right
-field below the shared navigation. A single vertical rule offset 4–5.5rem from the left
-and a full-width proof boundary make the composition feel like one continuous page. The
-left content uses a 7–9rem editorial inset; the portrait caption and high-contrast
-vertical `L. FARCI` marker sit inside the image field.
+field below the shared navigation. The portrait split and a full-width proof boundary
+make the composition feel like one continuous page. The left content uses a 7–9rem
+editorial inset; the portrait caption sits quietly inside the image field.
 
 The résumé action remains first in reading and tab order at every width. The mobile
 layout changes visual placement through the grid without reordering the document.
@@ -243,7 +240,7 @@ offset.
 
 ### Calls to action — implemented
 
-- **Primary:** Labelled Download résumé, signal-blue fill, high-contrast foreground,
+- **Primary:** Labelled View résumé, signal-blue fill, high-contrast foreground,
   control radius, icon plus text, and first position in reading and tab order.
 - **Secondary:** Labelled Contact me, document-field fill, etched semantic border, and
   the same height and radius as the primary action.
@@ -256,18 +253,17 @@ offset.
 ### Portrait stage — implemented
 
 The real portrait is the sole dominant image. A blue-to-ink gradient creates the field,
-a high-contrast semantic backing protects the vertical name marker in both themes, and
-a quiet mono caption identifies the current role and company on desktop. The crop moves
-from a right-weighted mobile figure through a deliberately centred medium stage to a
-full-height desktop portrait without adding a second image or decorative texture.
+and a quiet mono caption identifies the current role and company on desktop. The crop
+moves from a right-weighted mobile figure through a deliberately centred medium stage to
+a full-height desktop portrait without adding a second image or decorative texture.
 
 ### Proof rail — implemented
 
 Experience, Articles, and Certifications are three fully linked destinations with a
 Manrope title, configurable muted mono detail, and directional arrow. They stack as
-92px-minimum rows below 72rem and become a ruled three-column rail with 120px-minimum
-cells at the desktop handoff. The desktop cells divide the full left field equally and
-begin at the vertical editorial rule rather than crossing it. Within each cell, the
+92px-minimum rows below 72rem and become a three-column rail with 120px-minimum
+cells at the desktop handoff. The desktop cells divide the full left field equally,
+begin at the editorial inset, and use whitespace rather than separators. Within each cell, the
 label and detail align left while the arrow holds the right edge. Hover uses signal mist
 and nudges only the arrow; focus uses the shared visible ring. Homepage technologies and
 proof copy come from `content/data/home.json` rather than component literals.

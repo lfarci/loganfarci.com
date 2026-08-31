@@ -1,5 +1,5 @@
 {
-    "technologies": ["GitHub Copilot", "GitHub Actions", ".NET", "Azure"],
+    "technologies": ["GitHub", "Azure", "Terraform", ".NET"],
     "proofLinks": [
         { "label": "Experience", "detail": "Learn about my work experience and projects", "to": "/about#experience" },
         { "label": "Articles", "detail": "What I'm currently exploring and writing about", "to": "/articles" },

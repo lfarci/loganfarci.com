@@ -8,13 +8,13 @@ test.describe("Home page", () => {
 
         const main = page.getByRole("main");
         await expect(main.getByRole("heading", { level: 1 })).toHaveText("Hi, I'm Logan.Software Engineer");
-        await expect(main.getByRole("link", { name: "Download résumé" })).toHaveAttribute("download", "");
+        await expect(main.getByRole("link", { name: "View résumé" })).toHaveAttribute("download", "");
         await expect(main.getByRole("link", { name: "Contact me" })).toHaveAttribute(
             "href",
             "mailto:logan.farci@outlook.be",
         );
         await expect(main.getByRole("navigation", { name: "Profile highlights" }).getByRole("link")).toHaveCount(3);
-        await expect(main.getByText("GitHub Copilot · GitHub Actions · .NET · Azure", { exact: true })).toBeVisible();
+        await expect(main.getByText("GitHub · Azure · Terraform · .NET", { exact: true })).toBeVisible();
     });
 
     test("fits the complete desktop opening within its viewport", async ({ page }) => {
@@ -29,6 +29,87 @@ test.describe("Home page", () => {
                 })),
             )
             .toEqual({ clientHeight: 900, scrollHeight: 900 });
+    });
+
+    test("keeps the tablet hero content ahead of the portrait", async ({ page }) => {
+        await page.setViewportSize({ width: 1024, height: 1100 });
+        await page.goto("/");
+
+        const heading = page.getByRole("heading", { level: 1 });
+        const stack = page.getByText("GitHub · Azure · Terraform · .NET", { exact: true });
+        const resume = page.getByRole("link", { name: "View résumé" });
+        const contactList = page.locator('[aria-label="Other ways to connect"]');
+        const portrait = page.getByRole("img", { name: "Picture of the author: Logan Farci" });
+        const proof = page.getByRole("navigation", { name: "Profile highlights" });
+
+        await expect(heading).toBeVisible();
+        await expect(stack).toBeVisible();
+
+        const [headingBox, stackBox, resumeBox, contactListBox, portraitBox, proofBox] = await Promise.all([
+            heading.boundingBox(),
+            stack.boundingBox(),
+            resume.boundingBox(),
+            contactList.boundingBox(),
+            portrait.boundingBox(),
+            proof.boundingBox(),
+        ]);
+
+        expect(headingBox!.y).toBeLessThan(stackBox!.y);
+        expect(stackBox!.y).toBeLessThan(resumeBox!.y);
+        expect(resumeBox!.y).toBeLessThan(contactListBox!.y);
+        expect(contactListBox!.y).toBeLessThan(portraitBox!.y);
+        expect(portraitBox!.y).toBeLessThan(proofBox!.y);
+    });
+
+    test("keeps the hero continuous at the responsive handoffs", async ({ page }) => {
+        const handoffs: { headingTop: number }[] = [];
+
+        for (const { width, stacked, ctasStacked } of [
+            { width: 767, stacked: true, ctasStacked: true },
+            { width: 768, stacked: true, ctasStacked: false },
+            { width: 1199, stacked: true, ctasStacked: false },
+            { width: 1200, stacked: false, ctasStacked: false },
+        ]) {
+            await page.setViewportSize({ width, height: 900 });
+            await page.goto("/");
+
+            const layout = await page.evaluate(() => {
+                const box = (selector: string) => document.querySelector(selector)!.getBoundingClientRect();
+                const socialLinks = [...document.querySelectorAll<HTMLElement>(".home-contact-link")].map((link) =>
+                    link.getBoundingClientRect(),
+                );
+                const header = box(".field-shell-header");
+                const heading = box(".home-heading");
+                const actions = box(".home-actions");
+                const portrait = box(".home-portrait");
+                const resume = box(".home-cta-primary");
+                const contact = box(".home-cta-secondary");
+
+                return {
+                    headerBottom: header.bottom,
+                    headingTop: heading.top,
+                    actionsBottom: actions.bottom,
+                    portraitTop: portrait.top,
+                    ctaOffset: Math.abs(resume.top - contact.top),
+                    socialGaps: socialLinks.slice(1).map((link, index) => link.left - socialLinks[index].right),
+                    overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+                };
+            });
+
+            expect(layout.headingTop).toBeGreaterThanOrEqual(layout.headerBottom);
+            expect(layout.overflow).toBe(0);
+            expect(layout.socialGaps).toEqual([8, 8, 8]);
+            expect(layout.ctaOffset === 0).toBe(!ctasStacked);
+
+            handoffs.push({ headingTop: layout.headingTop });
+
+            if (stacked) {
+                expect(layout.actionsBottom).toBeLessThanOrEqual(layout.portraitTop);
+            }
+        }
+
+        expect(Math.abs(handoffs[0].headingTop - handoffs[1].headingTop)).toBeLessThanOrEqual(4);
+        expect(Math.abs(handoffs[2].headingTop - handoffs[3].headingTop)).toBeLessThanOrEqual(16);
     });
 
     test("exposes the complete set of accessible contact actions", async ({ page }) => {
