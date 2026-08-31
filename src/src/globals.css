@@ -440,6 +440,7 @@
     }
 
     .home-stack {
+        margin-top: 1.5rem;
         font-size: 0.82rem;
     }
 
@@ -510,6 +511,17 @@
     .home-intro,
     .home-actions {
         transform: translateY(clamp(-9.625rem, calc(115vw - 95.875rem), -1rem));
+    }
+}
+
+@media (min-width: 75rem) and (max-height: 48rem) {
+    .home-frame {
+        grid-template-rows: auto auto auto;
+        align-content: start;
+    }
+
+    .home-actions {
+        margin-top: -0.25rem;
     }
 }
 

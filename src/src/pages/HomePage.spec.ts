@@ -17,18 +17,54 @@ test.describe("Home page", () => {
         await expect(main.getByText("GitHub · Azure · Terraform · .NET", { exact: true })).toBeVisible();
     });
 
-    test("fits the complete desktop opening within its viewport", async ({ page }) => {
-        await page.setViewportSize({ width: 1440, height: 900 });
-        await page.goto("/");
+    test("fits the complete desktop opening within tall viewports", async ({ page }) => {
+        for (const viewport of [
+            { width: 1440, height: 900 },
+            { width: 1920, height: 1080 },
+        ]) {
+            await page.setViewportSize(viewport);
+            await page.goto("/");
 
-        await expect
-            .poll(() =>
-                page.evaluate(() => ({
-                    clientHeight: document.documentElement.clientHeight,
-                    scrollHeight: document.documentElement.scrollHeight,
-                })),
-            )
-            .toEqual({ clientHeight: 900, scrollHeight: 900 });
+            await expect
+                .poll(() =>
+                    page.evaluate(() => ({
+                        clientHeight: document.documentElement.clientHeight,
+                        scrollHeight: document.documentElement.scrollHeight,
+                    })),
+                )
+                .toEqual({ clientHeight: viewport.height, scrollHeight: viewport.height });
+        }
+    });
+
+    test("preserves hero breathing room on short desktop viewports", async ({ page }) => {
+        for (const viewport of [
+            { width: 1366, height: 768 },
+            { width: 1362, height: 700 },
+        ]) {
+            await page.setViewportSize(viewport);
+            await page.goto("/");
+
+            const layout = await page.evaluate(() => {
+                const box = (selector: string) => document.querySelector(selector)!.getBoundingClientRect();
+                const role = box(".home-role");
+                const stack = box(".home-stack");
+                const resume = box(".home-cta-primary");
+                const contacts = box(".home-contact-list");
+
+                return {
+                    roleToStack: stack.top - role.bottom,
+                    stackToCtas: resume.top - stack.bottom,
+                    ctasToSocial: contacts.top - resume.bottom,
+                };
+            });
+
+            expect(layout.roleToStack).toBeGreaterThanOrEqual(24);
+            expect(layout.roleToStack).toBeLessThanOrEqual(32);
+            expect(layout.stackToCtas).toBeGreaterThanOrEqual(28);
+            expect(layout.stackToCtas).toBeLessThanOrEqual(40);
+            expect(layout.ctasToSocial).toBeGreaterThanOrEqual(16);
+            expect(layout.ctasToSocial).toBeLessThanOrEqual(20);
+        }
     });
 
     test("keeps the tablet hero content ahead of the portrait", async ({ page }) => {
