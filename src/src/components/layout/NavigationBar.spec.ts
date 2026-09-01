@@ -37,7 +37,7 @@ test.describe("Desktop primary navigation", () => {
     });
 
     test("offers the résumé as a direct download", async ({ page }) => {
-        await page.goto("/");
+        await page.goto("/about");
 
         const downloadLink = page.getByRole("navigation").getByRole("link", { name: "Résumé", exact: true });
         await expect(downloadLink).toBeVisible();
@@ -95,6 +95,7 @@ test.describe("Shared navigation behavior", () => {
 
         await page.getByRole("button", { name: "Switch to dark mode" }).click();
         await page.getByRole("navigation").getByRole("link", { name: "About", exact: true }).click();
+        await expect(page.locator(".home-frame")).toHaveCount(0);
         await expect(page.getByRole("button", { name: "Switch to light mode" })).toBeVisible();
         await page.reload();
         await expect(page.getByRole("button", { name: "Switch to light mode" })).toBeVisible();
@@ -110,7 +111,7 @@ test.describe("Mobile navigation", () => {
     test.use({ viewport: { width: 390, height: 844 } });
 
     test("opens and closes the menu through the toggle button", async ({ page }) => {
-        await page.goto("/");
+        await page.goto("/about");
         const navigation = page.getByRole("navigation");
 
         await navigation.getByRole("button", { name: "Open menu" }).click();
@@ -122,7 +123,7 @@ test.describe("Mobile navigation", () => {
     });
 
     test("closes the menu with Escape", async ({ page }) => {
-        await page.goto("/");
+        await page.goto("/about");
         const navigation = page.getByRole("navigation");
 
         await navigation.getByRole("button", { name: "Open menu" }).click();
@@ -133,7 +134,7 @@ test.describe("Mobile navigation", () => {
     });
 
     test("offers the résumé as a direct download in the open menu", async ({ page }) => {
-        await page.goto("/");
+        await page.goto("/about");
         const navigation = page.getByRole("navigation");
 
         await navigation.getByRole("button", { name: "Open menu" }).click();
@@ -146,8 +147,8 @@ test.describe("Mobile navigation", () => {
 
     for (const destination of [
         { label: "Home", page: HOME_PAGE, startingPath: "/about" },
-        { label: "About", page: ABOUT_PAGE, startingPath: "/" },
-        { label: "Articles", page: ARTICLES_PAGE, startingPath: "/" },
+        { label: "About", page: ABOUT_PAGE, startingPath: "/articles" },
+        { label: "Articles", page: ARTICLES_PAGE, startingPath: "/about" },
     ]) {
         test(`navigates to ${destination.label} and dismisses the menu`, async ({ page }) => {
             await page.goto(destination.startingPath);
@@ -157,23 +158,27 @@ test.describe("Mobile navigation", () => {
             await navigation.getByRole("link", { name: destination.label, exact: true }).click();
 
             await expectPage(page, destination.page);
-            await expect(navigation.getByRole("button", { name: "Open menu" })).toHaveAttribute(
-                "aria-expanded",
-                "false",
-            );
+            await expect(page.getByRole("button", { name: "Open menu" })).toHaveAttribute("aria-expanded", "false");
         });
     }
 
     test("closes an open menu when resizing to desktop navigation", async ({ page }) => {
-        await page.goto("/");
+        await page.goto("/about");
         const navigation = page.getByRole("navigation");
 
         await navigation.getByRole("button", { name: "Open menu" }).click();
-        await page.setViewportSize({ width: 1024, height: 768 });
+        await page.setViewportSize({ width: 1280, height: 800 });
         await expect(navigation.getByRole("link", { name: "About", exact: true })).toBeVisible();
         await expect(navigation.getByLabel("Open menu", { exact: true })).toHaveAttribute("aria-expanded", "false");
         await page.setViewportSize({ width: 390, height: 844 });
 
         await expect(navigation.getByRole("button", { name: "Open menu" })).toBeVisible();
+    });
+
+    test("keeps the compact menu at medium width", async ({ page }) => {
+        await page.setViewportSize({ width: 1024, height: 768 });
+        await page.goto("/");
+
+        await expect(page.getByRole("navigation").getByRole("button", { name: "Open menu" })).toBeVisible();
     });
 });

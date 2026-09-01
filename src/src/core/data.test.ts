@@ -56,6 +56,13 @@ vi.mock("@content/data/education.json", () => ({
     },
 }));
 
+vi.mock("@content/data/home.json", () => ({
+    default: {
+        technologies: ["GitHub Copilot", ".NET"],
+        proofLinks: [{ label: "Experience", detail: "Learn about my work", to: "/about#experience" }],
+    },
+}));
+
 import {
     attemptToLoadIcons,
     getCertifications,
@@ -63,6 +70,7 @@ import {
     getDiploma,
     getExperiences,
     getIcons,
+    getHomeContent,
     getInterests,
     getProfile,
     getSkillCategories,
@@ -105,6 +113,13 @@ describe("data accessors", () => {
 
     it("returns the mocked diploma", () => {
         expect(getDiploma().name).toBe("Master CS");
+    });
+
+    it("returns the mocked homepage content", () => {
+        expect(getHomeContent()).toEqual({
+            technologies: ["GitHub Copilot", ".NET"],
+            proofLinks: [{ label: "Experience", detail: "Learn about my work", to: "/about#experience" }],
+        });
     });
 });
 

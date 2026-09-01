@@ -13,3 +13,4 @@ export * from "./icon";
 export * from "./interest";
 export * from "./contact";
 export * from "./profile";
+export * from "./home";

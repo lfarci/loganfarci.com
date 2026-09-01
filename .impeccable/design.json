@@ -1,0 +1,376 @@
+{
+    "schemaVersion": 2,
+    "generatedAt": "2026-08-30T10:30:01Z",
+    "title": "Design System: loganfarci.com",
+    "extensions": {
+        "colorMeta": {
+            "porcelain": {
+                "role": "neutral",
+                "displayName": "Porcelain",
+                "canonical": "oklch(99% 0.006 255)",
+                "tonalRamp": [
+                    "oklch(15% 0.006 255)",
+                    "oklch(27% 0.006 255)",
+                    "oklch(39% 0.006 255)",
+                    "oklch(51% 0.006 255)",
+                    "oklch(63% 0.006 255)",
+                    "oklch(75% 0.006 255)",
+                    "oklch(87% 0.006 255)",
+                    "oklch(95% 0.006 255)"
+                ]
+            },
+            "midnight": {
+                "role": "neutral",
+                "displayName": "Midnight",
+                "canonical": "oklch(13.5% 0.028 264)",
+                "tonalRamp": [
+                    "oklch(15% 0.028 264)",
+                    "oklch(27% 0.028 264)",
+                    "oklch(39% 0.028 264)",
+                    "oklch(51% 0.028 264)",
+                    "oklch(63% 0.028 264)",
+                    "oklch(75% 0.028 264)",
+                    "oklch(87% 0.028 264)",
+                    "oklch(95% 0.028 264)"
+                ]
+            },
+            "midnight-ink": {
+                "role": "neutral",
+                "displayName": "Midnight Ink",
+                "canonical": "oklch(18% 0.035 264)",
+                "tonalRamp": [
+                    "oklch(15% 0.035 264)",
+                    "oklch(27% 0.035 264)",
+                    "oklch(39% 0.035 264)",
+                    "oklch(51% 0.035 264)",
+                    "oklch(63% 0.035 264)",
+                    "oklch(75% 0.035 264)",
+                    "oklch(87% 0.035 264)",
+                    "oklch(95% 0.035 264)"
+                ]
+            },
+            "moonlit-text": {
+                "role": "neutral",
+                "displayName": "Moonlit Text",
+                "canonical": "oklch(96.5% 0.01 255)",
+                "tonalRamp": [
+                    "oklch(15% 0.01 255)",
+                    "oklch(27% 0.01 255)",
+                    "oklch(39% 0.01 255)",
+                    "oklch(51% 0.01 255)",
+                    "oklch(63% 0.01 255)",
+                    "oklch(75% 0.01 255)",
+                    "oklch(87% 0.01 255)",
+                    "oklch(95% 0.01 255)"
+                ]
+            },
+            "signal-blue": {
+                "role": "primary",
+                "displayName": "Signal Blue",
+                "canonical": "oklch(56% 0.19 258)",
+                "tonalRamp": [
+                    "oklch(15% 0.19 258)",
+                    "oklch(27% 0.19 258)",
+                    "oklch(39% 0.19 258)",
+                    "oklch(51% 0.19 258)",
+                    "oklch(63% 0.19 258)",
+                    "oklch(75% 0.19 258)",
+                    "oklch(87% 0.19 258)",
+                    "oklch(95% 0.19 258)"
+                ]
+            },
+            "luminous-signal-blue": {
+                "role": "primary",
+                "displayName": "Luminous Signal Blue",
+                "canonical": "oklch(72% 0.15 252)",
+                "tonalRamp": [
+                    "oklch(15% 0.15 252)",
+                    "oklch(27% 0.15 252)",
+                    "oklch(39% 0.15 252)",
+                    "oklch(51% 0.15 252)",
+                    "oklch(63% 0.15 252)",
+                    "oklch(75% 0.15 252)",
+                    "oklch(87% 0.15 252)",
+                    "oklch(95% 0.15 252)"
+                ]
+            },
+            "signal-mist": {
+                "role": "primary",
+                "displayName": "Signal Mist",
+                "canonical": "oklch(96% 0.026 255)",
+                "tonalRamp": [
+                    "oklch(15% 0.026 255)",
+                    "oklch(27% 0.026 255)",
+                    "oklch(39% 0.026 255)",
+                    "oklch(51% 0.026 255)",
+                    "oklch(63% 0.026 255)",
+                    "oklch(75% 0.026 255)",
+                    "oklch(87% 0.026 255)",
+                    "oklch(95% 0.026 255)"
+                ]
+            },
+            "aurora-teal": {
+                "role": "secondary",
+                "displayName": "Aurora Teal",
+                "canonical": "oklch(68% 0.14 188)",
+                "tonalRamp": [
+                    "oklch(15% 0.14 188)",
+                    "oklch(27% 0.14 188)",
+                    "oklch(39% 0.14 188)",
+                    "oklch(51% 0.14 188)",
+                    "oklch(63% 0.14 188)",
+                    "oklch(75% 0.14 188)",
+                    "oklch(87% 0.14 188)",
+                    "oklch(95% 0.14 188)"
+                ]
+            },
+            "luminous-aurora-teal": {
+                "role": "secondary",
+                "displayName": "Luminous Aurora Teal",
+                "canonical": "oklch(77% 0.13 188)",
+                "tonalRamp": [
+                    "oklch(15% 0.13 188)",
+                    "oklch(27% 0.13 188)",
+                    "oklch(39% 0.13 188)",
+                    "oklch(51% 0.13 188)",
+                    "oklch(63% 0.13 188)",
+                    "oklch(75% 0.13 188)",
+                    "oklch(87% 0.13 188)",
+                    "oklch(95% 0.13 188)"
+                ]
+            },
+            "copper-spark": {
+                "role": "tertiary",
+                "displayName": "Copper Spark",
+                "canonical": "oklch(74% 0.16 72)",
+                "tonalRamp": [
+                    "oklch(15% 0.16 72)",
+                    "oklch(27% 0.16 72)",
+                    "oklch(39% 0.16 72)",
+                    "oklch(51% 0.16 72)",
+                    "oklch(63% 0.16 72)",
+                    "oklch(75% 0.16 72)",
+                    "oklch(87% 0.16 72)",
+                    "oklch(95% 0.16 72)"
+                ]
+            },
+            "cool-line": {
+                "role": "neutral",
+                "displayName": "Cool Line",
+                "canonical": "oklch(86% 0.018 258)",
+                "tonalRamp": [
+                    "oklch(15% 0.018 258)",
+                    "oklch(27% 0.018 258)",
+                    "oklch(39% 0.018 258)",
+                    "oklch(51% 0.018 258)",
+                    "oklch(63% 0.018 258)",
+                    "oklch(75% 0.018 258)",
+                    "oklch(87% 0.018 258)",
+                    "oklch(95% 0.018 258)"
+                ]
+            },
+            "night-line": {
+                "role": "neutral",
+                "displayName": "Night Line",
+                "canonical": "oklch(34% 0.038 262)",
+                "tonalRamp": [
+                    "oklch(15% 0.038 262)",
+                    "oklch(27% 0.038 262)",
+                    "oklch(39% 0.038 262)",
+                    "oklch(51% 0.038 262)",
+                    "oklch(63% 0.038 262)",
+                    "oklch(75% 0.038 262)",
+                    "oklch(87% 0.038 262)",
+                    "oklch(95% 0.038 262)"
+                ]
+            },
+            "white": {
+                "role": "neutral",
+                "displayName": "White",
+                "canonical": "oklch(100% 0 0)",
+                "tonalRamp": [
+                    "oklch(15% 0 0)",
+                    "oklch(27% 0 0)",
+                    "oklch(39% 0 0)",
+                    "oklch(51% 0 0)",
+                    "oklch(63% 0 0)",
+                    "oklch(75% 0 0)",
+                    "oklch(87% 0 0)",
+                    "oklch(95% 0 0)"
+                ]
+            }
+        },
+        "typographyMeta": {
+            "display": { "displayName": "Homepage Display", "purpose": "The greeting and professional proposition." },
+            "body": { "displayName": "Reading Voice", "purpose": "Professional role and supporting explanation." },
+            "label": {
+                "displayName": "Evidence Label",
+                "purpose": "Technical stack, portrait annotation, and proof detail."
+            },
+            "wordmark": { "displayName": "Wordmark", "purpose": "Compact uppercase identity in the homepage masthead." }
+        },
+        "shadows": [
+            {
+                "name": "homepage-primary-action",
+                "value": "0 14px 30px -22px var(--color-foreground)",
+                "purpose": "Lifts the primary résumé action from the portrait stage."
+            },
+            {
+                "name": "homepage-portrait-cutout",
+                "value": "drop-shadow(0 30px 45px color-mix(in oklch, var(--color-foreground) 28%, transparent))",
+                "purpose": "Separates the portrait cutout from its gradient field."
+            },
+            {
+                "name": "card",
+                "value": "var(--shadow-card)",
+                "purpose": "Existing semantic elevation for a justified grouped surface."
+            },
+            {
+                "name": "popover",
+                "value": "var(--shadow-popover)",
+                "purpose": "Existing semantic elevation for transient content."
+            }
+        ],
+        "motion": [
+            {
+                "name": "homepage-state",
+                "value": "180ms ease-out",
+                "purpose": "Colour, border, and small directional hover changes."
+            },
+            {
+                "name": "control-colour",
+                "value": "200ms ease-out",
+                "purpose": "Shared Button primitive colour transitions."
+            },
+            {
+                "name": "reduced-motion",
+                "value": "none",
+                "purpose": "Transitions are removed when reduced motion is requested."
+            }
+        ],
+        "breakpoints": [
+            { "name": "inner-page-editorial", "value": "48rem" },
+            { "name": "homepage-split", "value": "64rem" },
+            { "name": "inner-page-wide-inset", "value": "80rem" }
+        ],
+        "implementationStatus": {
+            "status": "implemented",
+            "reviewDisposition": "ship-with-notes",
+            "blockers": [],
+            "routes": ["Home", "About", "Articles index", "Article detail", "404"],
+            "components": [
+                "Homepage masthead",
+                "Shared inner-page shell",
+                "Footer",
+                "Calls to action",
+                "Portrait stage",
+                "Proof rail",
+                "Disclosure rows",
+                "Credential rows",
+                "Article index rows",
+                "Article reading surface"
+            ]
+        }
+    },
+    "components": [
+        {
+            "name": "Homepage Primary CTA",
+            "kind": "button",
+            "refersTo": "homepage-cta-primary",
+            "description": "The first and strongest action: Download résumé.",
+            "html": "<a class=\"ds-home-cta-primary\" href=\"/resume.pdf\"><svg aria-hidden=\"true\" viewBox=\"0 0 24 24\"><path d=\"M12 3v12m0 0 4-4m-4 4-4-4M5 21h14\"/></svg><span>Download résumé</span></a>",
+            "css": ".ds-home-cta-primary { display:inline-flex; min-height:3.5rem; align-items:center; justify-content:center; gap:.5rem; padding:.75rem 1.4rem; border-radius:var(--radius-control); background:var(--color-brand); color:var(--color-brand-foreground); font:600 .95rem/1 var(--font-noto-sans); text-decoration:none; box-shadow:0 14px 30px -22px var(--color-foreground); transition:background-color 200ms ease-out; } .ds-home-cta-primary svg { width:1.25rem; height:1.25rem; fill:none; stroke:currentColor; stroke-width:2; } .ds-home-cta-primary:hover { background:var(--color-brand-hover); } .ds-home-cta-primary:focus-visible { outline:2px solid var(--color-ring); outline-offset:4px; }"
+        },
+        {
+            "name": "Homepage Secondary CTA",
+            "kind": "button",
+            "refersTo": "homepage-cta-secondary",
+            "description": "The named contact action paired with the résumé action.",
+            "html": "<a class=\"ds-home-cta-secondary\" href=\"mailto:logan.farci@outlook.be\"><svg aria-hidden=\"true\" viewBox=\"0 0 24 24\"><path d=\"M3 5h18v14H3zM3 7l9 6 9-6\"/></svg><span>Contact me</span></a>",
+            "css": ".ds-home-cta-secondary { display:inline-flex; min-height:3.5rem; align-items:center; justify-content:center; gap:.5rem; padding:.75rem 1.4rem; border:1px solid var(--color-border-strong); border-radius:var(--radius-control); background:var(--color-background); color:var(--color-text-primary); font:600 .95rem/1 var(--font-noto-sans); text-decoration:none; transition:background-color 200ms ease-out; } .ds-home-cta-secondary svg { width:1.25rem; height:1.25rem; fill:none; stroke:currentColor; stroke-width:2; } .ds-home-cta-secondary:hover { background:var(--color-surface-elevated); } .ds-home-cta-secondary:focus-visible { outline:2px solid var(--color-ring); outline-offset:4px; }"
+        },
+        {
+            "name": "Homepage Contact Icon",
+            "kind": "button",
+            "refersTo": "homepage-contact-icon",
+            "description": "A supplemental labelled contact destination beneath the named actions.",
+            "html": "<a class=\"ds-home-contact-icon\" href=\"#\" aria-label=\"Email\"><svg aria-hidden=\"true\" viewBox=\"0 0 24 24\"><path d=\"M3 5h18v14H3zM3 7l9 6 9-6\"/></svg></a>",
+            "css": ".ds-home-contact-icon { display:inline-flex; width:2.75rem; height:2.75rem; align-items:center; justify-content:center; border:1px solid var(--color-border); border-radius:var(--radius-control); background:var(--color-background); color:var(--color-text-primary); transition:color 180ms ease-out, border-color 180ms ease-out, transform 180ms ease-out; } .ds-home-contact-icon svg { width:1.25rem; height:1.25rem; fill:none; stroke:currentColor; stroke-width:2; } .ds-home-contact-icon:hover { border-color:var(--color-brand); color:var(--color-brand-hover); transform:translateY(-2px); } .ds-home-contact-icon:focus-visible { outline:2px solid var(--color-ring); outline-offset:4px; }"
+        },
+        {
+            "name": "Homepage Active Navigation Link",
+            "kind": "nav",
+            "description": "The compact active-location treatment in the homepage masthead.",
+            "html": "<a class=\"ds-home-nav-active\" href=\"/\" aria-current=\"page\">Home</a>",
+            "css": ".ds-home-nav-active { display:inline-flex; min-height:2.75rem; align-items:center; border-bottom:1px solid var(--color-brand); color:var(--color-brand); font:400 1rem/1.5 var(--font-noto-sans); text-decoration:none; transition:color 180ms ease-out, border-color 180ms ease-out; } .ds-home-nav-active:hover { color:var(--color-brand-hover); } .ds-home-nav-active:focus-visible { border-radius:var(--radius-control); outline:2px solid var(--color-ring); outline-offset:4px; }"
+        },
+        {
+            "name": "Homepage Wordmark",
+            "kind": "nav",
+            "description": "A blue signal dot and compact uppercase personal wordmark.",
+            "html": "<a class=\"ds-home-wordmark\" href=\"/\"><span aria-hidden=\"true\"></span>Logan Farci</a>",
+            "css": ".ds-home-wordmark { display:inline-flex; min-height:2.75rem; width:fit-content; align-items:center; gap:.75rem; color:var(--color-text-primary); font:700 1rem/1 var(--font-manrope); letter-spacing:.08em; text-transform:uppercase; text-decoration:none; } .ds-home-wordmark span { width:.55rem; height:.55rem; border-radius:999px; background:var(--color-brand); } .ds-home-wordmark:focus-visible { outline:2px solid var(--color-ring); outline-offset:4px; }"
+        },
+        {
+            "name": "Homepage Proof Link",
+            "kind": "custom",
+            "refersTo": "homepage-proof-link",
+            "description": "A full-row evidence destination used in the three-part proof rail.",
+            "html": "<a class=\"ds-home-proof\" href=\"#\"><span class=\"ds-home-proof-title\">Experience</span><span class=\"ds-home-proof-detail\">Public, banking and energy systems</span><svg aria-hidden=\"true\" viewBox=\"0 0 24 24\"><path d=\"M5 12h14m-5-5 5 5-5 5\"/></svg></a>",
+            "css": ".ds-home-proof { display:grid; grid-template-columns:1fr auto; align-items:center; gap:.25rem 1rem; min-height:7.5rem; padding:1.4rem 1.25rem; border-top:1px solid var(--color-border); border-bottom:1px solid var(--color-border-light); background:var(--color-background); color:var(--color-text-primary); text-decoration:none; transition:background-color 180ms ease-out, color 180ms ease-out; } .ds-home-proof-title { font:650 1rem/1.4 var(--font-manrope); } .ds-home-proof-detail { grid-column:1; color:var(--color-text-muted); font:.72rem/1.45 var(--font-reddit-mono); } .ds-home-proof svg { grid-column:2; grid-row:1 / 3; width:1rem; height:1rem; fill:none; stroke:currentColor; stroke-width:2; transition:transform 180ms ease-out; } .ds-home-proof:hover { background:var(--color-brand-subtle); color:var(--color-brand-hover); } .ds-home-proof:hover svg { transform:translateX(.2rem); } .ds-home-proof:focus-visible { border-radius:var(--radius-control); outline:2px solid var(--color-ring); outline-offset:4px; }"
+        }
+    ],
+    "narrative": {
+        "northStar": "Field Notes, continuous",
+        "overview": "Field Notes, continuous combines the site's polished technical personality with a quiet editorial structure. It feels precise, human, and assured: Manrope carries the proposition, Noto Sans carries the explanation, and Reddit Mono supplies compact evidence. Hairline rules and generous reading fields create rhythm without simulating paper, terminal chrome, or a developer dashboard.\n\nField Notes, continuous is implemented across Home, About, the Articles index, article detail, the shared inner-page navigation and footer, and the 404 surface. The homepage's custom masthead and split portrait stage are its most expressive composition; the other routes extend the same type, colour, ruled structure, metadata, and interaction grammar into editorial reading and evidence surfaces. The finish review disposition was ship-with-notes with no blockers.",
+        "keyCharacteristics": [
+            "A continuous editorial field structured by rules instead of repeated cards.",
+            "One decisive signal-blue proposition and primary action.",
+            "A real portrait used as the human anchor, with teal technical notation.",
+            "Compact mono metadata that supports rather than competes with the reading voice.",
+            "Responsive composition that changes hierarchy while preserving reading and tab order.",
+            "A shared sticky inner-page shell and editorial page grid across About, Articles, article detail, and 404.",
+            "Ruled disclosures, compact article rows, and bounded reading surfaces for progressive evidence."
+        ],
+        "rules": [
+            {
+                "name": "The Continuous World Rule",
+                "body": "The homepage may have its own full-viewport composition, but it must remain visibly related to the inner pages through shared type, semantic colour, control shapes, focus treatment, and editorial restraint.",
+                "section": "overview"
+            },
+            {
+                "name": "The Signal Rarity Rule",
+                "body": "Signal blue identifies the strongest proposition, action, or location; do not turn it into a broad decorative wash.",
+                "section": "colors"
+            },
+            {
+                "name": "The Three Voices Rule",
+                "body": "Manrope proposes, Noto Sans explains, and Reddit Mono indexes; mono must never become the body voice.",
+                "section": "typography"
+            },
+            {
+                "name": "The Evidence-Only Mono Rule",
+                "body": "Use mono labels and markers when they add factual orientation—dates, counts, stack details, authorship, or location. Omit them when they only preface or repeat an already clear heading.",
+                "section": "typography"
+            },
+            {
+                "name": "The Flat-by-Default Rule",
+                "body": "A boundary or interaction must justify elevation; ordinary sections are separated with space and a one-pixel semantic rule.",
+                "section": "elevation"
+            }
+        ],
+        "dos": [
+            "Do use Home, About, Articles, article detail, the shared shell, and 404 together as the implemented reference for Field Notes typography, semantic colour, ruled structure, control treatment, evidence hierarchy, and reading rhythm.",
+            "Do keep the résumé action first and Contact me second in label, reading order, and tab order.",
+            "Do use the real portrait and real evidence; make priority visible through spacing, rules, and writing hierarchy.",
+            "Do reserve mono labels and index markers for information that improves orientation; remove ornamental prefaces that duplicate the heading beside them.",
+            "Do test light and dark themes, keyboard focus, reduced motion, and narrow viewports."
+        ],
+        "donts": [
+            "Don't copy the homepage's full-viewport split as a generic template for every route; it is one expression of the shared world.",
+            "Don't introduce paper texture, scrapbook collage, glowing terminal chrome, dashboard framing, a serif masthead, stock imagery, or unverified career claims.",
+            "Don't turn every collection into a rounded card or give a non-interactive surface hover affordance.",
+            "Don't hardcode component colours, hide reading content with overflow, or rely on hover for essential meaning."
+        ]
+    }
+}

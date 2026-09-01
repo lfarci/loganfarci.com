@@ -85,7 +85,7 @@ function TableOfContentsList({ activeHeadingId, items, nested = false }: TableOf
 
 export function ArticleMarkdownLayout({ children }: Readonly<MarkdownElementProps>) {
     return (
-        <div className="grid w-full min-w-0 lg:grid-cols-[minmax(0,1fr)_14rem] lg:items-start lg:gap-10 xl:gap-12">
+        <div className="grid w-full min-w-0 lg:grid-cols-[minmax(0,72ch)_14rem] lg:items-start lg:gap-10 xl:gap-12">
             {children}
         </div>
     );

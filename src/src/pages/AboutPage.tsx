@@ -1,30 +1,20 @@
-import Section from "@/components/shared/Section";
-import React from "react";
+import type { ReactNode } from "react";
+import JsonLd from "@/components/shared/JsonLd";
 import MarkdownContent from "@/components/shared/MarkdownContent";
-import { Card, CardBody, CardHeader, CardSubtitle, CardTitle } from "@/components/cards";
-import InfoCard from "@/components/cards/InfoCard";
-import { Certification, SkillCategory } from "@/types";
-import { MarkdownPreview } from "@/components/shared/preview";
+import IconTag from "@/components/shared/IconTag";
+import { ChevronDownIcon } from "@/components/shared/icons";
 import { getCertifications, getDiploma, getExperiences, getProfile, getSkillCategories } from "@/core/data";
 import { formatExperiencePeriod } from "@/core/date";
-import IconTag from "@/components/shared/IconTag";
-import { Text } from "@/components/shared/typography";
-import { createId } from "@/core/string";
-import ColumnContainer from "@/components/layout/ColumnContainer";
-import ThumbnailGridSection from "@/components/shared/ThumbnailGridSection";
-import JsonLd from "@/components/shared/JsonLd";
-import { Heading1 } from "@/components/shared/typography";
 import { createBreadcrumbJsonLd, createCanonicalUrl } from "@/core/seo";
+import type { Certification, Image, SkillCategory } from "@/types";
 
-const certifications = getCertifications()
-    .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
-    .map((certification: Certification) => ({
-        image: certification.image,
-        title: certification.title,
-        description: certification.issuer,
-        url: certification.url,
-    }));
-
+const relevanceOrder: Record<Certification["relevance"], number> = { High: 0, Medium: 1, Low: 2 };
+const certifications = getCertifications().sort(
+    (left, right) =>
+        relevanceOrder[left.relevance] - relevanceOrder[right.relevance] || (left.order ?? 0) - (right.order ?? 0),
+);
+const featuredCertifications = certifications.filter((certification) => certification.relevance === "High");
+const additionalCertifications = certifications.filter((certification) => certification.relevance !== "High");
 const experiences = getExperiences();
 const skillCategories = getSkillCategories();
 const diploma = getDiploma();
@@ -39,6 +29,86 @@ const breadcrumbJsonLd = createBreadcrumbJsonLd([
     { name: "About", path: "/about" },
 ]);
 
+function ArrowUpRightIcon() {
+    return (
+        <svg aria-hidden="true" className="field-link-arrow" fill="none" viewBox="0 0 24 24">
+            <path
+                d="M7 17 17 7M8 7h9v9"
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="1.75"
+            />
+        </svg>
+    );
+}
+
+interface DisclosureProps {
+    children: ReactNode;
+    detail?: string;
+    image?: Image;
+    title: string;
+}
+
+function Disclosure({ children, detail, image, title }: Readonly<DisclosureProps>) {
+    return (
+        <details className="field-disclosure">
+            <summary>
+                <span className={image ? "field-disclosure-preview" : "min-w-0"}>
+                    {image && (
+                        <span className="field-disclosure-preview-mark">
+                            <img
+                                src={image.src}
+                                alt={image.alt}
+                                width={image.width}
+                                height={image.height}
+                                className="field-disclosure-preview-image"
+                            />
+                        </span>
+                    )}
+                    <span className="min-w-0">
+                        <h3>{title}</h3>
+                        {detail && <span className="field-meta">{detail}</span>}
+                    </span>
+                </span>
+                <ChevronDownIcon aria-hidden="true" className="field-disclosure-icon" size={22} strokeWidth={1.75} />
+            </summary>
+            <div className="field-disclosure-body">{children}</div>
+        </details>
+    );
+}
+
+function CertificationLink({ certification }: Readonly<{ certification: Certification }>) {
+    return (
+        <a href={certification.url} target="_blank" rel="noopener noreferrer" className="field-credential-link">
+            <img
+                src={certification.image.src}
+                alt={certification.image.alt}
+                width={certification.image.width}
+                height={certification.image.height}
+            />
+            <span className="min-w-0">
+                <h3>{certification.title}</h3>
+                <span className="field-meta">{certification.issuer}</span>
+            </span>
+            <ArrowUpRightIcon />
+        </a>
+    );
+}
+
+function SkillDisclosure({ category }: Readonly<{ category: SkillCategory }>) {
+    return (
+        <Disclosure detail={`${category.skills.length} skills`} title={category.name}>
+            <p className="field-supporting-copy">{category.description}</p>
+            <div className="field-skill-list">
+                {category.skills.map((skill) => (
+                    <IconTag key={skill.name}>{skill.name}</IconTag>
+                ))}
+            </div>
+        </Disclosure>
+    );
+}
+
 export default function AboutPage() {
     return (
         <>
@@ -52,77 +122,110 @@ export default function AboutPage() {
             <meta name="twitter:title" content={pageTitle} />
             <meta name="twitter:description" content={pageDescription} />
             <JsonLd data={breadcrumbJsonLd} />
-            <article className="py-8 md:py-10">
-                <Heading1 id="about-me" className="mb-6 scroll-mt-24 md:mb-8">
-                    About Me
-                </Heading1>
-                <div className="flow-root">
-                    <img
-                        src={profile.avatar.src}
-                        alt={profile.avatar.alt}
-                        width={300}
-                        height={300}
-                        className="block mx-auto mb-6 rounded-none md:float-right md:ml-8 md:mb-6 md:mt-0"
-                    />
-                    <MarkdownContent content={profile.description} />
-                </div>
-                <Section heading="Experience">
-                    <ColumnContainer>
+
+            <article className="field-page field-about-page">
+                <header className="field-page-header" id="about-me">
+                    <h1 className="field-page-title">About Me</h1>
+                    <p className="field-page-deck">
+                        The experience, working principles, and technical range behind the systems I build.
+                    </p>
+                </header>
+
+                <section className="field-about-intro" aria-label="Profile">
+                    <figure className="field-about-portrait">
+                        <img
+                            src={profile.avatar.src}
+                            alt={profile.avatar.alt}
+                            width={profile.avatar.width ?? 512}
+                            height={profile.avatar.height ?? 512}
+                        />
+                    </figure>
+                    <div className="field-about-narrative">
+                        <MarkdownContent content={profile.description} measure />
+                    </div>
+                </section>
+
+                <section className="field-section" id="experience">
+                    <header className="field-section-header">
+                        <h2>Experience</h2>
+                        <p>Selected roles and the systems delivered along the way.</p>
+                    </header>
+                    <div className="field-disclosure-list">
                         {experiences.map((experience) => (
-                            <InfoCard
+                            <Disclosure
                                 key={`${experience.name}-${experience.company.name}`}
                                 title={experience.name}
-                                subtitle={`${experience.company.name} (${experience.type})`}
-                                details={[
-                                    experience.company.location,
-                                    formatExperiencePeriod(experience.start, experience.end),
-                                ]}
-                                media={experience.company.logo}
-                                mediaSize="small"
-                                mediaAlign="start"
-                                align="start"
-                                showTitleTooltip
+                                detail={`${experience.company.name} · ${formatExperiencePeriod(experience.start, experience.end)}`}
+                                image={experience.company.logo}
                             >
-                                <MarkdownPreview>{experience.description}</MarkdownPreview>
-                            </InfoCard>
+                                <div className="field-entry-body">
+                                    <MarkdownContent content={experience.description} measure />
+                                </div>
+                            </Disclosure>
                         ))}
-                    </ColumnContainer>
-                </Section>
-                <Section heading="Education">
-                    <InfoCard
-                        title={diploma.name}
-                        subtitle={diploma.University}
-                        details={diploma.details}
-                        media={diploma.logo}
-                        mediaSize="small"
-                        mediaAlign="start"
-                        align="start"
-                        showTitleTooltip
-                    >
-                        <MarkdownPreview>{diploma.description}</MarkdownPreview>
-                    </InfoCard>
-                </Section>
-                <ThumbnailGridSection heading="Certifications" items={certifications} columns={2} size="small" />
-                <Section heading="Skills" id="skills">
-                    <ColumnContainer>
-                        {skillCategories.map((category: SkillCategory) => (
-                            <Card key={category.name} id={createId(category.name)} className="scroll-mt-24">
-                                <CardHeader className="gap-1.5">
-                                    <CardTitle>{category.name}</CardTitle>
-                                    <CardSubtitle>{`${category.skills.length} skills`}</CardSubtitle>
-                                </CardHeader>
-                                <CardBody className="pt-1 gap-2">
-                                    <Text>{category.description}</Text>
-                                    <div className="flex flex-wrap gap-2 mt-6">
-                                        {category.skills.map((skill) => (
-                                            <IconTag key={skill.name}>{skill.name}</IconTag>
+                    </div>
+                </section>
+
+                <section className="field-section" id="education">
+                    <header className="field-section-header">
+                        <h2>Education</h2>
+                        <p>The foundation beneath the professional work.</p>
+                    </header>
+                    <div className="field-disclosure-list">
+                        <Disclosure
+                            title={diploma.name}
+                            detail={`${diploma.University} · ${diploma.details.join(" · ")}`}
+                            image={diploma.logo}
+                        >
+                            <div className="field-entry-body">
+                                <MarkdownContent content={diploma.description} measure />
+                            </div>
+                        </Disclosure>
+                    </div>
+                </section>
+
+                <section className="field-section" id="certifications">
+                    <header className="field-section-header">
+                        <h2>Certifications</h2>
+                        <p>Current, relevant proof—led by the credentials closest to my work.</p>
+                    </header>
+                    <div>
+                        <div className="field-credential-list">
+                            {featuredCertifications.map((certification) => (
+                                <CertificationLink key={certification.title} certification={certification} />
+                            ))}
+                        </div>
+                        {additionalCertifications.length > 0 && (
+                            <div>
+                                <Disclosure
+                                    title="Additional certifications"
+                                    detail={`${additionalCertifications.length} credentials`}
+                                >
+                                    <div className="field-credential-list">
+                                        {additionalCertifications.map((certification) => (
+                                            <CertificationLink
+                                                key={certification.title}
+                                                certification={certification}
+                                            />
                                         ))}
                                     </div>
-                                </CardBody>
-                            </Card>
+                                </Disclosure>
+                            </div>
+                        )}
+                    </div>
+                </section>
+
+                <section className="field-section" id="skills">
+                    <header className="field-section-header">
+                        <h2>Skills</h2>
+                        <p>Grouped by how the tools combine in real delivery work.</p>
+                    </header>
+                    <div className="field-disclosure-list">
+                        {skillCategories.map((category) => (
+                            <SkillDisclosure key={category.name} category={category} />
                         ))}
-                    </ColumnContainer>
-                </Section>
+                    </div>
+                </section>
             </article>
         </>
     );

@@ -4,9 +4,9 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 import NavigationBar from "./NavigationBar";
 import { ThemeProvider } from "@/contexts/ThemeContext";
-import { MD_BREAKPOINT_WIDTH } from "@/core/breakpoints";
+import { DESKTOP_NAV_BREAKPOINT_WIDTH } from "@/core/breakpoints";
 
-const MOBILE_VIEWPORT_WIDTH = MD_BREAKPOINT_WIDTH - 1;
+const MOBILE_VIEWPORT_WIDTH = DESKTOP_NAV_BREAKPOINT_WIDTH - 1;
 
 function parseMinWidthFromMediaQuery(query: string, rootFontSize: number): number | null {
     // Test helper supports the min-width queries used by NavigationBar: (min-width: <value>rem|px).
@@ -110,6 +110,13 @@ describe("NavigationBar", () => {
         expect(menu.getAttribute("aria-hidden")).toBe("true");
     });
 
+    it("identifies the current application route", () => {
+        renderNavigationBarWithProviders();
+
+        expect(screen.getAllByRole("link", { name: "Home" })[0].getAttribute("aria-current")).toBe("page");
+        expect(screen.getAllByRole("link", { name: "About" })[0].getAttribute("aria-current")).toBeNull();
+    });
+
     it("opens the mobile menu when the toggle button is clicked", () => {
         renderNavigationBarWithProviders();
 
@@ -180,7 +187,7 @@ describe("NavigationBar", () => {
     });
 
     it("closes an open mobile menu after resizing to desktop width", () => {
-        // Use a width below Tailwind's md breakpoint to emulate a mobile viewport.
+        // Use a width below the shared navigation breakpoint to emulate the compact shell.
         setViewportWidth(MOBILE_VIEWPORT_WIDTH);
         renderNavigationBarWithProviders();
 
@@ -202,24 +209,24 @@ describe("NavigationBar", () => {
         expect(menu.getAttribute("aria-hidden")).toBe("true");
     });
 
-    it("keeps the mobile menu open below the md media query threshold", () => {
+    it("keeps the mobile menu open below the desktop navigation threshold", () => {
         setRootFontSize(20);
-        setViewportWidth(940);
+        setViewportWidth(1400);
         renderNavigationBarWithProviders();
 
         fireEvent.click(screen.getByRole("button", { name: /open menu/i }));
-        setViewportWidth(940, true);
+        setViewportWidth(1400, true);
 
         expect(screen.getByRole("button", { name: /close menu/i }).getAttribute("aria-expanded")).toBe("true");
     });
 
-    it("closes the mobile menu when viewport satisfies the md media query threshold", () => {
+    it("closes the mobile menu when viewport satisfies the desktop navigation threshold", () => {
         setRootFontSize(20);
-        setViewportWidth(940);
+        setViewportWidth(1400);
         renderNavigationBarWithProviders();
 
         fireEvent.click(screen.getByRole("button", { name: /open menu/i }));
-        setViewportWidth(960, true);
+        setViewportWidth(1440, true);
 
         expect(screen.getByRole("button", { name: /open menu/i }).getAttribute("aria-expanded")).toBe("false");
     });
