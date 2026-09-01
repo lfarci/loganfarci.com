@@ -48,8 +48,7 @@ export default function ArticlesPage() {
                 <header className="field-page-header">
                     <h1 className="field-page-title">Articles</h1>
                     <p className="field-page-deck">
-                        Practical notes from building and operating software—mostly .NET, Azure, and the decisions
-                        between them.
+                        Notes on GitHub, cloud engineering, developer tooling, and the systems I&apos;m building.
                     </p>
                 </header>
 
@@ -70,16 +69,18 @@ export default function ArticlesPage() {
                                             {article.title}
                                         </span>
                                         <span className="field-article-description">{article.description}</span>
-                                        <span className="field-article-tags">
-                                            {article.tags.map((tag) => (
-                                                <IconTag key={tag}>{tag}</IconTag>
-                                            ))}
-                                        </span>
                                     </span>
                                     <span className="field-article-row-meta">
-                                        <time className="field-article-date" dateTime={article.publishedAt}>
-                                            {formatDate(article.publishedAt)}
-                                        </time>
+                                        <span className="field-article-metadata">
+                                            <time className="field-article-date" dateTime={article.publishedAt}>
+                                                {formatDate(article.publishedAt)}
+                                            </time>
+                                            <span className="field-article-tags">
+                                                {article.tags.map((tag) => (
+                                                    <IconTag key={tag}>{tag}</IconTag>
+                                                ))}
+                                            </span>
+                                        </span>
                                         <ArrowRightIcon />
                                     </span>
                                 </Link>

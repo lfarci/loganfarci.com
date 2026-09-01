@@ -859,7 +859,6 @@
     }
 
     .field-skill-list,
-    .field-article-tags,
     .field-article-meta-tags {
         display: flex;
         flex-wrap: wrap;
@@ -868,11 +867,12 @@
     }
 
     .field-article-index {
-        border-top: 1px solid var(--color-border);
+        max-width: 70rem;
+        border-top: 1px solid var(--color-border-light);
     }
 
     .field-article-entry {
-        border-bottom: 1px solid var(--color-border);
+        min-width: 0;
     }
 
     .field-article-row {
@@ -880,16 +880,25 @@
         grid-template-columns: minmax(0, 1fr);
         grid-template-areas:
             "copy"
-            "date";
+            "meta";
         gap: 1rem;
-        min-height: 10rem;
-        padding-block: 1.5rem;
+        margin-inline: -0.75rem;
+        padding: clamp(1.5rem, 3vw, 2rem) 0.75rem;
+        border-radius: var(--radius-card);
         color: var(--color-text-primary);
+        transition:
+            background-color 180ms ease-out,
+            color 180ms ease-out;
+    }
+
+    .field-article-row:hover,
+    .field-article-row:focus-visible {
+        background: color-mix(in oklch, var(--color-foreground) 2.5%, transparent);
     }
 
     .field-article-row:focus-visible {
         outline: 2px solid var(--color-ring);
-        outline-offset: -2px;
+        outline-offset: 2px;
     }
 
     .field-article-copy {
@@ -905,6 +914,7 @@
     .field-article-title {
         display: block;
         max-width: none;
+        color: var(--color-text-primary);
         font-family: var(--font-manrope);
         font-size: clamp(1.4rem, 5vw, 2.25rem);
         font-weight: 600;
@@ -923,17 +933,40 @@
     }
 
     .field-article-row-meta {
-        grid-area: date;
-        display: flex;
+        grid-area: meta;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
         align-items: center;
-        justify-content: space-between;
         gap: 1rem;
+    }
+
+    .field-article-metadata,
+    .field-article-tags {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .field-article-metadata {
+        gap: 0.5rem 0.75rem;
+        min-width: 0;
+    }
+
+    .field-article-tags {
+        gap: 0.35rem;
+    }
+
+    .field-article-tags > span {
+        border-color: color-mix(in oklch, var(--color-border-light) 55%, transparent) !important;
+        background: color-mix(in oklch, var(--color-foreground) 2%, transparent) !important;
+        padding: 0.25rem 0.5rem !important;
     }
 
     .field-article-date {
         color: var(--color-text-muted);
         font-family: var(--font-reddit-mono);
         font-size: 0.75rem;
+        white-space: nowrap;
     }
 
     .field-article-row-meta .field-index-arrow {
@@ -1107,9 +1140,13 @@
         width: min(100%, 34rem);
     }
 
-    .field-about-page .field-section,
-    .field-articles-page .field-article-index {
+    .field-about-page .field-section {
         margin-right: calc(0rem - var(--field-content-right));
+        margin-left: calc(0rem - var(--field-rule-gap));
+    }
+
+    .field-articles-page .field-article-index {
+        margin-right: 0;
         margin-left: calc(0rem - var(--field-rule-gap));
     }
 
@@ -1120,6 +1157,7 @@
     }
 
     .field-articles-page .field-article-row {
+        margin-inline: 0;
         padding-right: var(--field-content-right);
         padding-left: var(--field-rule-gap);
     }
@@ -1152,16 +1190,6 @@
         top: 6.5rem;
         align-self: start;
         margin-bottom: 0;
-    }
-
-    .field-article-row {
-        min-height: 10.5rem;
-        padding-top: 1.75rem;
-        padding-bottom: 1.75rem;
-    }
-
-    .field-article-date {
-        white-space: nowrap;
     }
 }
 

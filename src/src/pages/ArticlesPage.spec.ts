@@ -2,6 +2,17 @@ import { expect, test } from "@/test/playwright/fixtures";
 import { ARTICLES_PAGE, expectPage, getFirstArticlePage } from "@/test/playwright/pages";
 
 test.describe("Articles", () => {
+    test("presents an editorial masthead above the article index", async ({ page }) => {
+        await page.goto("/articles");
+
+        await expect(page.getByRole("heading", { level: 1, name: "Articles" })).toBeVisible();
+        await expect(
+            page.getByText("Notes on GitHub, cloud engineering, developer tooling, and the systems I'm building.", {
+                exact: true,
+            }),
+        ).toBeVisible();
+    });
+
     test("lists published articles", async ({ page }) => {
         await page.goto("/articles");
         await expectPage(page, ARTICLES_PAGE);
@@ -9,7 +20,7 @@ test.describe("Articles", () => {
         await expect(page.getByRole("main").getByRole("article").first()).toBeVisible();
     });
 
-    test("gives every article card a titled link and publication date", async ({ page }) => {
+    test("gives every article entry a titled link and publication date", async ({ page }) => {
         await page.goto("/articles");
         const articleCards = page.getByRole("main").getByRole("article");
         await expect(articleCards.first()).toBeVisible();
