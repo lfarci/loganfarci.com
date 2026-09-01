@@ -883,7 +883,7 @@
             "meta";
         gap: 1rem;
         margin-inline: -0.75rem;
-        padding: clamp(1.375rem, 2.65vw, 1.75rem) 0.75rem;
+        padding: clamp(1.25rem, 2.25vw, 1.5rem) 0.75rem;
         border-radius: var(--radius-control);
         color: var(--color-text-primary);
         transition:
@@ -916,7 +916,7 @@
         max-width: none;
         color: var(--color-text-primary);
         font-family: var(--font-manrope);
-        font-size: clamp(1.4rem, 5vw, 2.25rem);
+        font-size: clamp(1.35rem, 3vw, 1.75rem);
         font-weight: 600;
         letter-spacing: -0.035em;
         line-height: 1.15;
