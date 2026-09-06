@@ -1134,16 +1134,78 @@
         margin-left: calc(0rem - var(--field-rule-gap));
     }
 
+    .field-about-page .field-section,
+    .field-articles-page .field-article-index,
+    .field-articles-page .field-article-entry {
+        position: relative;
+    }
+
+    .field-about-page .field-section,
+    .field-articles-page .field-article-index {
+        border-top: 0;
+    }
+
+    .field-articles-page .field-article-entry {
+        border-bottom: 0;
+        isolation: isolate;
+    }
+
+    .field-about-page .field-section::before,
+    .field-articles-page .field-article-index::before,
+    .field-articles-page .field-article-entry::after {
+        position: absolute;
+        left: calc(var(--field-content-left) - var(--editorial-rule-x) - 1rem);
+        width: calc(100vw - var(--field-content-left) - var(--field-content-right) + 2rem);
+        height: 1px;
+        content: "";
+        background: var(--color-border);
+        pointer-events: none;
+    }
+
+    .field-about-page .field-section::before,
+    .field-articles-page .field-article-index::before {
+        top: 0;
+    }
+
+    .field-articles-page .field-article-entry::after {
+        bottom: 0;
+        z-index: 1;
+    }
+
     .field-about-page .field-section {
         padding-right: var(--field-content-right);
         padding-left: var(--field-rule-gap);
-        border-top: 1px solid var(--color-border);
     }
 
     .field-articles-page .field-article-row {
         margin-inline: 0;
         padding-right: var(--field-content-right);
         padding-left: var(--field-rule-gap);
+        position: relative;
+        isolation: isolate;
+    }
+
+    .field-articles-page .field-article-row:hover,
+    .field-articles-page .field-article-row:focus-visible {
+        background: transparent;
+    }
+
+    .field-articles-page .field-article-row::before {
+        position: absolute;
+        inset-block: 0;
+        left: calc(var(--field-content-left) - var(--editorial-rule-x) - 1rem);
+        width: calc(100vw - var(--field-content-left) - var(--field-content-right) + 2rem);
+        content: "";
+        background: color-mix(in oklch, var(--color-foreground) 2%, transparent);
+        opacity: 0;
+        transition: opacity 180ms ease-out;
+        pointer-events: none;
+        z-index: -1;
+    }
+
+    .field-articles-page .field-article-row:hover::before,
+    .field-articles-page .field-article-row:focus-visible::before {
+        opacity: 1;
     }
 
     .field-not-found {
