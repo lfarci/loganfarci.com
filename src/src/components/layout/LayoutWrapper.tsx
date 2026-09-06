@@ -12,6 +12,13 @@ const LayoutWrapper: React.FC<Readonly<LayoutWrapperProps>> = ({ children, githu
     const location = useLocation();
     const isHomePage = location.pathname === "/";
     const isAboutPage = location.pathname === "/about";
+    const isArticlesPage = location.pathname === "/articles";
+
+    const mainClassName = isAboutPage
+        ? "field-shell-about-main min-w-0 w-full"
+        : isArticlesPage
+          ? "field-shell-articles-main min-w-0 w-full"
+          : "min-w-0 w-full";
 
     return (
         <>
@@ -22,11 +29,7 @@ const LayoutWrapper: React.FC<Readonly<LayoutWrapperProps>> = ({ children, githu
                 Skip to content
             </a>
             <NavigationBar title="Logan Farci" />
-            <main
-                id="main-content"
-                tabIndex={-1}
-                className={isAboutPage ? "field-shell-about-main min-w-0 w-full" : "min-w-0 w-full"}
-            >
+            <main id="main-content" tabIndex={-1} className={mainClassName}>
                 {children}
             </main>
             {!isHomePage && <Footer githubRepositoryUrl={githubRepositoryUrl} commitHash={commitHash} />}

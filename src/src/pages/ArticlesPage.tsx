@@ -70,19 +70,17 @@ export default function ArticlesPage() {
                                         </span>
                                         <span className="field-article-description">{article.description}</span>
                                     </span>
-                                    <span className="field-article-row-meta">
-                                        <span className="field-article-metadata">
-                                            <time className="field-article-date" dateTime={article.publishedAt}>
-                                                {formatDate(article.publishedAt)}
-                                            </time>
-                                            <span className="field-article-tags">
-                                                {article.tags.map((tag) => (
-                                                    <IconTag key={tag}>{tag}</IconTag>
-                                                ))}
-                                            </span>
+                                    <span className="field-article-metadata">
+                                        <span className="field-article-tags">
+                                            {article.tags.map((tag) => (
+                                                <IconTag key={tag}>{tag}</IconTag>
+                                            ))}
                                         </span>
-                                        <ArrowRightIcon />
+                                        <time className="field-article-date" dateTime={article.publishedAt}>
+                                            {formatDate(article.publishedAt)}
+                                        </time>
                                     </span>
+                                    <ArrowRightIcon />
                                 </Link>
                             </article>
                         ))}

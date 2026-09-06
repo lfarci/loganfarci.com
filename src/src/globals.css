@@ -668,6 +668,11 @@
         margin-top: clamp(2.5rem, 3vw, 3.5rem);
     }
 
+    .field-shell-articles-main,
+    .field-shell-articles-main + .field-shell-footer {
+        --field-footer-gap: clamp(1rem, 2vw, 1.5rem);
+    }
+
     .field-section-header {
         margin-bottom: 2rem;
     }
@@ -867,24 +872,22 @@
     }
 
     .field-article-index {
-        max-width: 70rem;
-        border-top: 1px solid var(--color-border-light);
+        border-top: 1px solid var(--color-border);
     }
 
     .field-article-entry {
         min-width: 0;
+        border-bottom: 1px solid var(--color-border);
     }
 
     .field-article-row {
         display: grid;
-        grid-template-columns: minmax(0, 1fr);
+        grid-template-columns: minmax(0, 1fr) auto;
         grid-template-areas:
-            "copy"
-            "meta";
-        gap: 1rem;
-        margin-inline: -0.75rem;
-        padding: clamp(1.25rem, 2.25vw, 1.5rem) 0.75rem;
-        border-radius: var(--radius-control);
+            "copy arrow"
+            "metadata arrow";
+        gap: 1rem 1.5rem;
+        padding-block: clamp(1.5rem, 2.5vw, 2rem);
         color: var(--color-text-primary);
         transition:
             background-color 180ms ease-out,
@@ -897,6 +900,7 @@
     }
 
     .field-article-row:focus-visible {
+        border-radius: var(--radius-control);
         outline: 2px solid var(--color-ring);
         outline-offset: 2px;
     }
@@ -932,15 +936,6 @@
         line-height: 1.6;
     }
 
-    .field-article-row-meta {
-        grid-area: meta;
-        display: grid;
-        grid-template-columns: minmax(0, 1fr) auto;
-        align-items: center;
-        gap: 1rem;
-    }
-
-    .field-article-metadata,
     .field-article-tags {
         display: flex;
         flex-wrap: wrap;
@@ -948,8 +943,11 @@
     }
 
     .field-article-metadata {
-        gap: 0.5rem 0.75rem;
+        grid-area: metadata;
+        display: grid;
+        gap: 0.625rem;
         min-width: 0;
+        justify-items: start;
     }
 
     .field-article-tags {
@@ -969,8 +967,10 @@
         white-space: nowrap;
     }
 
-    .field-article-row-meta .field-index-arrow {
+    .field-article-row > .field-index-arrow {
+        grid-area: arrow;
         flex: none;
+        margin-top: 0.125rem;
     }
 
     .field-article-row:hover .field-index-arrow,
@@ -1120,25 +1120,6 @@
         padding-left: var(--field-content-left);
     }
 
-    .field-page::before {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: var(--editorial-rule-x);
-        width: 1px;
-        content: "";
-        background: var(--color-border-light);
-        pointer-events: none;
-    }
-
-    .field-about-page::before {
-        bottom: calc(0rem - var(--field-footer-gap));
-    }
-
-    .field-articles-page::before {
-        display: none;
-    }
-
     .field-about-portrait {
         width: min(100%, 34rem);
     }
@@ -1149,8 +1130,8 @@
     }
 
     .field-articles-page .field-article-index {
-        margin-right: 0;
-        margin-left: 0;
+        margin-right: calc(0rem - var(--field-content-right));
+        margin-left: calc(0rem - var(--field-rule-gap));
     }
 
     .field-about-page .field-section {
@@ -1162,7 +1143,7 @@
     .field-articles-page .field-article-row {
         margin-inline: 0;
         padding-right: var(--field-content-right);
-        padding-left: 0;
+        padding-left: var(--field-rule-gap);
     }
 
     .field-not-found {
