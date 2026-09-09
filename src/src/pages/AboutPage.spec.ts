@@ -44,6 +44,13 @@ test.describe("About page", () => {
         await expect(page.getByRole("heading", { level: 2, name: "Skills" })).toBeVisible();
     });
 
+    test("exposes skill subsection anchors used by home redirects", async ({ page }) => {
+        await page.goto("/about");
+        for (const anchorId of ["cloud", "ai", "devops", "software-engineering"]) {
+            await expect(page.locator(`#${anchorId}`)).toBeVisible();
+        }
+    });
+
     test("keeps every disclosure closed while leaving the education preview visible", async ({ page }) => {
         await page.goto("/about");
         const disclosures = page.locator("details.field-disclosure");

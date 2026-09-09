@@ -6,6 +6,7 @@ import { ChevronDownIcon } from "@/components/shared/icons";
 import { getCertifications, getDiploma, getExperiences, getProfile, getSkillCategories } from "@/core/data";
 import { formatExperiencePeriod } from "@/core/date";
 import { createBreadcrumbJsonLd, createCanonicalUrl } from "@/core/seo";
+import { createId } from "@/core/string";
 import type { Certification, Image, SkillCategory } from "@/types";
 
 const relevanceOrder: Record<Certification["relevance"], number> = { High: 0, Medium: 1, Low: 2 };
@@ -46,13 +47,14 @@ function ArrowUpRightIcon() {
 interface DisclosureProps {
     children: ReactNode;
     detail?: string;
+    id?: string;
     image?: Image;
     title: string;
 }
 
-function Disclosure({ children, detail, image, title }: Readonly<DisclosureProps>) {
+function Disclosure({ children, detail, id, image, title }: Readonly<DisclosureProps>) {
     return (
-        <details className="field-disclosure">
+        <details className="field-disclosure" id={id}>
             <summary>
                 <span className={image ? "field-disclosure-preview" : "min-w-0"}>
                     {image && (
@@ -98,7 +100,7 @@ function CertificationLink({ certification }: Readonly<{ certification: Certific
 
 function SkillDisclosure({ category }: Readonly<{ category: SkillCategory }>) {
     return (
-        <Disclosure detail={`${category.skills.length} skills`} title={category.name}>
+        <Disclosure detail={`${category.skills.length} skills`} id={createId(category.name)} title={category.name}>
             <p className="field-supporting-copy">{category.description}</p>
             <div className="field-skill-list">
                 {category.skills.map((skill) => (
