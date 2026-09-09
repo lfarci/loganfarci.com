@@ -149,7 +149,9 @@ export default function AboutPage() {
 
                 <section className="field-section" id="experience">
                     <header className="field-section-header">
-                        <h2>Experience</h2>
+                        <h2 id="experience-heading" className="scroll-mt-24">
+                            Experience
+                        </h2>
                         <p>Selected roles and the systems delivered along the way.</p>
                     </header>
                     <div className="field-disclosure-list">
@@ -188,7 +190,9 @@ export default function AboutPage() {
 
                 <section className="field-section" id="certifications">
                     <header className="field-section-header">
-                        <h2>Certifications</h2>
+                        <h2 id="certifications-heading" className="scroll-mt-24">
+                            Certifications
+                        </h2>
                         <p>Current, relevant proof—led by the credentials closest to my work.</p>
                     </header>
                     <div>

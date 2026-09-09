@@ -177,8 +177,8 @@ test.describe("Home page", () => {
     });
 
     for (const destination of [
-        { link: "Experience", hash: "experience", targetHeading: "Experience" },
-        { link: "Certifications", hash: "certifications", targetHeading: "Certifications" },
+        { link: "Experience", hash: "experience-heading", targetHeading: "Experience" },
+        { link: "Certifications", hash: "certifications-heading", targetHeading: "Certifications" },
     ]) {
         test(`opens the ${destination.targetHeading} details from ${destination.link}`, async ({ page }) => {
             await page.goto("/");
@@ -189,7 +189,8 @@ test.describe("Home page", () => {
 
             await expectPage(page, ABOUT_PAGE);
             await expect(page).toHaveURL(new RegExp(`/about#${destination.hash}$`, "u"));
-            await expect(page.getByRole("heading", { name: destination.targetHeading, exact: true })).toBeVisible();
+            const heading = page.getByRole("heading", { level: 2, name: destination.targetHeading, exact: true });
+            await expect(heading).toBeVisible();
             await expect
                 .poll(() =>
                     page.evaluate((hash) => {
@@ -200,7 +201,7 @@ test.describe("Home page", () => {
                         return section.getBoundingClientRect().top;
                     }, destination.hash),
                 )
-                .toBeLessThanOrEqual(220);
+                .toBeLessThanOrEqual(120);
         });
     }
 
