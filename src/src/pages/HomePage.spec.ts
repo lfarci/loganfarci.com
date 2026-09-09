@@ -190,6 +190,17 @@ test.describe("Home page", () => {
             await expectPage(page, ABOUT_PAGE);
             await expect(page).toHaveURL(new RegExp(`/about#${destination.hash}$`, "u"));
             await expect(page.getByRole("heading", { name: destination.targetHeading, exact: true })).toBeVisible();
+            await expect
+                .poll(() =>
+                    page.evaluate((hash) => {
+                        const section = document.getElementById(hash);
+                        if (!section) {
+                            return Number.POSITIVE_INFINITY;
+                        }
+                        return section.getBoundingClientRect().top;
+                    }, destination.hash),
+                )
+                .toBeLessThanOrEqual(220);
         });
     }
 
