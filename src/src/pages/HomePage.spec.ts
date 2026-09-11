@@ -8,7 +8,7 @@ test.describe("Home page", () => {
 
         const main = page.getByRole("main");
         await expect(main.getByRole("heading", { level: 1 })).toHaveText("Hi, I'm Logan.Software Engineer");
-        await expect(main.getByRole("link", { name: "View résumé" })).toHaveAttribute("download", "");
+        await expect(main.getByRole("link", { name: "View résumé" })).not.toHaveAttribute("download");
         await expect(main.getByRole("link", { name: "Contact me" })).toHaveAttribute(
             "href",
             "mailto:logan.farci@outlook.be",
@@ -177,8 +177,8 @@ test.describe("Home page", () => {
     });
 
     for (const destination of [
-        { link: "Experience", hash: "experience-heading", targetHeading: "Experience" },
-        { link: "Certifications", hash: "certifications-heading", targetHeading: "Certifications" },
+        { link: "Experience", hash: "experience", targetHeading: "Experience" },
+        { link: "Certifications", hash: "certifications", targetHeading: "Certifications" },
     ]) {
         test(`opens the ${destination.targetHeading} details from ${destination.link}`, async ({ page }) => {
             await page.goto("/");

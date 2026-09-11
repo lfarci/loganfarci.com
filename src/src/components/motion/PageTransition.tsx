@@ -13,6 +13,19 @@ interface PageTransitionProps {
     readonly children: ReactNode;
 }
 
+function ScrollToHash({ hash }: Readonly<{ hash: string }>) {
+    useEffect(() => {
+        if (!hash) {
+            return;
+        }
+
+        const anchorId = decodeURIComponent(hash.slice(1));
+        document.getElementById(anchorId)?.scrollIntoView();
+    }, [hash]);
+
+    return null;
+}
+
 export default function PageTransition({ children }: PageTransitionProps) {
     const location = useLocation();
     const prefersReducedMotion = useReducedMotion();
@@ -23,39 +36,6 @@ export default function PageTransition({ children }: PageTransitionProps) {
     useEffect(() => {
         previousPathnameRef.current = location.pathname;
     }, [location.pathname]);
-
-    useEffect(() => {
-        if (!location.hash) {
-            return;
-        }
-
-        const headingId = decodeURIComponent(location.hash.slice(1));
-        let frameRequest = 0;
-        let remainingAttempts = 20;
-
-        const scrollToAnchor = () => {
-            const anchorElement = document.getElementById(headingId);
-            if (anchorElement) {
-                anchorElement.scrollIntoView();
-                return;
-            }
-
-            if (remainingAttempts <= 0) {
-                return;
-            }
-
-            remainingAttempts -= 1;
-            frameRequest = window.requestAnimationFrame(scrollToAnchor);
-        };
-
-        scrollToAnchor();
-
-        return () => {
-            if (frameRequest) {
-                window.cancelAnimationFrame(frameRequest);
-            }
-        };
-    }, [location.hash, location.pathname]);
 
     return (
         <AnimatePresence mode="wait" initial={false} custom={direction}>
@@ -68,6 +48,7 @@ export default function PageTransition({ children }: PageTransitionProps) {
                 exit="exit"
                 transition={prefersReducedMotion ? reducedMotionTransition : pageTransition}
             >
+                <ScrollToHash hash={location.hash} />
                 {children}
             </motion.div>
         </AnimatePresence>

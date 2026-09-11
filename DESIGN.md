@@ -192,10 +192,15 @@ About section boundaries and Articles index rows extend from that rule to the ri
 viewport edge without moving their inset content. On About and the Articles index, the
 vertical rule continues through the footer gap and terminates at the footer boundary.
 Articles keeps each date below its tags at every width. Article detail uses a broad masthead and
-bounded reading surface; the 404 uses the same grid, type, and signal hierarchy. At
+bounded reading surface, with tighter opening rhythm below desktop and a quiet closing
+choice between contact and continued reading. The 404 keeps a single-column recovery
+composition through tablet widths and uses the same grid, type, and signal hierarchy. At
 every width, inner-page decks remain directly beneath and left-aligned with their titles
 as one editorial group. At 72rem, section labels become sticky only where the available
-width supports that scan pattern.
+width supports that scan pattern. The shared skip link stays off-canvas until keyboard
+focus. Narrow article rows reduce repeated metadata density without hiding the title or
+date, while desktop About and article measures use the available field more confidently.
+The 404 uses direct recovery copy and offers both Home and Articles paths.
 
 ## Elevation & Depth
 
@@ -236,12 +241,15 @@ same wordmark, active-link treatment, résumé link, theme control, and accessib
 menu. The compact menu applies below 72rem; horizontal navigation applies at 72rem and
 above. Inner routes add the ruled footer, while Home keeps the opening composition
 full-height. Focus-visible states use a two-pixel semantic ring with a four-pixel
-offset.
+offset. Articles remains the active navigation location on article-detail routes. The
+compact menu trigger retains a 44px square target.
 
 ### Calls to action — implemented
 
-- **Primary:** Labelled View résumé, signal-blue fill, high-contrast foreground,
-  control radius, icon plus text, and first position in reading and tab order.
+- **Primary:** Labelled View résumé, opens the PDF for browser viewing, uses a
+  signal-blue fill and high-contrast foreground, and remains first in reading and tab
+  order. The shared navigation keeps the concise Résumé label while retaining its native
+  direct-download behavior.
 - **Secondary:** Labelled Contact me, document-field fill, etched semantic border, and
   the same height and radius as the primary action.
 - **Supplemental contacts:** Four labelled 44px square icon links below the actions.
@@ -288,12 +296,15 @@ and arrow. The title uses its full content track at every width. The date remain
 lower metadata line below the tags while the arrow holds the row edge. Article detail
 uses a back link, balanced masthead, mono metadata rail, and the established Markdown
 renderer for headings, navigation, callouts, tables, inline code, and block code
-controls.
+controls. A ruled closing section follows the article with Discuss this article as the
+primary action and More articles as the secondary continuation.
 
 ### Not-found surface — implemented
 
 The 404 page turns the error code into quiet signal-mist typography, pairs it directly
-with plain-language recovery copy, and provides a labelled primary route back home.
+with plain-language recovery copy, and provides labelled primary Home and secondary
+Articles routes. It stays single-column through tablet widths and adopts the
+side-by-side composition only from 64rem, where both elements have enough room.
 
 ## Do's and Don'ts
 

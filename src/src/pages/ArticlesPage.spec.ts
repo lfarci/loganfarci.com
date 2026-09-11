@@ -94,6 +94,20 @@ test.describe("Articles", () => {
 
         await expectPage(page, articlePage);
     });
+
+    test("offers contact and continued reading after an article", async ({ page }) => {
+        await page.goto("/articles");
+        const articlePage = await getFirstArticlePage(page);
+        await page.goto(articlePage.path);
+
+        await expect(page.getByRole("link", { name: "Discuss this article" })).toHaveAttribute(
+            "href",
+            "mailto:logan.farci@outlook.be",
+        );
+        await page.getByRole("link", { name: "More articles" }).click();
+
+        await expectPage(page, ARTICLES_PAGE);
+    });
 });
 
 test.describe("Mobile article navigation", () => {

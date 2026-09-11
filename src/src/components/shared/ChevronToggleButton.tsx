@@ -1,6 +1,7 @@
 import React from "react";
 import Tooltip from "@/components/shared/Tooltip";
 import { ChevronDownIcon } from "@/components/shared/icons";
+import { Button } from "@/components/shared/primitives/Button";
 
 interface ChevronToggleButtonProps {
     isExpanded: boolean;
@@ -13,11 +14,13 @@ function ChevronToggleButton({ isExpanded, onToggle }: ChevronToggleButtonProps)
     return (
         <div className="flex justify-center mt-2">
             <Tooltip content={toggleText} placement="bottom">
-                <button
+                <Button
+                    variant="ghost"
+                    size="icon"
                     onClick={onToggle}
                     type="button"
                     aria-label={toggleText}
-                    className="cursor-pointer focus:outline-hidden focus:ring-2 focus:ring-border rounded-sm"
+                    className="cursor-pointer rounded-sm focus-visible:ring-border"
                 >
                     <ChevronDownIcon
                         strokeWidth={1}
@@ -25,7 +28,7 @@ function ChevronToggleButton({ isExpanded, onToggle }: ChevronToggleButtonProps)
                             isExpanded ? "rotate-180" : ""
                         }`}
                     />
-                </button>
+                </Button>
             </Tooltip>
         </div>
     );

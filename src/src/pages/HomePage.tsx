@@ -89,7 +89,7 @@ export default function HomePage() {
                 <div className="home-actions">
                     <div className="home-cta-row">
                         <Button asChild className="home-cta home-cta-primary">
-                            <a href="/resume.pdf" download>
+                            <a href="/resume.pdf">
                                 <ResumeIcon />
                                 View résumé
                             </a>

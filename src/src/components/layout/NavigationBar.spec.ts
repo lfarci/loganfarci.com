@@ -57,6 +57,17 @@ test.describe("Desktop primary navigation", () => {
         await expectClientNavigation(page);
     });
 
+    test("keeps Articles current on article detail routes", async ({ page }) => {
+        await page.goto("/articles");
+        const articlePage = await getFirstArticlePage(page);
+        await page.goto(articlePage.path);
+
+        await expect(page.getByRole("navigation").getByRole("link", { name: "Articles", exact: true })).toHaveAttribute(
+            "aria-current",
+            "page",
+        );
+    });
+
     test("preserves Back and Forward history across primary pages", async ({ page }) => {
         await page.goto("/");
         const navigation = page.getByRole("navigation");
@@ -81,8 +92,11 @@ test.describe("Shared navigation behavior", () => {
     test("moves keyboard focus to the main content through the skip link", async ({ page }) => {
         await page.goto("/");
 
-        await page.keyboard.press("Tab");
         const skipLink = page.getByRole("link", { name: "Skip to content" });
+        await expect(skipLink).toHaveCSS("opacity", "0");
+        await expect(skipLink).toHaveCSS("pointer-events", "none");
+
+        await page.keyboard.press("Tab");
         await expect(skipLink).toBeFocused();
         await page.keyboard.press("Enter");
 
@@ -120,6 +134,15 @@ test.describe("Mobile navigation", () => {
 
         await expect(navigation.getByRole("button", { name: "Open menu" })).toHaveAttribute("aria-expanded", "false");
         await expect(navigation.getByRole("link", { name: "About", exact: true })).toHaveCount(0);
+    });
+
+    test("keeps the compact menu trigger at least 44 pixels square", async ({ page }) => {
+        await page.goto("/about");
+        const bounds = await page.getByRole("button", { name: "Open menu" }).boundingBox();
+
+        expect(bounds).not.toBeNull();
+        expect(bounds!.width).toBeGreaterThanOrEqual(44);
+        expect(bounds!.height).toBeGreaterThanOrEqual(44);
     });
 
     test("closes the menu with Escape", async ({ page }) => {

@@ -3,10 +3,15 @@ import IconTag from "@/components/shared/IconTag";
 import JsonLd from "@/components/shared/JsonLd";
 import MarkdownContent from "@/components/shared/MarkdownContent";
 import Tooltip from "@/components/shared/Tooltip";
+import { Button } from "@/components/shared/primitives/Button";
 import { getArticleBySlug } from "@/core/articles";
+import { getContacts } from "@/core/data";
 import { formatDate } from "@/core/date";
 import { createArticleJsonLd, createBreadcrumbJsonLd, createCanonicalUrl } from "@/core/seo";
 import { siteOgImage } from "@/core/site";
+
+const emailContactUrl =
+    getContacts().find((contact) => contact.icon === "email")?.url ?? "mailto:logan.farci@outlook.be";
 
 interface ArticleMetaProps {
     publishedAt: string;
@@ -98,6 +103,20 @@ export default function ArticlePage() {
                 <div className="field-article-body">
                     <MarkdownContent content={article.content} articleNavigation />
                 </div>
+                <section className="field-article-closing" aria-labelledby="article-closing-heading">
+                    <div className="field-article-closing-copy">
+                        <h2 id="article-closing-heading">Continue the conversation</h2>
+                        <p>Read another field note or get in touch about this one.</p>
+                    </div>
+                    <div className="field-article-closing-actions">
+                        <Button asChild className="field-article-closing-action">
+                            <a href={emailContactUrl}>Discuss this article</a>
+                        </Button>
+                        <Button asChild variant="secondary" className="field-article-closing-action">
+                            <Link to="/articles">More articles</Link>
+                        </Button>
+                    </div>
+                </section>
             </article>
         </>
     );
