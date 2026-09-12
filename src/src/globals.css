@@ -536,6 +536,11 @@
     .home-actions {
         margin-top: -0.25rem;
     }
+
+    .home-intro,
+    .home-actions {
+        transform: none;
+    }
 }
 
 @layer components {

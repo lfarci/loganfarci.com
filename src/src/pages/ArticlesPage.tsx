@@ -65,9 +65,9 @@ export default function ArticlesPage() {
                                     aria-labelledby={`article-title-${article.slug}`}
                                 >
                                     <span className="field-article-copy">
-                                        <span id={`article-title-${article.slug}`} className="field-article-title">
+                                        <h3 id={`article-title-${article.slug}`} className="field-article-title">
                                             {article.title}
-                                        </span>
+                                        </h3>
                                         <span className="field-article-description">{article.description}</span>
                                     </span>
                                     <span className="field-article-metadata">

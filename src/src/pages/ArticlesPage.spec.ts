@@ -28,6 +28,7 @@ test.describe("Articles", () => {
 
         await expect(articleCards.getByRole("link")).toHaveCount(articleCount);
         await expect(articleCards.locator("time[datetime]")).toHaveCount(articleCount);
+        await expect(articleCards.getByRole("heading", { level: 3 })).toHaveCount(articleCount);
     });
 
     test("opens a rendered article from the listing", async ({ page }) => {

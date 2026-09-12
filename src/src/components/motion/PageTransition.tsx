@@ -19,8 +19,12 @@ function ScrollToHash({ hash }: Readonly<{ hash: string }>) {
             return;
         }
 
-        const anchorId = decodeURIComponent(hash.slice(1));
-        document.getElementById(anchorId)?.scrollIntoView();
+        try {
+            const anchorId = decodeURIComponent(hash.slice(1));
+            document.getElementById(anchorId)?.scrollIntoView();
+        } catch {
+            // Ignore malformed fragments so a bad URL cannot break the page shell.
+        }
     }, [hash]);
 
     return null;

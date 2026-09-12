@@ -67,6 +67,24 @@ test.describe("Home page", () => {
         }
     });
 
+    test("keeps the introduction below the header on short laptop viewports", async ({ page }) => {
+        await page.setViewportSize({ width: 1200, height: 700 });
+        await page.goto("/");
+
+        const layout = await page.evaluate(() => ({
+            headingTop: document.querySelector(".home-heading")!.getBoundingClientRect().top,
+            headerBottom: document.querySelector(".field-shell-header")!.getBoundingClientRect().bottom,
+        }));
+
+        expect(layout.headingTop).toBeGreaterThanOrEqual(layout.headerBottom);
+    });
+
+    test("keeps the app usable for malformed URL fragments", async ({ page }) => {
+        await page.goto("/about#%");
+
+        await expect(page.getByRole("heading", { level: 1, name: "About Me" })).toBeVisible();
+    });
+
     test("keeps the tablet hero content ahead of the portrait", async ({ page }) => {
         await page.setViewportSize({ width: 1024, height: 1100 });
         await page.goto("/");
