@@ -1,6 +1,6 @@
 ---
 spec: data-contracts
-version: 0.1.1
+version: 0.1.2
 status: current-state
 ---
 
@@ -43,6 +43,7 @@ Used by many contracts. All fields required
 | `contacts.json`              | `getContacts()`              | `Contact[]`       | array         |
 | `profile.json`               | `getProfile()`               | `Profile`         | single object |
 | `education.json`             | `getDiploma()`               | `Diploma`         | single object |
+| `home.json`                  | `getHomeContent()`           | `HomeContent`     | single object |
 
 ## Field reference
 
@@ -105,6 +106,12 @@ Skill: `name` (req), `iconId` (opt — **must match an `icons.json` `id`**),
 
 `name` (req), `University` (req — note the capital `U`), `logo` (`Image`, req),
 `details` (`string[]`, req), `description` (req).
+
+### `HomeContent` ([home.ts](../../src/src/types/home.ts))
+
+`technologies` (`string[]`, req) and `proofLinks` (`HomeProofLink[]`, req). Each proof
+link requires `label`, `detail`, and `to`; destinations remain ordinary static site
+paths and may include an existing section hash.
 
 ## Certification synchronization
 

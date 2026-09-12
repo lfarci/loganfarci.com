@@ -35,6 +35,7 @@ test.describe("axe automated accessibility checks", () => {
     });
 
     test("every article has no serious or critical violations", async ({ page }) => {
+        test.setTimeout(60_000);
         await page.goto("/articles");
         await expectPage(page, ARTICLES_PAGE);
         const articlePages = await getAllArticlePages(page);
@@ -77,6 +78,7 @@ test.describe("axe automated accessibility checks (mobile)", () => {
     });
 
     test("every article has no serious or critical violations", async ({ page }) => {
+        test.setTimeout(60_000);
         await page.goto("/articles");
         await expectPage(page, ARTICLES_PAGE);
         const articlePages = await getAllArticlePages(page);

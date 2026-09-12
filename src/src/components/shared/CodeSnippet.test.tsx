@@ -29,8 +29,9 @@ describe("CodeSnippet", () => {
         expect({
             element: container.firstElementChild?.tagName,
             keepsInlineRadius: container.firstElementChild?.classList.contains("rounded-sm"),
+            wrapsLongTokens: container.firstElementChild?.classList.contains("[overflow-wrap:anywhere]"),
             copyControl: screen.queryByRole("button"),
-        }).toEqual({ element: "CODE", keepsInlineRadius: true, copyControl: null });
+        }).toEqual({ element: "CODE", keepsInlineRadius: true, wrapsLongTokens: true, copyControl: null });
     });
 
     it("renders an ordinary code block without requesting the diagram module", () => {

@@ -12,7 +12,7 @@ const ThemeToggle: React.FC = () => {
 
     if (!mounted) {
         return (
-            <div className="p-2 w-9 h-9 rounded-lg bg-surface-hover border border-border">
+            <div className="size-11 rounded-control border border-border bg-surface-hover p-2.5">
                 <div className="w-5 h-5" />
             </div>
         );
@@ -29,7 +29,7 @@ const ThemeToggleInner: React.FC = () => {
             onClick={toggleTheme}
             variant="icon"
             size="icon"
-            className="cursor-pointer"
+            className="size-11 cursor-pointer"
             aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
             type="button"
         >

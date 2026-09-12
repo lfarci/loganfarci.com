@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import ErrorMessage from "@/components/shared/ErrorMessage";
+import { Button } from "@/components/shared/primitives/Button";
 
 export default function NotFoundPage() {
     return (
@@ -7,18 +7,25 @@ export default function NotFoundPage() {
             <title>Page Not Found - Logan Farci</title>
             <meta name="description" content="The page you are looking for does not exist or has been moved." />
             <meta name="robots" content="noindex" />
-            <ErrorMessage
-                title="404"
-                heading="Page Not Found"
-                message="Sorry, the page you are looking for does not exist or has been moved."
-            >
-                <Link
-                    to="/"
-                    className="px-6 py-3 bg-primary text-text-inverse font-medium rounded-lg hover:bg-primary-hover transition-colors duration-200"
-                >
-                    Back to Home
-                </Link>
-            </ErrorMessage>
+            <section className="field-page field-not-found">
+                <p className="field-error-code" aria-hidden="true">
+                    404
+                </p>
+                <div className="field-error-copy">
+                    <h1>Page Not Found</h1>
+                    <p>
+                        That page doesn&apos;t exist or may have moved. Try the homepage or browse the latest articles.
+                    </p>
+                    <div className="field-error-actions">
+                        <Button asChild>
+                            <Link to="/">Back to home</Link>
+                        </Button>
+                        <Button asChild variant="secondary">
+                            <Link to="/articles">Browse articles</Link>
+                        </Button>
+                    </div>
+                </div>
+            </section>
         </>
     );
 }

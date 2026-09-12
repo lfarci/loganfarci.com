@@ -37,7 +37,7 @@ test.describe("Desktop primary navigation", () => {
     });
 
     test("offers the résumé as a direct download", async ({ page }) => {
-        await page.goto("/");
+        await page.goto("/about");
 
         const downloadLink = page.getByRole("navigation").getByRole("link", { name: "Résumé", exact: true });
         await expect(downloadLink).toBeVisible();
@@ -55,6 +55,17 @@ test.describe("Desktop primary navigation", () => {
 
         await expectPage(page, ABOUT_PAGE);
         await expectClientNavigation(page);
+    });
+
+    test("keeps Articles current on article detail routes", async ({ page }) => {
+        await page.goto("/articles");
+        const articlePage = await getFirstArticlePage(page);
+        await page.goto(articlePage.path);
+
+        await expect(page.getByRole("navigation").getByRole("link", { name: "Articles", exact: true })).toHaveAttribute(
+            "aria-current",
+            "page",
+        );
     });
 
     test("preserves Back and Forward history across primary pages", async ({ page }) => {
@@ -81,8 +92,11 @@ test.describe("Shared navigation behavior", () => {
     test("moves keyboard focus to the main content through the skip link", async ({ page }) => {
         await page.goto("/");
 
-        await page.keyboard.press("Tab");
         const skipLink = page.getByRole("link", { name: "Skip to content" });
+        await expect(skipLink).toHaveCSS("opacity", "0");
+        await expect(skipLink).toHaveCSS("pointer-events", "none");
+
+        await page.keyboard.press("Tab");
         await expect(skipLink).toBeFocused();
         await page.keyboard.press("Enter");
 
@@ -95,6 +109,7 @@ test.describe("Shared navigation behavior", () => {
 
         await page.getByRole("button", { name: "Switch to dark mode" }).click();
         await page.getByRole("navigation").getByRole("link", { name: "About", exact: true }).click();
+        await expect(page.locator(".home-frame")).toHaveCount(0);
         await expect(page.getByRole("button", { name: "Switch to light mode" })).toBeVisible();
         await page.reload();
         await expect(page.getByRole("button", { name: "Switch to light mode" })).toBeVisible();
@@ -110,7 +125,7 @@ test.describe("Mobile navigation", () => {
     test.use({ viewport: { width: 390, height: 844 } });
 
     test("opens and closes the menu through the toggle button", async ({ page }) => {
-        await page.goto("/");
+        await page.goto("/about");
         const navigation = page.getByRole("navigation");
 
         await navigation.getByRole("button", { name: "Open menu" }).click();
@@ -121,8 +136,17 @@ test.describe("Mobile navigation", () => {
         await expect(navigation.getByRole("link", { name: "About", exact: true })).toHaveCount(0);
     });
 
+    test("keeps the compact menu trigger at least 44 pixels square", async ({ page }) => {
+        await page.goto("/about");
+        const bounds = await page.getByRole("button", { name: "Open menu" }).boundingBox();
+
+        expect(bounds).not.toBeNull();
+        expect(bounds!.width).toBeGreaterThanOrEqual(44);
+        expect(bounds!.height).toBeGreaterThanOrEqual(44);
+    });
+
     test("closes the menu with Escape", async ({ page }) => {
-        await page.goto("/");
+        await page.goto("/about");
         const navigation = page.getByRole("navigation");
 
         await navigation.getByRole("button", { name: "Open menu" }).click();
@@ -133,7 +157,7 @@ test.describe("Mobile navigation", () => {
     });
 
     test("offers the résumé as a direct download in the open menu", async ({ page }) => {
-        await page.goto("/");
+        await page.goto("/about");
         const navigation = page.getByRole("navigation");
 
         await navigation.getByRole("button", { name: "Open menu" }).click();
@@ -146,8 +170,8 @@ test.describe("Mobile navigation", () => {
 
     for (const destination of [
         { label: "Home", page: HOME_PAGE, startingPath: "/about" },
-        { label: "About", page: ABOUT_PAGE, startingPath: "/" },
-        { label: "Articles", page: ARTICLES_PAGE, startingPath: "/" },
+        { label: "About", page: ABOUT_PAGE, startingPath: "/articles" },
+        { label: "Articles", page: ARTICLES_PAGE, startingPath: "/about" },
     ]) {
         test(`navigates to ${destination.label} and dismisses the menu`, async ({ page }) => {
             await page.goto(destination.startingPath);
@@ -157,23 +181,27 @@ test.describe("Mobile navigation", () => {
             await navigation.getByRole("link", { name: destination.label, exact: true }).click();
 
             await expectPage(page, destination.page);
-            await expect(navigation.getByRole("button", { name: "Open menu" })).toHaveAttribute(
-                "aria-expanded",
-                "false",
-            );
+            await expect(page.getByRole("button", { name: "Open menu" })).toHaveAttribute("aria-expanded", "false");
         });
     }
 
     test("closes an open menu when resizing to desktop navigation", async ({ page }) => {
-        await page.goto("/");
+        await page.goto("/about");
         const navigation = page.getByRole("navigation");
 
         await navigation.getByRole("button", { name: "Open menu" }).click();
-        await page.setViewportSize({ width: 1024, height: 768 });
+        await page.setViewportSize({ width: 1280, height: 800 });
         await expect(navigation.getByRole("link", { name: "About", exact: true })).toBeVisible();
         await expect(navigation.getByLabel("Open menu", { exact: true })).toHaveAttribute("aria-expanded", "false");
         await page.setViewportSize({ width: 390, height: 844 });
 
         await expect(navigation.getByRole("button", { name: "Open menu" })).toBeVisible();
+    });
+
+    test("keeps the compact menu at medium width", async ({ page }) => {
+        await page.setViewportSize({ width: 1024, height: 768 });
+        await page.goto("/");
+
+        await expect(page.getByRole("navigation").getByRole("button", { name: "Open menu" })).toBeVisible();
     });
 });

@@ -1,8 +1,6 @@
 import React from "react";
 import NewTabLink from "../shared/NewTabLink";
 import { Footnote } from "../shared/typography";
-import { contentWidthStyles } from "@/components/layout/contentWidthStyles";
-import { mergeClassNames } from "@/core/mergeClassNames";
 
 interface FooterProps {
     githubRepositoryUrl?: string;
@@ -15,13 +13,8 @@ const Footer: React.FC<FooterProps> = ({ githubRepositoryUrl, commitHash, commit
     const commitHashPortion = commitHash?.substring(0, commitHashLength);
     const showCommitHash = commitHash && commitHash.length > 0;
     return (
-        <footer
-            className={mergeClassNames(
-                contentWidthStyles.pageContainer,
-                "flex flex-wrap justify-center items-center pb-8 gap-x-1 gap-y-2 text-center",
-            )}
-        >
-            <div className="flex flex-wrap items-center gap-1 min-w-0">
+        <footer className="field-shell-footer">
+            <div className="flex min-w-0 flex-wrap items-center gap-1">
                 <Footnote>© Logan Farci.</Footnote>
             </div>
             {showCommitHash && (
