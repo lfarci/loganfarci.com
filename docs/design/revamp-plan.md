@@ -1,5 +1,5 @@
 ---
-status: draft-awaiting-approval
+status: shipped
 direction: field-notes-continuous
 date: 2026-08-27
 ---
@@ -8,15 +8,18 @@ date: 2026-08-27
 
 ## Decision and outcome
 
-This plan implements the selected **Field Notes, continuous** direction, represented by
+This plan implemented the selected **Field Notes, continuous** direction, represented by
 [`2026-08-27-field-notes-continuous.png`](../../.impeccable/mocks/decision/2026-08-27-field-notes-continuous.png).
 It combines the existing site’s fonts, dual-theme palette, and professional tone with
 an editorial technical rhythm. The result should make Logan’s proposition and preferred
 next step immediately clear, turn large inventories into selected proof, and correct the
 verified responsive and accessibility defects in the current-state critique.
 
-This is a plan only. It deliberately makes no UI or content-source changes. Build work
-starts only after explicit approval of this document.
+The direction is shipped across the public experience by merged PR [#445](https://github.com/lfarci/loganfarci.com/pull/445)
+(`e83140b`). The implementation preserved the existing content, routes, SEO metadata,
+prerender output, fonts, semantic colour system, theme behaviour, and personal voice
+while extending the Field Notes hierarchy across Home, About, Articles, article detail,
+the shared shell, and 404.
 
 ## Non-negotiable constraints
 
@@ -37,9 +40,9 @@ starts only after explicit approval of this document.
 - Meet the WCAG 2.1 AA, semantic-token, reduced-motion, keyboard, and 320px
   no-horizontal-overflow requirements in the quality and accessibility specs.
 
-## Work sequence
+## Shipped work sequence
 
-### 1. Establish the shared Field Notes language
+### 1. Establish the shared Field Notes language — shipped
 
 **Likely areas:** `src/src/globals.css`, `src/tailwind.config.ts`, shared typography,
 `src/src/components/shared/primitives/Button.tsx`, cards, tags, separators, and layout
@@ -55,11 +58,11 @@ utilities.
 - Make card affordance honest: either make the bounded surface a complete link/action or
   remove the hover/lift language from its static container.
 
-**Acceptance:** components use shared primitives and semantic tokens; field-note labels
+**Shipped acceptance:** components use shared primitives and semantic tokens; field-note labels
 remain legible without becoming body text; focus is conspicuous in each theme; no
 component relies on decorative animation for comprehension.
 
-### 2. Repair the shell and navigation conversion path
+### 2. Repair the shell and navigation conversion path — shipped
 
 **Likely areas:** `src/src/components/layout/LayoutWrapper.tsx`,
 `NavigationBar.tsx`, `Footer.tsx`, `src/src/components/shared/NavBarEntry.tsx`,
@@ -74,11 +77,11 @@ component relies on decorative animation for comprehension.
 - Carry the restrained rule-and-metadata treatment through the shell and footer so pages
   feel like one system.
 
-**Acceptance:** keyboard-only navigation can see every focused global control; the
+**Shipped acceptance:** keyboard-only navigation can see every focused global control; the
 current location is recognizable visually and semantically; mobile menu behavior stays
 covered by focused browser tests.
 
-### 3. Rebuild Home and About around selected proof
+### 3. Rebuild Home and About around selected proof — shipped
 
 **Likely areas:** `src/src/pages/HomePage.tsx`, `HeroSection.tsx`,
 `GreetingHeading.tsx`, `ContactLinks.tsx`, `TextSection.tsx`,
@@ -86,8 +89,8 @@ covered by focused browser tests.
 components, and their tests.
 
 - Recompose the home opening around the existing role and profile information: a
-  stronger editorial proposition, real portrait, a clearly labelled **Download résumé**
-  primary download, and **Contact me** secondary action. Place social/contact icons as
+  stronger editorial proposition, real portrait, a clearly labelled **View résumé**
+  primary action, and **Contact me** secondary action. Place social/contact icons as
   supplementary labelled choices, not the only hero actions.
 - Introduce a compact, factual proof rail for Experience, Writing, and Cloud systems;
   use existing site data rather than fabricated counts or claims.
@@ -99,11 +102,11 @@ components, and their tests.
 - Ensure disclosure states have full-size controls, `aria-expanded`, a controlled region,
   sensible initial visibility, and no loss of SEO-visible/static content.
 
-**Acceptance:** a first-time visitor can identify Logan’s work and find the résumé or
+**Shipped acceptance:** a first-time visitor can identify Logan’s work and find the résumé or
 contact path in the first viewport; the About page communicates depth before breadth;
 all content remains reachable by keyboard and is understandable without icons alone.
 
-### 4. Bring articles and recovery pages into the same hierarchy
+### 4. Bring articles and recovery pages into the same hierarchy — shipped
 
 **Likely areas:** `src/src/pages/ArticlesPage.tsx`, `ArticlePage.tsx`,
 `NotFoundPage.tsx`, article list/card components, `MarkdownContent.tsx`, `CodeSnippet`,
@@ -117,11 +120,11 @@ article-navigation components, and their tests.
 - Update the 404 recovery action to use the shared button/interaction language and offer
   a clear next step without adding a route or runtime service.
 
-**Acceptance:** reading remains the strongest experience; article metadata is scannable;
+**Shipped acceptance:** reading remains the strongest experience; article metadata is scannable;
 long inline code stays fully accessible on narrow screens; every recovery action is
 visibly and semantically a control.
 
-### 5. Verify the responsive, accessible system
+### 5. Verify the responsive, accessible system — shipped
 
 **Likely areas:** affected unit/component/Playwright specs, the accessibility baseline,
 and any small regression tests needed for navigation, controls, or markdown rendering.
@@ -135,33 +138,28 @@ and any small regression tests needed for navigation, controls, or markdown rend
 - Run the project quality gate and repeat the documented manual screen-reader pass after
   material UI changes.
 
-**Acceptance:** the verified critique defects are resolved; no serious or critical axe
+**Shipped acceptance:** the verified critique defects are resolved; no serious or critical axe
 findings are introduced; automated and manual checks support the final review.
 
-## Validation gates for implementation
+## Shipped validation gates
 
-Run from `src/` once code changes begin:
+PR #445 recorded the following completed gates from `src/`:
 
-```bash
-npm run lint
-npm run format:check
-npm run test
-npm run build
-npm run accessibility
-```
+- [x] `npm run format:check`
+- [x] `npm run lint` (one pre-existing raw-button warning in `ChevronToggleButton.tsx`)
+- [x] `npm run test` (252 Vitest tests plus 2 certification parser tests)
+- [x] `npm run build` (client, SSR, and prerender passed for all public routes)
+- [x] `npm run accessibility` (Lighthouse accessibility 100 on Home, About, Articles,
+      and a representative article)
+- [x] `PLAYWRIGHT_BASE_URL=http://127.0.0.1:4173 npm run test:e2e` (40/40 passed)
+- [x] Rendered review at 1440px and 390px, plus a representative dark-theme article;
+      Impeccable finish disposition: **ship-with-notes, no blockers**.
 
-For browser acceptance after the static build:
+The merged PR and its preview/validation record are the evidence for the completed
+rollout. No additional product or UI implementation is in scope for this plan unless a
+future review identifies a concrete regression.
 
-```bash
-npm run preview:swa
-PLAYWRIGHT_BASE_URL=http://127.0.0.1:4280 npm run test:e2e
-```
-
-Use the repository’s full validation workflow before proposing a PR. A visual review is
-also required in both themes and at narrow/mobile widths; automated checks alone cannot
-approve the hierarchy or image treatment.
-
-## Risks to manage during build
+## Risks and mitigations recorded for the shipped implementation
 
 | Risk                                                | Guardrail                                                                                                      |
 | --------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
@@ -172,8 +170,9 @@ approve the hierarchy or image treatment.
 | A stronger hero overstates the profile              | Build from the existing role, introduction, work, writing, and certification data only.                        |
 | Large visual changes weaken established behavior    | Extend current focused tests before replacing shared component behavior; preserve SEO/prerender contracts.     |
 
-## Approval checkpoint
+## Completion record
 
-Approve this plan to begin implementation on the isolated branch. The first build pass
-will establish the global language and shell, then validate it before the page-level
-recomposition proceeds.
+The plan moved from draft to shipped after PR [#445](https://github.com/lfarci/loganfarci.com/pull/445)
+merged the Field Notes implementation. The implementation and cross-route verification
+are complete; this document now records the shipped outcome rather than an approval
+checkpoint.
