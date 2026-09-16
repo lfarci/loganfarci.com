@@ -15,7 +15,7 @@ concurrency:
 
 env:
     AUTOMATION_BRANCH: auto/synchronize-certifications-${{ github.run_id }}
-    PR_BASE_BRANCH: main
+    PR_BASE_BRANCH: ${{ github.event.repository.default_branch }}
 
 jobs:
     sync:
