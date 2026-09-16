@@ -1,5 +1,75 @@
 [
   {
+    "title": "GitHub Advanced Security Sales Credential",
+    "issuer": "GitHub",
+    "date": "2026-08-27",
+    "image": {
+      "src": "/images/certifications/github-advanced-security-sales-credential.avif",
+      "alt": "GitHub Advanced Security Sales Credential badge",
+      "width": 128,
+      "height": 128
+    },
+    "url": "https://www.credly.com/badges/6494a37b-3e00-4556-88fd-272580440010/public_url",
+    "relevance": "Medium",
+    "order": 14
+  },
+  {
+    "title": "GitHub Copilot Sales Credential",
+    "issuer": "GitHub",
+    "date": "2026-08-27",
+    "image": {
+      "src": "/images/certifications/github-copilot-sales-credential.avif",
+      "alt": "GitHub Copilot Sales Credential badge",
+      "width": 128,
+      "height": 128
+    },
+    "url": "https://www.credly.com/badges/c8147629-9313-4e89-afe7-be5ea4c644dc/public_url",
+    "relevance": "Medium",
+    "order": 15
+  },
+  {
+    "title": "GitHub Platform Sales Credential",
+    "issuer": "GitHub",
+    "date": "2026-08-27",
+    "image": {
+      "src": "/images/certifications/github-platform-sales-credential.avif",
+      "alt": "GitHub Platform Sales Credential badge",
+      "width": 128,
+      "height": 128
+    },
+    "url": "https://www.credly.com/badges/142343d9-e6b3-4526-904c-b0d504f8456d/public_url",
+    "relevance": "Medium",
+    "order": 16
+  },
+  {
+    "title": "GitHub Revenue Motions Sales Credential",
+    "issuer": "GitHub",
+    "date": "2026-08-27",
+    "image": {
+      "src": "/images/certifications/github-revenue-motions-sales-credential.avif",
+      "alt": "GitHub Revenue Motions Sales Credential badge",
+      "width": 128,
+      "height": 128
+    },
+    "url": "https://www.credly.com/badges/b4dbd1a9-ed7a-411a-8975-0e8d83c401f9/public_url",
+    "relevance": "Medium",
+    "order": 17
+  },
+  {
+    "title": "GitHub Technical Sales Professional Credential",
+    "issuer": "GitHub",
+    "date": "2026-08-27",
+    "image": {
+      "src": "/images/certifications/github-technical-sales-professional-credential.avif",
+      "alt": "GitHub Technical Sales Professional Credential badge",
+      "width": 128,
+      "height": 128
+    },
+    "url": "https://www.credly.com/badges/29ea7703-a21f-4cc1-b21b-9f02f70d8012/public_url",
+    "relevance": "Medium",
+    "order": 18
+  },
+  {
     "title": "AzureDevOps to GitHub Migrations Delivery Credential",
     "issuer": "GitHub",
     "date": "2026-08-18",
@@ -194,6 +264,34 @@
     "url": "https://learn.microsoft.com/en-us/users/avanade-logan-farci/transcript/v2zpzc0kelwykj1?tab=credentials-tab",
     "relevance": "High",
     "order": 0
+  },
+  {
+    "title": "GitHub Certified: Agentic AI Developer",
+    "issuer": "Microsoft",
+    "date": "2026-09-07",
+    "image": {
+      "src": "/images/certifications/azure-developer-associate.avif",
+      "alt": "GitHub Certified: Agentic AI Developer badge",
+      "width": 128,
+      "height": 128
+    },
+    "url": "https://learn.microsoft.com/en-us/users/avanade-logan-farci/transcript/v2zpzc0kelwykj1?tab=credentials-tab",
+    "relevance": "High",
+    "order": 0
+  },
+  {
+    "title": "Microsoft Applied Skills: Resolve GitHub issues by using GitHub Copilot",
+    "issuer": "Microsoft",
+    "date": "2026-08-31",
+    "image": {
+      "src": "/images/certifications/microsoft-applied-skills-resolve-github-issues-by-using-github-copilot.avif",
+      "alt": "Microsoft Applied Skills: Resolve GitHub issues by using GitHub Copilot badge",
+      "width": 128,
+      "height": 128
+    },
+    "url": "https://learn.microsoft.com/api/credentials/share/en-us/avanade-logan-farci/CBC243D5DEB72471?sharingId=v2zpzc0kelwykj1",
+    "relevance": "Medium",
+    "order": 19
   },
   {
     "title": "Microsoft Applied Skills: Accelerate AI-assisted development by using GitHub Copilot",
