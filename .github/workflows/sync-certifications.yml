@@ -14,7 +14,7 @@ concurrency:
     cancel-in-progress: false
 
 env:
-    AUTOMATION_BRANCH: automation/certification-sync
+    AUTOMATION_BRANCH: auto/synchronize-certifications-${{ github.run_id }}
     PR_BASE_BRANCH: main
 
 jobs:

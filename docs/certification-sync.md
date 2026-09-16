@@ -32,10 +32,11 @@ monthly scheduled execution.
 
 ## Pull request behavior
 
-When generated output changes, the workflow commits it to the stable
-`automation/certification-sync` branch and creates a pull request against `main`. Repeated runs force
-the same branch back to the latest `main`, regenerate the content, and update the existing open pull
-request instead of opening duplicates.
+When generated output changes, the workflow commits it to a run-scoped
+`auto/synchronize-certifications-<run_id>` branch and creates a pull request against `main`.
+Re-running the same workflow run keeps the same `run_id`, forces that branch back to the latest
+`main`, regenerates the content, and updates the existing open pull request instead of opening a
+duplicate for the rerun.
 
 Review the pull request like any other content update. The automation does not merge it.
 
