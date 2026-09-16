@@ -111,9 +111,8 @@ jobs:
               env:
                   GH_TOKEN: ${{ github.token }}
               run: |
-                  git push --force-with-lease \
-                    "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" \
-                    "$AUTOMATION_BRANCH"
+                  gh auth setup-git
+                  git push --force-with-lease origin "$AUTOMATION_BRANCH"
 
             - name: Create or update pull request
               if: steps.generated.outputs.changed == 'true'
