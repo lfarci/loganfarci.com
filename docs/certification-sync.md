@@ -41,15 +41,12 @@ opening a duplicate for the rerun.
 
 Review the pull request like any other content update. The automation does not merge it.
 
-## Enabling or disabling the monthly schedule
+## Disabling or re-enabling the monthly schedule
 
-The workflow includes a monthly cron trigger for 06:00 UTC on the first day of each month, but the
-scheduled job is gated by the repository variable `CERTIFICATION_SYNC_SCHEDULE_ENABLED`.
+The workflow runs monthly at 06:00 UTC on the first day of each month.
 
-- To enable scheduled runs after a successful manual validation, set the repository variable to
-  `true`.
-- To disable scheduled runs, delete the variable or set it to any value other than `true`.
-- Manual runs continue to work while the scheduled job is disabled.
+To pause the schedule, disable the **Sync Certifications** workflow from the Actions tab. Re-enable
+the workflow from the same page when monthly synchronization should resume.
 
 ## Retrying failures
 
