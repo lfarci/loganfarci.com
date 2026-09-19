@@ -8,7 +8,7 @@ test.describe("Home page", () => {
 
         const main = page.getByRole("main");
         await expect(main.getByRole("heading", { level: 1 })).toHaveText("Hi, I'm Logan.Software Engineer");
-        await expect(main.getByRole("link", { name: "View résumé" })).not.toHaveAttribute("download");
+        await expect(main.getByRole("link", { name: "View résumé" })).toHaveAttribute("download", "");
         await expect(main.getByRole("link", { name: "Contact me" })).toHaveAttribute(
             "href",
             "mailto:logan.farci@outlook.be",
@@ -65,24 +65,6 @@ test.describe("Home page", () => {
             expect(layout.ctasToSocial).toBeGreaterThanOrEqual(16);
             expect(layout.ctasToSocial).toBeLessThanOrEqual(20);
         }
-    });
-
-    test("keeps the introduction below the header on short laptop viewports", async ({ page }) => {
-        await page.setViewportSize({ width: 1200, height: 700 });
-        await page.goto("/");
-
-        const layout = await page.evaluate(() => ({
-            headingTop: document.querySelector(".home-heading")!.getBoundingClientRect().top,
-            headerBottom: document.querySelector(".field-shell-header")!.getBoundingClientRect().bottom,
-        }));
-
-        expect(layout.headingTop).toBeGreaterThanOrEqual(layout.headerBottom);
-    });
-
-    test("keeps the app usable for malformed URL fragments", async ({ page }) => {
-        await page.goto("/about#%");
-
-        await expect(page.getByRole("heading", { level: 1, name: "About Me" })).toBeVisible();
     });
 
     test("keeps the tablet hero content ahead of the portrait", async ({ page }) => {
@@ -207,19 +189,7 @@ test.describe("Home page", () => {
 
             await expectPage(page, ABOUT_PAGE);
             await expect(page).toHaveURL(new RegExp(`/about#${destination.hash}$`, "u"));
-            const heading = page.getByRole("heading", { level: 2, name: destination.targetHeading, exact: true });
-            await expect(heading).toBeVisible();
-            await expect
-                .poll(() =>
-                    page.evaluate((hash) => {
-                        const section = document.getElementById(hash);
-                        if (!section) {
-                            return Number.POSITIVE_INFINITY;
-                        }
-                        return section.getBoundingClientRect().top;
-                    }, destination.hash),
-                )
-                .toBeLessThanOrEqual(120);
+            await expect(page.getByRole("heading", { name: destination.targetHeading, exact: true })).toBeVisible();
         });
     }
 

@@ -16,14 +16,6 @@ const navigationItems = [
     { url: "/resume.pdf", label: "Résumé", download: true },
 ] as const;
 
-function isNavigationItemActive(url: string, pathname: string) {
-    if (url === "/articles") {
-        return pathname === url || pathname.startsWith(`${url}/`);
-    }
-
-    return pathname === url;
-}
-
 const NavigationBar: React.FC<NavigationBarProps> = ({ title }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const menuId = useId();
@@ -89,7 +81,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ title }) => {
                     aria-label={isMenuOpen ? "Close menu" : "Open menu"}
                     aria-controls={menuId}
                     aria-expanded={isMenuOpen}
-                    className="size-11 min-[72rem]:hidden"
+                    className="min-[72rem]:hidden"
                     onClick={handleMenuToggle}
                 >
                     <span className="sr-only">{isMenuOpen ? "Close menu" : "Open menu"}</span>
@@ -117,7 +109,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ title }) => {
                             key={item.url}
                             url={item.url}
                             download={item.download}
-                            active={!item.download && isNavigationItemActive(item.url, location.pathname)}
+                            active={!item.download && location.pathname === item.url}
                             className="field-shell-link"
                         >
                             {item.label}
@@ -142,7 +134,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ title }) => {
                                     <NavBarEntry
                                         url={item.url}
                                         download={item.download}
-                                        active={!item.download && isNavigationItemActive(item.url, location.pathname)}
+                                        active={!item.download && location.pathname === item.url}
                                         className="field-shell-link py-2 text-base motion-reduce:transition-none"
                                     >
                                         {item.label}

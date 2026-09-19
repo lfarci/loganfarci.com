@@ -6,7 +6,6 @@ import { ChevronDownIcon } from "@/components/shared/icons";
 import { getCertifications, getDiploma, getExperiences, getProfile, getSkillCategories } from "@/core/data";
 import { formatExperiencePeriod } from "@/core/date";
 import { createBreadcrumbJsonLd, createCanonicalUrl } from "@/core/seo";
-import { createId } from "@/core/string";
 import type { Certification, Image, SkillCategory } from "@/types";
 
 const relevanceOrder: Record<Certification["relevance"], number> = { High: 0, Medium: 1, Low: 2 };
@@ -47,14 +46,13 @@ function ArrowUpRightIcon() {
 interface DisclosureProps {
     children: ReactNode;
     detail?: string;
-    id?: string;
     image?: Image;
     title: string;
 }
 
-function Disclosure({ children, detail, id, image, title }: Readonly<DisclosureProps>) {
+function Disclosure({ children, detail, image, title }: Readonly<DisclosureProps>) {
     return (
-        <details className="field-disclosure" id={id}>
+        <details className="field-disclosure">
             <summary>
                 <span className={image ? "field-disclosure-preview" : "min-w-0"}>
                     {image && (
@@ -100,7 +98,7 @@ function CertificationLink({ certification }: Readonly<{ certification: Certific
 
 function SkillDisclosure({ category }: Readonly<{ category: SkillCategory }>) {
     return (
-        <Disclosure detail={`${category.skills.length} skills`} id={createId(category.name)} title={category.name}>
+        <Disclosure detail={`${category.skills.length} skills`} title={category.name}>
             <p className="field-supporting-copy">{category.description}</p>
             <div className="field-skill-list">
                 {category.skills.map((skill) => (
@@ -147,7 +145,7 @@ export default function AboutPage() {
                     </div>
                 </section>
 
-                <section className="field-section scroll-mt-24" id="experience">
+                <section className="field-section" id="experience">
                     <header className="field-section-header">
                         <h2>Experience</h2>
                         <p>Selected roles and the systems delivered along the way.</p>
@@ -186,7 +184,7 @@ export default function AboutPage() {
                     </div>
                 </section>
 
-                <section className="field-section scroll-mt-24" id="certifications">
+                <section className="field-section" id="certifications">
                     <header className="field-section-header">
                         <h2>Certifications</h2>
                         <p>Current, relevant proof—led by the credentials closest to my work.</p>
