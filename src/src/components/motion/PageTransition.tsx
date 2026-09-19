@@ -13,6 +13,23 @@ interface PageTransitionProps {
     readonly children: ReactNode;
 }
 
+function ScrollToHash({ hash }: Readonly<{ hash: string }>) {
+    useEffect(() => {
+        if (!hash) {
+            return;
+        }
+
+        try {
+            const anchorId = decodeURIComponent(hash.slice(1));
+            document.getElementById(anchorId)?.scrollIntoView();
+        } catch {
+            // Ignore malformed fragments so a bad URL cannot break the page shell.
+        }
+    }, [hash]);
+
+    return null;
+}
+
 export default function PageTransition({ children }: PageTransitionProps) {
     const location = useLocation();
     const prefersReducedMotion = useReducedMotion();
@@ -35,6 +52,7 @@ export default function PageTransition({ children }: PageTransitionProps) {
                 exit="exit"
                 transition={prefersReducedMotion ? reducedMotionTransition : pageTransition}
             >
+                <ScrollToHash hash={location.hash} />
                 {children}
             </motion.div>
         </AnimatePresence>

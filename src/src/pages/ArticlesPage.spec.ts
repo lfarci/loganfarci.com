@@ -28,6 +28,7 @@ test.describe("Articles", () => {
 
         await expect(articleCards.getByRole("link")).toHaveCount(articleCount);
         await expect(articleCards.locator("time[datetime]")).toHaveCount(articleCount);
+        await expect(articleCards.getByRole("heading", { level: 3 })).toHaveCount(articleCount);
     });
 
     test("opens a rendered article from the listing", async ({ page }) => {
@@ -93,6 +94,20 @@ test.describe("Articles", () => {
         await page.goForward();
 
         await expectPage(page, articlePage);
+    });
+
+    test("offers contact and continued reading after an article", async ({ page }) => {
+        await page.goto("/articles");
+        const articlePage = await getFirstArticlePage(page);
+        await page.goto(articlePage.path);
+
+        await expect(page.getByRole("link", { name: "Discuss this article" })).toHaveAttribute(
+            "href",
+            "mailto:logan.farci@outlook.be",
+        );
+        await page.getByRole("link", { name: "More articles" }).click();
+
+        await expectPage(page, ARTICLES_PAGE);
     });
 });
 
