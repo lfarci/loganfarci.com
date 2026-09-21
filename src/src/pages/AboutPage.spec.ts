@@ -55,7 +55,9 @@ test.describe("About page", () => {
             return {
                 header: header ? Number.parseFloat(getComputedStyle(header).scrollMarginTop || "0") : 0,
                 experience: experience ? Number.parseFloat(getComputedStyle(experience).scrollMarginTop || "0") : 0,
-                certifications: certifications ? Number.parseFloat(getComputedStyle(certifications).scrollMarginTop || "0") : 0,
+                certifications: certifications
+                    ? Number.parseFloat(getComputedStyle(certifications).scrollMarginTop || "0")
+                    : 0,
             };
         });
 
