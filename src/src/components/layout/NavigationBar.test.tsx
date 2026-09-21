@@ -19,10 +19,10 @@ function parseMinWidthFromMediaQuery(query: string, rootFontSize: number): numbe
     return Number.parseFloat(minWidthMatch[1]) * unitMultiplier;
 }
 
-function renderNavigationBarWithProviders() {
+function renderNavigationBarWithProviders(initialEntry = "/") {
     return render(
         <ThemeProvider>
-            <MemoryRouter initialEntries={["/"]}>
+            <MemoryRouter initialEntries={[initialEntry]}>
                 <NavigationBar title="Logan Farci" />
             </MemoryRouter>
         </ThemeProvider>,
@@ -115,6 +115,12 @@ describe("NavigationBar", () => {
 
         expect(screen.getAllByRole("link", { name: "Home" })[0].getAttribute("aria-current")).toBe("page");
         expect(screen.getAllByRole("link", { name: "About" })[0].getAttribute("aria-current")).toBeNull();
+    });
+
+    it("identifies article detail routes as part of Articles", () => {
+        renderNavigationBarWithProviders("/articles/example");
+
+        expect(screen.getAllByRole("link", { name: "Articles" })[0].getAttribute("aria-current")).toBe("page");
     });
 
     it("opens the mobile menu when the toggle button is clicked", () => {

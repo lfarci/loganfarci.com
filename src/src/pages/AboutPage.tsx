@@ -126,7 +126,7 @@ export default function AboutPage() {
             <JsonLd data={breadcrumbJsonLd} />
 
             <article className="field-page field-about-page">
-                <header className="field-page-header scroll-mt-24" id="about-me">
+                <header className="field-page-header" id="about-me">
                     <h1 className="field-page-title">About Me</h1>
                     <p className="field-page-deck">
                         The experience, working principles, and technical range behind the systems I build.

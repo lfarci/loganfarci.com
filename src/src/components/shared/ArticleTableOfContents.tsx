@@ -85,7 +85,7 @@ function TableOfContentsList({ activeHeadingId, items, nested = false }: TableOf
 
 export function ArticleMarkdownLayout({ children }: Readonly<MarkdownElementProps>) {
     return (
-        <div className="grid w-full min-w-0 lg:grid-cols-[minmax(0,72ch)_14rem] lg:items-start lg:gap-10 xl:gap-12">
+        <div className="grid w-full min-w-0 lg:grid-cols-[minmax(0,74ch)_14rem] lg:items-start lg:gap-10 xl:gap-12">
             {children}
         </div>
     );
@@ -111,7 +111,7 @@ export default function ArticleTableOfContents({ node }: Readonly<MarkdownElemen
             <nav
                 id={tableOfContentsId}
                 aria-labelledby={tableOfContentsTitleId}
-                className="mb-8 border-b border-border pb-6 lg:sticky lg:top-24 lg:col-start-2 lg:row-start-1 lg:mb-0 lg:border-b-0 lg:border-l lg:pb-0 lg:pl-5"
+                className="mb-6 border-b border-border pb-5 lg:sticky lg:top-24 lg:col-start-2 lg:row-start-1 lg:mb-0 lg:border-b-0 lg:border-l lg:pb-0 lg:pl-5"
             >
                 <Label as="h2" id={tableOfContentsTitleId} className="mb-1 px-2 text-text-primary">
                     In this article

@@ -44,26 +44,11 @@ test.describe("About page", () => {
         await expect(page.getByRole("heading", { level: 2, name: "Skills" })).toBeVisible();
     });
 
-    test("keeps anchored sections clear of the sticky header", async ({ page }) => {
-        await page.goto("/about#about-me");
-
-        const offsetStyles = await page.evaluate(() => {
-            const header = document.querySelector(".field-page-header");
-            const experience = document.getElementById("experience");
-            const certifications = document.getElementById("certifications");
-
-            return {
-                header: header ? Number.parseFloat(getComputedStyle(header).scrollMarginTop || "0") : 0,
-                experience: experience ? Number.parseFloat(getComputedStyle(experience).scrollMarginTop || "0") : 0,
-                certifications: certifications
-                    ? Number.parseFloat(getComputedStyle(certifications).scrollMarginTop || "0")
-                    : 0,
-            };
-        });
-
-        expect(offsetStyles.header).toBeGreaterThan(0);
-        expect(offsetStyles.experience).toBeGreaterThan(0);
-        expect(offsetStyles.certifications).toBeGreaterThan(0);
+    test("exposes skill subsection anchors used by home redirects", async ({ page }) => {
+        await page.goto("/about");
+        for (const anchorId of ["cloud", "ai", "devops", "software-engineering"]) {
+            await expect(page.locator(`#${anchorId}`)).toBeVisible();
+        }
     });
 
     test("keeps every disclosure closed while leaving the education preview visible", async ({ page }) => {

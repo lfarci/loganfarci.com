@@ -89,7 +89,7 @@ export default function HomePage() {
                 <div className="home-actions">
                     <div className="home-cta-row">
                         <Button asChild className="home-cta home-cta-primary">
-                            <a href="/resume.pdf" download>
+                            <a href="/resume.pdf">
                                 <ResumeIcon />
                                 View résumé
                             </a>
@@ -101,7 +101,7 @@ export default function HomePage() {
                             </a>
                         </Button>
                     </div>
-                    <div className="home-contact-list" aria-label="Other ways to connect">
+                    <nav className="home-contact-list" aria-label="Other ways to connect">
                         {contacts.map((contact) => (
                             <a
                                 key={contact.name}
@@ -114,7 +114,7 @@ export default function HomePage() {
                                 {getContactIcon(contact)}
                             </a>
                         ))}
-                    </div>
+                    </nav>
                 </div>
 
                 <figure className="home-portrait">
