@@ -25,8 +25,8 @@ small local remark transform that derives heading metadata from the same syntax 
 it does not create a second Markdown parser or rendering path.
 
 Used by the article page ([`ArticlePage.tsx`](../../src/src/pages/ArticlePage.tsx)),
-the about page profile text, and `MarkdownSection` / `MarkdownPreview`. There is one
-renderer — new markdown surfaces MUST reuse `MarkdownContent`, not a second pipeline.
+the about page profile text, and `MarkdownSection`. There is one renderer — new
+markdown surfaces MUST reuse `MarkdownContent`, not a second pipeline.
 
 The article body is loaded and parsed as described in
 [architecture.md](./architecture.md#content-pipeline); this spec picks up at the render
