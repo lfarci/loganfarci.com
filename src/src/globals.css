@@ -573,6 +573,11 @@
         padding: clamp(3rem, 8vw, 5rem) 1.25rem 1rem;
     }
 
+    .field-page-header,
+    .field-section {
+        scroll-margin-top: calc(var(--field-shell-header-height) + 1rem);
+    }
+
     .field-page-header {
         max-width: 70rem;
         padding-bottom: clamp(3rem, 6vw, 4.75rem);
@@ -660,12 +665,9 @@
         padding-bottom: 0;
     }
 
-    .field-about-page {
-        --field-footer-gap: clamp(2.5rem, 3vw, 3.5rem);
-    }
-
+    .field-shell-about-main,
     .field-shell-about-main + .field-shell-footer {
-        margin-top: clamp(2.5rem, 3vw, 3.5rem);
+        --field-footer-gap: clamp(2.5rem, 3vw, 3.5rem);
     }
 
     .field-shell-articles-main,
@@ -1138,6 +1140,17 @@
     .field-articles-page .field-article-index,
     .field-articles-page .field-article-entry {
         position: relative;
+    }
+
+    .field-page::before {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: calc(var(--field-content-left) - var(--editorial-rule-x));
+        width: 1px;
+        content: "";
+        background: var(--color-border);
+        pointer-events: none;
     }
 
     .field-about-page .field-section,
