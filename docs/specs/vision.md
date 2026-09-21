@@ -78,7 +78,7 @@ about it. This is a deliberate professional statement, not a disclaimer to hide.
   reviewed by Logan. AI assistance never lowers the bar; anything shipped is work Logan
   vouches for.
 - **Demonstrate judgment, not just output.** The takeaway for a hiring manager should be
-  that Logan uses modern AI tooling effectively *and* knows exactly what he is doing —
+  that Logan uses modern AI tooling effectively _and_ knows exactly what he is doing —
   competence and control, with AI as a force multiplier.
 - **No AI slop.** Generic, padded, unverified, or hallucinated content MUST NOT ship.
   Technical claims and code MUST be verified (ties to the article hard rules in
@@ -196,6 +196,7 @@ Machine-readable (generated at build):
 ```
 
 Notes:
+
 - Keep the URL structure flat and predictable; slugs are kebab-case.
 - `/resume` is not a shipped or planned HTML route; browser PDF viewing happens via
   `/resume.pdf`, and any future résumé work remains tied to the existing external asset

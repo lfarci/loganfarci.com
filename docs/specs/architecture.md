@@ -17,17 +17,17 @@ state; see [vision.md](./vision.md) for planned direction and the target sitemap
 
 Verified from [`src/package.json`](../../src/package.json):
 
-| Concern | Choice |
-| --- | --- |
-| Build tool | **Vite 7** (not Next.js — see note below) |
-| UI | **React 19** + **react-router 7** |
-| Language | **TypeScript 5** (`strict: true`) |
-| Styling | **Tailwind CSS 4** (`@tailwindcss/vite`) + local shadcn-style **Radix** primitives |
-| Animation | **framer-motion** |
-| Markdown rendering | **react-markdown** + **remark-gfm**; **mermaid** for diagrams |
-| Analytics | **Azure Application Insights** (cookieless, PROD-only) — see [`docs/analytics.md`](../analytics.md) |
-| Testing | **vitest** + Testing Library + jsdom |
-| Hosting | **Azure Static Web Apps**, provisioned by Terraform in `infra/` |
+| Concern            | Choice                                                                                              |
+| ------------------ | --------------------------------------------------------------------------------------------------- |
+| Build tool         | **Vite 7** (not Next.js — see note below)                                                           |
+| UI                 | **React 19** + **react-router 7**                                                                   |
+| Language           | **TypeScript 5** (`strict: true`)                                                                   |
+| Styling            | **Tailwind CSS 4** (`@tailwindcss/vite`) + local shadcn-style **Radix** primitives                  |
+| Animation          | **framer-motion**                                                                                   |
+| Markdown rendering | **react-markdown** + **remark-gfm**; **mermaid** for diagrams                                       |
+| Analytics          | **Azure Application Insights** (cookieless, PROD-only) — see [`docs/analytics.md`](../analytics.md) |
+| Testing            | **vitest** + Testing Library + jsdom                                                                |
+| Hosting            | **Azure Static Web Apps**, provisioned by Terraform in `infra/`                                     |
 
 > **Stack note (drift reconciled):** The `README.md` tech-stack table historically
 > listed **Next.js**. The app does **not** use Next.js — it is a Vite SPA with a
@@ -39,13 +39,13 @@ All app commands run from the `src/` directory (the Vite project root).
 
 Defined in [`src/src/routes.tsx`](../../src/src/routes.tsx); pages in `src/src/pages/`.
 
-| Path | Page | Responsibility |
-| --- | --- | --- |
-| `/` | `HomePage` | Field Notes introduction, role/stack framing, primary résumé action, contact actions, portrait, and proof links that route to the About and article surfaces. It does not render featured article collections, a certification list, or an interests grid. |
-| `/about` | `AboutPage` | Full professional profile: experience timeline, education/diploma, current relevant certification set, and grouped skill categories. |
-| `/articles` | `ArticlesPage` | List of all articles, newest first. |
-| `/articles/:slug` | `ArticlePage` | A single rendered markdown article with metadata; redirects when the slug is unknown. |
-| `*` | `NotFoundPage` | Client-side 404. |
+| Path              | Page           | Responsibility                                                                                                                                                                                                                                             |
+| ----------------- | -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `/`               | `HomePage`     | Field Notes introduction, role/stack framing, primary résumé action, contact actions, portrait, and proof links that route to the About and article surfaces. It does not render featured article collections, a certification list, or an interests grid. |
+| `/about`          | `AboutPage`    | Full professional profile: experience timeline, education/diploma, current relevant certification set, and grouped skill categories.                                                                                                                       |
+| `/articles`       | `ArticlesPage` | List of all articles, newest first.                                                                                                                                                                                                                        |
+| `/articles/:slug` | `ArticlePage`  | A single rendered markdown article with metadata; redirects when the slug is unknown.                                                                                                                                                                      |
+| `*`               | `NotFoundPage` | Client-side 404.                                                                                                                                                                                                                                           |
 
 `getStaticRoutes()` (same file) enumerates the routes to prerender: `/`, `/about`,
 `/articles`, and one `/articles/{slug}` per article. The prerender step also renders
@@ -82,8 +82,8 @@ Contract between the pieces:
   bundle, and for each static route injects `html` into `<div id="root">` and
   `headTags` into `<head>`, writing `dist/{route}/index.html`. It additionally
   generates:
-  - `404.html` (from the `/404` render) — SWA fallback.
-  - `sitemap.xml`, `robots.txt`, `llms.txt`, `llms-full.txt`.
+    - `404.html` (from the `/404` render) — SWA fallback.
+    - `sitemap.xml`, `robots.txt`, `llms.txt`, `llms-full.txt`.
 - [`src/public/staticwebapp.config.json`](../../src/public/staticwebapp.config.json)
   sets `navigationFallback` → `/404.html`, excluding static assets and the generated
   text/xml files.
