@@ -1,6 +1,6 @@
 ---
 spec: vision
-version: 0.1.1
+version: 0.2.0
 status: vision
 ---
 
@@ -78,7 +78,7 @@ about it. This is a deliberate professional statement, not a disclaimer to hide.
   reviewed by Logan. AI assistance never lowers the bar; anything shipped is work Logan
   vouches for.
 - **Demonstrate judgment, not just output.** The takeaway for a hiring manager should be
-  that Logan uses modern AI tooling effectively *and* knows exactly what he is doing —
+  that Logan uses modern AI tooling effectively _and_ knows exactly what he is doing —
   competence and control, with AI as a force multiplier.
 - **No AI slop.** Generic, padded, unverified, or hallucinated content MUST NOT ship.
   Technical claims and code MUST be verified (ties to the article hard rules in
@@ -93,13 +93,16 @@ and machines.
 
 ### Planned sections and features
 
-- **Resume / CV.** A resume hosted on the site, viewable in the browser and available
-  as a downloadable file (e.g. PDF). It should reuse the existing experience,
-  education, certification, and skills data (see [data-contracts.md](./data-contracts.md))
-  rather than duplicating it.
+- **Résumé / CV asset.** The shipped delivery keeps the résumé as a static PDF asset
+  rather than a generated HTML page in the app. It is viewable in the browser from
+  `/resume.pdf` and is downloadable as a file; the current contract does not add a
+  `/resume` app route or a runtime résumé generator. The site continues to source its
+  profile data from the current data contracts and existing content pipeline rather than
+  duplicating a second résumé source of truth.
 - **Projects.** A dedicated projects section showcasing selected work, each with a
   short summary, tech used, and links (repo, live demo, article). Modeled as typed
-  data in `content/data/` mirroring the existing content pipeline.
+  data in `content/data/` mirroring the existing content pipeline; it remains a
+  planned backlog item rather than a live route.
 - **Themes.** A light/dark theme toggle **already ships** (`ThemeContext` +
   `ThemeToggle`, Tailwind `darkMode: "class"`), built on the semantic tokens (no second
   styling system). It honors `prefers-color-scheme` until the visitor explicitly
@@ -109,7 +112,7 @@ and machines.
   and **Dutch** (both for a Belgian audience, `fr_BE` / `nl_BE`) for now, with room to add
   more. Keep it simple: content and UI strings should be translatable
   without a heavy i18n framework, and prerendering must still produce static pages per
-  locale. Full plan in [i18n.md](./i18n.md).
+  locale. This remains planned backlog work, not a shipped route set; see [i18n.md](./i18n.md).
 
 ## Accessibility ambitions
 
@@ -161,8 +164,9 @@ measurable targets (aspirational where a planned section does not exist yet):
 - The site is **fully usable with the keyboard alone** and with a screen reader on the
   home, about, and article-reading flows.
 - Layout holds with **no horizontal scroll or overlap** from 320px up to wide desktop.
-- The resume is **viewable in the browser and downloadable as a PDF**, generated from
-  the existing profile/experience/education data (no duplicated source of truth).
+- The résumé is **viewable in the browser as a PDF asset and downloadable as a file**;
+  it remains an externally managed document and does not require a generated HTML route
+  or a duplicate source of truth in the app.
 - Each project in the projects section has a summary, tech list, and at least one link
   (repo, demo, or article).
 - A reader who lands on an article can tell **who wrote it** and reach a clear **way to
@@ -175,12 +179,12 @@ measurable targets (aspirational where a planned section does not exist yet):
 ## Target sitemap
 
 Current routes are in [architecture.md](./architecture.md). The target structure,
-including planned sections:
+including planned sections, remains a mix of live routes and planned backlog items:
 
 ```
-/                     Home: intro, featured articles, highlights, contact
+/                     Home: intro, role framing, résumé action, contact, proof links
 /about                Profile: experience, education, certifications, skills
-/resume               Resume/CV: browsable, with downloadable file (planned)
+/resume.pdf           Résumé PDF asset (shipped; not an HTML route)
 /projects             Projects index (planned)
 /projects/:slug       Individual project detail (planned)
 /articles             Articles index
@@ -192,7 +196,13 @@ Machine-readable (generated at build):
 ```
 
 Notes:
+
 - Keep the URL structure flat and predictable; slugs are kebab-case.
+- `/resume` is not a shipped or planned HTML route; browser PDF viewing happens via
+  `/resume.pdf`, and any future résumé work remains tied to the existing external asset
+  handoff rather than a generated app page.
+- Projects and internationalization remain planned backlog work and should be tracked
+  separately from the shipped route contract.
 - If internationalization lands, prefer a simple, conventional locale scheme and keep
   every locale statically prerendered.
 - Add new sections to the sitemap, `llms.txt`, and JSON-LD when they ship so content
