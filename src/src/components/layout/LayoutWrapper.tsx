@@ -24,7 +24,7 @@ const LayoutWrapper: React.FC<Readonly<LayoutWrapperProps>> = ({ children, githu
         <>
             <a
                 href="#main-content"
-                className="fixed left-4 top-4 z-50 -translate-y-[calc(100%+2rem)] rounded-control bg-surface px-4 py-3 font-medium text-primary shadow-popover transition-transform focus:translate-y-0 focus-visible:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background motion-reduce:transition-none"
+                className="field-skip-link fixed left-4 top-4 z-50 rounded-control bg-surface px-4 py-3 font-medium text-primary shadow-popover transition-transform focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background motion-reduce:transition-none"
             >
                 Skip to content
             </a>

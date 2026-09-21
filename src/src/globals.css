@@ -142,6 +142,18 @@
 }
 
 @layer components {
+    .field-skip-link {
+        pointer-events: none;
+        opacity: 0;
+        transform: translateY(calc(-100% - 2rem));
+    }
+
+    .field-skip-link:focus-visible {
+        pointer-events: auto;
+        opacity: 1;
+        transform: translateY(0);
+    }
+
     .home-frame {
         position: relative;
         display: grid;
@@ -986,6 +998,13 @@
         color: var(--color-text-secondary);
     }
 
+    .field-error-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        margin-top: 2rem;
+    }
+
     .field-back-link {
         display: inline-flex;
         min-height: 2.75rem;
@@ -1220,7 +1239,9 @@
     .field-articles-page .field-article-row:focus-visible::before {
         opacity: 1;
     }
+}
 
+@media (min-width: 64rem) {
     .field-not-found {
         grid-template-columns: minmax(18rem, 0.75fr) minmax(0, 1fr);
         gap: clamp(3rem, 8vw, 10rem);

@@ -13,10 +13,17 @@ export default function NotFoundPage() {
                 </p>
                 <div className="field-error-copy">
                     <h1>Page Not Found</h1>
-                    <p>That page does not exist, has moved, or was never committed in the first place.</p>
-                    <Button asChild className="mt-8">
-                        <Link to="/">Back to home</Link>
-                    </Button>
+                    <p>
+                        That page doesn&apos;t exist or may have moved. Try the homepage or browse the latest articles.
+                    </p>
+                    <div className="field-error-actions">
+                        <Button asChild>
+                            <Link to="/">Back to home</Link>
+                        </Button>
+                        <Button asChild variant="secondary">
+                            <Link to="/articles">Browse articles</Link>
+                        </Button>
+                    </div>
                 </div>
             </section>
         </>
