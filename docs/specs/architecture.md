@@ -1,6 +1,6 @@
 ---
 spec: architecture
-version: 0.1.0
+version: 0.2.0
 status: current-state
 ---
 
@@ -41,8 +41,8 @@ Defined in [`src/src/routes.tsx`](../../src/src/routes.tsx); pages in `src/src/p
 
 | Path | Page | Responsibility |
 | --- | --- | --- |
-| `/` | `HomePage` | Hero/greeting, profile intro, featured articles, high-relevance certifications, interests, and contact links. |
-| `/about` | `AboutPage` | Full professional profile: experience timeline, education/diploma, all certifications, and skill categories. |
+| `/` | `HomePage` | Field Notes introduction, role/stack framing, primary résumé action, contact actions, portrait, and proof links that route to the About and article surfaces. It does not render featured article collections, a certification list, or an interests grid. |
+| `/about` | `AboutPage` | Full professional profile: experience timeline, education/diploma, current relevant certification set, and grouped skill categories. |
 | `/articles` | `ArticlesPage` | List of all articles, newest first. |
 | `/articles/:slug` | `ArticlePage` | A single rendered markdown article with metadata; redirects when the slug is unknown. |
 | `*` | `NotFoundPage` | Client-side 404. |
@@ -50,6 +50,17 @@ Defined in [`src/src/routes.tsx`](../../src/src/routes.tsx); pages in `src/src/p
 `getStaticRoutes()` (same file) enumerates the routes to prerender: `/`, `/about`,
 `/articles`, and one `/articles/{slug}` per article. The prerender step also renders
 a dedicated `/404` into `404.html`.
+
+The current Home implementation follows the shipped Field Notes direction from
+[`DESIGN.md`](../../DESIGN.md) and [`docs/design/revamp-plan.md`](../design/revamp-plan.md):
+visible proof, contact and résumé actions, and the portrait-led intro are the shipped
+behavior, not the earlier featured-article/certification/interests layout.
+
+The site also ships a static résumé asset: [`src/public/resume.pdf`](../../src/public/resume.pdf)
+serves the browser/view and download workflow via `/resume.pdf`, but there is no
+`/resume` HTML route or runtime résumé generator in the current app. That asset is the
+public-facing résumé file; the site data and content pipeline remain the existing JSON
+and markdown sources, not a second generated résumé source of truth.
 
 ## SSR + prerender contract
 
