@@ -123,7 +123,7 @@ The first table shows **where each harness looks**. This one starts with a repos
 
 ## Instructions are getting easier to share
 
-For repository-wide guidance, **prefer [`AGENTS.md`](https://agents.md/)**. All four harnesses covered here recognize it in their documented configurations, so architecture notes, development commands, and coding conventions can live in one shared file. If you only need those general instructions in GitHub Copilot CLI, `.github/copilot-instructions.md` offers little portability benefit over `AGENTS.md`. It can still matter for other GitHub Copilot environments with different support.
+For repository-wide guidance, **prefer [`AGENTS.md`](https://agents.md/)**. All four harnesses covered here recognize it in their documented configurations, so architecture notes, development commands, and coding conventions can live in one shared file. If you only need those general instructions in GitHub Copilot CLI, `.github/copilot-instructions.md` offers little portability benefit over `AGENTS.md`. It can still matter for other GitHub Copilot environments (for example, GitHub.com, VS Code, or JetBrains), where instruction-file support differs.
 
 **Scoped instructions are the important exception.** Nested `AGENTS.md` files organize guidance by directory, but GitHub Copilot's `.github/instructions/*.instructions.md` supports `applyTo` glob patterns. That lets you target a single file, such as `src/App.tsx`, or files matching `**/*.tsx` across multiple directories. A nested `AGENTS.md` does not provide the same file-pattern targeting.
 
@@ -132,13 +132,14 @@ For repository-wide guidance, **prefer [`AGENTS.md`](https://agents.md/)**. All 
 **Check which GitHub Copilot environment you use.** The [official custom-instruction support matrix](https://docs.github.com/en/copilot/reference/custom-instructions-support) lists `AGENTS.md` support for GitHub Copilot CLI, VS Code Copilot Chat, cloud agent, and code review, but not for GitHub.com Copilot Chat or JetBrains Copilot Chat. This article focuses on GitHub Copilot CLI and desktop; do not assume every integration recognizes the same files.
 
 
-## Skills are moving in the same direction
+## Share skills through `.agents/skills/`
 
-The [Agent Skills specification](https://agentskills.io/) defines a reusable skill around a `SKILL.md` file and supporting resources. This is a much better starting point than maintaining parallel versions of the same coding checklist for every assistant.
+For skills, there is a particularly easy portability win: **put reusable skills in `.agents/skills/<name>/SKILL.md`** rather than keeping them only under GitHub Copilot's `.github/skills/`. GitHub Copilot, OpenCode, and Codex all document discovery of the shared `.agents/skills/` location, so those three harnesses can find the same skill without maintaining three copies.
 
-Still, I would test two things separately: does the harness *find* the skill, and does it *use* it correctly for the task? Shared structure does not guarantee identical triggering, tools, or results.
+Claude Code uses `.claude/skills/` for project skills instead. If you also use Claude Code, you can link or copy the skill into that directory, but check whether symlinks work in your version and environment rather than assuming automatic discovery from `.agents/skills/`.
 
-My website's existing article guidance is a useful candidate for a future skill, but I would not call it a portable skill until it has actually been packaged and exercised in both tools.
+The [Agent Skills specification](https://agentskills.io/) provides a common `SKILL.md` format. **Sharing the file is not the same as guaranteeing identical behavior**: each harness may decide differently when to load a skill and how to run it. Still, using the shared directory is a straightforward starting point.
+
 
 ## Custom agents are a different story
 
