@@ -151,7 +151,15 @@ Custom agents are harder to move than instructions or skills. Their definitions 
 
 **Reuse the intent, but migrate the implementation.** Translate each agent definition into the target harness's format, then test representative tasks, tool access, approval boundaries, delegation, and results. Copying the prompt alone does not reproduce the workflow.
 
-A shared format for reusable agent roles and capabilities, with harness-specific adapters, would be a useful next step. For now, custom agents require deliberate, harness-by-harness migration and evaluation.
+For now, custom agents require deliberate, harness-by-harness migration and evaluation.
+
+### Could agent workflows have a shared definition?
+
+I wonder whether an abstraction layer could describe a coding-agent workflow once, then generate custom-agent definitions for GitHub Copilot, OpenCode, Codex, and Claude Code. It is an interesting idea, but I am not convinced that a universal format would be practical.
+
+There are already experiments in this direction. Projects such as [AgentSync](https://github.com/chasepd/AgentSync) and [universal-ai-config](https://github.com/fabis94/universal-ai-config) aim to synchronize or generate agent configurations across tools. Their existence suggests this is a real problem, not an untouched idea. But generating valid files is only part of it: a workflow that delegates successfully in GitHub Copilot might behave differently in OpenCode, Codex, or Claude Code, and even across editor integrations. Tool names, permission models, context handling, and delegation semantics do not always map cleanly.
+
+Perhaps the useful abstraction would capture *intent and required capabilities*, while adapters expose unsupported features and tests verify the actual workflow. Whether that would save more work than maintaining a few native agent files remains an open question.
 
 ### Migration checklist
 
