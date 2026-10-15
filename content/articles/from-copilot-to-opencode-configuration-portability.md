@@ -46,20 +46,22 @@ my-project/
     └── AGENTS.md
 ```
 
-The pieces fit together roughly like this:
+The diagram summarizes how those pieces relate to one another:
 
 ```mermaid
 flowchart TD
-    R["Repository configuration"] --> I["Instructions and rules"]
-    R --> S["Skills"]
-    R --> A["Custom agents"]
-    R --> M["MCP servers"]
-    R --> H["Harness settings"]
-    H --> P["Permissions and hooks"]
-    A --> O["Delegation and orchestration"]
+    R["Repository configuration"]
+    R --> I["Instructions<br/>Project rules and context"]
+    R --> S["Skills<br/>Reusable task procedures"]
+    R --> A["Custom agents<br/>Specialized roles and tools"]
+    R --> M["MCP servers<br/>External integrations"]
+    R --> H["Harness settings<br/>Runtime-specific behavior"]
+    H --> P["Permissions<br/>Allowed actions"]
+    H --> K["Hooks<br/>Lifecycle automation"]
+    A -.-> O["Orchestration<br/>Delegation and coordination"]
 ```
 
-This diagram groups the configuration by purpose. It does not imply that every harness implements each feature in the same way.
+Instructions and skills mainly describe *what an assistant should know or do*. Custom agents define *who handles a task*. MCP servers supply external capabilities. Harness settings control *how the runtime operates*, including permissions and hooks. Orchestration connects agents into a workflow, but its implementation can depend on the harness.
 
 This is an **illustrative layout**, not a claim that every file exists in my website repository. Some files are shared conventions, while others are specific to a GitHub Copilot runtime. A different harness might understand the contents of a file but never look in that directory.
 
