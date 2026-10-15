@@ -157,9 +157,17 @@ For now, custom agents require deliberate, harness-by-harness migration and eval
 
 I wonder whether an abstraction layer could describe a coding-agent workflow once, then generate custom-agent definitions for GitHub Copilot, OpenCode, Codex, and Claude Code. It is an interesting idea, but I am not convinced that a universal format would be practical.
 
-There are already experiments in this direction. Projects such as [AgentSync](https://github.com/chasepd/AgentSync) and [universal-ai-config](https://github.com/fabis94/universal-ai-config) aim to synchronize or generate agent configurations across tools. Their existence suggests this is a real problem, not an untouched idea. But generating valid files is only part of it: a workflow that delegates successfully in GitHub Copilot might behave differently in OpenCode, Codex, or Claude Code, and even across editor integrations. Tool names, permission models, context handling, and delegation semantics do not always map cleanly.
+There are already experiments in this direction. Projects such as [AgentSync](https://github.com/chasepd/AgentSync) and [universal-ai-config](https://github.com/fabis94/universal-ai-config) aim to synchronize or generate agent configurations across tools. I have not reviewed these repositories in depth, so I would treat them as examples to investigate rather than proven solutions. Their existence suggests this is a real problem, not an untouched idea. But generating valid files is only part of it: a workflow that delegates successfully in GitHub Copilot might behave differently in OpenCode, Codex, or Claude Code, and even across editor integrations. Tool names, permission models, context handling, and delegation semantics do not always map cleanly.
 
 Perhaps the useful abstraction would capture *intent and required capabilities*, while adapters expose unsupported features and tests verify the actual workflow. Whether that would save more work than maintaining a few native agent files remains an open question.
+
+### How would I test a migrated agent?
+
+I would start with a few representative tasks and write down what success looks like *before* running them. For a read-only reviewer, for example: does it identify a seeded bug, avoid editing files, and produce actionable feedback? For a delegated task: was the right subagent called, and did it respect approval boundaries?
+
+Capture the run and check both **outcomes** (tests pass, expected files changed) and **process** (tools used, permissions respected, delegation performed). Repeat runs to catch inconsistent behavior, and compare the same scenarios across harnesses. OpenAI's [guide to testing Agent Skills with evals](https://developers.openai.com/blog/eval-skills) describes this prompt → trace and artifacts → checks approach, which also provides a useful starting point for custom-agent tests.
+
+There are harness-specific mechanisms, not one universal test runner: [GitHub documents a private test-and-review flow for organization custom agents](https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/customize-cloud-agent/test-custom-agents), while [OpenCode supports scripted, non-interactive runs](https://dev.opencode.ai/v2/docs/cli/commands/) that can be used in an evaluation harness. The first is a cloud-agent workflow, not a claim that GitHub Copilot CLI has the same test facility. For other harnesses, the same evaluation principles apply even if the automation interface differs.
 
 ### Migration checklist
 
@@ -167,7 +175,7 @@ Perhaps the useful abstraction would capture *intent and required capabilities*,
 2. Put reusable skills in `.agents/skills/`, link them for Claude Code, and test discovery and behavior.
 3. Translate custom agents and their orchestration deliberately, rather than just copying prompts.
 4. Reconfigure MCP servers and permissions for each harness.
-5. Run representative tasks in each target harness and record differences and manual interventions.
+5. Run a small repeatable evaluation suite in each target harness: check the output, tool calls, permission boundaries, and delegation, then record differences and manual interventions.
 
 ## Where portability still stops
 
