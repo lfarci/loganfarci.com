@@ -127,7 +127,9 @@ For repository-wide guidance, **prefer [`AGENTS.md`](https://agents.md/)**. All 
 
 **Scoped instructions are the important exception.** Nested `AGENTS.md` files organize guidance by directory, but GitHub Copilot's `.github/instructions/*.instructions.md` supports `applyTo` glob patterns. That lets you target a single file, such as `src/App.tsx`, or files matching `**/*.tsx` across multiple directories. A nested `AGENTS.md` does not provide the same file-pattern targeting.
 
-My rule of thumb: **use `AGENTS.md` for portable, repository-wide or directory-specific guidance; use GitHub Copilot-specific instruction files when you need its finer-grained `applyTo` scoping or deliberately want to target GitHub Copilot.** Avoid duplicating the same rules in both formats.
+**My rule of thumb:** Prefer `AGENTS.md` for both root and nested directory instructions. Use GitHub Copilot-specific files when you need file-pattern targeting with `applyTo`, or intentionally want Copilot-only behavior. Avoid duplicating rules.
+
+**Check which GitHub Copilot environment you use.** The [official custom-instruction support matrix](https://docs.github.com/en/copilot/reference/custom-instructions-support) lists `AGENTS.md` support for GitHub Copilot CLI, VS Code Copilot Chat, cloud agent, and code review, but not for GitHub.com Copilot Chat or JetBrains Copilot Chat. This article focuses on GitHub Copilot CLI and desktop; do not assume every integration recognizes the same files.
 
 
 ## Skills are moving in the same direction
