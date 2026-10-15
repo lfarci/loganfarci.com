@@ -115,7 +115,7 @@ Custom agents are harder to move than instructions or skills. Their definitions 
 
 ## Conclusion: Where portability still stops
 
-Portability is not all or nothing. **Instructions and skills are increasingly reusable; custom-agent execution remains harness-specific.** My takeaway is simple: share instructions and skills, then translate and test tool-specific configuration. I plan to test real migrations next; for now, this is a documentation-based comparison, not a compatibility benchmark.
+Portability is not all or nothing. **Instructions and skills are increasingly reusable; custom-agent execution remains harness-specific.** My takeaway is simple: share instructions and skills, then translate and test tool-specific configuration. This makes me wonder whether a small tool could compile a shared agent definition into harness-specific configuration files. It wouldn't erase differences in permissions, delegation, or execution, but it might reduce the work of switching tools. I want to test that idea against real migrations; for now, this is a documentation-based comparison, not a compatibility benchmark.
 
 ### Official references
 
