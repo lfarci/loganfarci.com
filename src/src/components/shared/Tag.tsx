@@ -18,7 +18,13 @@ const TagIcon: React.FC<TagIconProps> = ({ src, alt }) => {
     if (src.endsWith("-light.svg")) {
         return (
             <>
-                <img src={src} alt={alt} width={16} height={16} className={[...imageClasses, "dark:hidden"].join(" ")} />
+                <img
+                    src={src}
+                    alt={alt}
+                    width={16}
+                    height={16}
+                    className={[...imageClasses, "dark:hidden"].join(" ")}
+                />
                 <img
                     src={src.replace(/-light\.svg$/, "-dark.svg")}
                     alt={alt}
