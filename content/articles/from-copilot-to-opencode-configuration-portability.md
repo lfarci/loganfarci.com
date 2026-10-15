@@ -136,7 +136,7 @@ For repository-wide guidance, **prefer [`AGENTS.md`](https://agents.md/)**. All 
 
 For skills, there is a particularly easy portability win: **put reusable skills in `.agents/skills/<name>/SKILL.md`** rather than keeping them only under GitHub Copilot's `.github/skills/`. GitHub Copilot, OpenCode, and Codex all document discovery of the shared `.agents/skills/` location, so those three harnesses can find the same skill without maintaining three copies.
 
-Claude Code uses `.claude/skills/` for project skills instead. If you also use Claude Code, you can link or copy the skill into that directory, but check whether symlinks work in your version and environment rather than assuming automatic discovery from `.agents/skills/`.
+Claude Code discovers project skills under `.claude/skills/` instead, and does not document a setting to replace that default path with `.agents/skills/`. Fortunately, [Claude Code supports symlinked skill directories](https://code.claude.com/docs/en/skills). Keep `.agents/skills/` as the source of truth and symlink each skill into `.claude/skills/` rather than maintaining copies. For example, from the repository root: `mkdir -p .claude/skills && ln -s ../../.agents/skills/code-review .claude/skills/code-review` (assuming the `code-review` skill exists).
 
 The [Agent Skills specification](https://agentskills.io/) provides a common `SKILL.md` format. **Sharing the file is not the same as guaranteeing identical behavior**: each harness may decide differently when to load a skill and how to run it. Still, using the shared directory is a straightforward starting point.
 
