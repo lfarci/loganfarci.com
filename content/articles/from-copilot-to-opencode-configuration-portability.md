@@ -8,17 +8,49 @@ author: "Logan Farci"
 coauthoredWithAgent: true
 ---
 
-I use GitHub Copilot regularly, so naturally I have tailored my repositories around it. My personal website is no exception. It contains repository instructions, article-writing guidance, and an agent workflow with explicit roles and delivery rules.
+At work and on my personal projects, I spend a lot of time on GitHub. GitHub Copilot has been my usual coding assistant, and over time I've added instructions, skills, and custom agents to make it more useful in my repositories.
 
-Then I wanted to try [OpenCode](https://opencode.ai/). Not because I wanted to change models, but because I wanted to try a different coding harness on Fedora.
+I've also tried Claude Code, Codex, and OpenCode. One thing I keep running into is the configuration. I open a repository in a different tool and find myself adapting files or recreating things I've already set up for Copilot. Sometimes the instructions carry over easily. Other times, an agent or workflow needs a different setup.
 
-That raised a surprisingly practical question: **how much of the configuration already committed to my repository can I reuse when switching coding harnesses?** OpenCode is my first example, but the same question applies to Codex, Claude Code, Cursor, and Gemini CLI.
+So I wanted to look at a fairly specific question: **if a repository is already configured for GitHub Copilot, what can I reuse with another coding harness?** This is about files and settings in the repository, not model providers, API keys, or subscriptions.
 
-This article is about **repository configuration**, not model choice, API keys, subscriptions, or bring-your-own-key support.
+## What counts as agent configuration?
 
-## Configuration cheat sheet: where each harness looks
+By configuration, I mean the files that tell a coding assistant about the project and how it should work. They serve different purposes:
 
-The first question is not whether a tool *understands* Markdown. It is which instructions it discovers, at what scope, and whether multiple files are combined. Here are the main repository-level locations to check before switching harnesses.
+- **Instructions** describe the repository, coding conventions, and rules for particular directories or files.
+- **Skills** package repeatable tasks or workflows, usually as a `SKILL.md` file with optional supporting resources.
+- **Custom agents** define specialized roles, often with their own prompts, tools, and execution settings.
+- **MCP servers** connect the assistant to external tools and services. MCP is a shared protocol, but each client can store its server settings differently.
+- **Permissions and hooks** control which actions are allowed and what happens around tool calls or other lifecycle events.
+- **Orchestration** defines how agents delegate work, coordinate sessions, and hand results back. This is often the least portable part.
+
+A Copilot-oriented repository might contain something like this:
+
+```text
+my-project/
+├── AGENTS.md
+├── .agents/
+│   └── skills/
+│       └── write-article/
+│           └── SKILL.md
+├── .github/
+│   ├── copilot-instructions.md
+│   ├── instructions/
+│   │   └── articles.instructions.md
+│   └── agents/
+│       └── reviewer.agent.md
+├── .vscode/
+│   └── mcp.json
+└── src/
+    └── AGENTS.md
+```
+
+This is an **illustrative layout**, not a claim that every file exists in my website repository. Some files are shared conventions, while others are specific to GitHub Copilot or VS Code. A different harness might understand the contents of a file but never look in that directory.
+
+## Where each harness looks
+
+Here is the cheat sheet I would have liked when I started trying other tools. It focuses on the main repository-level paths rather than every possible global setting.
 
 | Asset | GitHub Copilot | OpenCode | Codex | Claude Code |
 | --- | --- | --- | --- | --- |
@@ -34,7 +66,7 @@ Copilot also differs by surface: VS Code, Copilot CLI, GitHub cloud agent, and c
 
 This table lists **representative repository locations**, not every user-level setting or legacy path. It is a documentation-based cheat sheet, not a cross-harness runtime test.
 
-## What can actually be reused?
+## What can I reuse without rewriting it?
 
 | Copilot asset | OpenCode | Codex | Claude Code |
 | --- | --- | --- | --- |
@@ -48,13 +80,13 @@ This table lists **representative repository locations**, not every user-level s
 
 The biggest distinction is between **content reuse** and **automatic loading**. A Markdown instruction can be perfectly reusable even if the target tool never discovers its original file path. A custom agent can reuse the same prompt while requiring a different execution contract.
 
-## A real repository example
+## How this applies to my website
 
 My website already contains a root `AGENTS.md`, plus nested guidance and Copilot-specific instruction files. Its root file points back to `.github/copilot-instructions.md` and `docs/specs/`. This is a reasonable way to avoid repeating project knowledge, but it also means that a harness must follow those references for the full guidance to take effect.
 
 The repository's Product Owner, Orchestrator, and Developer workflow is a tougher case. Its approval, branch, and quality-gate rules are meaningful regardless of harness, but the delegation mechanics are not portable merely because the Markdown is.
 
-## Instructions: mostly a discovery problem
+## Instructions are getting easier to share
 
 The most promising common denominator is [`AGENTS.md`](https://agents.md/), which can appear at more than one directory level. If a project puts general guidance there, different coding tools can potentially consume the same human-readable instructions.
 
@@ -64,7 +96,7 @@ The content itself is not tied to Copilot. The *path and loading rules* are.
 
 A sensible cleanup would be to keep shared guidance in `AGENTS.md`, leave genuinely Copilot-specific instructions in `.github/`, and verify how each harness handles scoped instructions. A path-scoped Copilot instruction is not automatically equivalent to an always-loaded Markdown file.
 
-## Skills: the closest thing to a portable asset
+## Skills are moving in the same direction
 
 The [Agent Skills specification](https://agentskills.io/) defines a reusable skill around a `SKILL.md` file and supporting resources. This is a much better starting point than maintaining parallel versions of the same coding checklist for every assistant.
 
@@ -72,7 +104,7 @@ Still, I would test two things separately: does the harness *find* the skill, an
 
 My website's existing article guidance is a useful candidate for a future skill, but I would not call it a portable skill until it has actually been packaged and exercised in both tools.
 
-## Agents: this is where the abstraction leaks
+## Custom agents are a different story
 
 A custom agent is more than a prompt. It may specify tools, execution mode, permissions, delegation, and how work returns to the parent session.
 
@@ -80,7 +112,7 @@ My website's documented Product Owner to Orchestrator to Developer workflow make
 
 The realistic migration is to preserve the workflow contract, then implement and test the orchestration separately in each harness. A passing static contract validator is useful evidence about repository rules, **not** proof of equivalent live agent behavior.
 
-## What I would actually migrate first
+## How I would approach a migration
 
 I would avoid rewriting everything at once:
 
@@ -92,7 +124,7 @@ I would avoid rewriting everything at once:
 
 This order matters. If the simple instructions already work, there is no reason to build a configuration compiler just to copy Markdown files.
 
-## The portability boundary
+## Where portability still stops
 
 The emerging answer is not that configuration is either portable or locked in. **Instructions and skills are increasingly reusable; agent execution remains harness-specific.**
 
