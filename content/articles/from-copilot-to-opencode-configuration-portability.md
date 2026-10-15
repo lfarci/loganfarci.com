@@ -73,13 +73,13 @@ Here is the cheat sheet I would have liked when I started trying other tools. It
 
 | Asset | GitHub Copilot | OpenCode | Codex | Claude Code |
 | --- | --- | --- | --- | --- |
-| **Instructions** | `.github/copilot-instructions.md` (root-wide); `.github/instructions/**/*.instructions.md` (glob-scoped); root or nested `AGENTS.md` in supported surfaces | `AGENTS.md` (project or ancestor); `opencode.json` `instructions` for extra files/globs; `CLAUDE.md` fallback | Root and nested `AGENTS.md`, plus `AGENTS.override.md` where applicable | Root and nested `CLAUDE.md`; `.claude/rules/` for modular rules |
-| **Skills** | `.agents/skills/<name>/SKILL.md`, `.github/skills/<name>/SKILL.md` | `.agents/skills/<name>/SKILL.md`, `.opencode/skills/<name>/SKILL.md` | `.agents/skills/<name>/SKILL.md` | `.claude/skills/<name>/SKILL.md` |
-| **Custom agents** | `.github/agents/*.agent.md` | `.opencode/agents/*.md` or `opencode.json` | Agent roles in Codex configuration | `.claude/agents/*.md` |
-| **MCP servers** | `.vscode/mcp.json` for VS Code; other Copilot surfaces vary | `opencode.json` | `.codex/config.toml` or user settings | `.mcp.json` |
-| **Harness configuration** (permissions, hooks, tools) | `.github/copilot/settings.json` (shared repository settings); `.github/copilot/settings.local.json` (local overrides); `~/.copilot/settings.json` (user settings) | `opencode.json`, plugins | `config.toml` | `.claude/settings.json` |
+| **Instructions** | `.github/copilot-instructions.md` (root-wide); `.github/instructions/**/*.instructions.md` (glob-scoped); root or nested `AGENTS.md` in supported surfaces | `AGENTS.md` (project or ancestor); `opencode.json` `instructions` for extra files/globs; `CLAUDE.md` fallback | Root and nested `AGENTS.md`, plus `AGENTS.override.md` where applicable | Root and nested `CLAUDE.md`, `.claude/CLAUDE.md`, `.claude/rules/` (including path-scoped rules); `AGENTS.md` fallback on supported versions |
+| **Skills** | `.agents/skills/<name>/SKILL.md`, `.github/skills/<name>/SKILL.md` | `.agents/skills/<name>/SKILL.md`, `.opencode/skills/<name>/SKILL.md` | `.agents/skills/<name>/SKILL.md` | `.claude/skills/<name>/SKILL.md` (no automatic `.agents/skills/` discovery documented) |
+| **Custom agents** | `.github/agents/*.agent.md` | `.opencode/agents/*.md` or `opencode.json` / `opencode.jsonc` | `.codex/agents/<name>.toml` (project); `~/.codex/agents/` (user) | `.claude/agents/*.md` |
+| **MCP servers** | `.vscode/mcp.json` for VS Code; other Copilot surfaces vary | `opencode.json` | `.codex/config.toml` (trusted project) or `~/.codex/config.toml` | `.mcp.json` |
+| **Harness configuration** (permissions, hooks, tools) | `.github/copilot/settings.json` (shared repository settings); `.github/copilot/settings.local.json` (local overrides); `~/.copilot/settings.json` (user settings) | `opencode.json`, plugins | `.codex/config.toml` (trusted project), `~/.codex/config.toml` | `.claude/settings.json`, `.claude/settings.local.json` |
 
-**Nested instruction files are real, but not identical across tools.** GitHub documents multiple `AGENTS.md` files at different directory levels, with the nearest applicable file taking precedence. Codex collects guidance along the path from repository root to the working directory, so deeper instructions can refine earlier ones. Claude Code supports nested `CLAUDE.md` files. OpenCode supports ancestor discovery, but you should not assume it eagerly loads every descendant `AGENTS.md` when working from the repository root. Its explicit `instructions` globs can cover additional files. These are different discovery semantics, not one universal scoping algorithm.
+**Nested instruction files are real, but not identical across tools.** GitHub documents multiple `AGENTS.md` files at different directory levels, with the nearest applicable file taking precedence. Codex collects guidance along the path from repository root to the working directory, so deeper instructions can refine earlier ones. Claude Code supports nested `CLAUDE.md` files and path-scoped `.claude/rules/`; newer releases can also load nested `AGENTS.md` files when no applicable `CLAUDE.md` takes precedence. OpenCode supports ancestor discovery, but you should not assume it eagerly loads every descendant `AGENTS.md` when working from the repository root. Its explicit `instructions` globs can cover additional files. These are different discovery semantics, not one universal scoping algorithm.
 
 GitHub Copilot also differs by surface: VS Code, GitHub Copilot CLI, GitHub cloud agent, and code review do not support precisely the same instruction types. Check the [official support matrix](https://docs.github.com/en/copilot/reference/custom-instructions-support) before treating a GitHub Copilot file as universally recognized.
 
@@ -91,7 +91,7 @@ This table lists **representative repository locations**, not every user-level s
 
 | GitHub Copilot asset | OpenCode | Codex | Claude Code |
 | --- | --- | --- | --- |
-| Root `AGENTS.md` | Read as-is | Read as-is | Do not assume native discovery; bridge via `CLAUDE.md` |
+| Root `AGENTS.md` | Read as-is | Read as-is | Native fallback if no applicable `CLAUDE.md` (Claude Code v2.1.277+); otherwise import via `CLAUDE.md` |
 | `.github/copilot-instructions.md` | Explicitly reference or adapt | Explicitly reference or adapt | Explicitly reference or adapt |
 | `.github/instructions/*.instructions.md` | Translate scoping | Translate scoping | Translate scoping |
 | Shared `.agents/skills/` | Shared skill location | Shared skill location | Check skill location / link or copy as needed |
@@ -101,7 +101,7 @@ This table lists **representative repository locations**, not every user-level s
 
 Unlike the first table, which is a file-location reference, this one focuses on **migration effort**. The biggest distinction is between **content reuse** and **automatic loading**. A Markdown instruction can be perfectly reusable even if the target tool never discovers its original file path. A custom agent can reuse the same prompt while requiring a different execution contract.
 
-For more on Codex's agent configuration, see the [official Codex documentation](https://developers.openai.com/codex/).
+For more on Codex custom agents, see the [subagents documentation](https://learn.chatgpt.com/docs/agent-configuration/subagents).
 
 ## How this applies to my website
 
@@ -162,8 +162,8 @@ That experiment will tell us whether a configuration translation tool would actu
 - [AGENTS.md convention](https://agents.md/)
 - [Agent Skills specification](https://agentskills.io/)
 - [OpenCode rules](https://opencode.ai/docs/rules/) and [agents](https://opencode.ai/docs/agents/)
-- [Codex documentation](https://developers.openai.com/codex/)
-- [Claude Code memory](https://code.claude.com/docs/en/memory) and [subagents](https://code.claude.com/docs/en/sub-agents)
+- [Codex configuration](https://learn.chatgpt.com/docs/config-file/config-basic) and [custom subagents](https://learn.chatgpt.com/docs/agent-configuration/subagents)
+- [Claude Code instructions and AGENTS.md](https://code.claude.com/docs/en/memory), [skills](https://code.claude.com/docs/en/skills), [settings](https://code.claude.com/docs/en/settings), and [subagents](https://code.claude.com/docs/en/sub-agents)
 - [Cursor documentation](https://cursor.com/docs)
 - [Gemini CLI documentation](https://geminicli.com/docs/)
 - [GitHub Copilot CLI configuration scopes](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-config-dir-reference)
