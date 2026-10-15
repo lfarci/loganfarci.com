@@ -1,6 +1,6 @@
 ---
 title: "Beyond GitHub Copilot: Can You Reuse Your AI Setup?"
-description: "A practical look at which repository-level GitHub Copilot customizations OpenCode can reuse, which need translation, and where portability ends."
+description: "A repository configuration cheat sheet comparing GitHub Copilot, OpenCode, Codex, and Claude Code: discovery paths, reusable assets, and migration gaps."
 publishedAt: "2026-10-15"
 featured: false
 tags: ["GitHub Copilot", "AI", "OpenCode"]
@@ -16,39 +16,46 @@ That raised a surprisingly practical question: **how much of the configuration a
 
 This article is about **repository configuration**, not model choice, API keys, subscriptions, or bring-your-own-key support.
 
-## Start with the files, not the marketing
+## Configuration cheat sheet: where each harness looks
 
 In [my website repository](https://github.com/lfarci/loganfarci.com), the existing Copilot setup includes `.github/copilot-instructions.md` and `.github/instructions/articles.instructions.md`. The latter targets `content/articles/*.md`. The repository also documents a Product Owner, Orchestrator, and Developer workflow, with a local contract validator.
 
 These are not interchangeable kinds of configuration. Some files provide *knowledge* to an agent; others define *how a particular runtime should execute work*.
 
-For a first-pass migration from Copilot to OpenCode, I would classify the assets this way:
+The table below is the practical reference I wanted when opening an existing Copilot-oriented repository in another harness. Paths are project-local unless otherwise stated. A path listed here is a documented configuration location, not proof that another harness reads it automatically.
 
-| Asset | Existing Copilot location or convention | OpenCode migration assessment |
-| --- | --- | --- |
-| General repository guidance | `.github/copilot-instructions.md` | Adapt into a shared `AGENTS.md` or configure explicit instruction loading |
-| Path-specific guidance | `.github/instructions/*.instructions.md` | Translate the path-scoping behavior; do not assume automatic discovery |
-| Shared instructions | `AGENTS.md` | Reusable when both tools read the same file |
-| Agent Skills | `.agents/skills/<name>/SKILL.md` | Strong portability candidate, subject to skill discovery and runtime testing |
-| Custom agents | `.github/agents/*.agent.md` | Translate agent metadata, tools, and permissions into OpenCode's agent format |
-| MCP servers | Copilot-specific MCP settings | Reuse server definitions conceptually; adapt client configuration |
-| Delegation and sessions | Copilot-specific runtime behavior | No promise of equivalent orchestration |
+| Asset | GitHub Copilot | OpenCode | Codex | Claude Code |
+| --- | --- | --- | --- | --- |
+| Repository instructions | `.github/copilot-instructions.md`; `AGENTS.md` in supported contexts | `AGENTS.md` | `AGENTS.md` | `CLAUDE.md` |
+| Scoped instructions | `.github/instructions/*.instructions.md` (with `applyTo`) | `AGENTS.md` plus configured instruction files; semantics differ | Nested `AGENTS.md` | Nested `CLAUDE.md` and rules under `.claude/rules/` |
+| Agent Skills | `.github/skills/<skill>/SKILL.md` or `.agents/skills/<skill>/SKILL.md` | `.opencode/skills/<skill>/SKILL.md` or `.agents/skills/<skill>/SKILL.md` | `.agents/skills/<skill>/SKILL.md` | `.claude/skills/<skill>/SKILL.md` |
+| Custom agents | `.github/agents/*.agent.md` | `.opencode/agents/*.md` or agent entries in `opencode.json` | Agent roles configured through Codex config; not Copilot `.agent.md` | `.claude/agents/*.md` |
+| MCP client configuration | `.vscode/mcp.json` in VS Code; other Copilot surfaces vary | `opencode.json` (`mcp`) | `.codex/config.toml` or user config | `.mcp.json` or Claude settings |
+| Permissions / hooks | Surface-specific settings and policies | `opencode.json` permissions; plugin hooks | `config.toml` approval/sandbox settings | `.claude/settings.json` permissions and hooks |
 
-This is a **migration assessment**, not a claim that every row has been tested end to end. In particular, a compatible Markdown file does not prove that the target harness discovers or applies it.
+**How to read this:** these are representative documented locations, not a complete enumeration of user-level directories, legacy aliases, or every product surface. In particular, Copilot VS Code, CLI, desktop app, and cloud agent can behave differently. File discovery, feature support, and runtime behavior need separate verification.
 
-## Beyond OpenCode: the wider portability question
+For a Copilot-to-anything migration, I would use four labels: **read as-is**, **needs relocation or configuration**, **needs translation**, and **no equivalent / unverified**. This makes the cheat sheet useful without promising identical behavior.
 
-OpenCode is the concrete migration scenario, not the only destination. The same Copilot repository might be opened tomorrow in Codex, Claude Code, Cursor, or Gemini CLI. To compare those harnesses fairly, I would track four outcomes for every asset: **recognized as-is**, **requires configuration or relocation**, **requires semantic translation**, and **unsupported or unverified**.
+## What can actually be reused?
 
-| Asset | OpenCode | Codex | Claude Code | Cursor | Gemini CLI |
-| --- | --- | --- | --- | --- | --- |
-| `AGENTS.md` guidance | Native convention | Native convention | Check loading behavior | Check loading behavior | Check loading behavior |
-| Agent Skills (`SKILL.md`) | Shared format candidate | Shared format candidate | Shared format candidate | Shared format candidate | Shared format candidate |
-| Copilot `.agent.md` profiles | Translation required | Translation required | Translation required | Translation required | Translation required |
-| MCP client configuration | Adapt settings | Adapt settings | Adapt settings | Adapt settings | Adapt settings |
-| Permissions and delegation | Runtime-specific | Runtime-specific | Runtime-specific | Runtime-specific | Runtime-specific |
+| Copilot asset | OpenCode | Codex | Claude Code |
+| --- | --- | --- | --- |
+| Root `AGENTS.md` | Read as-is | Read as-is | Do not assume native discovery; bridge via `CLAUDE.md` |
+| `.github/copilot-instructions.md` | Explicitly reference or adapt | Explicitly reference or adapt | Explicitly reference or adapt |
+| `.github/instructions/*.instructions.md` | Translate scoping | Translate scoping | Translate scoping |
+| Shared `.agents/skills/` | Shared skill location | Shared skill location | Check skill location / link or copy as needed |
+| Copilot `.agent.md` profiles | Translate | Translate | Translate |
+| MCP server definitions | Reuse server details, rewrite client config | Reuse server details, rewrite client config | Reuse server details, rewrite client config |
+| Delegation, permissions, session orchestration | Redesign and test | Redesign and test | Redesign and test |
 
-This is a **research checklist**, not a verified support matrix. In particular, “shared format candidate” does not assert identical discovery paths or execution behavior. I would only mark a cell as confirmed after checking the target version and, ideally, running a small test. The article can grow into a versioned matrix without claiming that all harnesses are interchangeable today.
+The biggest distinction is between **content reuse** and **automatic loading**. A Markdown instruction can be perfectly reusable even if the target tool never discovers its original file path. A custom agent can reuse the same prompt while requiring a different execution contract.
+
+## A real repository example
+
+My website already contains a root `AGENTS.md`, plus nested guidance and Copilot-specific instruction files. Its root file points back to `.github/copilot-instructions.md` and `docs/specs/`. This is a reasonable way to avoid repeating project knowledge, but it also means that a harness must follow those references for the full guidance to take effect.
+
+The repository's Product Owner, Orchestrator, and Developer workflow is a tougher case. Its approval, branch, and quality-gate rules are meaningful regardless of harness, but the delegation mechanics are not portable merely because the Markdown is.
 
 ## Instructions: mostly a discovery problem
 
@@ -98,13 +105,13 @@ I have not yet run a controlled Copilot-versus-OpenCode migration of every asset
 
 That experiment will tell us whether a configuration translation tool would actually save maintenance effort, or merely add another configuration format to maintain.
 
-### References
+### Official references
 
 - [AGENTS.md convention](https://agents.md/)
 - [Agent Skills specification](https://agentskills.io/)
-- [OpenCode documentation](https://opencode.ai/docs/)
+- [OpenCode rules](https://opencode.ai/docs/rules/) and [agents](https://opencode.ai/docs/agents/)
 - [Codex documentation](https://developers.openai.com/codex/)
-- [Claude Code documentation](https://code.claude.com/docs/en/overview)
+- [Claude Code memory](https://code.claude.com/docs/en/memory) and [subagents](https://code.claude.com/docs/en/sub-agents)
 - [Cursor documentation](https://cursor.com/docs)
 - [Gemini CLI documentation](https://geminicli.com/docs/)
 - [GitHub Copilot custom agents documentation](https://docs.github.com/en/copilot/concepts/agents/coding-agent/about-custom-agents)
