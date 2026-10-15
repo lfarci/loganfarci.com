@@ -147,11 +147,11 @@ The [Agent Skills specification](https://agentskills.io/) provides a common `SKI
 
 ## Custom agents need an active migration
 
-Custom agents are harder to move than instructions or skills. Their definitions can combine a role prompt with tool access, permissions, execution modes, delegation, and handoffs. GitHub Copilot, OpenCode, Codex, and Claude Code expose different configuration formats and execution mechanisms. Translating the prompt alone does not reproduce the workflow.
+Custom agents are harder to move than instructions or skills. Their definitions combine a role and instructions with harness-specific tools, permissions, delegation, and execution behavior. There is no common custom-agent configuration format supported across GitHub Copilot, OpenCode, Codex, and Claude Code.
 
-There are interoperability initiatives, but they solve adjacent problems. [Agent2Agent (A2A)](https://a2a-protocol.org/) standardizes communication between independently running agents, while the [Agent Client Protocol (ACP)](https://agentclientprotocol.com/) connects coding agents to editors. Neither provides a universal repository-level custom-agent definition that these four harnesses can execute interchangeably.
+**Reuse the intent, but migrate the implementation.** Translate each agent definition into the target harness's format, then test representative tasks, tool access, approval boundaries, delegation, and results. Copying the prompt alone does not reproduce the workflow.
 
-I think there is room for a shared format for reusable coding-agent roles, capabilities, tool requirements, permissions, and delegation patterns, with harness-specific adapters where necessary. Until that exists, **treat custom agents as an active migration**: translate the configuration, run representative tasks, and evaluate tool access, handoffs, approval boundaries, and results in the target harness.
+Protocols such as [ACP](https://agentclientprotocol.com/) improve interoperability between coding agents and their clients, but do not standardize custom-agent definitions. A shared format for reusable agent roles and capabilities, with harness-specific adapters, would be a useful next step. For now, custom agents require deliberate, harness-by-harness migration and evaluation.
 
 ### Migration checklist
 
