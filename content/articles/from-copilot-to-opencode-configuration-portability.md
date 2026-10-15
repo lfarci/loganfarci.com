@@ -56,12 +56,10 @@ flowchart TD
     R --> A["Custom agents<br/>Specialized roles and tools"]
     R --> M["MCP servers<br/>External integrations"]
     R --> H["Harness settings<br/>Runtime-specific behavior"]
-    H --> P["Permissions<br/>Allowed actions"]
-    H --> K["Hooks<br/>Lifecycle automation"]
     A -.-> O["Orchestration<br/>Delegation and coordination"]
 ```
 
-Instructions and skills mainly describe *what an assistant should know or do*. Custom agents define *who handles a task*. MCP servers supply external capabilities. Harness settings control *how the runtime operates*, including permissions and hooks. Orchestration connects agents into a workflow, but its implementation can depend on the harness.
+Instructions and skills mainly describe *what an assistant should know or do*. Custom agents define *who handles a task*. MCP servers supply external capabilities. Harness settings control *how the runtime operates*, with details that vary between tools. Orchestration connects agents into a workflow, but its implementation can depend on the harness.
 
 This is an **illustrative layout**, not a claim that every file exists in my website repository. Some files are shared conventions, while others are specific to a GitHub Copilot runtime. A different harness might understand the contents of a file but never look in that directory.
 
