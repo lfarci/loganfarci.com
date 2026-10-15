@@ -18,24 +18,21 @@ This article is about **repository configuration**, not model choice, API keys, 
 
 ## Configuration cheat sheet: where each harness looks
 
-In [my website repository](https://github.com/lfarci/loganfarci.com), the existing Copilot setup includes `.github/copilot-instructions.md` and `.github/instructions/articles.instructions.md`. The latter targets `content/articles/*.md`. The repository also documents a Product Owner, Orchestrator, and Developer workflow, with a local contract validator.
-
-These are not interchangeable kinds of configuration. Some files provide *knowledge* to an agent; others define *how a particular runtime should execute work*.
-
-The table below is the practical reference I wanted when opening an existing Copilot-oriented repository in another harness. Paths are project-local unless otherwise stated. A path listed here is a documented configuration location, not proof that another harness reads it automatically.
+The first question is not whether a tool *understands* Markdown. It is which instructions it discovers, at what scope, and whether multiple files are combined. Here are the main repository-level locations to check before switching harnesses.
 
 | Asset | GitHub Copilot | OpenCode | Codex | Claude Code |
 | --- | --- | --- | --- | --- |
-| Repository instructions | `.github/copilot-instructions.md`; `AGENTS.md` in supported contexts | `AGENTS.md` | `AGENTS.md` | `CLAUDE.md` |
-| Scoped instructions | `.github/instructions/*.instructions.md` (with `applyTo`) | `AGENTS.md` plus configured instruction files; semantics differ | Nested `AGENTS.md` | Nested `CLAUDE.md` and rules under `.claude/rules/` |
-| Agent Skills | `.github/skills/<skill>/SKILL.md` or `.agents/skills/<skill>/SKILL.md` | `.opencode/skills/<skill>/SKILL.md` or `.agents/skills/<skill>/SKILL.md` | `.agents/skills/<skill>/SKILL.md` | `.claude/skills/<skill>/SKILL.md` |
-| Custom agents | `.github/agents/*.agent.md` | `.opencode/agents/*.md` or agent entries in `opencode.json` | Agent roles configured through Codex config; not Copilot `.agent.md` | `.claude/agents/*.md` |
-| MCP client configuration | `.vscode/mcp.json` in VS Code; other Copilot surfaces vary | `opencode.json` (`mcp`) | `.codex/config.toml` or user config | `.mcp.json` or Claude settings |
-| Permissions / hooks | Surface-specific settings and policies | `opencode.json` permissions; plugin hooks | `config.toml` approval/sandbox settings | `.claude/settings.json` permissions and hooks |
+| **Instructions** | `.github/copilot-instructions.md` (root-wide); `.github/instructions/**/*.instructions.md` (glob-scoped); root or nested `AGENTS.md` in supported surfaces | `AGENTS.md` (project or ancestor); `opencode.json` `instructions` for extra files/globs; `CLAUDE.md` fallback | Root and nested `AGENTS.md`, plus `AGENTS.override.md` where applicable | Root and nested `CLAUDE.md`; `.claude/rules/` for modular rules |
+| **Skills** | `.agents/skills/<name>/SKILL.md`, `.github/skills/<name>/SKILL.md` | `.agents/skills/<name>/SKILL.md`, `.opencode/skills/<name>/SKILL.md` | `.agents/skills/<name>/SKILL.md` | `.claude/skills/<name>/SKILL.md` |
+| **Custom agents** | `.github/agents/*.agent.md` | `.opencode/agents/*.md` or `opencode.json` | Agent roles in Codex configuration | `.claude/agents/*.md` |
+| **MCP servers** | `.vscode/mcp.json` for VS Code; other Copilot surfaces vary | `opencode.json` | `.codex/config.toml` or user settings | `.mcp.json` |
+| **Permissions / hooks** | Product- and surface-specific | `opencode.json`, plugins | `config.toml` | `.claude/settings.json` |
 
-**How to read this:** these are representative documented locations, not a complete enumeration of user-level directories, legacy aliases, or every product surface. In particular, Copilot VS Code, CLI, desktop app, and cloud agent can behave differently. File discovery, feature support, and runtime behavior need separate verification.
+**Nested instruction files are real, but not identical across tools.** GitHub documents multiple `AGENTS.md` files at different directory levels, with the nearest applicable file taking precedence. Codex collects guidance along the path from repository root to the working directory, so deeper instructions can refine earlier ones. Claude Code supports nested `CLAUDE.md` files. OpenCode supports ancestor discovery, but you should not assume it eagerly loads every descendant `AGENTS.md` when working from the repository root. Its explicit `instructions` globs can cover additional files. These are different discovery semantics, not one universal scoping algorithm.
 
-For a Copilot-to-anything migration, I would use four labels: **read as-is**, **needs relocation or configuration**, **needs translation**, and **no equivalent / unverified**. This makes the cheat sheet useful without promising identical behavior.
+Copilot also differs by surface: VS Code, Copilot CLI, GitHub cloud agent, and code review do not support precisely the same instruction types. Check the [official support matrix](https://docs.github.com/en/copilot/reference/custom-instructions-support) before treating a Copilot file as universally recognized.
+
+This table lists **representative repository locations**, not every user-level setting or legacy path. It is a documentation-based cheat sheet, not a cross-harness runtime test.
 
 ## What can actually be reused?
 
@@ -59,7 +56,7 @@ The repository's Product Owner, Orchestrator, and Developer workflow is a toughe
 
 ## Instructions: mostly a discovery problem
 
-The most promising common denominator is [`AGENTS.md`](https://agents.md/). If a project puts general guidance there, different coding tools can potentially consume the same human-readable instructions.
+The most promising common denominator is [`AGENTS.md`](https://agents.md/), which can appear at more than one directory level. If a project puts general guidance there, different coding tools can potentially consume the same human-readable instructions.
 
 My repository already has a root `AGENTS.md` that points to Copilot instructions and canonical specs, so some guidance is shared without duplication. Important context still lives in `.github/copilot-instructions.md`: project architecture, commands, coding conventions, and links to the actual specs under `docs/specs/`.
 
@@ -114,4 +111,5 @@ That experiment will tell us whether a configuration translation tool would actu
 - [Claude Code memory](https://code.claude.com/docs/en/memory) and [subagents](https://code.claude.com/docs/en/sub-agents)
 - [Cursor documentation](https://cursor.com/docs)
 - [Gemini CLI documentation](https://geminicli.com/docs/)
-- [GitHub Copilot custom agents documentation](https://docs.github.com/en/copilot/concepts/agents/coding-agent/about-custom-agents)
+- [GitHub Copilot customization cheat sheet](https://docs.github.com/en/copilot/reference/customization-cheat-sheet)
+- [GitHub Copilot instruction support by environment](https://docs.github.com/en/copilot/reference/custom-instructions-support)
