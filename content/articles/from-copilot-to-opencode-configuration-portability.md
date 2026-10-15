@@ -161,27 +161,19 @@ I wonder whether it would make sense to define a coding-agent workflow once and 
 
 I would give the agent a set of representative tasks with clear success criteria, then run each task multiple times in each harness. **pass@k** measures whether at least one of *k* attempts succeeds; **pass^k** measures whether all *k* attempts succeed, making consistency visible. I'd also check tool use, permissions, and delegation, not just the final answer. Anthropic's [guide to agent evaluations](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents) explains both metrics and the challenges of testing nondeterministic agents.
 
-## Where portability still stops
+## Conclusion: Where portability still stops
 
-The emerging answer is not that configuration is either portable or locked in. **Instructions and skills are increasingly reusable; agent execution remains harness-specific.**
+Portability is not all or nothing. **Instructions and skills are increasingly reusable; custom-agent execution remains harness-specific.** My takeaway is to keep shared knowledge in existing formats and isolate behavior that depends on a particular harness.
 
-For developers starting with GitHub Copilot, that suggests a practical rule: write shared knowledge in common formats first, and isolate runtime-specific behavior instead of letting it spread through the repository.
+I would like to experiment more with actual migrations between GitHub Copilot, OpenCode, Codex, and Claude Code. I have not yet run controlled, versioned comparisons, so the observations here are based on documentation rather than verified behavioral equivalence.
 
-I have not yet run a controlled Copilot-versus-OpenCode migration of every asset in this repository, or equivalent checks for the other harnesses. The next step is to do that and replace the assessments above with observed results, including exact harness versions.
-
-That experiment will tell us whether a configuration translation tool would actually save maintenance effort, or merely add another configuration format to maintain.
+I am also curious whether an **agent-specific translation tool** could reduce the work of maintaining custom agents across harnesses. Instructions and skills already have useful shared conventions; generating another layer for those is less compelling. The question is whether translating agent definitions would save effort without hiding important differences in tools, permissions, and delegation.
 
 ### Official references
 
-- [AGENTS.md convention](https://agents.md/)
-- [Agent Skills specification](https://agentskills.io/)
-- [OpenCode rules](https://opencode.ai/docs/rules/) and [agents](https://opencode.ai/docs/agents/)
-- [Codex configuration](https://learn.chatgpt.com/docs/config-file/config-basic) and [custom subagents](https://learn.chatgpt.com/docs/agent-configuration/subagents)
-- [Claude Code instructions and AGENTS.md](https://code.claude.com/docs/en/memory), [skills](https://code.claude.com/docs/en/skills), [settings](https://code.claude.com/docs/en/settings), and [subagents](https://code.claude.com/docs/en/sub-agents)
-- [Cursor documentation](https://cursor.com/docs)
-- [Gemini CLI documentation](https://geminicli.com/docs/)
-- [GitHub Copilot CLI repository MCP configuration](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/add-mcp-servers)\n- [Claude Code subagents](https://code.claude.com/docs/en/sub-agents)\n- [GitHub Copilot CLI configuration scopes](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-config-dir-reference)
-- [GitHub Copilot desktop app](https://docs.github.com/en/copilot/concepts/copilot-surfaces/github-copilot-app)
-- [VS Code Agent Host architecture](https://code.visualstudio.com/blogs/2026/08/26/agent-host-architecture)
-- [GitHub Copilot customization cheat sheet](https://docs.github.com/en/copilot/reference/customization-cheat-sheet)
-- [GitHub Copilot instruction support by environment](https://docs.github.com/en/copilot/reference/custom-instructions-support)
+For the main configuration documentation of each harness:
+
+1. [GitHub Copilot customization](https://docs.github.com/en/copilot/reference/customization-cheat-sheet)
+2. [OpenCode configuration](https://opencode.ai/docs/config/)
+3. [Codex configuration](https://developers.openai.com/codex/config-basic)
+4. [Claude Code settings](https://code.claude.com/docs/en/settings)
