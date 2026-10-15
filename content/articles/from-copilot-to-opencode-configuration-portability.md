@@ -67,9 +67,13 @@ This is an **illustrative layout**, not a claim that every file exists in my web
 
 ## Where each harness looks
 
-Here is the cheat sheet I would have liked when I started trying other tools. It focuses on the main repository-level paths rather than every possible global setting.
+Here is the cheat sheet I would have liked when I started trying other tools. It focuses on repository-level files, not user-level settings.
 
-**Scope:** I mainly use **GitHub Copilot CLI and the GitHub Copilot desktop app**. GitHub documents the desktop app as built on GitHub Copilot CLI. Separately, VS Code documents an **Agent Host** architecture for running agent sessions independently of the client UI; that does not mean the desktop app and CLI have identical settings or that every desktop session should be described as an Agent Host session. Some repository instructions and agent definitions overlap with VS Code, but support is not automatically identical. This table covers repository conventions and explicitly flags settings that depend on a particular GitHub Copilot runtime. GitHub.com, VS Code, Visual Studio, and JetBrains are not treated as interchangeable.
+### Scope
+
+I mainly use **GitHub Copilot CLI and the GitHub Copilot desktop app**. GitHub documents the desktop app as built on GitHub Copilot CLI. VS Code has a separate Agent Host architecture, so I do not assume that settings or features work identically across those environments. The comparison focuses on repository conventions and calls out runtime-specific differences.
+
+### Configuration cheat sheet
 
 | Asset | GitHub Copilot | OpenCode | Codex | Claude Code |
 | --- | --- | --- | --- | --- |
