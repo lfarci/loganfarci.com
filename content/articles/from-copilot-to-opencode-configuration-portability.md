@@ -95,9 +95,15 @@ In Claude Code 2.1.277+, `AGENTS.md` is a fallback when no applicable `CLAUDE.md
 
 GitHub Copilot CLI, VS Code, GitHub cloud agent, and code review do not support exactly the same instruction types. This article focuses on GitHub Copilot CLI and the desktop app, rather than treating every environment as equivalent. The [official support matrix](https://docs.github.com/en/copilot/reference/custom-instructions-support) documents the differences.
 
-### Repository MCP and harness settings
+### MCP configuration is not fully portable
 
-GitHub Copilot CLI reads shared MCP configuration from `.github/mcp.json` and also discovers `.mcp.json` in the repository hierarchy. It does not read VS Code's `.vscode/mcp.json`. The [MCP guide](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/add-mcp-servers) covers those paths. Repository settings in `.github/copilot/settings.json` support a limited set of keys; see the [configuration reference](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-config-dir-reference).
+MCP is a shared protocol, but the **repository configuration file is not universal**. GitHub Copilot CLI and Claude Code both recognize a project-level `.mcp.json`. GitHub Copilot CLI also supports `.github/mcp.json` for shared repository configuration. OpenCode defines MCP servers in `opencode.json`, while Codex uses `.codex/config.toml`. So even when the same MCP server works across harnesses, you may need to translate its configuration.
+
+One easy trap: **GitHub Copilot CLI does not read `.vscode/mcp.json`**. GitHub's [CLI MCP documentation](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/add-mcp-servers) explicitly says so, because VS Code uses a different top-level `servers` key. The CLI expects `mcpServers` or a supported bare server mapping.
+
+### Harness-specific settings
+
+Beyond MCP, each harness has its own repository settings format. Those settings are not interchangeable simply because instructions or skills can be shared. See the paths in the cheat sheet and the [GitHub Copilot CLI configuration reference](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-config-dir-reference).
 
 The table lists representative **repository-level** locations. It is based on documentation, not live compatibility tests.
 
