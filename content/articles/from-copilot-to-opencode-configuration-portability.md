@@ -123,7 +123,7 @@ The first table shows **where each harness looks**. This one starts with a repos
 
 ## How I would approach a migration
 
-I would start with the most reusable pieces and move toward the harness-specific ones. The migration table above is a checklist of what changes; the sections below explain where I would spend the effort.
+I would start with the most reusable pieces and move toward the harness-specific ones: consolidate instructions in `AGENTS.md`, share skills through `.agents/skills/`, then migrate custom agents and harness-specific MCP settings. Finally, I would test representative tasks in each harness. The sections below explain where the differences matter.
 
 ## Instructions are getting easier to share
 
@@ -160,14 +160,6 @@ I wonder whether it would make sense to define a coding-agent workflow once and 
 ### How would I test a migrated agent?
 
 I would give the agent a set of representative tasks with clear success criteria, then run each task multiple times in each harness. **pass@k** measures whether at least one of *k* attempts succeeds; **pass^k** measures whether all *k* attempts succeed, making consistency visible. I'd also check tool use, permissions, and delegation, not just the final answer. Anthropic's [guide to agent evaluations](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents) explains both metrics and the challenges of testing nondeterministic agents.
-
-### Migration checklist
-
-1. Consolidate repository-wide and scoped instructions in `AGENTS.md` where supported, keeping harness-specific rules only when necessary.
-2. Put reusable skills in `.agents/skills/`, link them for Claude Code, and test discovery and behavior.
-3. Translate custom agents and their orchestration deliberately, rather than just copying prompts.
-4. Reconfigure MCP servers and permissions for each harness.
-5. Run a small repeatable evaluation suite in each target harness: check the output, tool calls, permission boundaries, and delegation, then record differences and manual interventions.
 
 ## Where portability still stops
 
