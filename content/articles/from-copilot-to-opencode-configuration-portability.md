@@ -159,7 +159,7 @@ I wonder whether it would make sense to define a coding-agent workflow once and 
 
 ### How would I test a migrated agent?
 
-Testing means giving an agent representative tasks, checking its results and tool use, and verifying that permissions and delegation behave as intended. Repeat the tests in each harness and compare outcomes. OpenAI's [guide to evaluating Agent Skills](https://developers.openai.com/blog/eval-skills) offers a useful introduction to scenario-based evaluation; the same principles can inform custom-agent testing.
+I would give the agent a set of representative tasks with clear success criteria, then run each task multiple times in each harness. **pass@k** measures whether at least one of *k* attempts succeeds; **pass^k** measures whether all *k* attempts succeed, making consistency visible. I'd also check tool use, permissions, and delegation, not just the final answer. Anthropic's [guide to agent evaluations](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents) explains both metrics and the challenges of testing nondeterministic agents.
 
 ### Migration checklist
 
