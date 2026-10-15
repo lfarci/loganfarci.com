@@ -95,15 +95,13 @@ In Claude Code 2.1.277+, `AGENTS.md` is a fallback when no applicable `CLAUDE.md
 
 GitHub Copilot CLI, VS Code, GitHub cloud agent, and code review do not support exactly the same instruction types. This article focuses on GitHub Copilot CLI and the desktop app, rather than treating every environment as equivalent. The [official support matrix](https://docs.github.com/en/copilot/reference/custom-instructions-support) documents the differences.
 
-### MCP configuration is not fully portable
+### MCP and harness-specific configuration
 
-MCP is a shared protocol, but the **repository configuration file is not universal**. GitHub Copilot CLI and Claude Code both recognize a project-level `.mcp.json`. GitHub Copilot CLI also supports `.github/mcp.json` for shared repository configuration. OpenCode defines MCP servers in `opencode.json`, while Codex uses `.codex/config.toml`. So even when the same MCP server works across harnesses, you may need to translate its configuration.
+MCP is a shared protocol, but **how you configure an MCP server depends on the harness**. GitHub Copilot CLI and Claude Code recognize a project-level `.mcp.json`, and GitHub Copilot CLI also supports `.github/mcp.json`. OpenCode defines MCP servers in `opencode.json`, while Codex uses `.codex/config.toml`. The same MCP server may work across tools, but its configuration is not necessarily portable.
 
-One easy trap: **GitHub Copilot CLI does not read `.vscode/mcp.json`**. GitHub's [CLI MCP documentation](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/add-mcp-servers) explicitly says so, because VS Code uses a different top-level `servers` key. The CLI expects `mcpServers` or a supported bare server mapping.
+GitHub Copilot CLI does **not** read VS Code's `.vscode/mcp.json`; the [GitHub Copilot CLI MCP guide](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/add-mcp-servers) explains the difference.
 
-### Harness-specific settings
-
-Beyond MCP, each harness has its own repository settings format. Those settings are not interchangeable simply because instructions or skills can be shared. See the paths in the cheat sheet and the [GitHub Copilot CLI configuration reference](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-config-dir-reference).
+More generally, each harness has its own repository settings format, so settings beyond MCP also need to be reviewed when switching tools. The cheat sheet shows the relevant paths; see the [GitHub Copilot CLI configuration reference](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-config-dir-reference) for an example.
 
 The table lists representative **repository-level** locations. It is based on documentation, not live compatibility tests.
 
