@@ -107,19 +107,19 @@ The table lists representative **repository-level** locations. It is based on do
 
 ## What needs to change when switching?
 
-| GitHub Copilot asset | OpenCode | Codex | Claude Code |
+The first table shows **where each harness looks**. This one starts with a repository configured for **GitHub Copilot** and asks a more practical question: **what can I keep, and what needs adapting?** Reusing the text of an instruction is not the same as having another harness discover it automatically.
+
+| GitHub Copilot | OpenCode | Codex | Claude Code |
 | --- | --- | --- | --- |
-| Root `AGENTS.md` | Read as-is | Read as-is | Native root and nested discovery (v2.1.277+); `CLAUDE.md` takes precedence by default |
-| `.github/copilot-instructions.md` | Explicitly reference or adapt | Explicitly reference or adapt | Explicitly reference or adapt |
-| `.github/instructions/*.instructions.md` | Translate scoping | Translate scoping | Translate scoping |
-| Shared `.agents/skills/` | Shared skill location | Shared skill location | Check skill location / link or copy as needed |
-| GitHub Copilot `.agent.md` profiles | Translate | Translate | Translate |
-| MCP server definitions | Reuse server details, rewrite client config | Reuse server details, rewrite client config | Reuse server details, rewrite client config |
-| Delegation, permissions, session orchestration | Redesign and test | Redesign and test | Redesign and test |
+| **Repository-wide instructions:** root `AGENTS.md` or `.github/copilot-instructions.md` | Reuse `AGENTS.md`; move or reference Copilot-specific instructions | Reuse `AGENTS.md`; move or reference Copilot-specific instructions | Reuse `AGENTS.md` on supported versions, subject to `CLAUDE.md` precedence; adapt Copilot-specific instructions |
+| **Scoped instructions:** nested `AGENTS.md` or `.github/instructions/*.instructions.md` | Reuse nested `AGENTS.md` in V2; adapt Copilot-specific globs | Reuse nested `AGENTS.md`; adapt Copilot-specific globs | Reuse nested `AGENTS.md` on supported versions; adapt Copilot-specific globs and check `CLAUDE.md` precedence |
+| **Skills:** `.agents/skills/` | Reuse the shared skill directory | Reuse the shared skill directory | Link or copy skills into `.claude/skills/` as needed |
+| **Custom agents:** `.github/agents/*.agent.md` | Adapt agent metadata and configuration | Convert to TOML agent definitions | Adapt agent frontmatter and tool settings |
+| **MCP servers** | Reuse server details; configure in `opencode.json` | Reuse server details; configure in `.codex/config.toml` | Reuse server details; configure in `.mcp.json` |
+| **Delegation, permissions, and orchestration** | Rework and test workflows | Rework and test workflows | Rework and test workflows |
 
-Unlike the first table, which is a file-location reference, this one focuses on **migration effort**. The biggest distinction is between **content reuse** and **automatic loading**. A Markdown instruction can be perfectly reusable even if the target tool never discovers its original file path. A custom agent can reuse the same prompt while requiring a different execution contract.
+**The takeaway:** `AGENTS.md` and shared skills offer the easiest path to reuse. GitHub Copilot-specific instruction files usually need relocation or explicit inclusion. Custom agents and orchestration can carry over conceptually, but their configuration and behavior need review rather than a simple file copy.
 
-For more on Codex custom agents, see the [subagents documentation](https://learn.chatgpt.com/docs/agent-configuration/subagents).
 
 ## How this applies to my website
 
