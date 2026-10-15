@@ -10,7 +10,7 @@ coauthoredWithAgent: true
 
 At work and on my personal projects, I spend a lot of time on GitHub. GitHub Copilot has been my usual coding assistant, and over time I've added instructions, skills, and custom agents to make it more useful in my repositories.
 
-I've also tried Claude Code, Codex, and OpenCode. One thing I keep running into is the configuration. I open a repository in a different tool and find myself adapting files or recreating things I've already set up for Copilot. Sometimes the instructions carry over easily. Other times, an agent or workflow needs a different setup.
+I've also tried Claude Code, Codex, and OpenCode. One thing I keep running into is the configuration. I open a repository in a different tool and find myself adapting files or recreating things I've already set up for GitHub Copilot. Sometimes the instructions carry over easily. Other times, an agent or workflow needs a different setup.
 
 So I wanted to look at a fairly specific question: **if a repository is already configured for GitHub Copilot, what can I reuse with another coding harness?** This is about files and settings in the repository, not model providers, API keys, or subscriptions.
 
@@ -61,13 +61,13 @@ flowchart TD
 
 This diagram groups the configuration by purpose. It does not imply that every harness implements each feature in the same way.
 
-This is an **illustrative layout**, not a claim that every file exists in my website repository. Some files are shared conventions, while others are specific to GitHub Copilot or VS Code. A different harness might understand the contents of a file but never look in that directory.
+This is an **illustrative layout**, not a claim that every file exists in my website repository. Some files are shared conventions, while others are specific to a GitHub Copilot runtime. A different harness might understand the contents of a file but never look in that directory.
 
 ## Where each harness looks
 
 Here is the cheat sheet I would have liked when I started trying other tools. It focuses on the main repository-level paths rather than every possible global setting.
 
-**Scope:** For GitHub Copilot, this comparison uses **GitHub Copilot Chat in Visual Studio Code** as the baseline. GitHub.com, GitHub Copilot CLI, Visual Studio, and JetBrains have different feature and instruction-support matrices. Other columns refer to the named coding harnesses' project-level configuration. This is not a comparison of all GitHub Copilot products.
+**Scope:** The GitHub Copilot baseline here is **GitHub Copilot CLI and the GitHub Copilot desktop app running sessions on an agent host**, which are the environments I use most. Some repository instructions and agent definitions overlap with VS Code, but support is not automatically identical. This table covers repository conventions and explicitly flags settings that depend on a particular GitHub Copilot runtime. GitHub.com, VS Code, Visual Studio, and JetBrains are not treated as interchangeable.
 
 | Asset | GitHub Copilot | OpenCode | Codex | Claude Code |
 | --- | --- | --- | --- | --- |
@@ -75,7 +75,7 @@ Here is the cheat sheet I would have liked when I started trying other tools. It
 | **Skills** | `.agents/skills/<name>/SKILL.md`, `.github/skills/<name>/SKILL.md` | `.agents/skills/<name>/SKILL.md`, `.opencode/skills/<name>/SKILL.md` | `.agents/skills/<name>/SKILL.md` | `.claude/skills/<name>/SKILL.md` |
 | **Custom agents** | `.github/agents/*.agent.md` | `.opencode/agents/*.md` or `opencode.json` | Agent roles in Codex configuration | `.claude/agents/*.md` |
 | **MCP servers** | `.vscode/mcp.json` for VS Code; other Copilot surfaces vary | `opencode.json` | `.codex/config.toml` or user settings | `.mcp.json` |
-| **Harness configuration** (permissions, hooks, tools) | VS Code settings and supported hook configuration | `opencode.json`, plugins | `config.toml` | `.claude/settings.json` |
+| **Harness configuration** (permissions, hooks, tools) | GitHub Copilot CLI / agent-host settings and hooks (runtime-specific) | `opencode.json`, plugins | `config.toml` | `.claude/settings.json` |
 
 **Nested instruction files are real, but not identical across tools.** GitHub documents multiple `AGENTS.md` files at different directory levels, with the nearest applicable file taking precedence. Codex collects guidance along the path from repository root to the working directory, so deeper instructions can refine earlier ones. Claude Code supports nested `CLAUDE.md` files. OpenCode supports ancestor discovery, but you should not assume it eagerly loads every descendant `AGENTS.md` when working from the repository root. Its explicit `instructions` globs can cover additional files. These are different discovery semantics, not one universal scoping algorithm.
 
