@@ -64,7 +64,7 @@ as unstyled default HTML:
 | Supported callout blockquote | Labeled callout | Compact label, decorative icon, semantic accent, and normal article typography. |
 | Link | `NewTabLink` | **All links open in a new tab** with safe `rel`. |
 | Inline/fenced code | `CodeSnippet` | See below. |
-| Table (GFM) | Styled `table` | Bordered, rounded, `surface` background. |
+| Table (GFM) | Styled `table` in a scrollable region | Bordered, rounded, `surface` background; horizontal overflow stays inside a keyboard-focusable wrapper. |
 | `---` rule / `**`/`_` | `hr` / `Strong` / `Emphasis` | |
 
 ## Blockquotes

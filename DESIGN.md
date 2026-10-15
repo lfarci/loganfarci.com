@@ -192,7 +192,10 @@ About section boundaries and Articles index rows extend from that rule to the ri
 viewport edge without moving their inset content. On About and the Articles index, the
 vertical rule continues through the footer gap and terminates at the footer boundary.
 Articles keeps each date below its tags at every width. Article detail uses a broad masthead and
-bounded reading surface, with tighter opening rhythm below desktop and a quiet closing
+bounded reading surface centered within balanced page insets. On desktop, the reading
+column fills the available width beside the contents rail within the same horizontal
+bounds as the article dividers. Wide tables scroll within the reading column. It uses
+tighter opening rhythm below desktop and a quiet closing
 choice between contact and continued reading. The 404 keeps a single-column recovery
 composition through tablet widths and uses the same grid, type, and signal hierarchy. At
 every width, inner-page decks remain directly beneath and left-aligned with their titles

@@ -105,6 +105,16 @@
     "icon": "/images/skills/backend/csharp.svg"
   },
   {
+    "id": "claude-code",
+    "name": "Claude Code",
+    "icon": "/images/icons/claude-code.svg"
+  },
+  {
+    "id": "codex",
+    "name": "Codex",
+    "icon": "/images/icons/codex-light.svg"
+  },
+  {
     "id": "docker",
     "name": "Docker",
     "icon": "/images/skills/devops/docker.svg"
@@ -178,6 +188,11 @@
     "id": "oauth",
     "name": "OAuth",
     "icon": "/images/skills/backend/oauth.svg"
+  },
+  {
+    "id": "opencode",
+    "name": "OpenCode",
+    "icon": "/images/icons/opencode-light.svg"
   },
   {
     "id": "openshift",

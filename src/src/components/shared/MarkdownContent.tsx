@@ -161,9 +161,14 @@ function createMarkdownComponents(measure: boolean): Components {
         em: ({ children }) => <Emphasis>{children}</Emphasis>,
         hr: () => <Separator decorative={false} className={mergeClassNames("my-10", measureClassName)} />,
         table: ({ children }) => (
-            <table className="my-8 w-full overflow-hidden rounded-lg border border-border bg-surface text-sm">
-                {children}
-            </table>
+            <div
+                role="region"
+                aria-label="Scrollable table"
+                tabIndex={0}
+                className="my-8 max-w-full overflow-x-auto rounded-lg border border-border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            >
+                <table className="w-full bg-surface text-sm">{children}</table>
+            </div>
         ),
         thead: ({ children }) => <thead className="bg-surface-elevated">{children}</thead>,
         tbody: ({ children }) => <tbody>{children}</tbody>,

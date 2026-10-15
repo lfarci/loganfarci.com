@@ -15,6 +15,27 @@ interface TagProps {
 const TagIcon: React.FC<TagIconProps> = ({ src, alt }) => {
     const imageClasses = ["mr-1", "h-4", "w-4", "shrink-0"];
 
+    if (src.endsWith("-light.svg")) {
+        return (
+            <>
+                <img
+                    src={src}
+                    alt={alt}
+                    width={16}
+                    height={16}
+                    className={[...imageClasses, "dark:hidden"].join(" ")}
+                />
+                <img
+                    src={src.replace(/-light\.svg$/, "-dark.svg")}
+                    alt={alt}
+                    width={16}
+                    height={16}
+                    className={[...imageClasses, "hidden", "dark:block"].join(" ")}
+                />
+            </>
+        );
+    }
+
     if (src.includes("-mono")) {
         imageClasses.push("filter", "dark:invert", "dark:brightness-125");
     }
