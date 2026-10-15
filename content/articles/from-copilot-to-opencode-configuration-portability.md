@@ -121,6 +121,10 @@ The first table shows **where each harness looks**. This one starts with a repos
 **The takeaway:** `AGENTS.md` and shared skills offer the easiest path to reuse. GitHub Copilot-specific instruction files usually need relocation or explicit inclusion. Custom agents and orchestration can carry over conceptually, but their configuration and behavior need review rather than a simple file copy.
 
 
+## How I would approach a migration
+
+I would start with the most reusable pieces and move toward the harness-specific ones. The migration table above is a checklist of what changes; the sections below explain where I would spend the effort.
+
 ## Instructions are getting easier to share
 
 For repository-wide guidance, **prefer [`AGENTS.md`](https://agents.md/)**. All four harnesses covered here recognize it in their documented configurations, so architecture notes, development commands, and coding conventions can live in one shared file. If you only need those general instructions in GitHub Copilot CLI, `.github/copilot-instructions.md` offers little portability benefit over `AGENTS.md`. It can still matter for other GitHub Copilot environments (for example, GitHub.com, VS Code, or JetBrains), where instruction-file support differs.
@@ -141,25 +145,21 @@ Claude Code discovers project skills under `.claude/skills/` instead, and does n
 The [Agent Skills specification](https://agentskills.io/) provides a common `SKILL.md` format. **Sharing the file is not the same as guaranteeing identical behavior**: each harness may decide differently when to discover, load, and run a skill. Test skill discovery in every harness, both by asking for the skill explicitly and by trying a task that should trigger it naturally. Then check whether the resulting behavior matches your expectations. A shared directory is a portability win, not a substitute for testing.
 
 
-## Custom agents are a different story
+## Custom agents need an active migration
 
-A custom agent is more than a prompt. It may specify tools, execution mode, permissions, delegation, and how work returns to the parent session.
+Custom agents are harder to move than instructions or skills. Their definitions can combine a role prompt with tool access, permissions, execution modes, delegation, and handoffs. GitHub Copilot, OpenCode, Codex, and Claude Code expose different configuration formats and execution mechanisms. Translating the prompt alone does not reproduce the workflow.
 
-My website's documented Product Owner to Orchestrator to Developer workflow makes this concrete. Its rules cover approval boundaries, branch isolation, and quality gates. Copying those instructions into an OpenCode agent file would preserve some intent, but would not recreate GitHub Copilot's execution model.
+There are interoperability initiatives, but they solve adjacent problems. [Agent2Agent (A2A)](https://a2a-protocol.org/) standardizes communication between independently running agents, while the [Agent Client Protocol (ACP)](https://agentclientprotocol.com/) connects coding agents to editors. Neither provides a universal repository-level custom-agent definition that these four harnesses can execute interchangeably.
 
-The realistic migration is to preserve the workflow contract, then implement and test the orchestration separately in each harness. A passing static contract validator is useful evidence about repository rules, **not** proof of equivalent live agent behavior.
+I think there is room for a shared format for reusable coding-agent roles, capabilities, tool requirements, permissions, and delegation patterns, with harness-specific adapters where necessary. Until that exists, **treat custom agents as an active migration**: translate the configuration, run representative tasks, and evaluate tool access, handoffs, approval boundaries, and results in the target harness.
 
-## How I would approach a migration
+### Migration checklist
 
-I would avoid rewriting everything at once:
-
-1. Audit the existing root and nested `AGENTS.md` files, keeping references to canonical `docs/specs/` documents rather than duplicating instructions.
-2. Check which instructions OpenCode discovers without extra configuration.
-3. Move genuinely reusable task guidance into Agent Skills where appropriate.
-4. Translate one small custom agent, documenting differences in tools and permissions.
-5. Run the same task in both harnesses and record what changed, including any manual intervention.
-
-This order matters. If the simple instructions already work, there is no reason to build a configuration compiler just to copy Markdown files.
+1. Consolidate repository-wide and scoped instructions in `AGENTS.md` where supported, keeping harness-specific rules only when necessary.
+2. Put reusable skills in `.agents/skills/`, link them for Claude Code, and test discovery and behavior.
+3. Translate custom agents and their orchestration deliberately, rather than just copying prompts.
+4. Reconfigure MCP servers and permissions for each harness.
+5. Run representative tasks in each target harness and record differences and manual interventions.
 
 ## Where portability still stops
 
