@@ -101,7 +101,7 @@ MCP is a shared protocol, but **how you configure an MCP server depends on the h
 
 GitHub Copilot CLI does **not** read VS Code's `.vscode/mcp.json`; the [GitHub Copilot CLI MCP guide](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/add-mcp-servers) explains the difference.
 
-More generally, each harness has its own repository settings format, so settings beyond MCP also need to be reviewed when switching tools. The cheat sheet shows the relevant paths; see the [GitHub Copilot CLI configuration reference](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-config-dir-reference) for an example.
+The same applies to other harness settings: each tool uses its own configuration format. The cheat sheet above shows where those repository files live.
 
 The table lists representative **repository-level** locations. It is based on documentation, not live compatibility tests.
 
