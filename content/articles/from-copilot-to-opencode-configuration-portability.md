@@ -151,7 +151,7 @@ Custom agents are harder to move than instructions or skills. Their definitions 
 
 **Reuse the intent, but migrate the implementation.** Translate each agent definition into the target harness's format, then test representative tasks, tool access, approval boundaries, delegation, and results. Copying the prompt alone does not reproduce the workflow.
 
-Protocols such as [ACP](https://agentclientprotocol.com/) improve interoperability between coding agents and their clients, but do not standardize custom-agent definitions. A shared format for reusable agent roles and capabilities, with harness-specific adapters, would be a useful next step. For now, custom agents require deliberate, harness-by-harness migration and evaluation.
+A shared format for reusable agent roles and capabilities, with harness-specific adapters, would be a useful next step. For now, custom agents require deliberate, harness-by-harness migration and evaluation.
 
 ### Migration checklist
 
