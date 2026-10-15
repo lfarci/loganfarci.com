@@ -12,7 +12,7 @@ At work and on my personal projects, I spend a lot of time on GitHub. GitHub Cop
 
 I've also tried Claude Code, Codex, and OpenCode. One thing I keep running into is the configuration. I open a repository in a different tool and find myself adapting files or recreating things I've already set up for GitHub Copilot. Sometimes the instructions carry over easily. Other times, an agent or workflow needs a different setup.
 
-So I wanted to look at a fairly specific question: **if a repository is already configured for GitHub Copilot, what can I reuse with another coding harness?** This is about files and settings in the repository, not model providers, API keys, or subscriptions.
+So I wanted to look at a fairly specific question: **if a repository is already configured for GitHub Copilot, what can I reuse with another coding tool?** By *harness*, I mean the tool that runs the coding agent, provides tools, and manages its workflow. This is about files and settings in the repository, not model providers, API keys, or subscriptions. The comparison reflects documented behavior as of October 2026, not a hands-on compatibility benchmark.
 
 ## What counts as agent configuration?
 
@@ -71,13 +71,13 @@ Here is the cheat sheet I would have liked when I started trying other tools. It
 
 ### Scope
 
-I mainly use **GitHub Copilot CLI and the GitHub Copilot desktop app**. GitHub documents the desktop app as built on GitHub Copilot CLI. VS Code has a separate Agent Host architecture, so I do not assume that settings or features work identically across those environments. The comparison focuses on repository conventions and calls out runtime-specific differences.
+For GitHub Copilot, the main scope is **Copilot CLI and the desktop app**, not every Copilot integration. Other surfaces, including VS Code and GitHub.com, have their own instruction support. A repository that works in the CLI may need different files or settings elsewhere; check the [official support matrix](https://docs.github.com/en/copilot/reference/custom-instructions-support) before assuming automatic discovery. User-level settings also exist but are outside this comparison.
 
 ### Configuration cheat sheet
 
 | Asset | GitHub Copilot | OpenCode | Codex | Claude Code |
 | --- | --- | --- | --- | --- |
-| **Instructions** | `.github/copilot-instructions.md` (root-wide); `.github/instructions/**/*.instructions.md` (glob-scoped); root or nested `AGENTS.md` in supported surfaces | Root and nested `AGENTS.md` (V2: nested on file access); `opencode.json` `instructions` globs; legacy `CLAUDE.md` fallback | Root and nested `AGENTS.md`, plus `AGENTS.override.md` where applicable | Root and nested `CLAUDE.md`; `.claude/rules/`; nested `AGENTS.md` on file access (v2.1.277+, fallback by default) |
+| **Instructions** | `.github/copilot-instructions.md` (root-wide); `.github/instructions/**/*.instructions.md` (glob-scoped); root or nested `AGENTS.md` in supported surfaces | Root and nested `AGENTS.md` (V2: nested on file access); `opencode.json` `instructions` globs; legacy `CLAUDE.md` fallback | Root and nested `AGENTS.md`, with `AGENTS.override.md` taking precedence over `AGENTS.md` in the same directory | Root and nested `CLAUDE.md`; `.claude/rules/`; nested `AGENTS.md` on file access where supported (fallback when no applicable `CLAUDE.md`) |
 | **Skills** | `.agents/skills/<name>/SKILL.md`, `.github/skills/<name>/SKILL.md` | `.agents/skills/<name>/SKILL.md`, `.opencode/skills/<name>/SKILL.md` | `.agents/skills/<name>/SKILL.md` | `.claude/skills/<name>/SKILL.md` (no automatic `.agents/skills/` discovery documented) |
 | **Custom agents** | `.github/agents/*.agent.md` | `.opencode/agents/*.md` or `opencode.json` / `opencode.jsonc` | `.codex/agents/<name>.toml` | `.claude/agents/*.md` (Markdown with YAML frontmatter) |
 | **MCP servers** | `.github/mcp.json` (shared) or `.mcp.json` (repository root; GitHub Copilot CLI) | `opencode.json` | `.codex/config.toml` (trusted project) | `.mcp.json` (project root) |
@@ -89,11 +89,11 @@ All four harnesses support directory-specific `AGENTS.md` instructions, although
 
 ### Claude Code's fallback rules
 
-In Claude Code 2.1.277+, `AGENTS.md` is a fallback when no applicable `CLAUDE.md` exists. The `claude-md-and-agents-md` setting allows both formats to load. See the [Claude Code documentation](https://code.claude.com/docs/en/memory) for details.
+In Claude Code versions that support `AGENTS.md`, it can serve as a fallback when no applicable `CLAUDE.md` exists. The `claude-md-and-agents-md` setting allows both formats to load; check your installed version against the documentation. See the [Claude Code documentation](https://code.claude.com/docs/en/memory) for details.
 
 ### GitHub Copilot depends on the environment
 
-GitHub Copilot CLI, VS Code, GitHub cloud agent, and code review do not support exactly the same instruction types. This article focuses on GitHub Copilot CLI and the desktop app, rather than treating every environment as equivalent. The [official support matrix](https://docs.github.com/en/copilot/reference/custom-instructions-support) documents the differences.
+Copilot CLI and desktop are the baseline here. If you also work in VS Code, GitHub.com, or another Copilot surface, check the [official support matrix](https://docs.github.com/en/copilot/reference/custom-instructions-support): the same repository instructions are not necessarily discovered in every environment.
 
 ### MCP and harness-specific configuration
 
@@ -153,21 +153,15 @@ Custom agents are harder to move than instructions or skills. Their definitions 
 
 For now, custom agents require deliberate, harness-by-harness migration and evaluation.
 
-### Could agent workflows have a shared definition?
+To validate a migration, I would run the same representative tasks in each tool and compare the results, tool access, permissions, and delegation—not just whether the agent produces a plausible answer.
 
-I wonder whether it would make sense to define a coding-agent workflow once and generate harness-specific agent configurations from it. I've seen initiatives exploring shared AI configuration, but I haven't evaluated them in depth. The hard part is not generating files: tools, permissions, and delegation differ, so equivalent behavior cannot be assumed.
+## What's next?
 
-### How would I test a migrated agent?
-
-I would give the agent a set of representative tasks with clear success criteria, then run each task multiple times in each harness. **pass@k** measures whether at least one of *k* attempts succeeds; **pass^k** measures whether all *k* attempts succeed, making consistency visible. I'd also check tool use, permissions, and delegation, not just the final answer. Anthropic's [guide to agent evaluations](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents) explains both metrics and the challenges of testing nondeterministic agents.
+I would like to test real migrations between GitHub Copilot, OpenCode, Codex, and Claude Code and compare their behavior on the same tasks. One question worth exploring is whether an **agent-specific translation tool** could reduce the effort of maintaining custom agents across tools without obscuring differences in tools, permissions, and delegation. I have not yet run controlled, versioned comparisons, so this article describes documented support rather than verified behavioral equivalence.
 
 ## Conclusion: Where portability still stops
 
-Portability is not all or nothing. **Instructions and skills are increasingly reusable; custom-agent execution remains harness-specific.** My takeaway is to keep shared knowledge in existing formats and isolate behavior that depends on a particular harness.
-
-I would like to experiment more with actual migrations between GitHub Copilot, OpenCode, Codex, and Claude Code. I have not yet run controlled, versioned comparisons, so the observations here are based on documentation rather than verified behavioral equivalence.
-
-I am also curious whether an **agent-specific translation tool** could reduce the work of maintaining custom agents across harnesses. Instructions and skills already have useful shared conventions; generating another layer for those is less compelling. The question is whether translating agent definitions would save effort without hiding important differences in tools, permissions, and delegation.
+Portability is not all or nothing. **Instructions and skills are increasingly reusable; custom-agent execution remains harness-specific.** My takeaway is simple: keep shared knowledge in existing formats first, and isolate behavior that depends on a particular tool.
 
 ### Official references
 
