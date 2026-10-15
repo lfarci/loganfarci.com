@@ -121,21 +121,15 @@ The first table shows **where each harness looks**. This one starts with a repos
 **The takeaway:** `AGENTS.md` and shared skills offer the easiest path to reuse. GitHub Copilot-specific instruction files usually need relocation or explicit inclusion. Custom agents and orchestration can carry over conceptually, but their configuration and behavior need review rather than a simple file copy.
 
 
-## How this applies to my website
-
-My website already contains a root `AGENTS.md`, plus nested guidance and GitHub Copilot-specific instruction files. Its root file points back to `.github/copilot-instructions.md` and `docs/specs/`. This is a reasonable way to avoid repeating project knowledge, but it also means that a harness must follow those references for the full guidance to take effect.
-
-The repository's Product Owner, Orchestrator, and Developer workflow is a tougher case. Its approval, branch, and quality-gate rules are meaningful regardless of harness, but the delegation mechanics are not portable merely because the Markdown is.
-
 ## Instructions are getting easier to share
 
 The most promising common denominator is [`AGENTS.md`](https://agents.md/), which can appear at more than one directory level. If a project puts general guidance there, different coding tools can potentially consume the same human-readable instructions.
 
-My repository already has a root `AGENTS.md` that points to GitHub Copilot instructions and canonical specs, so some guidance is shared without duplication. Important context still lives in `.github/copilot-instructions.md`: project architecture, commands, coding conventions, and links to the actual specs under `docs/specs/`.
+For a repository used with multiple harnesses, shared architecture notes, commands, and conventions are good candidates for `AGENTS.md`.
 
 The content itself is not tied to Copilot. The *path and loading rules* are.
 
-A sensible cleanup would be to keep shared guidance in `AGENTS.md`, leave genuinely GitHub Copilot-specific instructions in `.github/`, and verify how each harness handles scoped instructions. A path-scoped Copilot instruction is not automatically equivalent to an always-loaded Markdown file.
+There are still reasons to use GitHub Copilot-specific files: `.github/copilot-instructions.md` is GitHub Copilot's established repository instruction entry point, and `.github/instructions/*.instructions.md` can apply guidance to selected file patterns through `applyTo` frontmatter. Keep those when you need GitHub Copilot-specific behavior, but put broadly reusable instructions in `AGENTS.md` where practical. A path-scoped Copilot instruction is not automatically equivalent to an always-loaded Markdown file.
 
 ## Skills are moving in the same direction
 
