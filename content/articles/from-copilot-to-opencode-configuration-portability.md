@@ -62,7 +62,7 @@ The Copilot baseline is **Copilot CLI**. Other integrations, including VS Code a
 
 ### Nested instructions
 
-**OpenCode V1** uses first-match discovery and a `CLAUDE.md` fallback; **V2** combines ancestor instructions and loads nested files on access. Check your version with `opencode --version` and consult the [V2 migration guide](https://dev.opencode.ai/v2/docs/migrate-v1/). **Codex** builds its `AGENTS.md` chain at startup, from repository root to working directory; launch it in the relevant subtree or explicitly read deeper instructions. Claude Code can load nested instructions on access, subject to its fallback rules. See [Codex instruction discovery](https://developers.openai.com/codex/guides/agents-md) and [OpenCode V2 instructions](https://dev.opencode.ai/v2/docs/instructions/).
+**OpenCode V1** uses first-match discovery and a `CLAUDE.md` fallback; **V2** combines ancestor instructions and loads nested files on access. As of October 2026, OpenCode 2.x is released alongside the maintained 1.x line. Check your installed version with `opencode --version` and consult the [V2 migration guide](https://dev.opencode.ai/v2/docs/migrate-v1/). **Codex** builds its `AGENTS.md` chain at startup, from repository root to working directory; launch it in the relevant subtree or explicitly read deeper instructions. Claude Code can load nested instructions on access, subject to its fallback rules. See [Codex instruction discovery](https://developers.openai.com/codex/guides/agents-md) and [OpenCode V2 instructions](https://dev.opencode.ai/v2/docs/instructions/).
 
 ### Claude Code's fallback rules
 
