@@ -54,7 +54,7 @@ The Copilot baseline is **Copilot CLI**. Other integrations, including VS Code a
 
 | Asset | GitHub Copilot | OpenCode | Codex | Claude Code |
 | --- | --- | --- | --- | --- |
-| **Instructions** | `.github/copilot-instructions.md`; `.github/instructions/**/*.instructions.md` (`applyTo`); `AGENTS.md`; CLI also reads `CLAUDE.md` and `GEMINI.md` | `AGENTS.md`; V1: first-match and `CLAUDE.md` fallback; V2: ancestors plus nested on access; `opencode.json` instruction globs | `AGENTS.md` along root-to-working-directory path at startup; `AGENTS.override.md` takes precedence in its directory | Root and nested `CLAUDE.md`; `.claude/rules/`; nested `AGENTS.md` on file access where supported (fallback when no applicable `CLAUDE.md`) |
+| **Instructions** | `.github/copilot-instructions.md`; `.github/instructions/**/*.instructions.md` (`applyTo`); `AGENTS.md` (CLI; support varies elsewhere); CLI also reads `CLAUDE.md` and `GEMINI.md` | `AGENTS.md`; V1: first-match and `CLAUDE.md` fallback; V2: ancestors plus nested on access; `opencode.json` instruction globs | `AGENTS.md` along root-to-working-directory path at startup; `AGENTS.override.md` takes precedence in its directory | Root and nested `CLAUDE.md`; `.claude/rules/` (`paths` scoping); `AGENTS.md` fallback only when no applicable Claude instruction file blocks it |
 | **Skills** | `.agents/skills/<name>/SKILL.md`, `.github/skills/<name>/SKILL.md`, `.claude/skills/<name>/SKILL.md` | `.agents/skills/<name>/SKILL.md`, `.opencode/skills/<name>/SKILL.md`, `.claude/skills/<name>/SKILL.md` | `.agents/skills/<name>/SKILL.md` | `.claude/skills/<name>/SKILL.md` (no automatic `.agents/skills/` discovery documented) |
 | **Custom agents** | `.github/agents/*.agent.md` | `.opencode/agents/*.md` or `opencode.json` / `opencode.jsonc` | `.codex/agents/<name>.toml` | `.claude/agents/*.md` (Markdown with YAML frontmatter) |
 | **MCP servers** | `.github/mcp.json` (shared) or `.mcp.json` (repository root; GitHub Copilot CLI) | `opencode.json` | `.codex/config.toml` (trusted project) | `.mcp.json` (project root) |
@@ -62,11 +62,11 @@ The Copilot baseline is **Copilot CLI**. Other integrations, including VS Code a
 
 ### Nested instructions
 
-OpenCode V1 uses first-match instruction discovery with a `CLAUDE.md` fallback; V2 combines ancestor instructions and loads nested files on access. These are distinct versions with different rules, so check your installed release against the [V2 migration guide](https://dev.opencode.ai/v2/docs/migrate-v1/). Discovery differs. **Codex** builds its `AGENTS.md` chain at startup, from repository root to working directory. Launch it in the relevant subtree or explicitly ensure deeper instructions are read. **OpenCode V2** discovers nested instructions as files and directories are accessed. Claude Code can also discover nested instructions on access, subject to its fallback rules. See [Codex instruction discovery](https://developers.openai.com/codex/guides/agents-md) and [OpenCode V2 instructions](https://dev.opencode.ai/v2/docs/instructions/).
+**OpenCode V1** uses first-match discovery and a `CLAUDE.md` fallback; **V2** combines ancestor instructions and loads nested files on access. Check your version with `opencode --version` and consult the [V2 migration guide](https://dev.opencode.ai/v2/docs/migrate-v1/). **Codex** builds its `AGENTS.md` chain at startup, from repository root to working directory; launch it in the relevant subtree or explicitly read deeper instructions. Claude Code can load nested instructions on access, subject to its fallback rules. See [Codex instruction discovery](https://developers.openai.com/codex/guides/agents-md) and [OpenCode V2 instructions](https://dev.opencode.ai/v2/docs/instructions/).
 
 ### Claude Code's fallback rules
 
-Claude Code **2.1.277+** can use `AGENTS.md` as a fallback, but an applicable `CLAUDE.md`, `CLAUDE.local.md`, or `.claude/CLAUDE.md` can prevent that fallback. To load both formats, select **Project instructions → claude-md-and-agents-md** through `/config`; this choice is not controlled by repository or local settings files. For a repository-controlled alternative, reference `@AGENTS.md` from `CLAUDE.md`. Some environments required 2.1.281+; check the [Claude Code memory documentation](https://code.claude.com/docs/en/memory) for availability and precedence.
+Claude Code **2.1.277+** can use `AGENTS.md` as a fallback, but an applicable `CLAUDE.md`, `CLAUDE.local.md`, or `.claude/CLAUDE.md` can prevent that fallback. To load both formats, select **Project instructions → claude-md-and-agents-md** through `/config`; this choice is not controlled by repository or local settings files. It can also be configured in user-level `~/.claude/settings.json`, a `--settings` file, or managed settings, via `pluginConfigs`. For a repository-controlled alternative, reference `@AGENTS.md` from `CLAUDE.md`. Bedrock and telemetry-disabled environments required 2.1.281+; check the [Claude Code memory documentation](https://code.claude.com/docs/en/memory) for availability and precedence.
 
 ### MCP and harness-specific configuration
 
@@ -102,7 +102,7 @@ For repository-wide guidance, **prefer [`AGENTS.md`](https://agents.md/)**. All 
 
 For skills, there is a particularly easy portability win: **put reusable skills in `.agents/skills/<name>/SKILL.md`** rather than keeping them only under GitHub Copilot's `.github/skills/`. GitHub Copilot, OpenCode, and Codex all document discovery of the shared `.agents/skills/` location, so those three harnesses can find the same skill without maintaining three copies.
 
-Copilot and OpenCode also discover `.claude/skills/`, but Codex does not document that path. For all four, keep `.agents/skills/` as the source of truth and [symlink skills into `.claude/skills/`](https://code.claude.com/docs/en/skills). For example: `mkdir -p .claude/skills && ln -s ../../.agents/skills/code-review .claude/skills/code-review`. On checkouts without working symlink support, copy the complete skill directory during setup instead.
+Copilot, OpenCode, and Codex discover `.agents/skills/` directly. **Only Claude Code needs a bridge** to `.claude/skills/`: [symlink the skill directory](https://code.claude.com/docs/en/skills), or copy it if symlinks are unavailable. For example: `mkdir -p .claude/skills && ln -s ../../.agents/skills/code-review .claude/skills/code-review`. Copilot and OpenCode may discover both paths; verify that this does not create duplicate skill entries in your setup.
 
 The [Agent Skills specification](https://agentskills.io/) standardizes the file format, not invocation behavior. Test explicit and automatic skill discovery in each tool.
 
@@ -121,7 +121,7 @@ Portability is not all or nothing. **Instructions and skills are increasingly re
 
 For the main configuration documentation of each harness:
 
-1. [GitHub Copilot customization](https://docs.github.com/en/copilot/reference/customization-cheat-sheet)
+1. [GitHub Copilot customization](https://docs.github.com/en/copilot/reference/customization-cheat-sheet) and [CLI MCP configuration](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/add-mcp-servers)
 2. [OpenCode V2 instructions](https://dev.opencode.ai/v2/docs/instructions/) and [V1 migration](https://dev.opencode.ai/v2/docs/migrate-v1/)
-3. [Codex configuration](https://developers.openai.com/codex/config-basic)
-4. [Claude Code settings](https://code.claude.com/docs/en/settings)
+3. [Codex instruction discovery](https://developers.openai.com/codex/guides/agents-md) and [configuration](https://developers.openai.com/codex/config-basic)
+4. [Claude Code memory and instruction loading](https://code.claude.com/docs/en/memory) and [skills](https://code.claude.com/docs/en/skills)
