@@ -35,6 +35,8 @@ my-project/
 │       └── write-article/
 │           └── SKILL.md
 ├── .github/
+│   ├── copilot/
+│   │   └── settings.json
 │   ├── copilot-instructions.md
 │   ├── instructions/
 │   │   └── articles.instructions.md
@@ -51,11 +53,11 @@ The diagram summarizes how those pieces relate to one another:
 ```mermaid
 flowchart TD
     R["Repository configuration"]
-    R --> I["Instructions<br/>Project rules and context"]
-    R --> S["Skills<br/>Reusable task procedures"]
-    R --> A["Custom agents<br/>Specialized roles and tools"]
-    R --> M["MCP servers<br/>External integrations"]
-    R --> H["Harness settings<br/>Runtime-specific behavior"]
+    R --> I["<b>Instructions</b><br/><small>Project rules and context</small>"]
+    R --> S["<b>Skills</b><br/><small>Reusable task procedures</small>"]
+    R --> A["<b>Custom agents</b><br/><small>Specialized roles and tools</small>"]
+    R --> M["<b>MCP servers</b><br/><small>External integrations</small>"]
+    R --> H["<b>Harness settings</b><br/><small>Runtime-specific behavior</small>"]
     A -.-> O["Orchestration<br/>Delegation and coordination"]
 ```
 
@@ -67,7 +69,7 @@ This is an **illustrative layout**, not a claim that every file exists in my web
 
 Here is the cheat sheet I would have liked when I started trying other tools. It focuses on the main repository-level paths rather than every possible global setting.
 
-**Scope:** The GitHub Copilot baseline here is **GitHub Copilot CLI and the GitHub Copilot desktop app running sessions on an agent host**, which are the environments I use most. Some repository instructions and agent definitions overlap with VS Code, but support is not automatically identical. This table covers repository conventions and explicitly flags settings that depend on a particular GitHub Copilot runtime. GitHub.com, VS Code, Visual Studio, and JetBrains are not treated as interchangeable.
+**Scope:** I mainly use **GitHub Copilot CLI and the GitHub Copilot desktop app**. GitHub documents the desktop app as built on GitHub Copilot CLI. Separately, VS Code documents an **Agent Host** architecture for running agent sessions independently of the client UI; that does not mean the desktop app and CLI have identical settings or that every desktop session should be described as an Agent Host session. Some repository instructions and agent definitions overlap with VS Code, but support is not automatically identical. This table covers repository conventions and explicitly flags settings that depend on a particular GitHub Copilot runtime. GitHub.com, VS Code, Visual Studio, and JetBrains are not treated as interchangeable.
 
 | Asset | GitHub Copilot | OpenCode | Codex | Claude Code |
 | --- | --- | --- | --- | --- |
@@ -75,11 +77,13 @@ Here is the cheat sheet I would have liked when I started trying other tools. It
 | **Skills** | `.agents/skills/<name>/SKILL.md`, `.github/skills/<name>/SKILL.md` | `.agents/skills/<name>/SKILL.md`, `.opencode/skills/<name>/SKILL.md` | `.agents/skills/<name>/SKILL.md` | `.claude/skills/<name>/SKILL.md` |
 | **Custom agents** | `.github/agents/*.agent.md` | `.opencode/agents/*.md` or `opencode.json` | Agent roles in Codex configuration | `.claude/agents/*.md` |
 | **MCP servers** | `.vscode/mcp.json` for VS Code; other Copilot surfaces vary | `opencode.json` | `.codex/config.toml` or user settings | `.mcp.json` |
-| **Harness configuration** (permissions, hooks, tools) | GitHub Copilot CLI / agent-host settings and hooks (runtime-specific) | `opencode.json`, plugins | `config.toml` | `.claude/settings.json` |
+| **Harness configuration** (permissions, hooks, tools) | `.github/copilot/settings.json` (shared repository settings); `.github/copilot/settings.local.json` (local overrides); `~/.copilot/settings.json` (user settings) | `opencode.json`, plugins | `config.toml` | `.claude/settings.json` |
 
 **Nested instruction files are real, but not identical across tools.** GitHub documents multiple `AGENTS.md` files at different directory levels, with the nearest applicable file taking precedence. Codex collects guidance along the path from repository root to the working directory, so deeper instructions can refine earlier ones. Claude Code supports nested `CLAUDE.md` files. OpenCode supports ancestor discovery, but you should not assume it eagerly loads every descendant `AGENTS.md` when working from the repository root. Its explicit `instructions` globs can cover additional files. These are different discovery semantics, not one universal scoping algorithm.
 
 GitHub Copilot also differs by surface: VS Code, GitHub Copilot CLI, GitHub cloud agent, and code review do not support precisely the same instruction types. Check the [official support matrix](https://docs.github.com/en/copilot/reference/custom-instructions-support) before treating a GitHub Copilot file as universally recognized.
+
+For GitHub Copilot CLI, repository settings are deliberately limited to supported keys; unsupported user-level settings are ignored if placed in `.github/copilot/settings.json`. The [configuration reference](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-config-dir-reference) documents the supported keys and precedence. The separate `~/.copilot/config.json` is automatically managed state, **not** the recommended shared repository settings file.
 
 This table lists **representative repository locations**, not every user-level setting or legacy path. It is a documentation-based cheat sheet, not a cross-harness runtime test.
 
@@ -162,5 +166,8 @@ That experiment will tell us whether a configuration translation tool would actu
 - [Claude Code memory](https://code.claude.com/docs/en/memory) and [subagents](https://code.claude.com/docs/en/sub-agents)
 - [Cursor documentation](https://cursor.com/docs)
 - [Gemini CLI documentation](https://geminicli.com/docs/)
+- [GitHub Copilot CLI configuration scopes](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-config-dir-reference)
+- [GitHub Copilot desktop app](https://docs.github.com/en/copilot/concepts/copilot-surfaces/github-copilot-app)
+- [VS Code Agent Host architecture](https://code.visualstudio.com/blogs/2026/08/26/agent-host-architecture)
 - [GitHub Copilot customization cheat sheet](https://docs.github.com/en/copilot/reference/customization-cheat-sheet)
 - [GitHub Copilot instruction support by environment](https://docs.github.com/en/copilot/reference/custom-instructions-support)
