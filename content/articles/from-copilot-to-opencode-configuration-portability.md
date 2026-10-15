@@ -117,7 +117,7 @@ Custom agents are harder to move than instructions or skills. Their definitions 
 
 **Reuse the intent, but migrate the implementation.** Translate each agent definition into the target harness's format, then test representative tasks, tool access, approval boundaries, delegation, and results. Copying the prompt alone does not reproduce the workflow.
 
-To validate a migration, I would run the same representative tasks in each tool and compare the results, tool access, permissions, and delegation—not just whether the agent produces a plausible answer.
+To validate a migration, I would run the same representative tasks in each tool and compare the results, tool access, permissions, and delegation, not just whether the agent produces a plausible answer.
 
 ## What's next?
 
