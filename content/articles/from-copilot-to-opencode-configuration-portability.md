@@ -79,15 +79,23 @@ Here is the cheat sheet I would have liked when I started trying other tools. It
 | **MCP servers** | `.github/mcp.json` (shared) or `.mcp.json` (repository root; GitHub Copilot CLI) | `opencode.json` | `.codex/config.toml` (trusted project) | `.mcp.json` (project root) |
 | **Harness configuration** (permissions, hooks, tools) | `.github/copilot/settings.json` (shared repository settings); `.github/copilot/settings.local.json` (local overrides) | `opencode.json`, plugins | `.codex/config.toml` (trusted project) | `.claude/settings.json` (shared); `.claude/settings.local.json` (local override) |
 
-**What about nested `AGENTS.md` files?** All four harnesses can use instructions from multiple directories, but they do not load them at exactly the same moment. GitHub Copilot and Codex support directory-specific instructions. OpenCode V2 and Claude Code also recognize nested `AGENTS.md` files when the agent works with files in the relevant directory. You do not have to copy every nested file into the repository root.
+### Nested instructions
 
-**One Claude Code detail matters:** from version 2.1.277, `AGENTS.md` works as a fallback when there is no applicable `CLAUDE.md`. A separate setting, `claude-md-and-agents-md`, lets Claude Code load both formats. So an existing `CLAUDE.md` can affect whether your shared `AGENTS.md` instructions are applied. See the [OpenCode V2 instructions](https://dev.opencode.ai/v2/docs/instructions/) and [Claude Code memory documentation](https://code.claude.com/docs/en/memory) for the exact discovery rules.
+All four harnesses support directory-specific `AGENTS.md` instructions, although they discover and load them differently. In OpenCode V2 and Claude Code, nested files are picked up when the agent works in the relevant directory. You do not need to move every `AGENTS.md` to the repository root.
 
-GitHub Copilot also differs by surface: VS Code, GitHub Copilot CLI, GitHub cloud agent, and code review do not support precisely the same instruction types. Check the [official support matrix](https://docs.github.com/en/copilot/reference/custom-instructions-support) before treating a GitHub Copilot file as universally recognized.
+### Claude Code's fallback rules
 
-For GitHub Copilot CLI, [project MCP configuration](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/add-mcp-servers) can be committed in `.github/mcp.json`; the CLI also searches `.mcp.json` from the current directory upward to the repository root. A trusted workspace is required, and `.vscode/mcp.json` is not read by the CLI. Repository settings are deliberately limited to supported keys; unsupported user-level settings are ignored if placed in `.github/copilot/settings.json`. The [configuration reference](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-config-dir-reference) documents the supported keys and precedence. User-level configuration is intentionally omitted from this repository-focused comparison.
+In Claude Code 2.1.277+, `AGENTS.md` is a fallback when no applicable `CLAUDE.md` exists. The `claude-md-and-agents-md` setting allows both formats to load. See the [Claude Code documentation](https://code.claude.com/docs/en/memory) for details.
 
-This table lists **representative repository locations**, not every user-level setting or legacy path. It is a documentation-based cheat sheet, not a cross-harness runtime test.
+### GitHub Copilot depends on the environment
+
+GitHub Copilot CLI, VS Code, GitHub cloud agent, and code review do not support exactly the same instruction types. This article focuses on GitHub Copilot CLI and the desktop app, rather than treating every environment as equivalent. The [official support matrix](https://docs.github.com/en/copilot/reference/custom-instructions-support) documents the differences.
+
+### Repository MCP and harness settings
+
+GitHub Copilot CLI reads shared MCP configuration from `.github/mcp.json` and also discovers `.mcp.json` in the repository hierarchy. It does not read VS Code's `.vscode/mcp.json`. The [MCP guide](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/add-mcp-servers) covers those paths. Repository settings in `.github/copilot/settings.json` support a limited set of keys; see the [configuration reference](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-config-dir-reference).
+
+The table lists representative **repository-level** locations. It is based on documentation, not live compatibility tests.
 
 ## What needs to change when switching?
 
