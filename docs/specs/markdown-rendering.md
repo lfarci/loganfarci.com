@@ -226,9 +226,9 @@ Inline code inside table cells wraps at path separators (`/` and `.`) before fal
 back to character-level wrapping, so long paths stay legible instead of breaking
 mid-token. The break opportunities are zero-width and do not alter the copyable value.
 
-Authors SHOULD prefer a narrow, scannable table shape (for example, one row per harness
-with the harness as a row label) over a wide matrix, and reserve the scroll region for
-tables that genuinely cannot be narrowed.
+Wide comparison matrices are a supported shape: keep the table layout and let the scroll
+region pan it. Authors MAY narrow a table when the content reads better that way, but the
+renderer must not force a restructure.
 
 ## Ideal state (planned)
 

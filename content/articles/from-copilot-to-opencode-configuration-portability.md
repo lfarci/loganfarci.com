@@ -52,33 +52,13 @@ The Copilot baseline is **Copilot CLI**. Other integrations, including VS Code a
 
 ### Configuration cheat sheet
 
-| Harness | Configuration paths |
-| --- | --- |
-| **Instructions** | |
-| GitHub Copilot | `.github/copilot-instructions.md`; `.github/instructions/**/*.instructions.md` (`applyTo`); `AGENTS.md` (CLI; support varies elsewhere); CLI also reads `CLAUDE.md` and `GEMINI.md` |
-| OpenCode | `AGENTS.md`; V1: first-match and `CLAUDE.md` fallback; V2: ancestors plus nested on access; `opencode.json` instruction globs |
-| Codex | `AGENTS.md` along root-to-working-directory path at startup; `AGENTS.override.md` takes precedence in its directory |
-| Claude Code | Root and nested `CLAUDE.md`; `.claude/rules/` (`paths` scoping); `AGENTS.md` fallback only when no applicable Claude instruction file blocks it |
-| **Skills** | |
-| GitHub Copilot | `.agents/skills/<name>/SKILL.md`, `.github/skills/<name>/SKILL.md`, `.claude/skills/<name>/SKILL.md` |
-| OpenCode | `.agents/skills/<name>/SKILL.md`, `.opencode/skills/<name>/SKILL.md`, `.claude/skills/<name>/SKILL.md` |
-| Codex | `.agents/skills/<name>/SKILL.md` |
-| Claude Code | `.claude/skills/<name>/SKILL.md` (no automatic `.agents/skills/` discovery documented) |
-| **Custom agents** | |
-| GitHub Copilot | `.github/agents/*.agent.md` |
-| OpenCode | `.opencode/agents/*.md` or `opencode.json` / `opencode.jsonc` |
-| Codex | `.codex/agents/<name>.toml` |
-| Claude Code | `.claude/agents/*.md` (Markdown with YAML frontmatter) |
-| **MCP servers** | |
-| GitHub Copilot | `.github/mcp.json` (shared) or `.mcp.json` (repository root; GitHub Copilot CLI) |
-| OpenCode | `opencode.json` |
-| Codex | `.codex/config.toml` (trusted project) |
-| Claude Code | `.mcp.json` (project root) |
-| **Harness configuration** (permissions, hooks, tools) | |
-| GitHub Copilot | `.github/copilot/settings.json` (shared repository settings); `.github/copilot/settings.local.json` (local overrides) |
-| OpenCode | `opencode.json`, plugins |
-| Codex | `.codex/config.toml` (trusted project) |
-| Claude Code | `.claude/settings.json` (shared); `.claude/settings.local.json` (local override) |
+| Asset | GitHub Copilot | OpenCode | Codex | Claude Code |
+| --- | --- | --- | --- | --- |
+| **Instructions** | `.github/copilot-instructions.md`; `.github/instructions/**/*.instructions.md` (`applyTo`); `AGENTS.md` (CLI; support varies elsewhere); CLI also reads `CLAUDE.md` and `GEMINI.md` | `AGENTS.md`; V1: first-match and `CLAUDE.md` fallback; V2: ancestors plus nested on access; `opencode.json` instruction globs | `AGENTS.md` along root-to-working-directory path at startup; `AGENTS.override.md` takes precedence in its directory | Root and nested `CLAUDE.md`; `.claude/rules/` (`paths` scoping); `AGENTS.md` fallback only when no applicable Claude instruction file blocks it |
+| **Skills** | `.agents/skills/<name>/SKILL.md`, `.github/skills/<name>/SKILL.md`, `.claude/skills/<name>/SKILL.md` | `.agents/skills/<name>/SKILL.md`, `.opencode/skills/<name>/SKILL.md`, `.claude/skills/<name>/SKILL.md` | `.agents/skills/<name>/SKILL.md` | `.claude/skills/<name>/SKILL.md` (no automatic `.agents/skills/` discovery documented) |
+| **Custom agents** | `.github/agents/*.agent.md` | `.opencode/agents/*.md` or `opencode.json` / `opencode.jsonc` | `.codex/agents/<name>.toml` | `.claude/agents/*.md` (Markdown with YAML frontmatter) |
+| **MCP servers** | `.github/mcp.json` (shared) or `.mcp.json` (repository root; GitHub Copilot CLI) | `opencode.json` | `.codex/config.toml` (trusted project) | `.mcp.json` (project root) |
+| **Harness configuration** (permissions, hooks, tools) | `.github/copilot/settings.json` (shared repository settings); `.github/copilot/settings.local.json` (local overrides) | `opencode.json`, plugins | `.codex/config.toml` (trusted project) | `.claude/settings.json` (shared); `.claude/settings.local.json` (local override) |
 
 ### Nested instructions
 
@@ -100,29 +80,14 @@ Other settings are mostly tool-specific, though Copilot CLI also reads a **docum
 
 Starting from Copilot configuration, here is what I would keep or adapt:
 
-| Starting point | What to do |
-| --- | --- |
-| **OpenCode** | |
-| Repository-wide instructions | Reuse `AGENTS.md`; include Copilot files via `instructions` globs if useful |
-| Scoped instructions | V2: nested `AGENTS.md`; translate file conditions |
-| Skills | Reuse the shared skill directory |
-| Custom agents | Adapt agent metadata and configuration |
-| MCP servers | Reuse server details; configure in `opencode.json` |
-| Delegation, permissions, and orchestration | Rework and test workflows |
-| **Codex** | |
-| Repository-wide instructions | Reuse `AGENTS.md`; relocate Copilot-only files |
-| Scoped instructions | Load nested `AGENTS.md` from working-directory chain; translate file conditions |
-| Skills | Reuse the shared skill directory |
-| Custom agents | Convert to TOML agent definitions |
-| MCP servers | Reuse server details; configure in `.codex/config.toml` |
-| Delegation, permissions, and orchestration | Rework and test workflows |
-| **Claude Code** | |
-| Repository-wide instructions | Reuse `AGENTS.md` on supported versions, subject to `CLAUDE.md` precedence; adapt Copilot-specific instructions |
-| Scoped instructions | Translate file conditions into `.claude/rules/` with `paths`; check fallback |
-| Skills | Link or copy skills into `.claude/skills/` as needed |
-| Custom agents | Adapt agent frontmatter and tool settings |
-| MCP servers | Reuse server details; configure in `.mcp.json` |
-| Delegation, permissions, and orchestration | Rework and test workflows |
+| GitHub Copilot | OpenCode | Codex | Claude Code |
+| --- | --- | --- | --- |
+| **Repository-wide instructions:** root `AGENTS.md` or `.github/copilot-instructions.md` | Reuse `AGENTS.md`; include Copilot files via `instructions` globs if useful | Reuse `AGENTS.md`; relocate Copilot-only files | Reuse `AGENTS.md` on supported versions, subject to `CLAUDE.md` precedence; adapt Copilot-specific instructions |
+| **Scoped instructions:** nested `AGENTS.md` or `.github/instructions/*.instructions.md` | V2: nested `AGENTS.md`; translate file conditions | Load nested `AGENTS.md` from working-directory chain; translate file conditions | Translate file conditions into `.claude/rules/` with `paths`; check fallback |
+| **Skills:** `.agents/skills/` | Reuse the shared skill directory | Reuse the shared skill directory | Link or copy skills into `.claude/skills/` as needed |
+| **Custom agents:** `.github/agents/*.agent.md` | Adapt agent metadata and configuration | Convert to TOML agent definitions | Adapt agent frontmatter and tool settings |
+| **MCP servers** | Reuse server details; configure in `opencode.json` | Reuse server details; configure in `.codex/config.toml` | Reuse server details; configure in `.mcp.json` |
+| **Delegation, permissions, and orchestration** | Rework and test workflows | Rework and test workflows | Rework and test workflows |
 
 ## Instructions are getting easier to share
 
