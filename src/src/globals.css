@@ -1051,7 +1051,7 @@
         font-size: clamp(2.5rem, 8vw, 5.5rem);
         font-weight: 550;
         letter-spacing: -0.04em;
-        line-height: 0.98;
+        line-height: 1.25;
         text-wrap: balance;
     }
 
