@@ -182,14 +182,16 @@ editorial inset; the portrait caption sits quietly inside the image field.
 
 The résumé action remains first in reading and tab order at every width. The mobile
 layout changes visual placement through the grid without reordering the document.
-Every route uses the implemented full-width Field Notes shell: a sticky opaque
-navigation bar, responsive editorial insets, a quiet left rule from 48rem, and generous
-section spacing. The compact menu remains active below 72rem so tablet navigation is
+The navigation content is capped at 100rem and horizontally centred on every route.
+Home keeps the full-width Field Notes shell. Inner routes use the same shell capped at
+100rem and horizontally centred on wider screens. Both use a sticky opaque navigation
+bar, responsive editorial insets, a quiet left rule from 48rem, and generous section
+spacing. The compact menu remains active below 72rem so tablet navigation is
 consistent with mobile; the horizontal navigation begins at 72rem. About stays
 single-column through medium widths before shifting to portrait-plus-narrative and
-sticky section labels. The inner-page rule shares Home's exact horizontal position;
+sticky section labels. The inner-page rule shares Home's inset within its shell;
 About section boundaries and Articles index rows extend from that rule to the right
-viewport edge without moving their inset content. On About and the Articles index, the
+shell edge without moving their inset content. On About and the Articles index, the
 vertical rule continues through the footer gap and terminates at the footer boundary.
 Articles keeps each date below its tags at every width. Article detail uses a broad masthead and
 bounded reading surface centered within balanced page insets. On desktop, the reading

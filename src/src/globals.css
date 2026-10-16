@@ -14,6 +14,7 @@
     :root {
         --editorial-rule-x: clamp(4rem, 5vw, 5.5rem);
         --field-shell-header-height: 4.25rem;
+        --field-shell-max-width: 100rem;
         --field-footer-gap: clamp(3rem, 6vw, 6rem);
     }
 
@@ -29,6 +30,15 @@
         color: var(--color-foreground);
         background: var(--color-background);
         overflow-x: clip;
+    }
+
+    #root {
+        max-width: var(--field-shell-max-width);
+        margin-inline: auto;
+    }
+
+    #root:has(.home-frame) {
+        max-width: none;
     }
 
     ::selection {
@@ -554,6 +564,8 @@
 
     .field-shell-nav {
         display: flex;
+        max-width: var(--field-shell-max-width);
+        margin-inline: auto;
         flex-wrap: wrap;
         align-items: center;
         justify-content: space-between;
@@ -1278,7 +1290,9 @@
     .field-articles-page .field-article-entry::after {
         position: absolute;
         left: calc(var(--field-content-left) - var(--editorial-rule-x) - 1rem);
-        width: calc(100vw - var(--field-content-left) - var(--field-content-right) + 2rem);
+        width: calc(
+            min(100vw, var(--field-shell-max-width)) - var(--field-content-left) - var(--field-content-right) + 2rem
+        );
         height: 1px;
         content: "";
         background: var(--color-border);
@@ -1317,7 +1331,9 @@
         position: absolute;
         inset-block: 0;
         left: calc(var(--field-content-left) - var(--editorial-rule-x) - 1rem);
-        width: calc(100vw - var(--field-content-left) - var(--field-content-right) + 2rem);
+        width: calc(
+            min(100vw, var(--field-shell-max-width)) - var(--field-content-left) - var(--field-content-right) + 2rem
+        );
         content: "";
         background: color-mix(in oklch, var(--color-foreground) 2%, transparent);
         opacity: 0;
