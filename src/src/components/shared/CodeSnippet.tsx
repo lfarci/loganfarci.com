@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState, type ReactNode } from "react";
+import { Fragment, lazy, Suspense, useState, type ReactNode } from "react";
 
 import { Button } from "@/components/shared/primitives/Button";
 
@@ -29,6 +29,36 @@ function getTextContent(value: ReactNode): string {
 
 function getLanguage(className?: string): string | null {
     return className?.match(/(?:^|\s)language-([^\s]+)/)?.[1] ?? null;
+}
+
+const inlineCodeBreakPattern = /(?<=[^\s/.])([/.])(?=\S)/g;
+
+/**
+ * Adds zero-width break opportunities after path separators in inline code so
+ * long paths wrap at `/` and `.` boundaries instead of breaking mid-token. The
+ * `<wbr>` elements carry no text, so the copyable value is unchanged.
+ */
+function withInlineCodeBreaks(value: ReactNode): ReactNode {
+    if (typeof value !== "string") {
+        return value;
+    }
+
+    const parts = value.split(inlineCodeBreakPattern);
+
+    if (parts.length === 1) {
+        return value;
+    }
+
+    return parts.map((part, index) =>
+        index % 2 === 1 ? (
+            <Fragment key={index}>
+                {part}
+                <wbr />
+            </Fragment>
+        ) : (
+            <Fragment key={index}>{part}</Fragment>
+        ),
+    );
 }
 
 function CopyIcon() {
@@ -135,7 +165,7 @@ export default function CodeSnippet({ children, className, forceBlock = false }:
 
     return isInline ? (
         <code className="max-w-full whitespace-pre-wrap break-words rounded-sm bg-surface-elevated px-1.5 py-0.5 font-mono text-[0.9em] text-text-primary [overflow-wrap:anywhere]">
-            {children}
+            {withInlineCodeBreaks(children)}
         </code>
     ) : (
         <CodeBlock className={className} code={code}>

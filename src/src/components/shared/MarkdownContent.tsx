@@ -165,16 +165,16 @@ function createMarkdownComponents(measure: boolean): Components {
                 role="region"
                 aria-label="Scrollable table"
                 tabIndex={0}
-                className="my-8 max-w-full overflow-x-auto rounded-lg border border-border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                className="my-8 max-w-full overflow-x-auto rounded-card border border-border-light focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             >
                 <table className="w-full bg-surface text-sm">{children}</table>
             </div>
         ),
-        thead: ({ children }) => <thead className="bg-surface-elevated">{children}</thead>,
-        tbody: ({ children }) => <tbody>{children}</tbody>,
-        tr: ({ children }) => <tr className="border-b border-border-light last:border-b-0">{children}</tr>,
+        thead: ({ children }) => <thead className="bg-surface-muted">{children}</thead>,
+        tbody: ({ children }) => <tbody className="[&>tr:last-child>td]:border-b-0">{children}</tbody>,
+        tr: ({ children }) => <tr>{children}</tr>,
         th: ({ children }) => (
-            <th className="border-b border-border bg-surface-elevated px-4 py-3 text-left font-semibold text-text-primary">
+            <th className="border-b border-border bg-surface-muted px-4 py-3 text-left font-semibold text-text-primary">
                 {children}
             </th>
         ),
