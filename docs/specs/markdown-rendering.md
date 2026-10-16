@@ -1,6 +1,6 @@
 ---
 spec: markdown-rendering
-version: 0.3.2
+version: 0.3.3
 status: current-state
 ---
 
@@ -64,7 +64,7 @@ as unstyled default HTML:
 | Supported callout blockquote | Labeled callout | Compact label, decorative icon, semantic accent, and normal article typography. |
 | Link | `NewTabLink` | **All links open in a new tab** with safe `rel`. |
 | Inline/fenced code | `CodeSnippet` | See below. |
-| Table (GFM) | Styled `table` in a scrollable region | Bordered, rounded, `surface` background; horizontal overflow stays inside a keyboard-focusable wrapper. |
+| Table (GFM) | Styled `table` in a scrollable region | Shares the callout/code container radius and subtle border; header uses a distinct muted surface; horizontal overflow stays inside a keyboard-focusable wrapper. |
 | `---` rule / `**`/`_` | `hr` / `Strong` / `Emphasis` | |
 
 ## Blockquotes
@@ -207,6 +207,28 @@ real value.
 There is no syntax-highlighting library: fenced code keeps its `language-*` class but is
 not tokenized. Do not add a highlighter without cause (see
 [non-goals.md](./non-goals.md)).
+
+## Tables
+
+GFM tables render inside a keyboard-focusable scroll region (`role="region"`,
+accessible name “Scrollable table”, `tabIndex={0}`) so genuinely wide tables can be
+panned without causing page-level overflow. The wrapper reuses the shared container
+treatment — `rounded-card` radius and `border-border-light` hairline — so tables read as
+siblings of code blocks and callouts rather than a separate visual system.
+
+The header row uses the muted surface token, distinct from the elevated surface used by
+inline-code chips, so code inside header cells keeps its contrast. Body cells sit on the
+plain `surface` token. Row and cell borders are not stacked: the header carries the
+single rule beneath it, body cells carry one hairline each, and the final row's rule is
+removed.
+
+Inline code inside table cells wraps at path separators (`/` and `.`) before falling
+back to character-level wrapping, so long paths stay legible instead of breaking
+mid-token. The break opportunities are zero-width and do not alter the copyable value.
+
+Authors SHOULD prefer a narrow, scannable table shape (for example, one row per harness
+with the harness as a row label) over a wide matrix, and reserve the scroll region for
+tables that genuinely cannot be narrowed.
 
 ## Ideal state (planned)
 

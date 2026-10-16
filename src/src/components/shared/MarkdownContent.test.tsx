@@ -25,6 +25,32 @@ describe("MarkdownContent", () => {
         expect(screen.getByRole("table")).toBeTruthy();
     });
 
+    it("gives tables a coherent container and differentiated header surface", () => {
+        render(<MarkdownContent content={"| Name | Value |\n| --- | --- |\n| Test | Passed |"} />);
+
+        const region = screen.getByRole("region", { name: "Scrollable table" });
+        const header = screen.getByRole("columnheader", { name: "Name" });
+        const cell = screen.getByRole("cell", { name: "Test" });
+
+        expect({
+            semanticRadius: region.classList.contains("rounded-card"),
+            subtleBorder: region.classList.contains("border-border-light"),
+            keyboardFocusable: region.getAttribute("tabindex"),
+            scrollsInternally: region.classList.contains("overflow-x-auto"),
+            headerSurface: header.classList.contains("bg-surface-muted"),
+            headerAvoidsCodeChipSurface: header.classList.contains("bg-surface-elevated"),
+            cellSurface: cell.classList.contains("bg-surface"),
+        }).toEqual({
+            semanticRadius: true,
+            subtleBorder: true,
+            keyboardFocusable: "0",
+            scrollsInternally: true,
+            headerSurface: true,
+            headerAvoidsCodeChipSurface: false,
+            cellSurface: true,
+        });
+    });
+
     it("renders thematic breaks with the semantic separator primitive", () => {
         render(<MarkdownContent content={"Before\n\n---\n\nAfter"} measure />);
 

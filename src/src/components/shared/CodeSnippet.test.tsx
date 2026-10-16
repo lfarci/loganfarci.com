@@ -34,6 +34,16 @@ describe("CodeSnippet", () => {
         }).toEqual({ element: "CODE", keepsInlineRadius: true, wrapsLongTokens: true, copyControl: null });
     });
 
+    it("adds break opportunities after path separators without changing the copyable value", () => {
+        const { container } = render(<CodeSnippet>{".github/instructions/**/*.instructions.md"}</CodeSnippet>);
+        const code = container.firstElementChild;
+
+        expect({ breakOpportunities: code?.querySelectorAll("wbr").length, copyableValue: code?.textContent }).toEqual({
+            breakOpportunities: 5,
+            copyableValue: ".github/instructions/**/*.instructions.md",
+        });
+    });
+
     it("renders an ordinary code block without requesting the diagram module", () => {
         render(<CodeSnippet className="language-typescript">const answer = 42;</CodeSnippet>);
 
