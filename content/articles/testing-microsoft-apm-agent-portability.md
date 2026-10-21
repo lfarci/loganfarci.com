@@ -74,9 +74,9 @@ I then ran the same review task in all three harnesses. Copilot and OpenCode let
 | Agent profile generated | Pass | Pass | Pass |
 | Review completed and bug found | Pass | Pass | Pass |
 | Original source unchanged | Pass | Pass | Pass |
-| Exact completion marker | Pass | Pass | Partial |
+| Exact completion marker | Pass | Pass | Fail (truncated) |
 
-All three found the expected boundary bug and suggested the fix. OpenCode also ran tests in a scratch directory, although its final marker was missing the last character. These were individual functional tests, not a performance comparison. The full [Experiment 1 results](https://github.com/lfarci/agent-portability-lab/blob/main/docs/results/01-basic-portability.md) document the commands, findings, and Codex trace caveat.
+All three found the expected boundary bug and suggested the fix. OpenCode also ran tests in a scratch directory, but its final marker was missing the last character, so the exact-marker check failed. These were individual functional tests, not a performance comparison. The full [Experiment 1 results](https://github.com/lfarci/agent-portability-lab/blob/main/docs/results/01-basic-portability.md) document the commands, findings, and Codex trace caveat.
 
 Finally, I added one instruction to the canonical definition and reran APM. **The change propagated to all three generated files**, including Codex's TOML. For a simple, instruction-based reviewer, this was the workflow I wanted.
 
@@ -95,7 +95,7 @@ I defined a `restricted-reviewer` with this frontmatter:
 ```yaml
 ---
 name: restricted-reviewer
-description: Reviews C# code without editing files or running commands.
+description: Reviews C# code with read and search tools only; must not edit files or execute commands.
 tools:
   read: true
   grep: true
@@ -104,15 +104,15 @@ tools:
 ---
 ```
 
-APM generated the target files, but they didn't express equivalent restrictions. There is also a difference in what the targets mean by restricting tools: **Copilot's `tools` list controls tool availability**, while **OpenCode v2 has permission rules** that can allow, deny, or request approval for actions. These aren't interchangeable security contracts, and a valid configuration alone wouldn't prove runtime enforcement.
+APM generated the target files, but they didn't express equivalent restrictions. There is also a difference in what the targets mean by restricting tools: **Copilot's `tools` list controls tool availability**, while **[OpenCode v2 has permission rules](https://opencode.ai/v2/docs/permissions/)** that can allow, deny, or request approval for actions. These aren't interchangeable security contracts, and a valid configuration alone wouldn't prove runtime enforcement.
 
-Here's a side-by-side view of the [canonical input](https://github.com/lfarci/agent-portability-lab/blob/main/.apm/agents/restricted-reviewer.agent.md) and the committed generated definitions:
+The [canonical source](https://github.com/lfarci/agent-portability-lab/blob/main/.apm/agents/restricted-reviewer.agent.md) is shown above. Here's what APM generated for each harness:
 
-| Canonical source | Copilot output | OpenCode v2 output | Codex output |
-| --- | --- | --- | --- |
-| `tools: {read: true, grep: true, edit: false, bash: false}` | [Same boolean mapping](https://github.com/lfarci/agent-portability-lab/blob/main/.github/agents/restricted-reviewer.agent.md); Copilot expects an array or string | [Same legacy mapping](https://github.com/lfarci/agent-portability-lab/blob/main/.opencode/agents/restricted-reviewer.md); no native `permissions` rules | [No `tools` field](https://github.com/lfarci/agent-portability-lab/blob/main/.codex/agents/restricted-reviewer.toml); APM warned it was dropped |
-
-VS Code flagged the Copilot field's schema, OpenCode v2 didn't receive native permission rules, and Codex retained the review instructions but not the requested tool restrictions.
+| Target | Generated result |
+| --- | --- |
+| **Copilot** | [Boolean `tools` mapping copied](https://github.com/lfarci/agent-portability-lab/blob/main/.github/agents/restricted-reviewer.agent.md); Copilot expects a list or string, so VS Code flagged a schema error. |
+| **OpenCode v2** | [Legacy `tools` mapping copied](https://github.com/lfarci/agent-portability-lab/blob/main/.opencode/agents/restricted-reviewer.md); no native `permissions` rules generated. |
+| **Codex** | [`tools` metadata dropped](https://github.com/lfarci/agent-portability-lab/blob/main/.codex/agents/restricted-reviewer.toml), with an explicit APM warning. |
 
 The Codex warning was particularly clear:
 
@@ -158,5 +158,6 @@ For now, the [agent-portability-lab](https://github.com/lfarci/agent-portability
 
 - [Microsoft APM](https://microsoft.github.io/apm/)
 - [GitHub Copilot custom agents](https://docs.github.com/en/copilot/reference/custom-agents-configuration)
-- [OpenCode agents and permissions](https://opencode.ai/docs/agents/)
+- [OpenCode v2 agents](https://opencode.ai/v2/docs/agents)
+- [OpenCode v2 permissions](https://opencode.ai/v2/docs/permissions/)
 - [APM portable agent semantics discussion](https://github.com/microsoft/apm/issues/2108)
