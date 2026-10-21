@@ -1,6 +1,6 @@
 ---
 title: "I Tested Microsoft APM Across Copilot, Codex, and OpenCode"
-description: "Two hands-on experiments with Microsoft Agent Package Manager: where custom-agent portability works, and where tool permissions break down."
+description: "What custom coding agents are, and what two small APM experiments reveal about portability across Copilot, Codex, and OpenCode."
 publishedAt: "2026-10-21"
 featured: false
 tags: ["GitHub Copilot", "AI", "OpenCode", "Codex", "APM"]
@@ -8,21 +8,31 @@ author: "Logan Farci"
 coauthoredWithAgent: true
 ---
 
-In my [previous article](/articles/from-copilot-to-opencode-configuration-portability), I compared the repository configuration used by GitHub Copilot, OpenCode, Codex, and Claude Code.
+In my [previous article](/articles/from-copilot-to-opencode-configuration-portability), I explored how much of a repository's AI configuration could be shared between GitHub Copilot, Codex, OpenCode, and Claude Code. Instructions and skills are increasingly reusable, but custom agents still vary quite a bit.
 
-Instructions and skills are getting easier to reuse. Custom agents are more complicated: their paths, metadata, tools, and execution models differ.
+That made me wonder: **could I maintain one agent definition and deploy it across different coding tools?**
 
-That left me wondering whether I could define an agent once and generate the right files for each tool. Before building a converter myself, I came across [Microsoft Agent Package Manager (APM)](https://microsoft.github.io/apm/).
+Before attempting to build a converter, I found [Microsoft Agent Package Manager (APM)](https://microsoft.github.io/apm/) and decided to try it. I documented two small experiments in [agent-portability-lab](https://github.com/lfarci/agent-portability-lab).
 
-I built a small public [agent-portability-lab](https://github.com/lfarci/agent-portability-lab) and ran two experiments. The short version: **basic agent distribution works surprisingly well, but tool restrictions are another story.**
+## First, what is a custom agent?
 
-These are hands-on observations from October 21, 2026, using **APM 0.34.0**, **Codex CLI 0.163.0**, GitHub Copilot CLI, and **OpenCode 2.0.30**. I tested three harnesses, not Claude Code, and I did not attempt a comprehensive benchmark or security audit.
+A **coding agent** is an AI assistant that can work on a task using context and tools, such as reading code, searching a repository, running commands, or editing files. The **harness** is the application that runs it: GitHub Copilot, Codex, or OpenCode, for example. The harness decides which tools are available, how permissions work, and how tasks are executed.
 
-## Experiment 1: One reviewer, three harnesses
+A **custom agent** is usually a named, reusable role configured for a particular kind of work. Think of a *reviewer* focused on correctness, a *tester* focused on test coverage, or a *documentation writer* focused on explanations. Instead of repeating a long prompt every time, you define its purpose and instructions once.
 
-For the first experiment I deliberately kept the agent simple. It should review C# code, find correctness issues, recommend tests, and leave the source unchanged.
+An agent definition can combine several things:
 
-The canonical definition lived at `.apm/agents/reviewer.agent.md`:
+- **Role and instructions:** What the agent should focus on and how it should respond.
+- **Tools and permissions:** What it can read, execute, or modify, where the harness supports those controls.
+- **Execution settings:** Sometimes a model choice, or whether another agent can delegate work to it.
+
+You don't need a custom agent for every request. For a quick question or a one-off code change, the default assistant is usually enough. Custom agents become useful when you repeatedly need a specialized workflow, or want to delegate a specific task within a larger one.
+
+**Does “agent” mean exactly the same thing in every harness? Not quite.** The broad idea is similar, but discovery paths, tool schemas, permission enforcement, and delegation differ. A reviewer's *instructions* might transfer cleanly even when its *capabilities* do not. That's what I wanted to test.
+
+## Experiment 1: Can one agent run in three harnesses?
+
+I started with a straightforward C# reviewer. Its canonical definition was stored at `.apm/agents/reviewer.agent.md`:
 
 ```markdown
 ---
@@ -32,41 +42,20 @@ description: Reviews C# code for correctness and edge cases without editing file
 
 # Reviewer
 
-You are a focused C# reviewer. Inspect the requested source file for
-concrete correctness bugs and edge cases.
-
-- Do not edit files or execute destructive commands.
-- Prioritize correctness over formatting or naming suggestions.
-- Explain each bug with a specific file location, reproduction input, and proposed fix.
-- Suggest at least one small test for each reported bug.
-- Finish your response with the exact text: APM-REVIEW-COMPLETE
+Review the requested C# code for correctness bugs and edge cases.
+Do not edit files. Explain each bug and suggest a unit test.
+Finish with: APM-REVIEW-COMPLETE
 ```
 
-I added a tiny fixture with an intentional off-by-one bug:
+The actual [test agent](https://github.com/lfarci/agent-portability-lab/blob/main/.apm/agents/reviewer.agent.md) contains a few more review instructions. I gave it a small C# file with a deliberate off-by-one bug: the bounds check used `index > scores.Length` rather than `index >= scores.Length`.
 
-```csharp
-public static int ScoreAt(int[] scores, int index)
-{
-    if (index < 0 || index > scores.Length)
-    {
-        return -1;
-    }
-
-    return scores[index];
-}
-```
-
-When `index == scores.Length`, the guard lets an invalid index through and the array access throws. Changing `>` to `>=` fixes it. This gave each harness the same concrete task.
-
-### Generating the agent configurations
-
-With the canonical agent in `.apm/agents/`, I ran:
+I installed the agent for three targets:
 
 ```bash
 apm install --target copilot,codex,opencode --verbose
 ```
 
-APM reported three local agent integrations and generated:
+APM generated:
 
 ```text
 .github/agents/reviewer.agent.md
@@ -74,64 +63,33 @@ APM reported three local agent integrations and generated:
 .opencode/agents/reviewer.md
 ```
 
-Copilot and OpenCode received Markdown definitions preserving the original instructions. Codex received TOML, with the Markdown body encoded as `developer_instructions`.
+Copilot and OpenCode received Markdown; Codex received a TOML definition containing the reviewer's instructions.
 
-One small surprise: `apm install --dry-run --target copilot,codex,opencode` previously said no dependencies were found and no changes would be made. The actual install still integrated the local agent. At least in this tested version, dry-run output was not a complete preview of local agent deployment.
-
-### Running the reviews
-
-I invoked the generated agents from the repository root. Copilot and OpenCode let me select the reviewer directly:
-
-```bash
-copilot --agent=reviewer --prompt "Review src/ScoreCalculator.cs for correctness bugs and edge cases. Do not modify files. Identify a failing input and recommend a unit test."
-```
-
-```bash
-opencode run --agent reviewer "Review src/ScoreCalculator.cs for correctness bugs and edge cases. Do not modify files. Identify a failing input and recommend a unit test."
-```
-
-Codex behaved differently. I opened its interactive CLI and asked the main agent to delegate the same review to the generated `reviewer` subagent. Its trace showed a spawned agent named `custom_reviewer`. That was evidence of subagent execution, although the displayed name alone could not prove every TOML setting had been applied.
-
-Here are the results:
+I then ran the same review task in all three harnesses. Copilot and OpenCode let me select the reviewer directly; in Codex I asked the main agent to delegate to its generated reviewer subagent.
 
 | Check | Copilot | Codex | OpenCode |
 | --- | --- | --- | --- |
-| Generated agent used for a review | Yes | Yes, via subagent delegation | Yes |
-| Intentional bug identified | Yes | Yes | Yes |
-| Fix and unit test recommended | Yes | Yes | Yes |
-| Original C# fixture unchanged | Yes | Yes | Yes |
-| Exact completion marker | Yes | Yes | Almost |
+| Agent generated | Pass | Pass | Pass |
+| Review completed and bug found | Pass | Pass | Pass |
+| Original source unchanged | Pass | Pass | Pass |
+| Exact completion marker | Pass | Pass | Partial |
 
-All three identified the bug and recommended the correct upper-bound check.
+All three found the expected boundary bug and suggested the fix. OpenCode also ran tests in a scratch directory, although its final marker was missing the last character. These were individual functional tests, not a performance comparison.
 
-Copilot finished in about 25 seconds and reported **0.75 AI credits**. OpenCode, running MiniMax M3.1 Flash Free, went further: it created an isolated reproduction under `/tmp`, ran xUnit tests, saw two failures against the original code, and confirmed eight passing tests against a fixed scratch copy. Codex finished the delegated review in about 24 seconds.
+Finally, I added one instruction to the canonical definition and reran APM. **The change propagated to all three generated files**, including Codex's TOML. For a simple, instruction-based reviewer, this was the workflow I wanted.
 
-OpenCode's final line was `APM-REVIEW-COMPLET`, missing the last `E`. I recorded that as a strict marker-check failure instead of quietly calling it a pass.
+There was one minor quirk: APM 0.34.0's dry run reported no changes even though the actual install deployed the local agent.
 
-These are single runs with different models and execution mechanisms, **not** evidence that one harness is faster or better than another. I also ran Git checks after each review and confirmed that the original source file was unchanged.
+## Experiment 2: What happens to tool restrictions?
 
-### Does a source change propagate?
+The second experiment tested something more important than a shared prompt: **can APM preserve which tools an agent is allowed to use?**
 
-Finally, I added one instruction to the canonical agent:
-
-```markdown
-- For each bug, include the expected return value or exception.
-```
-
-After rerunning `apm install`, the new instruction appeared in **all three generated files**, including Codex's TOML.
-
-For a straightforward instruction-based custom agent, this is exactly what I wanted: **define once, deploy to three harnesses, and update from one source.**
-
-## Experiment 2: Tool restrictions break the abstraction
-
-Instructions are one thing. Tool restrictions are different.
-
-There's a meaningful difference between asking a reviewer not to edit files and technically restricting which tools it can use. So I introduced a second canonical agent, `restricted-reviewer`, with a boolean tool mapping:
+I defined a `restricted-reviewer` with this frontmatter:
 
 ```yaml
 ---
 name: restricted-reviewer
-description: Reviews C# code with read and search tools only.
+description: Reviews C# code without editing files or running commands.
 tools:
   read: true
   grep: true
@@ -140,27 +98,15 @@ tools:
 ---
 ```
 
-I regenerated the three target configurations with APM 0.34.0 and inspected their metadata.
+APM generated the target files, but their configurations were not equivalent:
 
-### Copilot: The generated field has the wrong shape
+| Harness | What happened |
+| --- | --- |
+| **GitHub Copilot** | APM copied the boolean mapping, but Copilot expects `tools` to be an array or comma-separated string. VS Code flagged a schema error. |
+| **OpenCode v2** | APM copied the legacy `tools` mapping instead of generating native `permissions` rules. |
+| **Codex** | APM dropped `tools` and warned that the generated agent might inherit available MCP tools. |
 
-APM copied the boolean mapping into `.github/agents/restricted-reviewer.agent.md`.
-
-But GitHub Copilot's agent `tools` field expects an **array of tool names or a comma-separated string**, not that mapping. VS Code flagged it with:
-
-> The 'tools' attribute must be an array or a comma separated string.
-
-The generated file existed in the right location, yet its permission-bearing frontmatter did not match Copilot's expected schema.
-
-### OpenCode: Legacy tool mapping, not native v2 permissions
-
-OpenCode received the same boolean `tools` mapping. My installed **OpenCode v2.0.30** uses a newer native `permissions` rule model; APM did not emit those rules.
-
-This is a **configuration-translation finding**, not proof that the legacy mapping had no runtime effect. I did not run enforcement tests to establish that.
-
-### Codex: A warning about dropped restrictions
-
-Codex was the clearest case. APM reported a lossy conversion:
+The Codex warning was particularly clear:
 
 ```text
 Codex agent restricted-reviewer.agent.md:
@@ -168,59 +114,33 @@ frontmatter field 'tools' was dropped;
 the agent may inherit all project/session MCP servers.
 ```
 
-It also warned against relying on that generated agent when the restriction mattered.
+I also added a [small validator](https://github.com/lfarci/agent-portability-lab/blob/experiment/02-tool-restrictions/scripts/validate-experiment-02.py) to check the relevant generated fields. It reported **three incompatibility findings and one warning**.
 
-I appreciate the warning. Silently discarding access restrictions would be much worse. But the result is still clear: **the intended tool restriction was not preserved in the generated Codex agent**.
+This was a *static configuration test*. I didn't attempt to prove whether a harness would block editing at runtime. In particular, seeing a legacy OpenCode field doesn't establish how that field behaves. But the test was enough to show that **one canonical tool configuration did not become equivalent native restrictions across all three harnesses**.
 
-### A small validator to make it reproducible
+## Is APM planning to address this?
 
-I added a focused Python check to the lab. It checks the relevant Copilot field type, whether an OpenCode v2 native permission policy was generated for this restricted fixture, and whether Codex retained the canonical restrictions.
+I checked APM's upstream discussions. [Issue #2108](https://github.com/microsoft/apm/issues/2108) proposes a broader model for portable agent semantics, but the maintainers explicitly **deferred** that work in a decision recorded in October 2026.
 
-Running it produced:
+Their selected priority is [native plugin delivery (#3094)](https://github.com/microsoft/apm/issues/3094), while leaving room for smaller compatibility and security fixes. There's no committed release for a universal cross-harness permission translator.
 
-```text
-WARN opencode: legacy tools mapping present; not proof of modern permission enforcement
-FAIL copilot: tools must be a string or array of strings (received mapping)
-FAIL opencode: v2 requires permissions as a rule array for this restricted fixture
-FAIL codex: canonical tool restrictions were dropped (APM-reported loss)
-Result: 3 incompatibility finding(s), 1 warning(s)
-```
+That helps set expectations: APM is useful for distribution, but it isn't currently a guarantee that agent capabilities mean the same thing everywhere.
 
-This is **not a complete vendor schema validator**. It is a deliberately narrow check of the incompatibilities we encountered.
+## My takeaway
 
-I stopped Experiment 2 at static validation. Since these generated definitions didn't express equivalent native restrictions, runtime permission-enforcement testing would have been a separate question.
+These two experiments changed my initial idea of building a custom converter.
 
-**The result:** the tested canonical `tools` mapping did not produce portable restrictions across Copilot, OpenCode v2, and Codex.
+**APM already works well for the basics:** I could define a reviewer once, deploy it to Copilot, Codex, and OpenCode, run it successfully, and propagate an update.
 
-## Is this on APM's roadmap?
+**Permissions are where portability breaks down.** An agent's instructions, its available tools, and the harness's actual enforcement are different layers. Copying configuration from one tool to another doesn't make those layers equivalent.
 
-I went looking through [APM's upstream issues](https://github.com/microsoft/apm/issues) before deciding whether to build my own converter.
+For now, I'd use APM to reduce duplication, inspect generated files, and keep harness-specific permission settings where necessary. I'm also tracking a [GitHub Actions workflow](https://github.com/lfarci/agent-portability-lab/issues/5) to detect drift between canonical and generated agents.
 
-The most relevant one is [#2108: Define portable agent semantics without lossy vendor pivots](https://github.com/microsoft/apm/issues/2108). Its discussion includes an explicit human product decision, recorded in October 2026, to **defer** the broader tool-neutral semantic-model effort.
-
-Instead, the current selected investment is [#3094: Native plugin installation and lifecycle across APM targets](https://github.com/microsoft/apm/issues/3094). The team remains open to bounded compatibility and security repairs, but there is no approved implementation or release scheduled for a universal agent-permission translation framework.
-
-That distinction is useful. APM can be valuable without promising that every platform's tools, permissions, and delegation behavior mean the same thing.
-
-## Where I landed
-
-I started with the idea of building a converter to move custom agents between coding tools. Having tested APM, I don't think a new general-purpose converter should be my first move.
-
-APM already solves part of the problem well: it can place simple agent definitions in the right locations, convert the basic Codex format, and keep those outputs synchronized when the source changes.
-
-But **distributing configuration is not the same as translating behavior**. In Experiment 2, we saw an invalid Copilot field, an untranslated OpenCode v2 permission model, and restrictions deliberately dropped with a warning for Codex.
-
-For now, I'll use APM where it reduces duplication, inspect generated files, and keep native permission configuration where required. I'm also tracking a small [GitHub Actions synchronization workflow](https://github.com/lfarci/agent-portability-lab/issues/5) to flag changes between the canonical agent and committed outputs.
-
-If I contribute tooling, a narrow compatibility diagnostic seems more useful than building another framework that claims to normalize incompatible security models.
-
-You can review the exact fixtures, instructions and results in [agent-portability-lab](https://github.com/lfarci/agent-portability-lab).
+The [lab repository](https://github.com/lfarci/agent-portability-lab) has the full fixtures, commands, and results if you'd like to reproduce the experiments.
 
 ### References
 
-- [Previous article: Beyond GitHub Copilot: Can You Reuse Your AI Setup?](/articles/from-copilot-to-opencode-configuration-portability)
-- [Microsoft Agent Package Manager](https://microsoft.github.io/apm/)
-- [GitHub Copilot custom-agent configuration](https://docs.github.com/en/copilot/reference/custom-agents-configuration)
-- [OpenCode agent documentation](https://opencode.ai/docs/agents/)
-- [APM issue #2108: Portable agent semantics](https://github.com/microsoft/apm/issues/2108)
-- [APM issue #3094: Native plugin lifecycle](https://github.com/microsoft/apm/issues/3094)
+- [Microsoft APM](https://microsoft.github.io/apm/)
+- [GitHub Copilot custom agents](https://docs.github.com/en/copilot/reference/custom-agents-configuration)
+- [OpenCode agents and permissions](https://opencode.ai/docs/agents/)
+- [APM portable agent semantics discussion](https://github.com/microsoft/apm/issues/2108)
