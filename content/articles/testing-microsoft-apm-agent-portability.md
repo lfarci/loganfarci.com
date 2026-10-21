@@ -138,15 +138,17 @@ That helps set expectations: APM is useful for distribution, but it isn't curren
 
 ## My takeaway
 
-These two experiments changed my initial idea of building a custom converter.
+I had been thinking about agent-profile portability for a few weeks before discovering APM. Finding a tool that already implemented part of that idea was exciting, and I genuinely enjoyed experimenting with it.
 
-**APM already works well for the basics:** I could define a reviewer once, deploy it to Copilot, Codex, and OpenCode, run it successfully, and propagate an update.
+**But these results haven't convinced me to add APM to my projects just to share agent profiles.** For a basic reviewer persona, the benefit is mostly generating a few files that contain the same instructions. That's convenient, but probably not enough to justify another dependency when the equivalent setup is so simple.
 
-**Permissions are where portability breaks down.** An agent's instructions, its available tools, and the harness's actual enforcement are different layers. Copying configuration from one tool to another doesn't make those layers equivalent.
+The features that would make a translation layer really valuable to me are the harder ones: tools and permissions, model-specific settings, and possibly delegation. That's also where our experiment exposed the limitations. APM supports some field conversions, but it doesn't currently offer the level of cross-harness translation I was hoping to explore.
 
-For now, I'd use APM to reduce duplication, inspect generated files, and keep harness-specific permission settings where necessary. I'm also tracking a [GitHub Actions workflow](https://github.com/lfarci/agent-portability-lab/issues/5) to detect drift between canonical and generated agents.
+That doesn't mean APM is doing the wrong thing. **It's a package manager**, and distributing packages and plugins containing agent customizations is a useful problem to solve. The maintainers' focus on native plugin delivery makes sense. Translating advanced agent-profile semantics between vendors is a different, potentially much larger undertaking. I don't yet know what it would take to make that reliable enough to depend on.
 
-The [lab repository](https://github.com/lfarci/agent-portability-lab) has the full fixtures, commands, and results if you'd like to reproduce the experiments.
+So I'm not planning to build a competing tool or adopt APM for this particular use case right now. I'll keep an eye on other projects tackling profile portability. If nothing addresses the gap, I might eventually try a small lab project: take one canonical profile and experiment with transforming it into the native definitions of several harnesses, including their more advanced settings.
+
+For now, the [agent-portability-lab](https://github.com/lfarci/agent-portability-lab) captures what I learned. **Sharing an agent's role is relatively easy. Sharing what that agent is actually allowed to do is much harder.**
 
 ### References
 
