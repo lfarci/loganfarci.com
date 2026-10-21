@@ -1,6 +1,6 @@
 ---
 title: "I Tested Microsoft APM Across Copilot, Codex, and OpenCode"
-description: "What custom coding agents are, and what two small APM experiments reveal about portability across Copilot, Codex, and OpenCode."
+description: "I tested Microsoft APM with GitHub Copilot, Codex, and OpenCode to see whether custom agent instructions, tools, and permissions actually remain portable."
 publishedAt: "2026-10-21"
 featured: false
 tags: ["GitHub Copilot", "AI", "OpenCode", "Codex", "APM"]
@@ -13,6 +13,8 @@ In my [previous article](/articles/from-copilot-to-opencode-configuration-portab
 That made me wonder: **could I maintain one agent definition and deploy it across different coding tools?**
 
 Before attempting to build a converter, I found [Microsoft Agent Package Manager (APM)](https://microsoft.github.io/apm/) and decided to try it. I documented two small experiments in [agent-portability-lab](https://github.com/lfarci/agent-portability-lab).
+
+I ran them on October 21, 2026 using **APM 0.34.0**. The recorded versions were **Codex CLI 0.163.0** for Experiment 1 and **OpenCode 2.0.30** for Experiment 2; I didn't record the Copilot CLI version. These are snapshots of a particular setup, not a cross-version compatibility claim.
 
 ## Do you really need a custom agent?
 
@@ -30,7 +32,7 @@ Those are useful boundaries, not hard technical limits: agent profiles can conta
 
 For this experiment, the question is whether APM can move such a profile between harnesses **without losing the intended configuration**. See [GitHub's comparison of customization options](https://docs.github.com/en/copilot/concepts/customizations/comparing-customizations) and [Microsoft's description of an agent harness](https://learn.microsoft.com/en-us/agent-framework/concepts/harness) for the broader distinction.
 
-## Experiment 1: Can one agent run in three harnesses?
+## Experiment 1: Can one reviewer profile run in three harnesses?
 
 I started with a straightforward C# reviewer. Its canonical definition was stored at `.apm/agents/reviewer.agent.md`:
 
@@ -65,16 +67,16 @@ APM generated:
 
 Copilot and OpenCode received Markdown; Codex received a TOML definition containing the reviewer's instructions.
 
-I then ran the same review task in all three harnesses. Copilot and OpenCode let me select the reviewer directly; in Codex I asked the main agent to delegate to its generated reviewer subagent.
+I then ran the same review task in all three harnesses. Copilot and OpenCode let me select the reviewer directly; in Codex I asked the main agent to delegate to its generated reviewer subagent. The Codex trace showed a `custom_reviewer` subagent running, but that trace alone doesn't prove that every property of the generated TOML was applied.
 
 | Check | Copilot | Codex | OpenCode |
 | --- | --- | --- | --- |
-| Agent generated | Pass | Pass | Pass |
+| Agent profile generated | Pass | Pass | Pass |
 | Review completed and bug found | Pass | Pass | Pass |
 | Original source unchanged | Pass | Pass | Pass |
 | Exact completion marker | Pass | Pass | Partial |
 
-All three found the expected boundary bug and suggested the fix. OpenCode also ran tests in a scratch directory, although its final marker was missing the last character. These were individual functional tests, not a performance comparison.
+All three found the expected boundary bug and suggested the fix. OpenCode also ran tests in a scratch directory, although its final marker was missing the last character. These were individual functional tests, not a performance comparison. The full [Experiment 1 results](https://github.com/lfarci/agent-portability-lab/blob/main/docs/results/01-basic-portability.md) document the commands, findings, and Codex trace caveat.
 
 Finally, I added one instruction to the canonical definition and reran APM. **The change propagated to all three generated files**, including Codex's TOML. For a simple, instruction-based reviewer, this was the workflow I wanted.
 
@@ -83,6 +85,10 @@ There was one minor quirk: APM 0.34.0's dry run reported no changes even though 
 ## Experiment 2: What happens to tool restrictions?
 
 The second experiment tested something more important than a shared prompt: **can APM preserve which tools an agent is allowed to use?**
+
+I deliberately started with an **OpenCode-style boolean tool mapping**. [APM's agent-authoring documentation](https://microsoft.github.io/apm/producer/author-primitives/instructions-and-agents/) uses this shape in its example and explicitly documents that Copilot and OpenCode targets receive agent frontmatter **verbatim**, whereas Codex converts a limited set of fields.
+
+That makes this a test of **APM's cross-harness transformation scope**, not an assumption that the input is already valid Copilot configuration or evidence of an unexpected APM regression.
 
 I defined a `restricted-reviewer` with this frontmatter:
 
@@ -98,13 +104,15 @@ tools:
 ---
 ```
 
-APM generated the target files, but their configurations were not equivalent:
+APM generated the target files, but they didn't express equivalent restrictions. There is also a difference in what the targets mean by restricting tools: **Copilot's `tools` list controls tool availability**, while **OpenCode v2 has permission rules** that can allow, deny, or request approval for actions. These aren't interchangeable security contracts, and a valid configuration alone wouldn't prove runtime enforcement.
 
-| Harness | What happened |
-| --- | --- |
-| **GitHub Copilot** | APM copied the boolean mapping, but Copilot expects `tools` to be an array or comma-separated string. VS Code flagged a schema error. |
-| **OpenCode v2** | APM copied the legacy `tools` mapping instead of generating native `permissions` rules. |
-| **Codex** | APM dropped `tools` and warned that the generated agent might inherit available MCP tools. |
+Here's a side-by-side view of the [canonical input](https://github.com/lfarci/agent-portability-lab/blob/main/.apm/agents/restricted-reviewer.agent.md) and the committed generated definitions:
+
+| Canonical source | Copilot output | OpenCode v2 output | Codex output |
+| --- | --- | --- | --- |
+| `tools: {read: true, grep: true, edit: false, bash: false}` | [Same boolean mapping](https://github.com/lfarci/agent-portability-lab/blob/main/.github/agents/restricted-reviewer.agent.md); Copilot expects an array or string | [Same legacy mapping](https://github.com/lfarci/agent-portability-lab/blob/main/.opencode/agents/restricted-reviewer.md); no native `permissions` rules | [No `tools` field](https://github.com/lfarci/agent-portability-lab/blob/main/.codex/agents/restricted-reviewer.toml); APM warned it was dropped |
+
+VS Code flagged the Copilot field's schema, OpenCode v2 didn't receive native permission rules, and Codex retained the review instructions but not the requested tool restrictions.
 
 The Codex warning was particularly clear:
 
@@ -114,19 +122,15 @@ frontmatter field 'tools' was dropped;
 the agent may inherit all project/session MCP servers.
 ```
 
-I also added a [small validator](https://github.com/lfarci/agent-portability-lab/blob/experiment/02-tool-restrictions/scripts/validate-experiment-02.py) to check the relevant generated fields. It reported **three incompatibility findings and one warning**.
+I also added a [small validator](https://github.com/lfarci/agent-portability-lab/blob/main/scripts/validate-experiment-02.py) to check the relevant generated fields. It reported **three incompatibility findings and one warning**. The full [Experiment 2 results](https://github.com/lfarci/agent-portability-lab/blob/main/docs/results/02-tool-restrictions.md) include the CLI warning and validation output.
 
 This was a *static configuration test*. I didn't attempt to prove whether a harness would block editing at runtime. In particular, seeing a legacy OpenCode field doesn't establish how that field behaves. But the test was enough to show that **one canonical tool configuration did not become equivalent native restrictions across all three harnesses**.
 
 ### What about other agent-profile settings?
 
-We only tested tool restrictions, but agent profiles can also specify a model, reasoning effort, handoffs, and other metadata. The [APM agent documentation](https://microsoft.github.io/apm/producer/author-primitives/instructions-and-agents/) describes a **field-by-field** approach rather than universal translation:
+APM also documents [selective mappings for other fields](https://microsoft.github.io/apm/producer/author-primitives/instructions-and-agents/). It passes `model` through to Copilot and OpenCode and writes it into Codex TOML, **without translating model names**. A string `model_reasoning_effort` can be mapped into Codex TOML, while handoffs and other metadata may be copied or dropped depending on the target.
 
-- **Model selection:** APM passes `model` unchanged to Copilot and OpenCode, and writes a supplied string `model` to Codex TOML. It does **not** translate model names or verify that a target supports the model.
-- **Reasoning effort:** APM specifically maps a string `model_reasoning_effort` to Codex TOML. Reasoning controls aren't unique to Codex, though; [OpenCode also supports them](https://opencode.ai/v2/docs/models) through its own model settings.
-- **Handoffs and other metadata:** Some targets receive frontmatter verbatim, while Codex supports only a documented subset and warns when other fields are dropped. A copied field does not necessarily have the same meaning in every harness.
-
-**I didn't test any of these additional settings.** They're documented capabilities and limitations, not findings from the lab. The broader lesson is that **some agent-profile fields can be carried across, others need target-specific handling, and copying a value does not guarantee equivalent behavior**.
+**I didn't test these fields.** The documentation reinforces the same distinction: converting a configuration field doesn't guarantee equivalent behavior across harnesses.
 
 ## Is APM planning to address this?
 
