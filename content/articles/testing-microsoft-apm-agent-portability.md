@@ -14,21 +14,21 @@ That made me wonder: **could I maintain one agent definition and deploy it acros
 
 Before attempting to build a converter, I found [Microsoft Agent Package Manager (APM)](https://microsoft.github.io/apm/) and decided to try it. I documented two small experiments in [agent-portability-lab](https://github.com/lfarci/agent-portability-lab).
 
-## First, what is a custom agent?
+## Do you really need a custom agent?
 
-A **coding agent** is an AI assistant that can work on a task using context and tools, such as reading code, searching a repository, running commands, or editing files. The **harness** is the application that runs it: GitHub Copilot, Codex, or OpenCode, for example. The harness decides which tools are available, how permissions work, and how tasks are executed.
+**Copilot, Codex, and OpenCode are already coding agents.** You don't need to create a custom-agent file to make them read code, use tools, or work through a task. Each product comes with an *agent harness*: the runtime that manages model and tool calls, context, execution, and permissions. You can use one interactively or automate it from a script or server. Strictly speaking, the harness is the machinery behind an agent, not the agent itself, even if we often use the product name for both.
 
-A **custom agent** is usually a named, reusable role configured for a particular kind of work. Think of a *reviewer* focused on correctness, a *tester* focused on test coverage, or a *documentation writer* focused on explanations. Instead of repeating a long prompt every time, you define its purpose and instructions once.
+In this article, **custom agent** means something narrower: a **named profile within an existing harness**. For example, a *reviewer* profile might focus on finding bugs, expose only read/search tools, choose a model, or be available for delegation. Depending on the harness, you can select that profile for your main session or launch it as a subagent with its own context. You're configuring an existing agent runtime, not building a new one.
 
-An agent definition can combine several things:
+My practical rule of thumb is to keep these concerns separate:
 
-- **Role and instructions:** What the agent should focus on and how it should respond.
-- **Tools and permissions:** What it can read, execute, or modify, where the harness supports those controls.
-- **Execution settings:** Sometimes a model choice, or whether another agent can delegate work to it.
+- **`AGENTS.md` and project instructions:** conventions that should apply broadly.
+- **Skills:** reusable *how-to* procedures for specific tasks.
+- **Custom agent profiles:** a specialized role, its tools and permissions, and optionally model or delegation settings.
 
-You don't need a custom agent for every request. For a quick question or a one-off code change, the default assistant is usually enough. Custom agents become useful when you repeatedly need a specialized workflow, or want to delegate a specific task within a larger one.
+Those are useful boundaries, not hard technical limits: agent profiles can contain instructions too, and the harness ultimately determines what permissions it enforces. If the default assistant plus instructions and skills already does the job, **you probably don't need a custom agent**.
 
-**Does “agent” mean exactly the same thing in every harness? Not quite.** The broad idea is similar, but discovery paths, tool schemas, permission enforcement, and delegation differ. A reviewer's *instructions* might transfer cleanly even when its *capabilities* do not. That's what I wanted to test.
+For this experiment, the question is whether APM can move such a profile between harnesses **without losing the intended configuration**. See [GitHub's comparison of customization options](https://docs.github.com/en/copilot/concepts/customizations/comparing-customizations) and [Microsoft's description of an agent harness](https://learn.microsoft.com/en-us/agent-framework/concepts/harness) for the broader distinction.
 
 ## Experiment 1: Can one agent run in three harnesses?
 
