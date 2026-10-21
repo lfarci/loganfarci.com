@@ -118,6 +118,16 @@ I also added a [small validator](https://github.com/lfarci/agent-portability-lab
 
 This was a *static configuration test*. I didn't attempt to prove whether a harness would block editing at runtime. In particular, seeing a legacy OpenCode field doesn't establish how that field behaves. But the test was enough to show that **one canonical tool configuration did not become equivalent native restrictions across all three harnesses**.
 
+### What about other agent-profile settings?
+
+We only tested tool restrictions, but agent profiles can also specify a model, reasoning effort, handoffs, and other metadata. The [APM agent documentation](https://microsoft.github.io/apm/producer/author-primitives/instructions-and-agents/) describes a **field-by-field** approach rather than universal translation:
+
+- **Model selection:** APM passes `model` unchanged to Copilot and OpenCode, and writes a supplied string `model` to Codex TOML. It does **not** translate model names or verify that a target supports the model.
+- **Reasoning effort:** APM specifically maps a string `model_reasoning_effort` to Codex TOML. Reasoning controls aren't unique to Codex, though; [OpenCode also supports them](https://opencode.ai/v2/docs/models) through its own model settings.
+- **Handoffs and other metadata:** Some targets receive frontmatter verbatim, while Codex supports only a documented subset and warns when other fields are dropped. A copied field does not necessarily have the same meaning in every harness.
+
+**I didn't test any of these additional settings.** They're documented capabilities and limitations, not findings from the lab. The broader lesson is that **some agent-profile fields can be carried across, others need target-specific handling, and copying a value does not guarantee equivalent behavior**.
+
 ## Is APM planning to address this?
 
 I checked APM's upstream discussions. [Issue #2108](https://github.com/microsoft/apm/issues/2108) proposes a broader model for portable agent semantics, but the maintainers explicitly **deferred** that work in a decision recorded in October 2026.
