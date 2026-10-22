@@ -558,8 +558,20 @@
         position: sticky;
         z-index: 40;
         top: 0;
-        border-bottom: 1px solid var(--color-border);
         background: var(--color-background);
+    }
+
+    /* Let the header rule span the viewport even when #root is width-constrained. */
+    .field-shell-header::after {
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        width: 100vw;
+        height: 1px;
+        background: var(--color-border);
+        content: "";
+        pointer-events: none;
+        transform: translateX(-50%);
     }
 
     .field-shell-nav {

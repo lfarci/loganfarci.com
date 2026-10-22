@@ -89,6 +89,30 @@ test.describe("Desktop primary navigation", () => {
 });
 
 test.describe("Shared navigation behavior", () => {
+    test("extends the header divider across the full viewport at mobile and wide desktop widths", async ({ page }) => {
+        for (const width of [390, 1920]) {
+            await page.setViewportSize({ width, height: 900 });
+            await page.goto("/about");
+
+            const divider = await page.locator(".field-shell-header").evaluate((header) => {
+                const headerBounds = header.getBoundingClientRect();
+                const pseudoStyles = window.getComputedStyle(header, "::after");
+                const dividerWidth = Number.parseFloat(pseudoStyles.width);
+
+                return {
+                    width: dividerWidth,
+                    left: headerBounds.left + headerBounds.width / 2 - dividerWidth / 2,
+                    viewportWidth: window.innerWidth,
+                    background: pseudoStyles.backgroundColor,
+                };
+            });
+
+            expect(divider.width).toBeCloseTo(divider.viewportWidth, 0);
+            expect(divider.left).toBeCloseTo(0, 0);
+            expect(divider.background).not.toBe("rgba(0, 0, 0, 0)");
+        }
+    });
+
     test("moves keyboard focus to the main content through the skip link", async ({ page }) => {
         await page.goto("/");
 
