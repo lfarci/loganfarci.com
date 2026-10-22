@@ -14,7 +14,7 @@ test.describe("Home page", () => {
             "mailto:logan.farci@outlook.be",
         );
         await expect(main.getByRole("navigation", { name: "Profile highlights" }).getByRole("link")).toHaveCount(3);
-        await expect(main.getByText("GitHub · Azure · Terraform · .NET", { exact: true })).toBeVisible();
+        await expect(main.getByText(".NET · Azure · GitHub · Terraform", { exact: true })).toBeVisible();
     });
 
     test("fits the complete desktop opening within tall viewports", async ({ page }) => {

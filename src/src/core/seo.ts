@@ -2,7 +2,7 @@ import type { Article, Contact, Experience, Profile } from "@/types";
 import { siteOgImage, siteUrl } from "@/core/site";
 
 export const siteName = "Logan Farci";
-export const siteDescription = "Software Engineer specializing in Azure, C#, .NET, and cloud-native solutions.";
+export const siteDescription = "Software Engineer working across .NET, Azure cloud-native systems, developer experience, and AI-assisted software delivery.";
 
 export type JsonLdPrimitive = string | number | boolean | null;
 export type JsonLdValue = JsonLdPrimitive | JsonLdObject | JsonLdValue[];

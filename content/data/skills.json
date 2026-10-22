@@ -154,7 +154,7 @@
   },
   {
     "name": "AI",
-    "description": "Builds practical AI solutions and developer workflows with GitHub Copilot, Azure AI, and modern orchestration frameworks.",
+    "description": "Practical experience with GitHub Copilot, custom agents, and GitHub Models for software delivery; exploring agent workflows and Azure AI Foundry with an emphasis on quality and developer productivity.",
     "skills": [
       {
         "name": "GitHub Copilot",
@@ -165,19 +165,8 @@
         "iconId": "github-copilot"
       },
       {
-        "name": "GitHub Copilot SDK",
-        "iconId": "github-copilot"
-      },
-      {
         "name": "GitHub Models",
         "iconId": "github"
-      },
-      {
-        "name": "Sementic Kernel"
-      },
-      {
-        "name": "LangChain",
-        "iconId": "langchain"
       },
       {
         "name": "Azure AI Foundry",

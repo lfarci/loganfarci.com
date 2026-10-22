@@ -1,6 +1,6 @@
 [
   {
-    "name": "Consultant, Full-Stack Developer",
+    "name": "Consultant, DevOps Engineer",
     "start": "2025-12-01",
     "type": "Full-Time",
     "company": {
@@ -14,7 +14,7 @@
         "height": 128
       }
     },
-    "description": "A global leader in digital innovation and cloud services, created by Accenture and Microsoft to help organizations accelerate their digital transformation.\n\n- Led development of enterprise-grade solutions using Azure, .NET, and the Microsoft ecosystem for global clients.  \n- Architected and delivered scalable cloud applications using Azure, Infrastructure as Code, and clean architectural patterns.  \n- Championed code quality by applying clean code principles, resulting in maintainable, testable software.  \n- Mentored junior developers and interns across a variety of client and internal projects.  \n- Collaborated with clients to turn business requirements into secure, high-performance solutions.  \n- Promoted agile practices as a hands-on Scrum practitioner focused on continuous improvement and team effectiveness."
+    "description": "Consultant at Avanade, continuing the Azure platform and DevOps engagement started as a Senior Analyst in late 2023.\n\n- Contributed to a configuration-driven Terraform and GitHub Actions platform supporting approximately 20 Azure environments.\n- Built and maintained reusable infrastructure modules and deployment workflows, including automation for Azure Red Hat OpenShift (ARO).\n- Worked on secure deployments with private networking, self-hosted GitHub Actions runners, managed identities, Azure RBAC, and infrastructure security checks.\n- Applied software engineering practices to infrastructure work through versioning, pull requests, reusable components, and documentation.\n- Helped improve GitHub Copilot workflows with repository instructions and specialized agents."
   },
   {
     "name": "Senior Analyst, Full-Stack Developer",
@@ -32,7 +32,7 @@
         "height": 128
       }
     },
-    "description": "A global leader in digital innovation and cloud services, created by Accenture and Microsoft to help organizations accelerate their digital transformation.\n\n- Led development of enterprise-grade solutions using Azure, .NET, and the Microsoft ecosystem for global clients.  \n- Architected and delivered scalable cloud applications using Azure, Infrastructure as Code, and clean architectural patterns.  \n- Championed code quality by applying clean code principles, resulting in maintainable, testable software.  \n- Mentored junior developers and interns across a variety of client and internal projects.  \n- Collaborated with clients to turn business requirements into secure, high-performance solutions.  \n- Promoted agile practices as a hands-on Scrum practitioner focused on continuous improvement and team effectiveness."
+    "description": "Worked across banking, energy, and Azure platform engineering engagements, moving from application development into infrastructure automation while keeping software engineering at the core.\n\n- Delivered tested .NET regulatory changes for a Belgian energy-sector application.\n- Improved SQL Server processing and built Python checks to identify missing messages and data inconsistencies.\n- Contributed to Terraform and GitHub Actions automation for an Azure platform engagement starting in late 2023, before the December 2025 promotion to Consultant.\n- Collaborated with developers and architects on application delivery, code quality, and maintainable infrastructure."
   },
   {
     "name": "Analyst Developer",

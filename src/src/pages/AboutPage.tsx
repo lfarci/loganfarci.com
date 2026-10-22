@@ -23,7 +23,7 @@ const profile = getProfile();
 
 const pageTitle = "About - Logan Farci";
 const pageDescription =
-    "Learn more about Logan Farci, a Software Engineer specializing in Azure, C#, .NET, and cloud-native solutions.";
+    "Explore Logan Farci’s experience in software engineering, .NET, Azure cloud platforms, developer tooling, and AI-assisted development.";
 const pageUrl = createCanonicalUrl("/about");
 const breadcrumbJsonLd = createBreadcrumbJsonLd([
     { name: "Home", path: "/" },
