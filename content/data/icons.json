@@ -235,11 +235,6 @@
     "icon": "/images/skills/frontend/react.svg"
   },
   {
-    "id": "rest-api",
-    "name": "REST API",
-    "icon": "/images/skills/backend/rest-api-mono.svg"
-  },
-  {
     "id": "spring-boot",
     "name": "Spring Boot",
     "icon": "/images/skills/backend/spring.svg"
@@ -253,11 +248,6 @@
     "id": "tailwind-css",
     "name": "Tailwind CSS",
     "icon": "/images/skills/frontend/tailwind.svg"
-  },
-  {
-    "id": "team-foundation-version-control",
-    "name": "Team Foundation Version Control",
-    "icon": "/images/skills/tools/version-control-mono.svg"
   },
   {
     "id": "terraform",

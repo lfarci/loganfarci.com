@@ -44,8 +44,7 @@
         "iconId": "mongodb"
       },
       {
-        "name": "REST API",
-        "iconId": "rest-api"
+        "name": "REST API"
       },
       {
         "name": "OAuth",
@@ -246,8 +245,7 @@
         "iconId": "visual-studio-code"
       },
       {
-        "name": "Team Foundation Version Control",
-        "iconId": "team-foundation-version-control"
+        "name": "Team Foundation Version Control"
       },
       {
         "name": "Git",

@@ -1,8 +1,7 @@
-The REST API, Agent Skills and version-control pictograms in this directory
-are adapted from Lucide SVG icons:
+The Agent Skills pictogram in this directory is adapted from a Lucide SVG icon:
 https://github.com/lucide-icons/lucide/tree/main/icons
 
-Icon source files: route.svg, puzzle.svg, git-branch.svg
+Icon source file: puzzle.svg
 
 The MIT License (MIT)
 Copyright (c) 2013-present Cole Bemis

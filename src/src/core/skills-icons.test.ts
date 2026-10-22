@@ -7,10 +7,17 @@ import skills from "@content/data/skills.json";
 import type { SkillCategory } from "@/types";
 
 describe("skill icon coverage", () => {
-    it("assigns a real local SVG to every displayed skill", () => {
+    const textOnlySkills = new Set(["REST API", "Team Foundation Version Control"]);
+    it("assigns local SVGs to branded skills while allowing intentional text-only concepts", () => {
         for (const category of skills as SkillCategory[]) {
             for (const skill of category.skills) {
                 const label = `${category.name} / ${skill.name}`;
+                if (textOnlySkills.has(skill.name)) {
+                    expect(skill.iconId, `${label} should remain text-only`).toBeUndefined();
+                    expect(icons.some((entry) => entry.name === skill.name)).toBe(false);
+                    continue;
+                }
+
                 expect(skill.iconId, `${label} must have an iconId`).toBeDefined();
                 const icon = icons.find((entry) => entry.id === skill.iconId);
                 expect(icon?.name, `${label} must resolve to a matching display-name icon`).toBe(skill.name);
