@@ -1,0 +1,52 @@
+name: One-time résumé PDF sync
+
+on:
+  push:
+    branches:
+      - chore/sync-resume-pdf-20261022
+    paths:
+      - .github/workflows/sync-resume-pdf-once.yml
+
+permissions:
+  contents: write
+
+jobs:
+  sync-pdf:
+    if: github.event.head_commit.message == 'chore(ci): one-time resume PDF sync'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Fetch successful merged résumé build artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          url="https://api.github.com/repos/lfarci/resume/actions/artifacts/12430377632/zip"
+          if ! curl --fail --silent --show-error --location --retry 2 \
+              --header 'Accept: application/vnd.github+json' \
+              --header 'X-GitHub-Api-Version: 2022-11-28' \
+              "$url" --output /tmp/resume-artifact.zip; then
+            curl --fail --silent --show-error --location --retry 2 \
+              --header "Authorization: Bearer $GH_TOKEN" \
+              --header 'Accept: application/vnd.github+json' \
+              "$url" --output /tmp/resume-artifact.zip
+          fi
+          mkdir -p /tmp/resume-artifact
+          unzip -oq /tmp/resume-artifact.zip -d /tmp/resume-artifact
+          test -s /tmp/resume-artifact/resume.pdf
+          cp /tmp/resume-artifact/resume.pdf src/public/resume.pdf
+          echo 'cd5555ad340e77d43449cfdea2fed2602d93aa91167f2f79e119b2325c7645bc  src/public/resume.pdf' | sha256sum --check
+      - name: Commit only website résumé PDF
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add src/public/resume.pdf
+          if git diff --cached --quiet; then
+            echo 'Website PDF already current'
+            exit 0
+          fi
+          git commit -m 'chore(site): refresh résumé from merged source build'
+          git push origin HEAD:chore/sync-resume-pdf-20261022
