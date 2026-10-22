@@ -21,7 +21,7 @@ describe("skill icon coverage", () => {
 
                 const localPath = fileURLToPath(new URL(`../../public${icon.icon}`, import.meta.url));
                 expect(existsSync(localPath), `${label} icon file does not exist: ${icon.icon}`).toBe(true);
-                expect(readFileSync(localPath, "utf8"), `${label} must be an SVG`).toMatch(/<svg\\b/u);
+                expect(readFileSync(localPath, "utf8"), `${label} must be an SVG`).toMatch(/<svg\b/u);
             }
         }
     });
