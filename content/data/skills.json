@@ -44,7 +44,8 @@
         "iconId": "mongodb"
       },
       {
-        "name": "REST API"
+        "name": "REST API",
+        "iconId": "rest-api"
       },
       {
         "name": "OAuth",
@@ -120,7 +121,7 @@
       },
       {
         "name": "GitHub Actions",
-        "iconId": "github"
+        "iconId": "github-actions"
       },
       {
         "name": "PowerShell",
@@ -169,27 +170,32 @@
         "iconId": "github-copilot"
       },
       {
-        "name": "Claude Code"
+        "name": "Claude Code",
+        "iconId": "claude-code"
       },
       {
-        "name": "OpenAI Codex"
+        "name": "OpenAI Codex",
+        "iconId": "openai-codex"
       },
       {
-        "name": "OpenCode"
+        "name": "OpenCode",
+        "iconId": "opencode"
       },
       {
-        "name": "MCP"
+        "name": "MCP",
+        "iconId": "mcp"
       },
       {
-        "name": "Agent Skills"
+        "name": "Agent Skills",
+        "iconId": "agent-skills"
       },
       {
         "name": "GitHub Copilot CLI",
-        "iconId": "github-copilot"
+        "iconId": "github-copilot-cli"
       },
       {
         "name": "GitHub Models",
-        "iconId": "github"
+        "iconId": "github-models"
       },
       {
         "name": "Azure AI Foundry",
@@ -240,7 +246,8 @@
         "iconId": "visual-studio-code"
       },
       {
-        "name": "Team Foundation Version Control"
+        "name": "Team Foundation Version Control",
+        "iconId": "team-foundation-version-control"
       },
       {
         "name": "Git",
