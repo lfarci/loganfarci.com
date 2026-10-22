@@ -7,7 +7,7 @@ import skills from "@content/data/skills.json";
 import type { SkillCategory } from "@/types";
 
 describe("skill icon coverage", () => {
-    const textOnlySkills = new Set(["REST API", "Team Foundation Version Control"]);
+    const textOnlySkills = new Set(["REST API", "Team Foundation Version Control", "Agent Skills"]);
     it("assigns local SVGs to branded skills while allowing intentional text-only concepts", () => {
         for (const category of skills as SkillCategory[]) {
             for (const skill of category.skills) {

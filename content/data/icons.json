@@ -5,11 +5,6 @@
     "icon": "/images/skills/backend/dotnet.svg"
   },
   {
-    "id": "agent-skills",
-    "name": "Agent Skills",
-    "icon": "/images/skills/ai/agent-skills-mono.svg"
-  },
-  {
     "id": "angular",
     "name": "Angular",
     "icon": "/images/skills/frontend/angular.svg"

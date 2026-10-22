@@ -185,8 +185,7 @@
         "iconId": "mcp"
       },
       {
-        "name": "Agent Skills",
-        "iconId": "agent-skills"
+        "name": "Agent Skills"
       },
       {
         "name": "GitHub Copilot CLI",
