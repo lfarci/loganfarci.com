@@ -1,5 +1,5 @@
 import { existsSync, readFileSync } from "node:fs";
-import { fileURLToPath } from "node:url";
+import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 
 import icons from "@content/data/icons.json";
@@ -26,7 +26,7 @@ describe("skill icon coverage", () => {
                     continue;
                 }
 
-                const localPath = fileURLToPath(new URL(`../../public${icon.icon}`, import.meta.url));
+                const localPath = resolve(process.cwd(), "public", icon.icon.replace(/^\//u, ""));
                 expect(existsSync(localPath), `${label} icon file does not exist: ${icon.icon}`).toBe(true);
                 expect(readFileSync(localPath, "utf8"), `${label} must be an SVG`).toMatch(/<svg\b/u);
             }
