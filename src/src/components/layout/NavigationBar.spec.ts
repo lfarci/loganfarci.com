@@ -100,15 +100,16 @@ test.describe("Shared navigation behavior", () => {
                 const dividerWidth = Number.parseFloat(pseudoStyles.width);
 
                 return {
-                    width: dividerWidth,
                     left: headerBounds.left + headerBounds.width / 2 - dividerWidth / 2,
-                    viewportWidth: window.innerWidth,
+                    right: headerBounds.left + headerBounds.width / 2 + dividerWidth / 2,
+                    viewportWidth: document.documentElement.clientWidth,
                     background: pseudoStyles.backgroundColor,
                 };
             });
 
-            expect(divider.width).toBeCloseTo(divider.viewportWidth, 0);
-            expect(divider.left).toBeCloseTo(0, 0);
+            // Cover the visible viewport even when a vertical scrollbar consumes layout space.
+            expect(divider.left).toBeLessThanOrEqual(0.5);
+            expect(divider.right).toBeGreaterThanOrEqual(divider.viewportWidth - 0.5);
             expect(divider.background).not.toBe("rgba(0, 0, 0, 0)");
         }
     });
