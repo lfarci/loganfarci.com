@@ -25,7 +25,7 @@ test.describe("About page", () => {
         const main = page.getByRole("main");
 
         for (const representativeContent of [
-            "Consultant, Full-Stack Developer",
+            "Consultant, DevOps Engineer",
             "Bachelor in Computer Science",
             "Azure Developer Associate",
             "Software Engineering",

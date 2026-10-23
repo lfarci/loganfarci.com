@@ -14,7 +14,7 @@ test.describe("Home page", () => {
             "mailto:logan.farci@outlook.be",
         );
         await expect(main.getByRole("navigation", { name: "Profile highlights" }).getByRole("link")).toHaveCount(3);
-        await expect(main.getByText("GitHub · Azure · Terraform · .NET", { exact: true })).toBeVisible();
+        await expect(main.getByText(".NET · Azure · GitHub · Terraform", { exact: true })).toBeVisible();
     });
 
     test("fits the complete desktop opening within tall viewports", async ({ page }) => {
@@ -90,7 +90,7 @@ test.describe("Home page", () => {
         await page.goto("/");
 
         const heading = page.getByRole("heading", { level: 1 });
-        const stack = page.getByText("GitHub · Azure · Terraform · .NET", { exact: true });
+        const stack = page.getByText(".NET · Azure · GitHub · Terraform", { exact: true });
         const resume = page.getByRole("link", { name: "View résumé" });
         const contactList = page.locator('[aria-label="Other ways to connect"]');
         const portrait = page.getByRole("img", { name: "Picture of the author: Logan Farci" });

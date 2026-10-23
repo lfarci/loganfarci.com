@@ -1,7 +1,7 @@
 [
   {
     "name": "Software Engineering",
-    "description": "Builds reliable, maintainable software with C#, .NET, TypeScript, Java, and modern engineering practices, from APIs and data access to testing and developer tooling.",
+    "description": "Builds reliable, maintainable software with C#, .NET, Python, TypeScript, Java, and modern engineering practices, from APIs and data access to testing and developer tooling.",
     "skills": [
       {
         "name": ".NET",
@@ -10,6 +10,10 @@
       {
         "name": "C#",
         "iconId": "csharp"
+      },
+      {
+        "name": "Python",
+        "iconId": "python"
       },
       {
         "name": "xUnit",
@@ -108,39 +112,35 @@
   },
   {
     "name": "DevOps",
-    "description": "Focused on streamlining development and delivery through automated pipelines and infrastructure management. Experienced in implementing CI/CD, containerization, and monitoring practices to ensure reliable, efficient deployment on Azure.",
+    "description": "Builds and maintains Azure infrastructure and delivery automation with Terraform, GitHub Actions, CI/CD, and scripting. Also has hands-on experience with containerized and OpenShift-targeted workloads.",
     "skills": [
-      {
-        "name": "Docker",
-        "iconId": "docker"
-      },
-      {
-        "name": "Kubernetes",
-        "iconId": "kubernetes"
-      },
-      {
-        "name": "OpenShift",
-        "iconId": "openshift"
-      },
       {
         "name": "Terraform",
         "iconId": "terraform"
       },
       {
-        "name": "Bicep",
-        "iconId": "bicep"
+        "name": "GitHub Actions",
+        "iconId": "github-actions"
       },
       {
-        "name": "Linux",
-        "iconId": "linux"
+        "name": "PowerShell",
+        "iconId": "powershell"
       },
       {
         "name": "Bash",
         "iconId": "bash"
       },
       {
-        "name": "PowerShell",
-        "iconId": "powershell"
+        "name": "Linux",
+        "iconId": "linux"
+      },
+      {
+        "name": "Docker",
+        "iconId": "docker"
+      },
+      {
+        "name": "Bicep",
+        "iconId": "bicep"
       },
       {
         "name": "GitHub",
@@ -149,35 +149,51 @@
       {
         "name": "Azure DevOps",
         "iconId": "azure-devops"
+      },
+      {
+        "name": "Kubernetes",
+        "iconId": "kubernetes"
+      },
+      {
+        "name": "OpenShift",
+        "iconId": "openshift"
       }
     ]
   },
   {
     "name": "AI",
-    "description": "Builds practical AI solutions and developer workflows with GitHub Copilot, Azure AI, and modern orchestration frameworks.",
+    "description": "Practical experience with AI coding agents, reusable Agent Skills, and MCP integrations for software development workflows; additional exposure to GitHub Models and Azure AI Foundry.",
     "skills": [
       {
         "name": "GitHub Copilot",
         "iconId": "github-copilot"
       },
       {
-        "name": "GitHub Copilot CLI",
-        "iconId": "github-copilot"
+        "name": "Claude Code",
+        "iconId": "claude-code"
       },
       {
-        "name": "GitHub Copilot SDK",
-        "iconId": "github-copilot"
+        "name": "OpenAI Codex",
+        "iconId": "openai-codex"
+      },
+      {
+        "name": "OpenCode",
+        "iconId": "opencode"
+      },
+      {
+        "name": "MCP",
+        "iconId": "mcp"
+      },
+      {
+        "name": "Agent Skills"
+      },
+      {
+        "name": "GitHub Copilot CLI",
+        "iconId": "github-copilot-cli"
       },
       {
         "name": "GitHub Models",
-        "iconId": "github"
-      },
-      {
-        "name": "Sementic Kernel"
-      },
-      {
-        "name": "LangChain",
-        "iconId": "langchain"
+        "iconId": "github-models"
       },
       {
         "name": "Azure AI Foundry",

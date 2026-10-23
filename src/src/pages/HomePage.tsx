@@ -12,7 +12,7 @@ const emailContact = contacts.find((contact) => contact.icon === "email");
 
 const pageTitle = "Logan Farci - Software Engineer";
 const pageDescription =
-    "Software Engineer specializing in Azure, C#, .NET, and cloud-native solutions. Explore my work, articles, and certifications.";
+    "Software Engineer building .NET and Azure cloud-native systems, with an interest in developer experience and AI-assisted development.";
 const pageUrl = createCanonicalUrl("/");
 
 function getContactIcon(contact: Contact) {

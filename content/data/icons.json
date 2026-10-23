@@ -10,14 +10,14 @@
     "icon": "/images/skills/frontend/angular.svg"
   },
   {
-    "id": "azure-ai-foundry",
-    "name": "Azure AI Foundry",
-    "icon": "/images/skills/ai/foundry.svg"
-  },
-  {
     "id": "azure",
     "name": "Azure",
     "icon": "/images/icons/azure.svg"
+  },
+  {
+    "id": "azure-ai-foundry",
+    "name": "Azure AI Foundry",
+    "icon": "/images/skills/ai/foundry.svg"
   },
   {
     "id": "azure-api-management",
@@ -100,11 +100,6 @@
     "icon": "/images/skills/frontend/blazor.svg"
   },
   {
-    "id": "csharp",
-    "name": "C#",
-    "icon": "/images/skills/backend/csharp.svg"
-  },
-  {
     "id": "claude-code",
     "name": "Claude Code",
     "icon": "/images/icons/claude-code.svg"
@@ -113,6 +108,11 @@
     "id": "codex",
     "name": "Codex",
     "icon": "/images/icons/codex-light.svg"
+  },
+  {
+    "id": "csharp",
+    "name": "C#",
+    "icon": "/images/skills/backend/csharp.svg"
   },
   {
     "id": "docker",
@@ -132,12 +132,22 @@
   {
     "id": "github-actions",
     "name": "GitHub Actions",
-    "icon": "/images/skills/devops/github-mono.svg"
+    "icon": "/images/skills/devops/github-actions.svg"
   },
   {
     "id": "github-copilot",
     "name": "GitHub Copilot",
     "icon": "/images/skills/ai/copilot-mono.svg"
+  },
+  {
+    "id": "github-copilot-cli",
+    "name": "GitHub Copilot CLI",
+    "icon": "/images/skills/ai/copilot-mono.svg"
+  },
+  {
+    "id": "github-models",
+    "name": "GitHub Models",
+    "icon": "/images/skills/devops/github-mono.svg"
   },
   {
     "id": "java",
@@ -190,6 +200,11 @@
     "icon": "/images/skills/backend/oauth.svg"
   },
   {
+    "id": "openai-codex",
+    "name": "OpenAI Codex",
+    "icon": "/images/icons/codex-light.svg"
+  },
+  {
     "id": "opencode",
     "name": "OpenCode",
     "icon": "/images/icons/opencode-light.svg"
@@ -203,6 +218,11 @@
     "id": "powershell",
     "name": "PowerShell",
     "icon": "/images/skills/devops/powershell.svg"
+  },
+  {
+    "id": "python",
+    "name": "Python",
+    "icon": "/images/skills/backend/python.svg"
   },
   {
     "id": "react",
