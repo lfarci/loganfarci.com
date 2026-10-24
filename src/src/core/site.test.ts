@@ -11,6 +11,12 @@ describe("site", () => {
         expect(siteOgImage).toBe(`${siteUrl}/images/social-preview.png`);
     });
 
+    it("normalizes trailing slashes when constructing absolute Open Graph image URLs", () => {
+        expect(createSocialImageUrl("https://example-497.westeurope.azurestaticapps.net/")).toBe(
+            "https://example-497.westeurope.azurestaticapps.net/images/social-preview.png",
+        );
+    });
+
     it("supports a preview image origin without changing the production canonical URL", () => {
         expect(createSocialImageUrl("https://example-497.westeurope.azurestaticapps.net")).toBe(
             "https://example-497.westeurope.azurestaticapps.net/images/social-preview.png",
