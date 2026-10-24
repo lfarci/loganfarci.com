@@ -34,14 +34,13 @@ const css=[
  '.hero{position:absolute;left:76px;top:205px;font-family:"Manrope Variable",sans-serif;font-size:82px;line-height:1.07;font-weight:550;letter-spacing:-.035em}',
  '.hero .first{display:block;color:#f5f7fd}',
  '.hero .second{display:block;color:#4c9dfb;margin-top:15px}',
- '.desc{position:absolute;left:80px;top:480px;color:#b9cce6;font-family:"Noto Sans",sans-serif;font-size:19px;font-weight:400;line-height:1.54}',
  '.rule-bottom{position:absolute;left:80px;top:552px;width:760px;height:1px;background:rgba(109,146,191,.43)}',
  '.stack{position:absolute;left:80px;top:577px;font-family:"Reddit Mono",monospace;font-weight:400;font-size:17px;letter-spacing:.03em;color:#a5c5e9}'
 ].join("\n");
 const body='<div id="canvas"><div class="orb"></div><div class="arc"></div><div class="arc second"></div>'+
  '<div class="dot"></div><div class="wordmark">LOGAN FARCI</div><div class="rule"></div>'+
  '<div class="hero"><span class="first">Hi, I&#39;m Logan.</span><span class="second">Software Engineer</span></div>'+
- '<div class="desc">Software engineer building for the web and cloud.</div>'+
+
  '<div class="rule-bottom"></div><div class="stack">loganfarci.com</div></div>';
 const html='<!doctype html><html lang="en"><head><meta charset="utf-8"/><style>'+
  fontRules.join("\n")+css+'</style></head><body>'+body+'</body></html>';
