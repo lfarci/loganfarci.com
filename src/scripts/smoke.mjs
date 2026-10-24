@@ -126,6 +126,7 @@ function createChecker(baseUrl) {
     let checksPassed = 0;
     let checksFailed = 0;
     const failedChecks = [];
+    const checkedImages = new Map();
 
     function pass(message) {
         checksPassed += 1;
@@ -220,31 +221,36 @@ function createChecker(baseUrl) {
             `${targetUrl} is missing non-empty JSON-LD markup`,
         );
 
-        // Every published page must advertise an accessible absolute OG image.
-        // This also catches PR previews pointing at an unmerged production image.
-        {
-            const hasAbsoluteImageUrl = /^https:\/\//i.test(ogImageUrl);
-            check(
-                hasAbsoluteImageUrl,
-                `${targetUrl} declares an absolute HTTPS og:image URL`,
-                `${targetUrl} has a missing or non-HTTPS og:image URL: "${ogImageUrl}"`,
-            );
-            if (hasAbsoluteImageUrl) {
+        // Check each page's advertised OG image. Reuse the response for shared
+        // images, without skipping validation for any individual page.
+        const hasAbsoluteImageUrl = /^https:\/\//i.test(ogImageUrl);
+        check(
+            hasAbsoluteImageUrl,
+            `${targetUrl} declares an absolute HTTPS og:image URL`,
+            `${targetUrl} has a missing or non-HTTPS og:image URL: "${ogImageUrl}"`,
+        );
+        if (hasAbsoluteImageUrl) {
+            let imageResult = checkedImages.get(ogImageUrl);
+            if (!imageResult) {
                 const imageResponse = await globalThis.fetch(ogImageUrl, {
                     signal: globalThis.AbortSignal.timeout(requestTimeoutMs),
                 });
-                const imageContentType = imageResponse.headers.get("content-type") ?? "";
-                check(
-                    imageResponse.status === 200,
-                    `${ogImageUrl} (advertised og:image) returned HTTP 200`,
-                    `${ogImageUrl} (advertised og:image) returned HTTP ${imageResponse.status}`,
-                );
-                check(
-                    /image\/png/i.test(imageContentType),
-                    `${ogImageUrl} (advertised og:image) returned image/png`,
-                    `${ogImageUrl} (advertised og:image) returned "${imageContentType}", expected image/png`,
-                );
+                imageResult = {
+                    status: imageResponse.status,
+                    contentType: imageResponse.headers.get("content-type") ?? "",
+                };
+                checkedImages.set(ogImageUrl, imageResult);
             }
+            check(
+                imageResult.status === 200,
+                `${targetUrl} advertised a reachable og:image (${ogImageUrl})`,
+                `${targetUrl} advertised ${ogImageUrl} (HTTP ${imageResult.status}, expected 200)`,
+            );
+            check(
+                /image\/png/i.test(imageResult.contentType),
+                `${targetUrl} og:image returned image/png`,
+                `${targetUrl} og:image returned "${imageResult.contentType}", expected image/png`,
+            );
         }
     }
 
