@@ -39,8 +39,16 @@ export default function App() {
                 <meta property="og:site_name" content="Logan Farci" />
                 <meta property="og:locale" content="en_US" />
                 <meta property="og:image" content={siteOgImage} />
-                <meta name="twitter:card" content="summary" />
+                <meta property="og:image:type" content="image/png" />
+                <meta property="og:image:width" content="1200" />
+                <meta property="og:image:height" content="630" />
+                <meta
+                    property="og:image:alt"
+                    content="Dark blue social card featuring a blue dot and the words Hi, I’m Logan. Software Engineer."
+                />
+                <meta name="twitter:card" content="summary_large_image" />
                 <meta name="twitter:image" content={siteOgImage} />
+                <meta name="twitter:image:alt" content="Logan Farci — Software Engineer" />
                 <JsonLd data={siteJsonLd} />
                 <LayoutWrapper
                     githubRepositoryUrl={githubRepositoryUrl}

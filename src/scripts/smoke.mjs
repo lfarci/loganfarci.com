@@ -2,7 +2,7 @@ import { appendFile } from "node:fs/promises";
 
 const rawBaseUrl = process.argv[2];
 const DEFAULT_REQUEST_TIMEOUT_MS = 15000;
-const ARTICLE_ROUTE_IN_SITEMAP_REGEX = /<loc>([^<]+\/articles\/[^<]+)<\/loc>/gi;
+const SITEMAP_URL_REGEX = /<loc>([^<]+)<\/loc>/gi;
 const SMOKE_NOT_FOUND_PATH_PREFIX = "/__smoke_not_found_";
 const SITE_OWNER_NAME = "Logan Farci";
 const LLMS_FULL_TITLE = `${SITE_OWNER_NAME} - Full LLM Context`;
@@ -38,6 +38,7 @@ const MACHINE_FILE_EXPECTATIONS = [
 ];
 const DOWNLOADABLE_FILE_EXPECTATIONS = [
     { pathname: "/resume.pdf", contentTypePattern: /application\/pdf/i, contentTypeDescription: "application/pdf" },
+    { pathname: "/images/social-preview.png", contentTypePattern: /image\/png/i, contentTypeDescription: "image/png" },
 ];
 const CUSTOM_NOT_FOUND_EXPECTATIONS = {
     titlePattern: new RegExp(`<title[^>]*>\\s*Page Not Found - ${SITE_OWNER_NAME}\\s*<\\/title>`, "i"),
@@ -121,6 +122,7 @@ function createChecker(baseUrl) {
     let checksPassed = 0;
     let checksFailed = 0;
     const failedChecks = [];
+    const checkedImages = new Map();
 
     function pass(message) {
         checksPassed += 1;
@@ -164,6 +166,10 @@ function createChecker(baseUrl) {
         const ogDescriptionTag = findTag(body, "meta", (tag) => /property\s*=\s*["']og:description["']/i.test(tag));
         const ogTitle = getAttribute(ogTitleTag, "content");
         const ogDescription = getAttribute(ogDescriptionTag, "content");
+        const ogImageTag = findTag(body, "meta", (tag) => /property\s*=\s*["']og:image["']/i.test(tag));
+        const ogImageUrl = getAttribute(ogImageTag, "content");
+        const twitterImageTag = findTag(body, "meta", (tag) => /name\s*=\s*["']twitter:image["']/i.test(tag));
+        const twitterImageUrl = getAttribute(twitterImageTag, "content");
         const hasNonEmptyJsonLdScript = hasJsonLdScript(body);
         const renderedContent = extractRenderableContent(body);
 
@@ -212,6 +218,44 @@ function createChecker(baseUrl) {
             `${targetUrl} includes non-empty JSON-LD markup`,
             `${targetUrl} is missing non-empty JSON-LD markup`,
         );
+
+        check(
+            twitterImageUrl === ogImageUrl,
+            `${targetUrl} advertises the same image for Twitter and Open Graph`,
+            `${targetUrl} Twitter image "${twitterImageUrl}" differs from og:image "${ogImageUrl}"`,
+        );
+
+        // Check each page's advertised OG image. Reuse the response for shared
+        // images, without skipping validation for any individual page.
+        const hasAbsoluteImageUrl = /^https:\/\//i.test(ogImageUrl);
+        check(
+            hasAbsoluteImageUrl,
+            `${targetUrl} declares an absolute HTTPS og:image URL`,
+            `${targetUrl} has a missing or non-HTTPS og:image URL: "${ogImageUrl}"`,
+        );
+        if (hasAbsoluteImageUrl) {
+            let imageResult = checkedImages.get(ogImageUrl);
+            if (!imageResult) {
+                const imageResponse = await globalThis.fetch(ogImageUrl, {
+                    signal: globalThis.AbortSignal.timeout(requestTimeoutMs),
+                });
+                imageResult = {
+                    status: imageResponse.status,
+                    contentType: imageResponse.headers.get("content-type") ?? "",
+                };
+                checkedImages.set(ogImageUrl, imageResult);
+            }
+            check(
+                imageResult.status === 200,
+                `${targetUrl} advertised a reachable og:image (${ogImageUrl})`,
+                `${targetUrl} advertised ${ogImageUrl} (HTTP ${imageResult.status}, expected 200)`,
+            );
+            check(
+                /image\/png/i.test(imageResult.contentType),
+                `${targetUrl} og:image returned image/png`,
+                `${targetUrl} og:image returned "${imageResult.contentType}", expected image/png`,
+            );
+        }
     }
 
     async function checkMachineFile({
@@ -262,7 +306,7 @@ function createChecker(baseUrl) {
         );
     }
 
-    async function resolveArticlePathFromSitemap() {
+    async function resolvePublicRoutesFromSitemap() {
         const { targetUrl, response, body } = await request("/sitemap.xml");
         check(
             response.status === 200,
@@ -270,16 +314,25 @@ function createChecker(baseUrl) {
             `${targetUrl} is unavailable for route discovery`,
         );
 
-        const articleMatches = [...body.matchAll(ARTICLE_ROUTE_IN_SITEMAP_REGEX)];
-        const firstArticleUrl = articleMatches[0]?.[1];
-        if (!firstArticleUrl) {
-            fail("No /articles/{slug} route found in sitemap.xml");
-            return null;
-        }
-
-        const articlePath = new globalThis.URL(firstArticleUrl).pathname;
-        pass(`Discovered article route from sitemap: ${articlePath}`);
-        return articlePath;
+        // Every published static page needs working Open Graph metadata, including
+        // individual articles. The sitemap is generated from the app's static routes.
+        const routes = [...body.matchAll(SITEMAP_URL_REGEX)].map((match) => new globalThis.URL(match[1]).pathname);
+        const uniqueRoutes = [...new Set(routes)];
+        check(
+            routes.includes("/") &&
+                routes.includes("/about") &&
+                routes.includes("/articles") &&
+                routes.some((route) => route.startsWith("/articles/")),
+            `${targetUrl} includes homepage, about, article listing, and individual articles`,
+            `${targetUrl} is missing expected public page routes`,
+        );
+        check(
+            uniqueRoutes.length === routes.length,
+            `${targetUrl} contains no duplicate page routes`,
+            `${targetUrl} contains duplicate page routes`,
+        );
+        pass(`Discovered ${uniqueRoutes.length} published HTML routes from sitemap`);
+        return uniqueRoutes;
     }
 
     async function checkNotFoundFallback() {
@@ -309,7 +362,7 @@ function createChecker(baseUrl) {
         checkHtmlRoute,
         checkMachineFile,
         checkDownloadableFile,
-        resolveArticlePathFromSitemap,
+        resolvePublicRoutesFromSitemap,
         checkNotFoundFallback,
         hasFailures: () => hasFailures,
         getSummary: () => ({ checksPassed, checksFailed, totalChecks: checksPassed + checksFailed, failedChecks }),
@@ -355,13 +408,11 @@ try {
     console.log(`🔎 Running smoke checks against ${baseUrl}`);
     const checker = createChecker(baseUrl);
 
-    await checker.checkHtmlRoute("/");
-    await checker.checkHtmlRoute("/about");
-    await checker.checkHtmlRoute("/articles");
-
-    const articlePath = await checker.resolveArticlePathFromSitemap();
-    if (articlePath) {
-        await checker.checkHtmlRoute(articlePath);
+    // Verify Open Graph metadata on every published page, not just the homepage
+    // and a single example article.
+    const publicRoutes = await checker.resolvePublicRoutesFromSitemap();
+    for (const route of publicRoutes) {
+        await checker.checkHtmlRoute(route);
     }
 
     for (const machineFileExpectation of MACHINE_FILE_EXPECTATIONS) {

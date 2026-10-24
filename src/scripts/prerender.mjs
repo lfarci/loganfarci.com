@@ -9,7 +9,7 @@ function injectHeadTags(page, headTags) {
     return page.replace("</head>", `${headTags}\n</head>`);
 }
 
-const siteUrl = process.env.VITE_SITE_URL ?? "https://loganfarci.com";
+const siteUrl = process.env.VITE_SITE_URL ?? "https://www.loganfarci.com";
 
 function createAbsoluteUrl(route) {
     return route === "/" ? siteUrl : `${siteUrl}${route}`;
