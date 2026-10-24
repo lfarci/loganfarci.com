@@ -165,7 +165,7 @@ function createChecker(baseUrl) {
         const ogDescriptionTag = findTag(body, "meta", (tag) => /property\s*=\s*["']og:description["']/i.test(tag));
         const ogTitle = getAttribute(ogTitleTag, "content");
         const ogDescription = getAttribute(ogDescriptionTag, "content");
-        const ogImageTag = findTag(body, "meta", (tag) => /property\\s*=\\s*["']og:image["']/i.test(tag));
+        const ogImageTag = findTag(body, "meta", (tag) => /property\s*=\s*["']og:image["']/i.test(tag));
         const ogImageUrl = getAttribute(ogImageTag, "content");
         const hasNonEmptyJsonLdScript = hasJsonLdScript(body);
         const renderedContent = extractRenderableContent(body);
