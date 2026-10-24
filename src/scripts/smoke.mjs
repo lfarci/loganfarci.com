@@ -39,7 +39,7 @@ const MACHINE_FILE_EXPECTATIONS = [
 const DOWNLOADABLE_FILE_EXPECTATIONS = [
     { pathname: "/resume.pdf", contentTypePattern: /application\/pdf/i, contentTypeDescription: "application/pdf" },
     {
-        pathname: "/images/social-preview-v2.png",
+        pathname: "/images/social-preview-v3.png",
         contentTypePattern: /image\/png/i,
         contentTypeDescription: "image/png",
     },
