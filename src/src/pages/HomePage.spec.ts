@@ -195,7 +195,7 @@ test.describe("Home page", () => {
     });
 
     for (const destination of [
-        { link: "Experience", hash: "experience", targetHeading: "Experience" },
+        { link: "Engineering work", hash: "selected-work", targetHeading: "Selected engineering work" },
         { link: "Certifications", hash: "certifications", targetHeading: "Certifications" },
     ]) {
         test(`opens the ${destination.targetHeading} details from ${destination.link}`, async ({ page }) => {

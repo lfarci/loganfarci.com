@@ -147,6 +147,38 @@ export default function AboutPage() {
                     </div>
                 </section>
 
+                <section className="field-section scroll-mt-24" id="selected-work">
+                    <header className="field-section-header">
+                        <h2>Selected engineering work</h2>
+                        <p>
+                            Public projects and technical writing, with the implementation choices and limitations
+                            visible.
+                        </p>
+                    </header>
+                    <div className="field-entry-body">
+                        <MarkdownContent
+                            content={`### C# Quest Tracker
+
+A personal learning companion built with HTML, CSS, and JavaScript. It keeps exercise progress in the browser and supports CSV backups, without an account or backend.
+
+[Try the tracker](https://lfarci.github.io/csharp-quest-tracker/) · [Read the source](https://github.com/lfarci/csharp-quest-tracker)
+
+### Testing agent configuration portability
+
+Two small experiments with Microsoft APM across Copilot, Codex, and OpenCode: what carries across, where tools and permissions differ, and why I chose not to adopt it for this use case.
+
+[Read the APM experiment](/articles/testing-microsoft-apm-agent-portability)
+
+### Azure Linux VM access with Entra ID
+
+A practical walkthrough of SSH authentication, Azure RBAC, and Terraform configuration for Linux VMs, including interactive and automation scenarios.
+
+[Read the Azure SSH walkthrough](/articles/azure-vm-entra-id-ssh)`}
+                            measure
+                        />
+                    </div>
+                </section>
+
                 <section className="field-section scroll-mt-24" id="experience">
                     <header className="field-section-header">
                         <h2>Experience</h2>

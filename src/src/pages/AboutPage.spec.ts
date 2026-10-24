@@ -7,11 +7,31 @@ test.describe("About page", () => {
         await expectPage(page, ABOUT_PAGE);
 
         await expect(page.getByRole("main").getByRole("heading", { level: 2 })).toHaveText([
+            "Selected engineering work",
             "Experience",
             "Education",
             "Certifications",
             "Skills",
         ]);
+    });
+
+    test("makes a public project and selected technical articles discoverable", async ({ page }) => {
+        await page.goto("/about#selected-work");
+        const work = page.locator("#selected-work");
+
+        for (const [name, href] of [
+            ["Try the tracker", "https://lfarci.github.io/csharp-quest-tracker/"],
+            ["Read the source", "https://github.com/lfarci/csharp-quest-tracker"],
+            ["Read the APM experiment", "/articles/testing-microsoft-apm-agent-portability"],
+            ["Read the Azure SSH walkthrough", "/articles/azure-vm-entra-id-ssh"],
+        ]) {
+            await expect(work.getByRole("link", { name, exact: true })).toHaveAttribute("href", href);
+        }
+
+        await work.getByRole("link", { name: "Read the APM experiment" }).click();
+        await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+            "I Tested Microsoft APM Across Copilot, Codex, and OpenCode",
+        );
     });
 
     test("shows the author portrait with an accessible description", async ({ page }) => {

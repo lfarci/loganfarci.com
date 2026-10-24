@@ -7,9 +7,9 @@
     ],
     "proofLinks": [
         {
-            "label": "Experience",
-            "detail": "Learn about my work experience and projects",
-            "to": "/about#experience"
+            "label": "Engineering work",
+            "detail": "Selected projects and hands-on technical writing",
+            "to": "/about#selected-work"
         },
         {
             "label": "Articles",
