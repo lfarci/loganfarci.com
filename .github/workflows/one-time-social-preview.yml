@@ -1,0 +1,43 @@
+name: One-time static social card replacement
+on:
+  push:
+    branches:
+      - fix/496-social-canonical-host
+    paths:
+      - .github/workflows/one-time-social-preview.yml
+
+permissions:
+  contents: write
+
+jobs:
+  commit-static-png:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: fix/496-social-canonical-host
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: src/package-lock.json
+      - run: npm ci --prefix src
+      - name: Render and validate static PNG once
+        working-directory: src
+        run: |
+          node --input-type=module <<'NODE'
+          import sharp from "sharp";
+          const path = "public/images/social-preview.png";
+          await sharp("../.tmp/social-preview.svg").png({ compressionLevel: 9 }).toFile(path);
+          const metadata = await sharp(path).metadata();
+          if (metadata.format !== "png" || metadata.width !== 1200 || metadata.height !== 630) {
+            throw Error("Unexpected social preview format or size");
+          }
+          NODE
+      - name: Commit final static asset and clean up one-time tooling
+        run: |
+          git add -f src/public/images/social-preview.png
+          rm .tmp/social-preview.svg .github/workflows/one-time-social-preview.yml
+          git add -u
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -m "assets(seo): replace social preview with homepage blue-dot design"
+          git push origin HEAD:refs/heads/fix/496-social-canonical-host
