@@ -165,6 +165,8 @@ function createChecker(baseUrl) {
         const ogDescriptionTag = findTag(body, "meta", (tag) => /property\s*=\s*["']og:description["']/i.test(tag));
         const ogTitle = getAttribute(ogTitleTag, "content");
         const ogDescription = getAttribute(ogDescriptionTag, "content");
+        const ogImageTag = findTag(body, "meta", (tag) => /property\\s*=\\s*["']og:image["']/i.test(tag));
+        const ogImageUrl = getAttribute(ogImageTag, "content");
         const hasNonEmptyJsonLdScript = hasJsonLdScript(body);
         const renderedContent = extractRenderableContent(body);
 
@@ -213,6 +215,33 @@ function createChecker(baseUrl) {
             `${targetUrl} includes non-empty JSON-LD markup`,
             `${targetUrl} is missing non-empty JSON-LD markup`,
         );
+
+        // Fetch the actual advertised image, not just the asset on this hostname.
+        // This catches previews accidentally referencing a not-yet-deployed production PNG.
+        if (pathname === "/") {
+            const hasAbsoluteImageUrl = /^https:\/\//i.test(ogImageUrl);
+            check(
+                hasAbsoluteImageUrl,
+                `${targetUrl} declares an absolute HTTPS og:image URL`,
+                `${targetUrl} has a missing or non-HTTPS og:image URL: "${ogImageUrl}"`,
+            );
+            if (hasAbsoluteImageUrl) {
+                const imageResponse = await globalThis.fetch(ogImageUrl, {
+                    signal: globalThis.AbortSignal.timeout(requestTimeoutMs),
+                });
+                const imageContentType = imageResponse.headers.get("content-type") ?? "";
+                check(
+                    imageResponse.status === 200,
+                    `${ogImageUrl} (advertised og:image) returned HTTP 200`,
+                    `${ogImageUrl} (advertised og:image) returned HTTP ${imageResponse.status}`,
+                );
+                check(
+                    /image\/png/i.test(imageContentType),
+                    `${ogImageUrl} (advertised og:image) returned image/png`,
+                    `${ogImageUrl} (advertised og:image) returned "${imageContentType}", expected image/png`,
+                );
+            }
+        }
     }
 
     async function checkMachineFile({
