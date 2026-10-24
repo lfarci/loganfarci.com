@@ -95,15 +95,26 @@ jobs:
           default_hostname=$(az staticwebapp list \
             --query "[?contains(to_string(customDomains), 'www.loganfarci.com')].defaultHostname | [0]" \
             -o tsv)
+          app_region=$(az staticwebapp list \
+            --query "[?contains(to_string(customDomains), 'www.loganfarci.com')].location | [0]" \
+            -o tsv)
 
-          if [[ ! "$default_hostname" == *.azurestaticapps.net ]]; then
-            echo "::error::Could not determine the Azure Static Web App hostname"
+          if [[ ! "$default_hostname" == *.azurestaticapps.net || -z "$app_region" ]]; then
+            echo "::error::Could not determine the Azure Static Web App hostname and region"
             exit 1
           fi
 
-          # PR environments are exposed with the numeric PR suffix, not 'pr-N'.
+          # Azure's default hostname can omit the region included in preview URLs.
+          # For example, production '<name>.2.azurestaticapps.net' becomes
+          # '<name>-497.westeurope.2.azurestaticapps.net' for PR #497.
+          app_region="${app_region// /}"
+          app_region="${app_region,,}"
           suffix="${PREVIEW_ENVIRONMENT#pr-}"
-          preview_hostname="${default_hostname%%.*}-${suffix}.${default_hostname#*.}"
+          domain_suffix="${default_hostname#*.}"
+          if [[ "$domain_suffix" != "$app_region".* ]]; then
+            domain_suffix="$app_region.$domain_suffix"
+          fi
+          preview_hostname="${default_hostname%%.*}-${suffix}.${domain_suffix}"
           echo "origin=https://${preview_hostname}" >> "$GITHUB_OUTPUT"
 
       - name: Build application
