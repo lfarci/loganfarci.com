@@ -2,7 +2,7 @@ import { appendFile } from "node:fs/promises";
 
 const rawBaseUrl = process.argv[2];
 const DEFAULT_REQUEST_TIMEOUT_MS = 15000;
-const ARTICLE_ROUTE_IN_SITEMAP_REGEX = /<loc>([^<]+\/articles\/[^<]+)<\/loc>/gi;
+const SITEMAP_URL_REGEX = /<loc>([^<]+)<\/loc>/gi;
 const SMOKE_NOT_FOUND_PATH_PREFIX = "/__smoke_not_found_";
 const SITE_OWNER_NAME = "Logan Farci";
 const LLMS_FULL_TITLE = `${SITE_OWNER_NAME} - Full LLM Context`;
@@ -220,9 +220,9 @@ function createChecker(baseUrl) {
             `${targetUrl} is missing non-empty JSON-LD markup`,
         );
 
-        // Fetch the actual advertised image, not just the asset on this hostname.
-        // This catches previews accidentally referencing a not-yet-deployed production PNG.
-        if (pathname === "/") {
+        // Every published page must advertise an accessible absolute OG image.
+        // This also catches PR previews pointing at an unmerged production image.
+        {
             const hasAbsoluteImageUrl = /^https:\/\//i.test(ogImageUrl);
             check(
                 hasAbsoluteImageUrl,
@@ -296,7 +296,7 @@ function createChecker(baseUrl) {
         );
     }
 
-    async function resolveArticlePathFromSitemap() {
+    async function resolvePublicRoutesFromSitemap() {
         const { targetUrl, response, body } = await request("/sitemap.xml");
         check(
             response.status === 200,
@@ -304,16 +304,27 @@ function createChecker(baseUrl) {
             `${targetUrl} is unavailable for route discovery`,
         );
 
-        const articleMatches = [...body.matchAll(ARTICLE_ROUTE_IN_SITEMAP_REGEX)];
-        const firstArticleUrl = articleMatches[0]?.[1];
-        if (!firstArticleUrl) {
-            fail("No /articles/{slug} route found in sitemap.xml");
-            return null;
-        }
-
-        const articlePath = new globalThis.URL(firstArticleUrl).pathname;
-        pass(`Discovered article route from sitemap: ${articlePath}`);
-        return articlePath;
+        // Every published static page needs working Open Graph metadata, including
+        // individual articles. The sitemap is generated from the app's static routes.
+        const routes = [...body.matchAll(SITEMAP_URL_REGEX)].map(
+            (match) => new globalThis.URL(match[1]).pathname,
+        );
+        const uniqueRoutes = [...new Set(routes)];
+        check(
+            routes.includes("/") &&
+                routes.includes("/about") &&
+                routes.includes("/articles") &&
+                routes.some((route) => route.startsWith("/articles/")),
+            `${targetUrl} includes homepage, about, article listing, and individual articles`,
+            `${targetUrl} is missing expected public page routes`,
+        );
+        check(
+            uniqueRoutes.length === routes.length,
+            `${targetUrl} contains no duplicate page routes`,
+            `${targetUrl} contains duplicate page routes`,
+        );
+        pass(`Discovered ${uniqueRoutes.length} published HTML routes from sitemap`);
+        return uniqueRoutes;
     }
 
     async function checkNotFoundFallback() {
@@ -343,7 +354,7 @@ function createChecker(baseUrl) {
         checkHtmlRoute,
         checkMachineFile,
         checkDownloadableFile,
-        resolveArticlePathFromSitemap,
+        resolvePublicRoutesFromSitemap,
         checkNotFoundFallback,
         hasFailures: () => hasFailures,
         getSummary: () => ({ checksPassed, checksFailed, totalChecks: checksPassed + checksFailed, failedChecks }),
@@ -389,13 +400,11 @@ try {
     console.log(`🔎 Running smoke checks against ${baseUrl}`);
     const checker = createChecker(baseUrl);
 
-    await checker.checkHtmlRoute("/");
-    await checker.checkHtmlRoute("/about");
-    await checker.checkHtmlRoute("/articles");
-
-    const articlePath = await checker.resolveArticlePathFromSitemap();
-    if (articlePath) {
-        await checker.checkHtmlRoute(articlePath);
+    // Verify Open Graph metadata on every published page, not just the homepage
+    // and a single example article.
+    const publicRoutes = await checker.resolvePublicRoutesFromSitemap();
+    for (const route of publicRoutes) {
+        await checker.checkHtmlRoute(route);
     }
 
     for (const machineFileExpectation of MACHINE_FILE_EXPECTATIONS) {
