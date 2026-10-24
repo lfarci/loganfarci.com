@@ -66,13 +66,13 @@ Verified from [`src/vite.config.ts`](../../src/vite.config.ts) and
 ### What MUST be tested
 
 - **Core logic.** Any change to `src/src/core/` (articles, data accessors, SEO,
-  commands, date/string helpers) **MUST** add or update a colocated `*.test.ts`.
+  date/string helpers) **MUST** add or update a colocated `*.test.ts`.
 - **Data contracts.** A change to a `content/data/*.json` shape or its accessor in
   `core/data.ts` **MUST** be covered — see the mock-and-assert pattern in
   [`core/data.test.ts`](../../src/src/core/data.test.ts) and
   [data-contracts.md](./data-contracts.md).
 - **Behavioral component logic.** Components with real behavior (theme toggle,
-  terminal commands, prompt handling) **MUST** have tests. Purely presentational
+  navigation menus) **MUST** have tests. Purely presentational
   components **MAY** be left untested.
 
 ### Guidelines

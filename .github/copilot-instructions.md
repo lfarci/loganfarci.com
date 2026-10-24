@@ -106,9 +106,6 @@ documented authoritatively in [`docs/specs/architecture.md`](../docs/specs/archi
 Data model shapes for `content/data/*.json` and `src/src/types/` live in
 [`docs/specs/data-contracts.md`](../docs/specs/data-contracts.md).
 
-- **Terminal UI:**
-  - Located in `src/src/components/terminal/`, implements a command pattern via `src/src/core/Commands.ts` for extensible command handling.
-
 ## Azure-Specific Guidance
 
 - Provision all cloud resources in Azure using Terraform; never hardcode resource names.
