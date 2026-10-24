@@ -44,7 +44,7 @@ export default function App() {
                 <meta property="og:image:height" content="630" />
                 <meta
                     property="og:image:alt"
-                    content="Logan Farci — Software Engineer, .NET, Azure, GitHub and developer experience"
+                    content="Dark blue social card featuring a blue dot and the words Hi, I’m Logan. Software Engineer."
                 />
                 <meta name="twitter:card" content="summary_large_image" />
                 <meta name="twitter:image" content={siteOgImage} />
