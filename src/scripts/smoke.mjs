@@ -38,7 +38,7 @@ const MACHINE_FILE_EXPECTATIONS = [
 ];
 const DOWNLOADABLE_FILE_EXPECTATIONS = [
     { pathname: "/resume.pdf", contentTypePattern: /application\/pdf/i, contentTypeDescription: "application/pdf" },
-    { pathname: "/images/social-preview.png", contentTypePattern: /image\/png/i, contentTypeDescription: "image/png" },
+    { pathname: "/images/social-preview-v2.png", contentTypePattern: /image\/png/i, contentTypeDescription: "image/png" },
 ];
 const CUSTOM_NOT_FOUND_EXPECTATIONS = {
     titlePattern: new RegExp(`<title[^>]*>\\s*Page Not Found - ${SITE_OWNER_NAME}\\s*<\\/title>`, "i"),
