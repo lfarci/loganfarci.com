@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Logan Farci — Software Engineer</title>
+  <desc id="desc">A clean midnight and porcelain social preview for Logan Farci, highlighting .NET, Azure, developer experience and agentic AI.</desc>
+  <defs>
+    <linearGradient id="rightSurface" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f5f9fe"/>
+      <stop offset="1" stop-color="#dae8f7"/>
+    </linearGradient>
+    <linearGradient id="signal" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#4a86ee"/>
+      <stop offset="1" stop-color="#40c0b4"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="#151c2d"/>
+  <rect width="1200" height="8" fill="#4a86ee"/>
+  <rect x="824" width="376" height="630" fill="url(#rightSurface)"/>
+  <rect x="823" y="0" width="1" height="630" fill="#547a9d" opacity="0.5"/>
+
+  <!-- Editorial masthead and signal rule -->
+  <rect x="80" y="73" width="5" height="61" fill="#64cfc5"/>
+  <text x="108" y="98" fill="#f7fafc" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="700" letter-spacing="4">LOGAN FARCI</text>
+  <text x="109" y="126" fill="#91b9cb" font-family="Arial, Helvetica, sans-serif" font-size="14" letter-spacing="3">FIELD NOTES / SOFTWARE</text>
+
+  <!-- The primary proposition remains legible in a small LinkedIn card -->
+  <text x="76" y="283" fill="#f8fbff" font-family="Arial, Helvetica, sans-serif" font-size="80" font-weight="700" letter-spacing="-3">Logan Farci</text>
+  <text x="77" y="365" fill="#82c5ff" font-family="Arial, Helvetica, sans-serif" font-size="60" font-weight="700" letter-spacing="-2">Software Engineer</text>
+  <line x1="80" y1="424" x2="744" y2="424" stroke="#4a617d" stroke-width="1.5"/>
+
+  <text x="80" y="467" fill="#e8f1fa" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="600" letter-spacing="1">.NET  /  AZURE  /  GITHUB</text>
+  <text x="80" y="502" fill="#aed2da" font-family="Arial, Helvetica, sans-serif" font-size="21" letter-spacing="0.3">Developer Experience  ·  Agentic AI Development</text>
+
+  <line x1="80" y1="548" x2="744" y2="548" stroke="#3b506b" stroke-width="1"/>
+  <circle cx="87" cy="584" r="6" fill="#50c6bb"/>
+  <text x="109" y="592" fill="#ccd7e5" font-family="Arial, Helvetica, sans-serif" font-size="22" letter-spacing="0.4">loganfarci.com</text>
+
+  <!-- Quiet abstract system diagram: readable even when reduced -->
+  <g transform="translate(1011 306)">
+    <circle r="165" fill="none" stroke="#c1d6ec" stroke-width="2"/>
+    <circle r="113" fill="none" stroke="#83a7c9" stroke-width="2" stroke-dasharray="6 11"/>
+    <circle r="66" fill="#e9f3ff" stroke="#5c92d5" stroke-width="2"/>
+    <path d="M -113 0 L -67 0 M 67 0 L 113 0 M 0 -113 L 0 -67 M 0 67 L 0 113" stroke="#3e83c3" stroke-width="3"/>
+    <path d="M -54 -54 L -112 -110 M 54 54 L 113 110 M 54 -54 L 113 -110 M -54 54 L -113 110" stroke="#89b3d7" stroke-width="2"/>
+    <circle cx="-113" cy="0" r="10" fill="#4889db"/>
+    <circle cx="113" cy="0" r="10" fill="#42b9ae"/>
+    <circle cx="0" cy="-113" r="10" fill="#42b9ae"/>
+    <circle cx="0" cy="113" r="10" fill="#4889db"/>
+    <circle cx="-113" cy="-110" r="8" fill="#b8d8ed" stroke="#6699c5" stroke-width="2"/>
+    <circle cx="113" cy="110" r="8" fill="#b8d8ed" stroke="#6699c5" stroke-width="2"/>
+    <circle cx="113" cy="-110" r="8" fill="#b8d8ed" stroke="#6699c5" stroke-width="2"/>
+    <circle cx="-113" cy="110" r="8" fill="#b8d8ed" stroke="#6699c5" stroke-width="2"/>
+    <text x="0" y="17" fill="#397ac7" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="43" font-weight="700" letter-spacing="-1">LF</text>
+  </g>
+  <text x="842" y="574" fill="#53799e" font-family="Arial, Helvetica, sans-serif" font-size="13" letter-spacing="2.5">BUILD  ·  TEST  ·  SHIP</text>
+</svg>
