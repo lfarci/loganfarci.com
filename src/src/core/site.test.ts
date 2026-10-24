@@ -8,24 +8,24 @@ describe("site", () => {
     });
 
     it("derives the production Open Graph image URL from the site URL", () => {
-        expect(siteOgImage).toBe(`${siteUrl}/images/social-preview-v3.png`);
+        expect(siteOgImage).toBe(`${siteUrl}/images/social-preview.png`);
     });
 
     it("normalizes trailing slashes when constructing absolute Open Graph image URLs", () => {
         expect(createSocialImageUrl("https://example-497.westeurope.azurestaticapps.net/")).toBe(
-            "https://example-497.westeurope.azurestaticapps.net/images/social-preview-v3.png",
+            "https://example-497.westeurope.azurestaticapps.net/images/social-preview.png",
         );
     });
 
     it("always resolves the social image from the host root, even when a preview URL has a path", () => {
         expect(createSocialImageUrl("https://preview.example.com/pr/497")).toBe(
-            "https://preview.example.com/images/social-preview-v3.png",
+            "https://preview.example.com/images/social-preview.png",
         );
     });
 
     it("supports a preview image origin without changing the production canonical URL", () => {
         expect(createSocialImageUrl("https://example-497.westeurope.azurestaticapps.net")).toBe(
-            "https://example-497.westeurope.azurestaticapps.net/images/social-preview-v3.png",
+            "https://example-497.westeurope.azurestaticapps.net/images/social-preview.png",
         );
         expect(siteUrl).toBe("https://www.loganfarci.com");
     });
