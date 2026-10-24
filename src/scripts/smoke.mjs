@@ -168,6 +168,8 @@ function createChecker(baseUrl) {
         const ogDescription = getAttribute(ogDescriptionTag, "content");
         const ogImageTag = findTag(body, "meta", (tag) => /property\s*=\s*["']og:image["']/i.test(tag));
         const ogImageUrl = getAttribute(ogImageTag, "content");
+        const twitterImageTag = findTag(body, "meta", (tag) => /name\s*=\s*["']twitter:image["']/i.test(tag));
+        const twitterImageUrl = getAttribute(twitterImageTag, "content");
         const hasNonEmptyJsonLdScript = hasJsonLdScript(body);
         const renderedContent = extractRenderableContent(body);
 
@@ -215,6 +217,12 @@ function createChecker(baseUrl) {
             hasNonEmptyJsonLdScript,
             `${targetUrl} includes non-empty JSON-LD markup`,
             `${targetUrl} is missing non-empty JSON-LD markup`,
+        );
+
+        check(
+            twitterImageUrl === ogImageUrl,
+            `${targetUrl} advertises the same image for Twitter and Open Graph`,
+            `${targetUrl} Twitter image "${twitterImageUrl}" differs from og:image "${ogImageUrl}"`,
         );
 
         // Check each page's advertised OG image. Reuse the response for shared
