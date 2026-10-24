@@ -312,9 +312,7 @@ function createChecker(baseUrl) {
 
         // Every published static page needs working Open Graph metadata, including
         // individual articles. The sitemap is generated from the app's static routes.
-        const routes = [...body.matchAll(SITEMAP_URL_REGEX)].map(
-            (match) => new globalThis.URL(match[1]).pathname,
-        );
+        const routes = [...body.matchAll(SITEMAP_URL_REGEX)].map((match) => new globalThis.URL(match[1]).pathname);
         const uniqueRoutes = [...new Set(routes)];
         check(
             routes.includes("/") &&
