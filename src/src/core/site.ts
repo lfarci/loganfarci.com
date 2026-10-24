@@ -6,5 +6,5 @@ export const createSocialImageUrl = (origin: string): string => new URL("/images
 
 // PNG format for og:image — AVIF is not supported by Twitter/X and Facebook crawlers.
 export const siteOgImage = createSocialImageUrl(
-    (import.meta.env.VITE_OG_IMAGE_ORIGIN as string | undefined) ?? siteUrl,
+    (import.meta.env.VITE_OG_IMAGE_ORIGIN as string | undefined) || siteUrl,
 );
