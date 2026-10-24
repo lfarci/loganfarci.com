@@ -4,5 +4,3 @@ coverage
 src/dist
 src/package-lock.json
 
-# Hand-authored vector source for the generated social preview asset
-src/scripts/assets/social-preview.svg
