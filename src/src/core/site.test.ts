@@ -8,6 +8,6 @@ describe("site", () => {
     });
 
     it("derives the Open Graph image URL from the site URL", () => {
-        expect(siteOgImage).toBe(`${siteUrl}/images/avatar.png`);
+        expect(siteOgImage).toBe(`${siteUrl}/images/social-preview.png`);
     });
 });
