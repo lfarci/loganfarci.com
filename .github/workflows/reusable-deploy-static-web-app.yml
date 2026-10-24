@@ -90,10 +90,11 @@ jobs:
         env:
           PREVIEW_ENVIRONMENT: "${{ inputs.static_web_app_environment_name }}"
         run: |
-          default_hostname=$(az staticwebapp show \
-            --name loganfarci-stapp \
-            --resource-group loganfarci-rg \
-            --query defaultHostname -o tsv)
+          # Discover the currently deployed site instead of assuming Terraform's
+          # default resource-group/name values match every Azure environment.
+          default_hostname=$(az staticwebapp list \
+            --query "[?contains(to_string(customDomains), 'www.loganfarci.com')].defaultHostname | [0]" \
+            -o tsv)
 
           if [[ ! "$default_hostname" == *.azurestaticapps.net ]]; then
             echo "::error::Could not determine the Azure Static Web App hostname"
