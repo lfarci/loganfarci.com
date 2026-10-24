@@ -17,6 +17,12 @@ describe("site", () => {
         );
     });
 
+    it("always resolves the social image from the host root, even when a preview URL has a path", () => {
+        expect(createSocialImageUrl("https://preview.example.com/pr/497")).toBe(
+            "https://preview.example.com/images/social-preview.png",
+        );
+    });
+
     it("supports a preview image origin without changing the production canonical URL", () => {
         expect(createSocialImageUrl("https://example-497.westeurope.azurestaticapps.net")).toBe(
             "https://example-497.westeurope.azurestaticapps.net/images/social-preview.png",
