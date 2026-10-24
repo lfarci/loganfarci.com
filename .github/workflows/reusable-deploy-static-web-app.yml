@@ -82,6 +82,29 @@ jobs:
           echo "deployment_token=$(az keyvault secret show --name StaticWebAppDeploymentKey --vault-name "$AZURE_KEY_VAULT_NAME" --query value -o tsv)" >> $GITHUB_OUTPUT
           echo "application_insights_connection_string=$(az keyvault secret show --name ApplicationInsightsConnectionString --vault-name "$AZURE_KEY_VAULT_NAME" --query value -o tsv 2>/dev/null || echo "")" >> $GITHUB_OUTPUT
 
+      # Azure SWA PR previews have a different hostname than the custom production
+      # domain. The social image must point to the preview's own deployed PNG.
+      - name: Resolve preview social image origin
+        id: preview-image
+        if: inputs.static_web_app_environment_name != ''
+        env:
+          PREVIEW_ENVIRONMENT: "${{ inputs.static_web_app_environment_name }}"
+        run: |
+          default_hostname=$(az staticwebapp show \
+            --name loganfarci-stapp \
+            --resource-group loganfarci-rg \
+            --query defaultHostname -o tsv)
+
+          if [[ ! "$default_hostname" == *.azurestaticapps.net ]]; then
+            echo "::error::Could not determine the Azure Static Web App hostname"
+            exit 1
+          fi
+
+          # PR environments are exposed with the numeric PR suffix, not 'pr-N'.
+          suffix="${PREVIEW_ENVIRONMENT#pr-}"
+          preview_hostname="${default_hostname%%.*}-${suffix}.${default_hostname#*.}"
+          echo "origin=https://${preview_hostname}" >> "$GITHUB_OUTPUT"
+
       - name: Build application
         run: npm run build
         env:
@@ -89,6 +112,7 @@ jobs:
           VITE_COMMIT_HASH: "${{ inputs.commit_hash }}"
           VITE_APPINSIGHTS_CONNECTION_STRING: "${{ steps.get-secrets.outputs.application_insights_connection_string }}"
           VITE_DEPLOYMENT_ENVIRONMENT: "${{ inputs.github_environment_name }}"
+          VITE_OG_IMAGE_ORIGIN: "${{ steps.preview-image.outputs.origin }}"
 
       - name: Deploy to Azure Static Web Apps
         id: deploy
