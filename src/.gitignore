@@ -39,3 +39,6 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+
+# Generated from scripts/assets/social-preview.svg by prebuild/predev
+/public/images/social-preview.png
