@@ -1,5 +1,19 @@
 [
   {
+    "title": "Microsoft Pro Badge: GitHub Copilot - Proficient",
+    "issuer": "Microsoft",
+    "date": "2026-10-28",
+    "image": {
+      "src": "/images/certifications/microsoft-pro-badge-github-copilot-proficient.avif",
+      "alt": "Microsoft Pro Badge: GitHub Copilot - Proficient badge",
+      "width": 128,
+      "height": 128
+    },
+    "url": "https://www.credly.com/badges/995f75ed-ca7f-4b8c-bd60-d4b3ed18dc65/public_url",
+    "relevance": "Medium",
+    "order": 20
+  },
+  {
     "title": "GitHub Advanced Security Sales Credential",
     "issuer": "GitHub",
     "date": "2026-08-27",
