@@ -47,7 +47,7 @@
         "@fontsource-variable/manrope": "*",
         "@fontsource/noto-sans": "*",
         "@fontsource/reddit-mono": "*",
-        "@lhci/cli": "^0.15.1",
+        "@lhci/cli": "^0.16.1",
         "@playwright/test": "^1.62.1",
         "@tailwindcss/vite": "^4.2.1",
         "@testing-library/react": "^16.3.2",
